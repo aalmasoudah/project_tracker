@@ -3,12 +3,16 @@
 ## Account Lifecycle
 
 1. An authorized administrator creates the account.
-2. The administrator assigns department and predefined groups.
-3. The user signs in with a hashed password.
-4. Authorized staff may deactivate or reactivate the account.
-5. Lifecycle and role changes create audit records.
+2. The administrator assigns one department and one approved predefined role.
+3. The user signs in with a temporary hashed password and must replace it.
+4. The user may change their password and persisted language preference.
+5. Technical Admin may update non-security profile fields, reset a password,
+   or deactivate/reactivate the account.
+6. Deactivation revokes all sessions; reactivation requires a new login.
+7. Lifecycle and role changes create append-only audit records.
 
-Detailed authorization remains to be approved before Phase 2.
+Only a superuser may grant or revoke Technical Admin. Accounts are never
+hard-deleted.
 
 ## Project and Course Lifecycle
 

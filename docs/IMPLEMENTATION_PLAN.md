@@ -2,20 +2,20 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phase specifications remain
-unapproved until the project owner explicitly approves them.
+Status: Planning pass completed on 2026-07-23. Phases 1 and 2 are completed;
+later phase specifications remain unapproved until the project owner
+explicitly approves them.
 
 The project proceeds one approved phase at a time. The approved scope permits
 planning, but it does not approve unresolved business rules, permissions, or
-phase specifications. No Django application code is part of this planning
-pass.
+phase specifications.
 
 ## Delivery Sequence
 
 | Phase | Outcome | Depends on | Approval status |
 | --- | --- | --- | --- |
-| 1 | Engineering Foundation | Approved scope and technical plan | Prepared for owner approval |
-| 2 | Accounts, Roles, and Organization | Phase 1; permission matrix | Blocked by role decisions |
+| 1 | Engineering Foundation | Approved scope and technical plan | Completed on 2026-07-23 |
+| 2 | Accounts, Roles, and Organization | Phase 1; Phase 2 permission slice | Completed on 2026-07-25 |
 | 3 | Projects and Teams | Phase 2; project access/status/currency rules | Blocked by business decisions |
 | 4 | Courses and Trainers | Phase 3; course lifecycle/access rules | Blocked by business decisions |
 | 5 | Tasks and Collaboration | Phases 3-4; task rules | Blocked by business decisions |
@@ -54,22 +54,22 @@ requirements.
 | BR-13 | Expiry during trainer data entry | Question 13 | 9 |
 | BR-14 | Date/time storage, display, and overdue semantics | Question 14 | 3 |
 | BR-15 | Supported currencies and rounding | Question 15 | 3 |
-| BR-16 | Hard-deletable records | Question 16 | 2 |
+| BR-16 | Hard-deletable records | Question 16 | Phase 2 slice approved; later records open |
 | BR-17 | User-disableable notification categories | Question 17 | 11 |
 | BR-18 | File/audit/archive retention periods | Question 18 | 14 |
-| RBAC-01 | Full action-by-role permission matrix | `USER_ROLES.md` | 2 |
-| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | 2 |
+| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Phase 2 slice approved |
+| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Phase 2 slice approved |
 | RBAC-03 | Project-manager cross-project access | Question 2 | 3 |
-| RBAC-04 | Supervisor cross-team/department access | Question 3 | 2 |
+| RBAC-04 | Supervisor cross-team/department access | Question 3 | Phase 2 slice approved |
 | RBAC-05 | Employee/contractor budget visibility | Question 4 | 3 |
 | RBAC-06 | Personal attendance visibility | Question 5 | 10 |
 | RBAC-07 | Personal-data report export rights | Question 6 | 13 |
-| RBAC-08 | Archive/restore authority | Question 7 | 2 |
+| RBAC-08 | Archive/restore authority | Question 7 | Phase 2 slice approved |
 | RBAC-09 | Audit/health visibility | Question 8 | 14 |
-| L10N-01 | Default language and preference persistence | `BUSINESS_RULES.md` question 19 | 2 (Phase 1 keeps the default configurable) |
-| L10N-02 | Official Arabic terminology approver | Question 20 | 2 |
+| L10N-01 | Default language and preference persistence | `BUSINESS_RULES.md` question 19 | Approved |
+| L10N-02 | Official Arabic terminology approver | Question 20 | Approved |
 | L10N-03 | Calendar and digit display policy | Question 21 | 3 |
-| L10N-04 | Arabic normalization for identity/search/duplicates | Question 22 | 2 |
+| L10N-04 | Arabic normalization for identity/search/duplicates | Question 22 | Account search approved; later duplicates open |
 
 Phase owners must update the source documents when decisions are approved and
 then revise the affected phase specification. A status or formula must never

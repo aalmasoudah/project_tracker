@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }} · {% translate "Accounts" %}{% endblock %}
+
+{% block content %}
+  <div class="form-card card border-0 shadow-sm mx-auto">
+    <div class="card-body p-4 p-lg-5">
+      <h1 class="h2 mb-4">{{ page_title }}</h1>
+      {% if profile_user %}
+        <p class="alert alert-info">
+          {% translate "Username is immutable:" %} <bdi>{{ profile_user.username }}</bdi>
+        </p>
+      {% endif %}
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include "includes/form_fields.html" %}
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-primary" type="submit">{% translate "Save" %}</button>
+          {% if profile_user %}
+            <a class="btn btn-outline-secondary" href="{% url 'accounts:detail' profile_user.pk %}">{% translate "Cancel" %}</a>
+          {% else %}
+            <a class="btn btn-outline-secondary" href="{% url 'accounts:list' %}">{% translate "Cancel" %}</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

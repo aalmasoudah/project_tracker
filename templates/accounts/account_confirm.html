@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+  <div class="confirm-card card border-0 shadow-sm mx-auto">
+    <div class="card-body p-4 p-lg-5">
+      <h1 class="h2 mb-3">{{ page_title }}</h1>
+      <p><bdi>{{ profile_user.display_name }}</bdi></p>
+      <p class="text-body-secondary">{{ confirmation_text }}</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="d-flex gap-2">
+          <button class="btn {{ submit_class }}" type="submit">{{ submit_label }}</button>
+          <a class="btn btn-outline-secondary" href="{% url 'accounts:detail' profile_user.pk %}">{% translate "Cancel" %}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

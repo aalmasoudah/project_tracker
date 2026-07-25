@@ -14,6 +14,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "apps.accounts.apps.AccountsConfig",
+    "apps.organizations.apps.OrganizationsConfig",
+    "apps.audit.apps.AuditConfig",
 ]
 
 MIDDLEWARE = [
@@ -23,6 +25,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.accounts.middleware.ForcePasswordChangeMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -70,7 +73,7 @@ LANGUAGES = [
     ("en", _("English")),
 ]
 SUPPORTED_LANGUAGE_CODES = {code for code, _name in LANGUAGES}
-LANGUAGE_CODE = env_string("DEFAULT_LANGUAGE", default="en")
+LANGUAGE_CODE = env_string("DEFAULT_LANGUAGE", default="ar")
 if LANGUAGE_CODE not in SUPPORTED_LANGUAGE_CODES:
     supported_languages = ", ".join(sorted(SUPPORTED_LANGUAGE_CODES))
     raise ImproperlyConfigured(
@@ -92,9 +95,12 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = ("apps.accounts.backends.CaseInsensitiveUsernameBackend",)
 
-LOGIN_URL = "/admin/login/"
+LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
+SESSION_COOKIE_AGE = 8 * 60 * 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGGING = build_logging_config(
     json_logs=env_bool("DJANGO_JSON_LOGS", default=True),

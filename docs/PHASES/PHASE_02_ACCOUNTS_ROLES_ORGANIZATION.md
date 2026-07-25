@@ -1,6 +1,6 @@
 # Phase 2: Accounts, Roles, and Organization
 
-Status: Draft; blocked by permission and lifecycle decisions.
+Status: Completed and verified on 2026-07-25 after owner approval.
 
 ## 1. Goal
 
@@ -10,14 +10,16 @@ account changes.
 
 ## 2. Included Features
 
-- Approved user profile fields and department association.
+- Required display name and email, immutable username, one primary department,
+  one predefined role, forced temporary-password change, and persisted
+  language preference.
 - Departments.
 - Admin-created accounts; activation and deactivation.
 - User-facing login and logout.
-- Approved predefined Django groups and permission assignments.
+- Seven approved internal Django groups and exact Phase 2 permissions.
 - Role-aware navigation backed by server authorization.
 - Audit events for account lifecycle and role changes.
-- Approved per-user language preference and fully localized Arabic/English
+- Persisted per-user language preference and fully localized Arabic/English
   account, authentication, navigation, and department screens.
 
 ## 3. Excluded Features
@@ -25,8 +27,8 @@ account changes.
 - Custom permission-builder UI.
 - Public registration, social login, and external-trainer accounts.
 - Projects, courses, tasks, attendance, and later domain navigation.
-- Any permission not present in the approved matrix.
-- Unapproved Arabic translations for role or department terminology.
+- Any permission outside the approved Phase 2 matrix.
+- Later-domain Arabic terminology.
 
 ## 4. User Stories
 
@@ -39,13 +41,14 @@ account changes.
 
 ## 5. Models Involved
 
-- `accounts.User` additions approved for Phase 2.
+- `accounts.User` additions for display name, required unique email,
+  department, preferred language, forced password change, and lifecycle
+  timestamps.
+- Temporary PostgreSQL-backed login-throttle records.
 - `organizations.Department`.
 - Django `Group` and `Permission`.
 - `audit.AuditEvent` or an equally explicit append-only audit model.
-- User language preference only if `L10N-01` approves persistence.
-
-Exact fields wait for the approved permission/profile decisions.
+- Persisted Arabic/English user language preference.
 
 ## 6. Pages Involved
 
@@ -57,34 +60,49 @@ Exact fields wait for the approved permission/profile decisions.
 
 ## 7. Permission Requirements
 
-Blocked until `RBAC-01`, `RBAC-02`, `RBAC-04`, `RBAC-08`, and relevant audit
-visibility are approved. Permissions must be checked in views, services, and
-querysets; navigation visibility is not enforcement.
+The approved matrix is recorded in `USER_ROLES.md` and decision 0007.
+Permissions must be checked in views, services, and querysets; navigation
+visibility is not enforcement. Only a superuser may assign Technical Admin.
 
 ## 8. Validation Rules
 
-- Unique identity fields and normalized input follow the approved account
-  policy.
-- Arabic identity/search normalization follows `L10N-04` and never destroys
-  the stored original name.
+- Username is immutable, Unicode NFKC-normalized, and case-insensitively
+  unique. Email and display name are required; email is case-insensitively
+  unique.
+- Arabic identity text is preserved. Derived search may ignore
+  diacritics/tatweel and normalize Alef and Persian keyboard variants without
+  merging `ة/ه` or `ى/ي`.
 - Passwords use Django validation and hashing.
 - Only authorized actors may assign privileged groups.
 - Inactive accounts cannot authenticate.
-- Archive/hard-delete behavior follows approved `BR-16`.
+- Accounts, departments, and audit records cannot be hard-deleted through the
+  application.
+- Five account or twenty IP failures in fifteen minutes cause a fifteen-minute
+  lock with non-enumerating messages.
+- Sessions expire after eight hours/browser close and are revoked on logout,
+  deactivation, password change, or administrative reset as applicable.
 
 ## 9. Business Rules
 
 - Accounts are created by authorized administrators.
 - Inactive users cannot sign in.
 - Lifecycle and role changes create audit records.
-- Exact predefined group permissions and object visibility remain unresolved.
+- Each internal account has exactly one managed group.
+- Technical Admin administers accounts/departments and reads Phase 2 audit.
+- CEO/Executive Manager view the active organization directory.
+- Project Manager/Supervisor view active users in their own department.
+- Employee/Contractor view only their profile and department.
+- External Trainer has no internal account or group.
 
 ## 10. Expected Migrations
 
-- Approved Phase 2 fields on `accounts.User`.
+- Approved Phase 2 fields on `accounts.User` plus identity constraints.
 - Initial `organizations.Department`.
-- Initial audit-event model if it is not otherwise available.
-- Constraints/indexes for approved identity, department, archive, and audit
+- Initial append-only `audit.AuditEvent`.
+- Temporary login-throttle storage.
+- Reversible data migration seeding the seven approved internal roles and
+  their Phase 2 model permissions.
+- Constraints/indexes for identity, department, archive, throttle, and audit
   queries.
 
 ## 11. Unit Tests
@@ -93,7 +111,8 @@ querysets; navigation visibility is not enforcement.
 - Activation/deactivation services.
 - Group assignment policy.
 - Audit payload safety.
-- Language preference and localized role-label mapping.
+- Language preference, account-search normalization, and localized role-label
+  mapping.
 
 ## 12. Integration Tests
 
@@ -131,7 +150,8 @@ querysets; navigation visibility is not enforcement.
 
 ## 16. Acceptance Criteria
 
-- Approved account and department lifecycle works.
+- Approved account and department lifecycle works, including immediate session
+  revocation.
 - Predefined groups exactly match the approved matrix.
 - View- and object-level permissions are enforced and tested.
 - Inactive users cannot authenticate.
@@ -143,10 +163,7 @@ querysets; navigation visibility is not enforcement.
 
 - Completed Phase 1.
 - Approved full permission matrix and object-level questions.
-- Approved identity fields, account lifecycle, archive/hard-delete, audit
-  visibility, and login-security policy.
-- Approved default/preference, terminology owner, and identity normalization
-  rules.
+- Decision 0007 and the source-document updates approved on 2026-07-25.
 
 ## 18. Rollback Considerations
 

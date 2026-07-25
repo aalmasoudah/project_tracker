@@ -7,11 +7,11 @@ from django.urls import reverse
 
 @pytest.mark.integration
 @pytest.mark.django_db
-def test_anonymous_user_is_redirected_to_admin_login(client: Client) -> None:
+def test_anonymous_user_is_redirected_to_user_login(client: Client) -> None:
     response = client.get(reverse("home"))
 
     assert response.status_code == 302
-    assert response["Location"] == "/admin/login/?next=/"
+    assert response["Location"] == "/accounts/login/?next=/"
 
 
 @pytest.mark.integration
@@ -31,7 +31,7 @@ def test_authenticated_english_shell_uses_ltr_assets(
     assert "bootstrap.min.css" in content
     assert "bootstrap.rtl.min.css" not in content
     assert "htmx.min.js" in content
-    assert "Engineering foundation ready" in content
+    assert "Accounts and organization" in content
 
 
 @pytest.mark.integration
@@ -49,8 +49,8 @@ def test_authenticated_arabic_shell_uses_rtl_assets(
     assert response.status_code == 200
     assert '<html lang="ar" dir="rtl">' in content
     assert "bootstrap.rtl.min.css" in content
-    assert "الأساس الهندسي جاهز" in content
-    assert "phase-one-user" in content
+    assert "الحسابات والهيكل التنظيمي" in content
+    assert "Phase One User" in content
 
 
 @pytest.mark.integration

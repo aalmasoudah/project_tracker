@@ -2,25 +2,38 @@
 {% load i18n %}
 
 {% block title %}
-  {% translate "Engineering foundation" %} · {% translate "Company Project Tracker" %}
+  {% translate "Accounts and organization" %} · {% translate "Company Project Tracker" %}
 {% endblock %}
 
 {% block content %}
   <section class="foundation-card card border-0 shadow-sm" aria-labelledby="page-title">
     <div class="card-body p-4 p-lg-5">
-      <p class="text-uppercase text-primary fw-semibold mb-2">
-        {% translate "Phase 1" %}
-      </p>
+      <p class="text-primary fw-semibold mb-2">{% translate "Phase 2" %}</p>
       <h1 class="display-6 fw-bold" id="page-title">
-        {% translate "Engineering foundation ready" %}
+        {% translate "Accounts and organization" %}
       </h1>
       <p class="lead text-body-secondary mb-4">
-        {% translate "The authenticated bilingual workspace is ready for approved business phases." %}
+        {% translate "Secure bilingual account and department administration." %}
       </p>
-      <p class="mb-0">
+      <p class="mb-4">
         {% translate "Signed in as" %}
-        <bdi class="fw-semibold">{{ request.user.get_username }}</bdi>
+        <bdi class="fw-semibold">{{ request.user.display_name }}</bdi>
       </p>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{% url 'accounts:profile' %}">
+          {% translate "View my profile" %}
+        </a>
+        {% if perms.accounts.manage_accounts or perms.accounts.view_all_directory or perms.accounts.view_department_directory %}
+          <a class="btn btn-outline-primary" href="{% url 'accounts:list' %}">
+            {% translate "Open account directory" %}
+          </a>
+        {% endif %}
+        {% if perms.organizations.view_department %}
+          <a class="btn btn-outline-primary" href="{% url 'organizations:list' %}">
+            {% translate "Open departments" %}
+          </a>
+        {% endif %}
+      </div>
     </div>
   </section>
 {% endblock %}

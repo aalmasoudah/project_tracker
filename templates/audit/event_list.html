@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load audit_tags i18n %}
+
+{% block title %}{% translate "Audit" %}{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <h1 class="h2 mb-1">{% translate "Security audit" %}</h1>
+    <p class="text-body-secondary mb-0">{% translate "Append-only Phase 2 account and department events." %}</p>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">{% translate "Time" %}</th>
+            <th scope="col">{% translate "Action" %}</th>
+            <th scope="col">{% translate "Actor" %}</th>
+            <th scope="col">{% translate "Target" %}</th>
+            <th scope="col">{% translate "Correlation ID" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in page %}
+            <tr>
+              <td>{{ event.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+              <td>{{ event.action|audit_action_label }}</td>
+              <td><bdi>{{ event.actor.display_name|default:"—" }}</bdi></td>
+              <td><bdi>{{ event.target_label|default:event.target_type }}</bdi></td>
+              <td><code><bdi>{{ event.correlation_id }}</bdi></code></td>
+            </tr>
+          {% empty %}
+            <tr><td class="text-center py-5" colspan="5">{% translate "No audit events found." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if page.has_other_pages %}
+    <nav class="mt-4" aria-label="{% translate 'Audit pagination' %}">
+      <ul class="pagination">
+        {% if page.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">{% translate "Previous" %}</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page.number }} / {{ page.paginator.num_pages }}</span></li>
+        {% if page.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">{% translate "Next" %}</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}

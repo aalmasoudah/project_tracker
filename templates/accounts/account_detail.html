@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load account_tags i18n %}
+
+{% block title %}{{ profile_user.display_name }} · {% translate "Accounts" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <p class="text-body-secondary mb-1"><bdi>{{ profile_user.username }}</bdi></p>
+      <h1 class="h2 mb-0"><bdi>{{ profile_user.display_name }}</bdi></h1>
+    </div>
+    {% if perms.accounts.manage_accounts %}
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'accounts:update' profile_user.pk %}">{% translate "Edit" %}</a>
+        {% if profile_user.pk != request.user.pk %}
+          <a class="btn btn-outline-warning" href="{% url 'accounts:password_reset' profile_user.pk %}">{% translate "Reset password" %}</a>
+          {% if profile_user.is_active %}
+            <a class="btn btn-outline-danger" href="{% url 'accounts:deactivate' profile_user.pk %}">{% translate "Deactivate" %}</a>
+          {% else %}
+            <a class="btn btn-outline-success" href="{% url 'accounts:reactivate' profile_user.pk %}">{% translate "Reactivate" %}</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <dl class="detail-grid card border-0 shadow-sm p-4">
+    <div><dt>{% translate "Email address" %}</dt><dd><bdi>{{ profile_user.email }}</bdi></dd></div>
+    <div><dt>{% translate "Role" %}</dt><dd>{{ profile_user|user_role_label }}</dd></div>
+    <div><dt>{% translate "Department" %}</dt><dd>{{ profile_user.department|department_name }}</dd></div>
+    <div><dt>{% translate "Preferred language" %}</dt><dd>{{ profile_user.get_preferred_language_display }}</dd></div>
+    <div>
+      <dt>{% translate "Status" %}</dt>
+      <dd>{% if profile_user.is_active %}{% translate "Active" %}{% else %}{% translate "Inactive" %}{% endif %}</dd>
+    </div>
+    <div><dt>{% translate "Joined" %}</dt><dd>{{ profile_user.date_joined|date:"SHORT_DATETIME_FORMAT" }}</dd></div>
+  </dl>
+{% endblock %}

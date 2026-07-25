@@ -11,6 +11,8 @@ def test_custom_user_password_is_hashed() -> None:
     raw_password = "fictional-password-9301"
     user = User.objects.create_user(
         username="hash-test-user",
+        email="hash-test-user@example.test",
+        display_name="Hash Test User",
         password=raw_password,
     )
 

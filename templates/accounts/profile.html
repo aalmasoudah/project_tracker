@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load account_tags i18n %}
+
+{% block title %}{% translate "My profile" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <h1 class="h2 mb-1">{% translate "My profile" %}</h1>
+      <p class="text-body-secondary mb-0">{% translate "Your approved internal account details." %}</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'accounts:password_change' %}">
+      {% translate "Change password" %}
+    </a>
+  </div>
+
+  <dl class="detail-grid card border-0 shadow-sm p-4">
+    <div><dt>{% translate "Display name" %}</dt><dd><bdi>{{ profile_user.display_name }}</bdi></dd></div>
+    <div><dt>{% translate "Username" %}</dt><dd><bdi>{{ profile_user.username }}</bdi></dd></div>
+    <div><dt>{% translate "Email address" %}</dt><dd><bdi>{{ profile_user.email }}</bdi></dd></div>
+    <div><dt>{% translate "Role" %}</dt><dd>{{ profile_user|user_role_label }}</dd></div>
+    <div><dt>{% translate "Department" %}</dt><dd>{{ profile_user.department|department_name }}</dd></div>
+    <div><dt>{% translate "Preferred language" %}</dt><dd>{{ profile_user.get_preferred_language_display }}</dd></div>
+  </dl>
+{% endblock %}

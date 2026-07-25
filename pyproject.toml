@@ -69,7 +69,7 @@ plugins = ["mypy_django_plugin.main"]
 strict = true
 warn_unreachable = true
 exclude = [
-    "^apps/accounts/migrations/",
+    "^apps/.*/migrations/",
     "^\\.venv",
     "^\\.uv-cache-temp",
 ]

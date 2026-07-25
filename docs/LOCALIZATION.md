@@ -2,7 +2,8 @@
 
 ## Status and Objective
 
-Status: Approved scope requirement; policy details remain open.
+Status: Approved scope requirement. Phase 2 account policy was approved on
+2026-07-25; later output policies remain open.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -12,7 +13,7 @@ spreadsheets must behave correctly with Arabic and mixed-direction data.
 ## Foundation
 
 - Configure Django internationalization for `ar` and `en` in Phase 1.
-- Keep the default language configurable until the owner approves it.
+- Arabic is the default language.
 - Use Django translation catalogs for Python and template text.
 - Set page `lang` and `dir` from the active language and preserve direction in
   HTMX fragments.
@@ -54,15 +55,23 @@ spreadsheets must behave correctly with Arabic and mixed-direction data.
 
 ## Dates, Numbers, and Terminology
 
-The following require explicit owner approval:
+Approved for Phase 2:
 
-- Default application language and whether users persist a preference.
-- Official Arabic translations for roles, statuses, workflow actions, and
+- Arabic is the default, and internal users persist Arabic or English.
+- The project owner approves official terminology.
+- Phase 2 role translations are recorded in decision 0007.
+- Account identity preserves original Arabic text. Derived search may ignore
+  diacritics/tatweel and normalize Alef and Persian keyboard variants without
+  merging `ة/ه` or `ى/ي`.
+
+The following still require explicit owner approval in their later phases:
+
+- Official Arabic translations for later statuses, workflow actions, and
   report names.
 - Gregorian/Hijri display by screen/report.
 - Arabic-Indic/Western digit display.
 - Date/time, timezone, currency, and rounding conventions.
-- Arabic search, sorting, identity, and duplicate-normalization rules.
+- Arabic duplicate and sorting rules outside the approved account search.
 
 Until approved, implementation keeps these policies configurable or defers the
 affected feature; it does not guess.

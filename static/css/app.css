@@ -46,3 +46,71 @@ body {
 bdi {
   unicode-bidi: isolate;
 }
+
+.auth-card {
+  max-width: 30rem;
+}
+
+.form-card {
+  max-width: 46rem;
+}
+
+.confirm-card {
+  max-width: 38rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.detail-grid div {
+  min-width: 0;
+}
+
+.detail-grid dt {
+  color: var(--bs-secondary-color);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.detail-grid dd {
+  margin-bottom: 0;
+  overflow-wrap: anywhere;
+}
+
+code bdi {
+  unicode-bidi: isolate;
+}
+
+@media (max-width: 991.98px) {
+  .navigation-actions {
+    align-items: stretch;
+    border-top: var(--bs-border-width) solid var(--bs-border-color);
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .input-group {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-group > .form-control,
+  .input-group > .btn {
+    border-radius: var(--bs-border-radius) !important;
+    width: 100%;
+  }
+
+  .table {
+    min-width: 42rem;
+  }
+}

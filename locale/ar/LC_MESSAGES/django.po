@@ -1,17 +1,17 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: insight-tracker 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-23 00:00+0300\n"
-"PO-Revision-Date: 2026-07-23 00:00+0300\n"
+"POT-Creation-Date: 2026-07-25 00:00+0300\n"
+"PO-Revision-Date: 2026-07-25 00:00+0300\n"
 "Last-Translator: Project Owner\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0?0:n==1?1:n==2?2:n%100>=3 && "
-"n%100<=10?3:n%100>=11 && n%100<=99?4:5;\n"
+"Plural-Forms: nplurals=6; plural=n==0?0:n==1?1:n==2?2:n%100>=3 && n%100<=10?3:n%100>=11 && n%100<=99?4:5;\n"
 
 msgid "Accounts"
 msgstr "الحسابات"
@@ -19,17 +19,8 @@ msgstr "الحسابات"
 msgid "Company Project Tracker"
 msgstr "متتبع مشاريع الشركة"
 
-msgid "Engineering foundation"
-msgstr "الأساس الهندسي"
-
-msgid "Engineering foundation ready"
-msgstr "الأساس الهندسي جاهز"
-
 msgid "Language"
 msgstr "اللغة"
-
-msgid "Phase 1"
-msgstr "المرحلة الأولى"
 
 msgid "Primary navigation"
 msgstr "التنقل الرئيسي"
@@ -43,11 +34,559 @@ msgstr "تخطي إلى المحتوى الرئيسي"
 msgid "Switch language"
 msgstr "تغيير اللغة"
 
-msgid "The authenticated bilingual workspace is ready for approved business phases."
-msgstr "مساحة العمل الثنائية اللغة والمحمية بالمصادقة جاهزة لمراحل العمل المعتمدة."
-
 msgid "user"
 msgstr "مستخدم"
 
 msgid "users"
 msgstr "المستخدمون"
+
+msgid ""
+"A department can be archived only after all active users move or are "
+"deactivated."
+msgstr ""
+"لا يمكن أرشفة القسم حتى يُنقل جميع المستخدمين النشطين أو تُعطّل حساباتهم."
+
+msgid "A department is required for this role."
+msgstr "القسم مطلوب لهذا الدور."
+
+msgid "A department with this code already exists."
+msgstr "يوجد قسم بهذا الرمز مسبقًا."
+
+msgid "A user with that username already exists."
+msgstr "يوجد مستخدم باسم المستخدم هذا مسبقًا."
+
+msgid "Access denied"
+msgstr "الوصول مرفوض"
+
+msgid "Account"
+msgstr "الحساب"
+
+msgid "Account created"
+msgstr "تم إنشاء الحساب"
+
+msgid "Account created successfully."
+msgstr "تم إنشاء الحساب بنجاح."
+
+msgid "Account deactivated"
+msgstr "تم تعطيل الحساب"
+
+msgid "Account deactivated successfully."
+msgstr "تم تعطيل الحساب بنجاح."
+
+msgid "Account directory"
+msgstr "دليل الحسابات"
+
+msgid "Account reactivated"
+msgstr "تمت إعادة تفعيل الحساب"
+
+msgid "Account reactivated successfully."
+msgstr "تمت إعادة تفعيل الحساب بنجاح."
+
+msgid "Account updated"
+msgstr "تم تحديث الحساب"
+
+msgid "Account updated successfully."
+msgstr "تم تحديث الحساب بنجاح."
+
+msgid "Accounts and organization"
+msgstr "الحسابات والهيكل التنظيمي"
+
+msgid "Action"
+msgstr "الإجراء"
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "Actor"
+msgstr "المنفّذ"
+
+msgid "All active sessions will be revoked."
+msgstr "سيتم إنهاء جميع الجلسات النشطة."
+
+msgid "An account with this email already exists."
+msgstr "يوجد حساب بهذا البريد الإلكتروني مسبقًا."
+
+msgid "Append-only Phase 2 account and department events."
+msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."
+
+msgid "Approved profile"
+msgstr "الملف المعتمد"
+
+msgid "Arabic"
+msgstr "العربية"
+
+msgid "Arabic name"
+msgstr "الاسم بالعربية"
+
+msgid "Arabic name is required."
+msgstr "الاسم بالعربية مطلوب."
+
+msgid "Archive"
+msgstr "أرشفة"
+
+msgid "Archive department"
+msgstr "أرشفة القسم"
+
+msgid "Archived"
+msgstr "مؤرشف"
+
+msgid "Archived departments cannot receive users."
+msgstr "لا يمكن إسناد مستخدمين إلى الأقسام المؤرشفة."
+
+msgid "Audit"
+msgstr "سجل التدقيق"
+
+msgid "Audit pagination"
+msgstr "التنقل بين صفحات سجل التدقيق"
+
+msgid "Bilingual organization units visible to your role."
+msgstr "الوحدات التنظيمية ثنائية اللغة المتاحة لدورك."
+
+msgid "CEO"
+msgstr "الرئيس التنفيذي"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Change password"
+msgstr "تغيير كلمة المرور"
+
+msgid "Confirm temporary password"
+msgstr "تأكيد كلمة المرور المؤقتة"
+
+msgid "Contractor"
+msgstr "متعاقد"
+
+msgid "Correlation ID"
+msgstr "معرّف التتبع"
+
+msgid "Create account"
+msgstr "إنشاء حساب"
+
+msgid "Create department"
+msgstr "إنشاء قسم"
+
+msgid "Deactivate"
+msgstr "تعطيل"
+
+msgid "Deactivate account"
+msgstr "تعطيل الحساب"
+
+msgid "Department"
+msgstr "القسم"
+
+msgid "Department archived"
+msgstr "تمت أرشفة القسم"
+
+msgid "Department archived successfully."
+msgstr "تمت أرشفة القسم بنجاح."
+
+msgid "Department code"
+msgstr "رمز القسم"
+
+msgid "Department created"
+msgstr "تم إنشاء القسم"
+
+msgid "Department created successfully."
+msgstr "تم إنشاء القسم بنجاح."
+
+msgid "Department restored"
+msgstr "تمت استعادة القسم"
+
+msgid "Department restored successfully."
+msgstr "تمت استعادة القسم بنجاح."
+
+msgid "Department updated"
+msgstr "تم تحديث القسم"
+
+msgid "Department updated successfully."
+msgstr "تم تحديث القسم بنجاح."
+
+msgid "Departments"
+msgstr "الأقسام"
+
+msgid "Display name"
+msgstr "الاسم المعروض"
+
+msgid "Display name is required."
+msgstr "الاسم المعروض مطلوب."
+
+msgid "Edit"
+msgstr "تعديل"
+
+msgid "Edit account"
+msgstr "تعديل الحساب"
+
+msgid "Edit department"
+msgstr "تعديل القسم"
+
+msgid "Email address"
+msgstr "البريد الإلكتروني"
+
+msgid "Employee"
+msgstr "موظف"
+
+msgid "English"
+msgstr "الإنجليزية"
+
+msgid "English name"
+msgstr "الاسم بالإنجليزية"
+
+msgid "English name is required."
+msgstr "الاسم بالإنجليزية مطلوب."
+
+msgid "Executive Manager"
+msgstr "المدير التنفيذي"
+
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "IP address"
+msgstr "عنوان IP"
+
+msgid "Important dates"
+msgstr "التواريخ المهمة"
+
+msgid "Inactive"
+msgstr "معطّل"
+
+msgid "Joined"
+msgstr "تاريخ الانضمام"
+
+msgid "Language preference changed"
+msgstr "تم تغيير اللغة المفضلة"
+
+msgid "Login failed"
+msgstr "فشل تسجيل الدخول"
+
+msgid "Login succeeded"
+msgstr "نجح تسجيل الدخول"
+
+msgid "Login temporarily locked"
+msgstr "تم إيقاف تسجيل الدخول مؤقتًا"
+
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+msgid "My profile"
+msgstr "ملفي الشخصي"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "No accounts found."
+msgstr "لم يتم العثور على حسابات."
+
+msgid "No assigned role"
+msgstr "لا يوجد دور معيّن"
+
+msgid "No audit events found."
+msgstr "لم يتم العثور على أحداث تدقيق."
+
+msgid "No departments found."
+msgstr "لم يتم العثور على أقسام."
+
+msgid "Not found"
+msgstr "غير موجود"
+
+msgid "Only accounts permitted by your role are shown."
+msgstr "تظهر فقط الحسابات التي يسمح لك دورك بعرضها."
+
+msgid "Open account directory"
+msgstr "فتح دليل الحسابات"
+
+msgid "Open departments"
+msgstr "فتح الأقسام"
+
+msgid "Password"
+msgstr "كلمة المرور"
+
+msgid "Password changed"
+msgstr "تم تغيير كلمة المرور"
+
+msgid "Password reset"
+msgstr "تمت إعادة تعيين كلمة المرور"
+
+msgid "Phase 2"
+msgstr "المرحلة الثانية"
+
+msgid "Preferred language"
+msgstr "اللغة المفضلة"
+
+msgid "Previous"
+msgstr "السابق"
+
+msgid "Project Manager"
+msgstr "مدير مشروع"
+
+msgid "Reactivate"
+msgstr "إعادة تفعيل"
+
+msgid "Reactivate account"
+msgstr "إعادة تفعيل الحساب"
+
+msgid "Recovery permissions"
+msgstr "صلاحيات الاسترداد"
+
+msgid "Replace your temporary password before continuing."
+msgstr "استبدل كلمة المرور المؤقتة قبل المتابعة."
+
+msgid "Reset password"
+msgstr "إعادة تعيين كلمة المرور"
+
+msgid "Restore"
+msgstr "استعادة"
+
+msgid "Restore department"
+msgstr "استعادة القسم"
+
+msgid "Return home"
+msgstr "العودة إلى الرئيسية"
+
+msgid "Role"
+msgstr "الدور"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Save new password"
+msgstr "حفظ كلمة المرور الجديدة"
+
+msgid "Search"
+msgstr "بحث"
+
+msgid "Search accounts"
+msgstr "البحث في الحسابات"
+
+msgid "Search by name, username, or email"
+msgstr "البحث بالاسم أو اسم المستخدم أو البريد الإلكتروني"
+
+msgid "Search departments"
+msgstr "البحث في الأقسام"
+
+msgid "Secure bilingual account and department administration."
+msgstr "إدارة آمنة وثنائية اللغة للحسابات والأقسام."
+
+msgid "Security audit"
+msgstr "سجل التدقيق الأمني"
+
+msgid "Set a temporary password for"
+msgstr "تعيين كلمة مرور مؤقتة لـ"
+
+msgid "Set temporary password"
+msgstr "تعيين كلمة مرور مؤقتة"
+
+msgid "Sign in"
+msgstr "تسجيل الدخول"
+
+msgid "Sign out"
+msgstr "تسجيل الخروج"
+
+msgid "Status"
+msgstr "الحالة"
+
+msgid "Supervisor"
+msgstr "مشرف"
+
+msgid "System messages"
+msgstr "رسائل النظام"
+
+msgid "Target"
+msgstr "الهدف"
+
+msgid "Technical Admin"
+msgstr "المسؤول التقني"
+
+msgid "Temporary password"
+msgstr "كلمة المرور المؤقتة"
+
+msgid "Temporary password set; the user must replace it at login."
+msgstr ""
+"تم تعيين كلمة مرور مؤقتة؛ يجب على المستخدم استبدالها عند تسجيل الدخول."
+
+msgid "The department will become available for new account assignments."
+msgstr "سيصبح القسم متاحًا لإسناد حسابات جديدة."
+
+msgid "The requested record was not found or is not visible to your role."
+msgstr "السجل المطلوب غير موجود أو غير متاح لدورك."
+
+msgid "The two password fields did not match."
+msgstr "كلمتا المرور غير متطابقتين."
+
+msgid "The user must sign in again after reactivation."
+msgstr "يجب على المستخدم تسجيل الدخول مجددًا بعد إعادة التفعيل."
+
+msgid "This immediately signs the user out and prevents future login."
+msgstr "سيؤدي هذا إلى تسجيل خروج المستخدم فورًا ومنع تسجيل دخوله لاحقًا."
+
+msgid "Time"
+msgstr "الوقت"
+
+msgid "Toggle navigation"
+msgstr "إظهار أو إخفاء قائمة التنقل"
+
+msgid ""
+"Unable to sign in with the provided credentials. Try again later or contact "
+"an administrator."
+msgstr ""
+"تعذّر تسجيل الدخول بالبيانات المقدمة. حاول لاحقًا أو تواصل مع المسؤول."
+
+msgid "Unknown role"
+msgstr "دور غير معروف"
+
+msgid ""
+"Use 2-20 uppercase English letters, numbers, underscores, or hyphens, "
+"starting with a letter."
+msgstr ""
+"استخدم من حرفين إلى 20 من الأحرف الإنجليزية الكبيرة أو الأرقام أو الشرطة "
+"السفلية أو الواصلة، على أن يبدأ الرمز بحرف."
+
+msgid "Use the internal account created for you by an administrator."
+msgstr "استخدم الحساب الداخلي الذي أنشأه لك المسؤول."
+
+msgid "Use uppercase English letters, numbers, underscores, or hyphens."
+msgstr ""
+"استخدم الأحرف الإنجليزية الكبيرة أو الأرقام أو الشرطة السفلية أو الواصلة."
+
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgid "Username is immutable:"
+msgstr "اسم المستخدم ثابت ولا يمكن تغييره:"
+
+msgid "View my profile"
+msgstr "عرض ملفي الشخصي"
+
+msgid "You do not have permission to perform this action."
+msgstr "ليس لديك صلاحية لتنفيذ هذا الإجراء."
+
+msgid "Your approved internal account details."
+msgstr "بيانات حسابك الداخلي المعتمدة."
+
+msgid "Your password was changed successfully."
+msgstr "تم تغيير كلمة مرورك بنجاح."
+
+msgid "action"
+msgstr "الإجراء"
+
+msgid "actor"
+msgstr "المنفّذ"
+
+msgid "archived"
+msgstr "مؤرشف"
+
+msgid "archived at"
+msgstr "تاريخ الأرشفة"
+
+msgid "audit event"
+msgstr "حدث تدقيق"
+
+msgid "audit events"
+msgstr "أحداث التدقيق"
+
+msgid "code"
+msgstr "الرمز"
+
+msgid "correlation ID"
+msgstr "معرّف التتبع"
+
+msgid "created at"
+msgstr "تاريخ الإنشاء"
+
+msgid "deactivated at"
+msgstr "تاريخ التعطيل"
+
+msgid "deactivated by"
+msgstr "عطّله"
+
+msgid "department"
+msgstr "القسم"
+
+msgid "departments"
+msgstr "الأقسام"
+
+msgid "display name"
+msgstr "الاسم المعروض"
+
+msgid "email address"
+msgstr "البريد الإلكتروني"
+
+msgid "metadata"
+msgstr "البيانات الوصفية"
+
+msgid "must change password"
+msgstr "يجب تغيير كلمة المرور"
+
+msgid "preferred language"
+msgstr "اللغة المفضلة"
+
+msgid "target ID"
+msgstr "معرّف الهدف"
+
+msgid "target label"
+msgstr "وصف الهدف"
+
+msgid "target type"
+msgstr "نوع الهدف"
+
+msgid "updated at"
+msgstr "تاريخ التحديث"
+
+msgid "username"
+msgstr "اسم المستخدم"
+
+msgid "Account administration permission is required."
+msgstr "صلاحية إدارة الحسابات مطلوبة."
+
+msgid "An account can have only one managed role."
+msgstr "لا يمكن أن يكون للحساب أكثر من دور مُدار واحد."
+
+msgid "Assign one approved role before reactivation."
+msgstr "عيّن دورًا معتمدًا واحدًا قبل إعادة التفعيل."
+
+msgid "Department administration permission is required."
+msgstr "صلاحية إدارة الأقسام مطلوبة."
+
+msgid "Move or deactivate active users before archiving this department."
+msgstr "انقل المستخدمين النشطين أو عطّل حساباتهم قبل أرشفة هذا القسم."
+
+msgid "Only a superuser may assign Technical Admin."
+msgstr "لا يمكن إسناد دور المسؤول التقني إلا بواسطة المستخدم الأعلى صلاحية."
+
+msgid "Only a superuser may change Technical Admin."
+msgstr "لا يمكن تغيير المسؤول التقني إلا بواسطة المستخدم الأعلى صلاحية."
+
+msgid "Only a superuser may manage a superuser account."
+msgstr "لا يمكن إدارة حساب مستخدم أعلى صلاحية إلا بواسطة مستخدم أعلى صلاحية."
+
+msgid "Only a superuser may revoke Technical Admin."
+msgstr "لا يمكن سحب دور المسؤول التقني إلا بواسطة المستخدم الأعلى صلاحية."
+
+msgid "Select an approved predefined role."
+msgstr "اختر دورًا معتمدًا ومحددًا مسبقًا."
+
+msgid "The final active administrator cannot be deactivated."
+msgstr "لا يمكن تعطيل آخر مسؤول نشط."
+
+msgid "Unsupported language."
+msgstr "اللغة غير مدعومة."
+
+msgid "Use the personal password-change page."
+msgstr "استخدم صفحة تغيير كلمة المرور الشخصية."
+
+msgid "You cannot deactivate your own account."
+msgstr "لا يمكنك تعطيل حسابك الشخصي."
+
+#~ msgid "Engineering foundation"
+#~ msgstr "الأساس الهندسي"
+
+#~ msgid "Engineering foundation ready"
+#~ msgstr "الأساس الهندسي جاهز"
+
+#~ msgid "Phase 1"
+#~ msgstr "المرحلة الأولى"
+
+#~ msgid ""
+#~ "The authenticated bilingual workspace is ready for approved business phases."
+#~ msgstr ""
+#~ "مساحة العمل الثنائية اللغة والمحمية بالمصادقة جاهزة لمراحل العمل المعتمدة."

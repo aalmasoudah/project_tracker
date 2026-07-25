@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load account_tags i18n %}
+
+{% block title %}{% translate "Departments" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <h1 class="h2 mb-1">{% translate "Departments" %}</h1>
+      <p class="text-body-secondary mb-0">{% translate "Bilingual organization units visible to your role." %}</p>
+    </div>
+    {% if perms.organizations.add_department %}
+      <a class="btn btn-primary" href="{% url 'organizations:create' %}">{% translate "Create department" %}</a>
+    {% endif %}
+  </div>
+
+  <form class="card border-0 shadow-sm p-3 mb-4" method="get" role="search">
+    <div class="input-group">
+      <label class="visually-hidden" for="department-search">{% translate "Search departments" %}</label>
+      <input class="form-control" id="department-search" name="q" type="search" value="{{ search }}">
+      <button class="btn btn-outline-primary" type="submit">{% translate "Search" %}</button>
+    </div>
+  </form>
+
+  <div class="row g-3">
+    {% for department in department_list %}
+      <div class="col-12 col-md-6 col-xl-4">
+        <article class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between gap-2 mb-2">
+              <span class="badge text-bg-primary"><bdi>{{ department.code }}</bdi></span>
+              {% if department.is_archived %}
+                <span class="badge text-bg-secondary">{% translate "Archived" %}</span>
+              {% endif %}
+            </div>
+            <h2 class="h5"><bdi>{{ department|department_name }}</bdi></h2>
+            <p class="small text-body-secondary mb-3">
+              <bdi>{{ department.name_ar }}</bdi> · <bdi>{{ department.name_en }}</bdi>
+            </p>
+            {% if perms.organizations.change_department %}
+              <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'organizations:update' department.pk %}">{% translate "Edit" %}</a>
+                {% if department.is_archived %}
+                  <a class="btn btn-outline-success btn-sm" href="{% url 'organizations:restore' department.pk %}">{% translate "Restore" %}</a>
+                {% else %}
+                  <a class="btn btn-outline-danger btn-sm" href="{% url 'organizations:archive' department.pk %}">{% translate "Archive" %}</a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </article>
+      </div>
+    {% empty %}
+      <div class="col-12"><p class="text-center py-5">{% translate "No departments found." %}</p></div>
+    {% endfor %}
+  </div>
+{% endblock %}

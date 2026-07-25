@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phase 1, Engineering Foundation, is implemented. Phase 2 is not approved and
-no business-domain feature has been started.
+Phases 1 and 2 are complete. Phase 2, Accounts, Roles, and Organization, was
+implemented and verified on 2026-07-25.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -41,12 +41,13 @@ docker compose exec db createdb -U tracker tracker_test
 
 Open:
 
-- Authenticated shell: <http://127.0.0.1:8000/>
-- Bootstrap administration login: <http://127.0.0.1:8000/admin/>
+- User login: <http://127.0.0.1:8000/accounts/login/>
+- Authenticated application: <http://127.0.0.1:8000/>
+- Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 
-The user-facing login experience belongs to Phase 2. Phase 1 uses the
-restricted Django administration login only to bootstrap a local user.
+Create accounts and departments through the localized Phase 2 application.
+The Django administration remains a restricted superuser recovery surface.
 
 ## Quality Gate
 

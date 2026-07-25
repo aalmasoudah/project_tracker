@@ -1,9 +1,8 @@
 # User Roles
 
-## Proposed Predefined Roles
+## Approved Predefined Roles
 
-The development playbook identifies the following user types for acceptance
-testing. Their exact permissions require project-owner approval.
+The following Phase 2 internal roles were approved on 2026-07-25:
 
 - Technical Admin
 - CEO
@@ -12,7 +11,10 @@ testing. Their exact permissions require project-owner approval.
 - Supervisor
 - Employee
 - Contractor
-- External Trainer
+
+Each internal account has exactly one managed predefined role. External
+Trainer remains a stable business label but is not an internal account or
+Django group.
 
 ## Role Model
 
@@ -25,36 +27,44 @@ testing. Their exact permissions require project-owner approval.
 - Role assignment and account lifecycle changes are audited.
 - External trainers use secure, limited, expiring links for approved
   attendance workflows and are not assumed to have internal accounts.
+- Only a Django superuser may grant or revoke Technical Admin.
+- Technical Admin may assign only non-technical managed roles.
 
-## Permission Matrix Requiring Approval
+## Phase 2 Permission Matrix
 
-For each role, approve Create, View, Update, Archive, Approve, Export, and
-Administer permissions for:
+Permissions are approved incrementally by phase. Later-domain permissions
+remain unresolved until their workflows are approved.
 
-- Users and departments
-- Projects and teams
-- Courses and trainers
-- Tasks, comments, and files
-- Milestones and completion approvals
-- Trainees and imports
-- Sessions and attendance
-- Notifications
-- Dashboards and search
-- Reports and exports
-- Audit and operational information
+| Role | Accounts | Departments | Audit |
+| --- | --- | --- | --- |
+| Technical Admin | Create, view, update, deactivate/reactivate, reset passwords, assign non-technical roles | Create, view, update, archive/restore | Read |
+| CEO | View all active directory entries | View all active departments | None |
+| Executive Manager | View all active directory entries | View all active departments | None |
+| Project Manager | View active users in own department | View own department | None |
+| Supervisor | View active users in own department | View own department | None |
+| Employee | View own profile | View own department | None |
+| Contractor | View own profile | View own department | None |
+
+All internal users may change their own password and language preference.
+There are no Phase 2 approve or export actions. The public `/health/` endpoint
+remains minimal; detailed operational information is deferred.
 
 ## Object-Level Access Questions
 
-1. Can users view only assigned records, department records, or all records?
+1. [Approved for Phase 2] Use the account/department scopes above. Later
+   domain scopes are approved in their phases.
 2. Can project managers access projects they do not manage?
-3. Can supervisors access employees outside their department or team?
+3. [Approved for Phase 2] No. Supervisors see active users only in their own
+   department.
 4. Can employees and contractors see budgets?
 5. Who may view personal attendance information?
 6. Who may export reports containing personal data?
-7. Who may archive and restore each record type?
-8. Who may view audit records and operational health information?
+7. [Approved for Phase 2] Technical Admin may archive/restore departments.
+   Accounts are deactivated/reactivated. Later records remain open.
+8. [Approved for Phase 2] Technical Admin may read Phase 2 audit records.
+   Detailed operational health remains deferred.
 
 ## Role Approval
 
-Status: Proposed role list only. The permission matrix must be approved before
-Phase 2.
+Status: The role model and Phase 2 permission slice were approved on
+2026-07-25. Later-domain matrix entries remain open.

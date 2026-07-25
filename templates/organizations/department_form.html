@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }} · {% translate "Departments" %}{% endblock %}
+
+{% block content %}
+  <div class="form-card card border-0 shadow-sm mx-auto">
+    <div class="card-body p-4 p-lg-5">
+      <h1 class="h2 mb-4">{{ page_title }}</h1>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include "includes/form_fields.html" %}
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" type="submit">{% translate "Save" %}</button>
+          <a class="btn btn-outline-secondary" href="{% url 'organizations:list' %}">{% translate "Cancel" %}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -31,7 +31,11 @@ navigation is never an authorization control.
 - Do not log passwords, reset values, session identifiers, authorization
   headers, raw attendance tokens, or secret environment values.
 - Add login rate limiting and abnormal-failure monitoring before production;
-  the exact control is specified in the phase that owns login.
+  Phase 2 uses five account failures or twenty IP failures in fifteen minutes
+  followed by a fifteen-minute lock.
+- Sessions expire after eight hours and when the browser closes.
+- Logout, deactivation, password change, and administrative reset revoke
+  applicable sessions.
 
 External trainer links are capability URLs, not general accounts. They grant
 only the approved session action and never internal navigation.
@@ -47,8 +51,8 @@ only the approved session action and never internal navigation.
   archived records, exports, and files.
 - Keep the Django admin restricted to authorized technical administration.
 
-The permission matrix and object-level access policy are unresolved and block
-Phase 2 and every later user-facing domain phase.
+The Phase 2 permission slice was approved on 2026-07-25. Later domain
+permissions remain unresolved and block their user-facing phases.
 
 ## Web Security
 
@@ -117,6 +121,10 @@ Audit data must be append-only through normal application paths, access
 controlled, correlation-friendly, and free of secrets. Retention, hard-delete
 exceptions, export rights, and personal-data access require owner approval.
 
+Technical Admin alone may read Phase 2 audit records. Accounts, departments,
+and audit records are not hard-deleted. Expired throttle counters may be
+deleted as temporary security data.
+
 ## Security Verification
 
 Every applicable phase includes:
@@ -133,7 +141,7 @@ Every applicable phase includes:
 
 ## Open Security Decisions
 
-- Complete role and object-level permission matrix.
+- Complete each later-domain role and object-level permission slice.
 - Personal attendance visibility and export authorization.
 - Default language, persisted preference, and approved Arabic terminology.
 - Arabic normalization rules for identity, duplicate detection, and search.
