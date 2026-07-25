@@ -1,0 +1,1 @@
+"""Critical Playwright workflows."""

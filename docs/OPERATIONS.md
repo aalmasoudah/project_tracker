@@ -1,0 +1,143 @@
+# Operations Plan
+
+## Status and Purpose
+
+Status: Planning baseline.
+
+This plan defines the operational capabilities required before company data is
+placed in production. Named owners, escalation contacts, retention periods,
+provider plans, and recovery objectives still require approval.
+
+## Operational Responsibilities
+
+Before staging, assign owners for:
+
+- Application releases and rollback.
+- Database and object-storage administration.
+- Security incident response.
+- User access and periodic permission review.
+- Backup verification and restoration tests.
+- Monitoring and alert response.
+- Email delivery and domain authentication.
+- Data retention, privacy requests, and audit access.
+- User support and escalation.
+- Arabic terminology/translation review and localization release quality.
+
+Production credentials must be role-limited and unavailable to ordinary
+application users.
+
+## Monitoring
+
+Monitor at minimum:
+
+| Area | Signals |
+| --- | --- |
+| Availability | Health endpoint, external uptime, failed releases |
+| Application | Error rate, response latency, slow requests |
+| Security | Abnormal authentication/token failures, denied sensitive actions |
+| Database | Capacity, connections, locks, slow queries, backup status |
+| Storage | Capacity, authorization failures, lifecycle failures |
+| Workers | Queue depth, worker availability, retry/failure rate |
+| Email | Bounce/failure rate and provider health |
+| Business workflows | Stuck approval/import/attendance states where measurable |
+
+Alert thresholds, on-call routes, and escalation timing require operational
+approval and measured baselines.
+
+## Health Endpoint
+
+`/health/` reports application and database availability using a stable,
+machine-readable response. It must:
+
+- Avoid secrets, configuration values, stack traces, record counts, and
+  internal topology.
+- Use an appropriate failure status when the database is unavailable.
+- Remain inexpensive and safe for frequent platform probes.
+- Expand to worker/storage dependencies only when doing so improves actionable
+  monitoring without making the web service appear unhealthy for a separate
+  degraded dependency.
+
+## Backup and Recovery
+
+- Use managed PostgreSQL recovery capabilities appropriate to the production
+  plan.
+- Create encrypted logical backups stored separately from the primary service
+  where approved.
+- Back up object metadata and ensure object-storage durability/versioning
+  aligns with policy.
+- Verify backup jobs and alert on failure.
+- Restore into an isolated temporary environment, apply checks, and validate
+  important record counts/workflows.
+- Record restoration evidence, elapsed time, owner, and outcome.
+- Securely remove temporary restoration resources.
+
+Retention duration, recovery point objective, recovery time objective, and
+restoration cadence require owner approval. The application must not expose an
+unrestricted database-restore web page.
+
+## Incident Response
+
+1. Detect and classify the incident.
+2. Assign an incident lead and establish a timestamped record.
+3. Contain access or pause affected workflows without destroying evidence.
+4. Preserve relevant logs, release identifiers, and database/storage state.
+5. Recover using an approved runbook and verified source.
+6. Validate authorization, integrity, and critical workflows.
+7. Communicate through approved contacts.
+8. Complete a post-incident review and track corrective actions.
+
+Security incidents must include credential/token revocation and access review
+where applicable. Direct production data edits require an approved,
+auditable procedure.
+
+## Routine Maintenance
+
+- Review dependency and security updates regularly in staging first.
+- Review errors, failed jobs, storage/database capacity, and email failures.
+- Verify backup completion and perform approved restoration exercises.
+- Review inactive accounts, privileged groups, and service credentials.
+- Rotate secrets according to approved policy and after suspected exposure.
+- Review slow queries and indexes using realistic synthetic data.
+- Maintain change log, decision records, runbooks, and release history.
+- Review translation completeness and Arabic rendering whenever user-visible
+  text, emails, imports, or reports change.
+
+## Protected Operational Commands
+
+Management commands that export data, apply retention, repair state, or create
+privileged users must:
+
+- Require an explicit environment and confirmation mechanism appropriate to
+  impact.
+- Validate authorization through operational access controls.
+- Be idempotent or safely resumable where practical.
+- Support dry-run for destructive or broad changes.
+- Log safe summaries without secrets or personal payloads.
+- Refuse ambiguous targets.
+
+These commands are added only in the phase that owns their behavior.
+
+## Required Runbooks Before Launch
+
+- Deploy and rollback.
+- Create/revoke privileged access.
+- Database backup verification and isolated restoration test.
+- Object-storage access failure.
+- Suspected credential or token exposure.
+- High error rate or unavailable service.
+- Failed migration.
+- Worker backlog/failure after Phase 11.
+- Email delivery failure after Phase 11.
+- Privacy, retention, and authorized data export.
+
+## Open Operational Decisions
+
+- Named owners, support contact, and escalation path.
+- Production region, provider plans, and contractual requirements.
+- RPO, RTO, backup/retention periods, and restoration cadence.
+- Data/file/audit retention and approved hard-delete exceptions.
+- Monitoring thresholds and notification routes.
+- Maintenance windows and release approval authority.
+- Staging and production domain names.
+- Default language, approved Arabic terminology owner, calendar/digit policy,
+  and Arabic support contact.

@@ -1,0 +1,79 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <title>{% block title %}{% translate "Company Project Tracker" %}{% endblock %}</title>
+    {% if LANGUAGE_BIDI %}
+      <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.rtl.min.css' %}">
+    {% else %}
+      <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+    {% endif %}
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}" defer></script>
+    <script src="{% static 'vendor/htmx/htmx.min.js' %}" defer></script>
+  </head>
+  <body>
+    <a class="visually-hidden-focusable skip-link" href="#main-content">
+      {% translate "Skip to main content" %}
+    </a>
+
+    <header class="border-bottom bg-body-tertiary">
+      <nav class="navbar container" aria-label="{% translate 'Primary navigation' %}">
+        <a class="navbar-brand fw-semibold" href="{% url 'home' %}">
+          {% translate "Company Project Tracker" %}
+        </a>
+
+        <form
+          class="d-flex align-items-center gap-2"
+          action="{% url 'set_language' %}"
+          method="post"
+        >
+          {% csrf_token %}
+          <input name="next" type="hidden" value="{{ request.get_full_path }}">
+          <label class="visually-hidden" for="language-select">
+            {% translate "Language" %}
+          </label>
+          {% get_available_languages as LANGUAGES %}
+          {% get_language_info_list for LANGUAGES as language_info_list %}
+          <select
+            class="form-select form-select-sm"
+            id="language-select"
+            name="language"
+          >
+            {% for language in language_info_list %}
+              <option
+                value="{{ language.code }}"
+                {% if language.code == LANGUAGE_CODE %}selected{% endif %}
+              >
+                {{ language.name_local }}
+              </option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-outline-primary btn-sm" type="submit">
+            {% translate "Switch language" %}
+          </button>
+        </form>
+      </nav>
+    </header>
+
+    <main class="container py-5" id="main-content" tabindex="-1">
+      {% block content %}{% endblock %}
+    </main>
+
+    <script>
+      document.body.addEventListener("htmx:afterSwap", function (event) {
+        const focusTarget = event.detail.target.querySelector(
+          "[data-focus-after-swap]"
+        );
+        if (focusTarget) {
+          focusTarget.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

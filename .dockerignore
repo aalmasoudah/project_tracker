@@ -1,0 +1,16 @@
+.git
+.github
+.venv*
+.env
+.uv-cache-temp
+.uv-python-temp
+__pycache__
+*.pyc
+.mypy_cache
+.pytest_cache
+.ruff_cache
+media
+staticfiles
+playwright-report
+test-results
+tmp

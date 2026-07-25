@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% translate "Engineering foundation" %} · {% translate "Company Project Tracker" %}
+{% endblock %}
+
+{% block content %}
+  <section class="foundation-card card border-0 shadow-sm" aria-labelledby="page-title">
+    <div class="card-body p-4 p-lg-5">
+      <p class="text-uppercase text-primary fw-semibold mb-2">
+        {% translate "Phase 1" %}
+      </p>
+      <h1 class="display-6 fw-bold" id="page-title">
+        {% translate "Engineering foundation ready" %}
+      </h1>
+      <p class="lead text-body-secondary mb-4">
+        {% translate "The authenticated bilingual workspace is ready for approved business phases." %}
+      </p>
+      <p class="mb-0">
+        {% translate "Signed in as" %}
+        <bdi class="fw-semibold">{{ request.user.get_username }}</bdi>
+      </p>
+    </div>
+  </section>
+{% endblock %}

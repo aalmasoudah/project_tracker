@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: tracker_test
+          POSTGRES_PASSWORD: tracker
+          POSTGRES_USER: tracker
+        options: >-
+          --health-cmd "pg_isready -U tracker -d tracker_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 5432:5432
+
+    env:
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DEFAULT_LANGUAGE: en
+      DJANGO_SETTINGS_MODULE: config.settings.testing
+      SECRET_KEY: ci-only-fictional-secret
+      TEST_DATABASE_URL: postgresql://tracker:tracker@127.0.0.1:5432/tracker_test
+      TIME_ZONE: UTC
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.12"
+
+      - name: Install gettext
+        run: sudo apt-get update && sudo apt-get install --yes gettext
+
+      - name: Install locked dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Compile translations
+        run: uv run python manage.py compilemessages
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Type check
+        run: uv run mypy .
+
+      - name: Run Django checks
+        run: uv run python manage.py check
+
+      - name: Check migration drift
+        run: uv run python manage.py makemigrations --check
+
+      - name: Run unit, integration, and security tests
+        run: uv run pytest -m "not browser"
+
+      - name: Install Playwright Chromium
+        run: uv run playwright install --with-deps chromium
+
+      - name: Run critical browser tests
+        run: uv run pytest -m browser

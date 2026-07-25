@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.python-version.local
+.venv*/
+
+# Django
+.env
+db.sqlite3
+media/
+staticfiles/
+
+# Tests and quality tools
+.coverage
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+playwright-report/
+test-results/
+tmp/
+
+# Local tool caches
+.docker-codex-temp/
+.uv-cache-temp/
+.uv-python-temp/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

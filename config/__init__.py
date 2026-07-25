@@ -1,0 +1,1 @@
+"""Insight Tracker Django configuration."""

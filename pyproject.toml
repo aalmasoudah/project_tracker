@@ -1,0 +1,78 @@
+[project]
+name = "insight-tracker"
+version = "0.1.0"
+description = "Internal project, course, task, trainee, and attendance tracker."
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "Django>=5.2,<5.3",
+    "gunicorn>=23,<24",
+    "psycopg[binary]>=3.2,<4",
+    "whitenoise[brotli]>=6.9,<7",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs[compatible-mypy]>=5.2,<5.3",
+    "mypy>=1.17,<2",
+    "playwright>=1.54,<2",
+    "polib>=1.2,<2",
+    "pytest>=8.4,<9",
+    "pytest-django>=4.11,<5",
+    "ruff>=0.12,<1",
+    "types-polib>=1.2,<2",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.testing"
+addopts = "-ra --strict-config --strict-markers"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+markers = [
+    "browser: critical Playwright browser workflow",
+    "integration: PostgreSQL-backed Django integration test",
+    "security: security-relevant behavior",
+    "unit: isolated unit test",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+extend-exclude = [".venv", ".venv-phase1", ".uv-cache-temp"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "C4",
+    "DJ",
+    "E",
+    "F",
+    "I",
+    "RUF",
+    "UP",
+    "W",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*.py" = ["E501", "RUF012"]
+"config/settings/*.py" = ["F403", "F405"]
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["mypy_django_plugin.main"]
+strict = true
+warn_unreachable = true
+exclude = [
+    "^apps/accounts/migrations/",
+    "^\\.venv",
+    "^\\.uv-cache-temp",
+]
+
+[tool.django-stubs]
+django_settings_module = "config.settings.testing"
