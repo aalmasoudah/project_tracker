@@ -49,22 +49,43 @@ All internal users may change their own password and language preference.
 There are no Phase 2 approve or export actions. The public `/health/` endpoint
 remains minimal; detailed operational information is deferred.
 
+## Phase 3 Permission Matrix
+
+| Role | Project visibility | Project changes | Budget | Archive/history |
+| --- | --- | --- | --- | --- |
+| Technical Admin | None | None | None | Phase 2 security audit only |
+| CEO | All | None | All | View archived and all project history |
+| Executive Manager | All | Full administration, references, teams, and statuses | All | Archive/restore any; all history |
+| Project Manager | Managed projects | Create and manage own projects and teams | Managed projects | Archive/restore/history for managed projects |
+| Supervisor | Active supervised/member projects | None | None | None |
+| Employee | Active member projects | None | None | None |
+| Contractor | Active member projects | None | None | None |
+
+Every project belongs to one department. Managers, supervisors, and team
+members must be active, have an eligible role, and belong to that department.
+Executive Manager manages clients and categories. Project Managers select
+active reference records but do not administer them.
+
 ## Object-Level Access Questions
 
-1. [Approved for Phase 2] Use the account/department scopes above. Later
-   domain scopes are approved in their phases.
-2. Can project managers access projects they do not manage?
-3. [Approved for Phase 2] No. Supervisors see active users only in their own
-   department.
-4. Can employees and contractors see budgets?
+1. [Approved through Phase 3] Use the account/department scopes above and the
+   project scopes in the Phase 3 matrix. Later domains remain open.
+2. [Approved for Phase 3] Project Managers cannot access projects they do not
+   manage unless a later phase grants a separate assignment.
+3. [Approved through Phase 3] Supervisors do not receive cross-department
+   directory or project access.
+4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
 5. Who may view personal attendance information?
 6. Who may export reports containing personal data?
-7. [Approved for Phase 2] Technical Admin may archive/restore departments.
-   Accounts are deactivated/reactivated. Later records remain open.
+7. [Approved through Phase 3] Technical Admin may archive/restore departments.
+   Executive Manager may archive/restore any project; Project Manager may do
+   so only for a managed project. Accounts are deactivated/reactivated. Later
+   records remain open.
 8. [Approved for Phase 2] Technical Admin may read Phase 2 audit records.
    Detailed operational health remains deferred.
 
 ## Role Approval
 
 Status: The role model and Phase 2 permission slice were approved on
-2026-07-25. Later-domain matrix entries remain open.
+2026-07-25. The Phase 3 project slice was approved on 2026-07-26 in decision
+0008. Later-domain matrix entries remain open.

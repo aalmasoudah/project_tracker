@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+
+{% block title %}{% translate "Projects" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start mb-4">
+    <div>
+      <h1 class="h2 mb-1">{% translate "Projects" %}</h1>
+      <p class="text-body-secondary mb-0">{% translate "Projects visible to your approved role." %}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      {% if perms.projects.view_client %}<a class="btn btn-outline-secondary" href="{% url 'projects:client_list' %}">{% translate "Clients" %}</a>{% endif %}
+      {% if perms.projects.view_category %}<a class="btn btn-outline-secondary" href="{% url 'projects:category_list' %}">{% translate "Categories" %}</a>{% endif %}
+      {% if perms.projects.add_project %}<a class="btn btn-primary" href="{% url 'projects:create' %}">{% translate "Create project" %}</a>{% endif %}
+    </div>
+  </div>
+
+  <form class="card card-body mb-4" method="get">
+    <div class="row g-2">
+      <div class="col-12 col-lg-5">
+        <label class="visually-hidden" for="project-search">{% translate "Search projects" %}</label>
+        <input class="form-control" id="project-search" name="q" value="{{ search }}" placeholder="{% translate 'Search projects' %}">
+      </div>
+      <div class="col-6 col-lg-2">
+        <select class="form-select" name="status" aria-label="{% translate 'Status' %}">
+          <option value="">{% translate "All statuses" %}</option>
+          {% for value, label in status_choices %}<option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-6 col-lg-2">
+        <select class="form-select" name="priority" aria-label="{% translate 'Priority' %}">
+          <option value="">{% translate "All priorities" %}</option>
+          {% for value, label in priority_choices %}<option value="{{ value }}" {% if selected_priority == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      {% if perms.projects.view_all_projects or perms.projects.view_managed_projects %}
+        <div class="col-12 col-lg-2 form-check align-self-center ms-2">
+          <input class="form-check-input" id="archived" name="archived" type="checkbox" value="1" {% if include_archived %}checked{% endif %}>
+          <label class="form-check-label" for="archived">{% translate "Include archived" %}</label>
+        </div>
+      {% endif %}
+      <div class="col-12 col-lg-auto"><button class="btn btn-outline-primary w-100" type="submit">{% translate "Filter" %}</button></div>
+    </div>
+  </form>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>{% translate "Project" %}</th><th>{% translate "Status" %}</th><th>{% translate "Priority" %}</th><th>{% translate "Manager" %}</th><th>{% translate "Dates" %}</th></tr></thead>
+      <tbody>
+        {% for project in page %}
+          <tr>
+            <td><a href="{% url 'projects:detail' project.pk %}"><bdi>{{ project.code }}</bdi> — {{ project|localized_project_name }}</a>{% if project.is_archived %} <span class="badge text-bg-secondary">{% translate "Archived" %}</span>{% endif %}</td>
+            <td>{{ project.get_status_display }}</td>
+            <td>{{ project.get_priority_display }}</td>
+            <td>{{ project.manager.display_name }}</td>
+            <td><bdi>{{ project.start_date|date:"Y-m-d" }} – {{ project.end_date|date:"Y-m-d" }}</bdi></td>
+          </tr>
+        {% empty %}
+          <tr><td class="text-center py-5" colspan="5">{% translate "No projects found." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if page.has_other_pages %}
+    <nav aria-label="{% translate 'Project pagination' %}"><ul class="pagination">
+      {% if page.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}&q={{ search|urlencode }}">{% translate "Previous" %}</a></li>{% endif %}
+      <li class="page-item disabled"><span class="page-link">{{ page.number }} / {{ page.paginator.num_pages }}</span></li>
+      {% if page.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}&q={{ search|urlencode }}">{% translate "Next" %}</a></li>{% endif %}
+    </ul></nav>
+  {% endif %}
+{% endblock %}

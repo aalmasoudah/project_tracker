@@ -22,6 +22,17 @@ class AppendOnlyAuditQuerySet(models.QuerySet["AuditEvent"]):
 class AuditEvent(models.Model):
     """A safe append-only record of a security-relevant event."""
 
+    class Scope(models.TextChoices):
+        SECURITY = "security", _("Security")
+        PROJECTS = "projects", _("Projects")
+
+    scope = models.CharField(
+        _("scope"),
+        max_length=32,
+        choices=Scope.choices,
+        default=Scope.SECURITY,
+        db_index=True,
+    )
     actor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,

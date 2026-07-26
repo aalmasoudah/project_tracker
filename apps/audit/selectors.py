@@ -8,7 +8,9 @@ from apps.audit.models import AuditEvent
 
 
 def audit_events_visible_to(actor: User) -> QuerySet[AuditEvent]:
-    """Return Phase 2 audit events only to approved Technical Admin actors."""
+    """Return security-scope events only to approved Technical Admin actors."""
     if not actor.has_perm("audit.view_auditevent"):
         raise PermissionDenied("Audit visibility permission is required.")
-    return AuditEvent.objects.select_related("actor").all()
+    return AuditEvent.objects.select_related("actor").filter(
+        scope=AuditEvent.Scope.SECURITY
+    )

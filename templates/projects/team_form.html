@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+{% block title %}{% translate "Manage team" %}{% endblock %}
+{% block content %}
+  <div class="form-shell"><h1 class="h2">{% translate "Manage team" %}</h1><p>{{ project|localized_project_name }}</p>
+    <form method="post">{% csrf_token %}{% include "includes/form_fields.html" %}<button class="btn btn-primary" type="submit">{% translate "Save team" %}</button> <a class="btn btn-outline-secondary" href="{% url 'projects:detail' project.pk %}">{% translate "Cancel" %}</a></form>
+  </div>
+{% endblock %}

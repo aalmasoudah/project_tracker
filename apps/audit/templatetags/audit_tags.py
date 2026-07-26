@@ -23,6 +23,20 @@ ACTION_LABELS = {
     actions.DEPARTMENT_UPDATED: _("Department updated"),
     actions.DEPARTMENT_ARCHIVED: _("Department archived"),
     actions.DEPARTMENT_RESTORED: _("Department restored"),
+    actions.PROJECT_CREATED: _("Project created"),
+    actions.PROJECT_UPDATED: _("Project updated"),
+    actions.PROJECT_STATUS_CHANGED: _("Project status changed"),
+    actions.PROJECT_ARCHIVED: _("Project archived"),
+    actions.PROJECT_RESTORED: _("Project restored"),
+    actions.PROJECT_TEAM_UPDATED: _("Project team updated"),
+    actions.CLIENT_CREATED: _("Client created"),
+    actions.CLIENT_UPDATED: _("Client updated"),
+    actions.CLIENT_ARCHIVED: _("Client archived"),
+    actions.CLIENT_RESTORED: _("Client restored"),
+    actions.CATEGORY_CREATED: _("Category created"),
+    actions.CATEGORY_UPDATED: _("Category updated"),
+    actions.CATEGORY_ARCHIVED: _("Category archived"),
+    actions.CATEGORY_RESTORED: _("Category restored"),
 }
 
 

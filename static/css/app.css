@@ -7,6 +7,11 @@
     format("truetype-variations");
 }
 
+.preserve-lines {
+  unicode-bidi: plaintext;
+  white-space: pre-wrap;
+}
+
 :root {
   --insight-focus: #0a58ca;
   --insight-surface: #f7f9fc;

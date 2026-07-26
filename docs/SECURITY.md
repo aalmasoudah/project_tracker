@@ -51,8 +51,9 @@ only the approved session action and never internal navigation.
   archived records, exports, and files.
 - Keep the Django admin restricted to authorized technical administration.
 
-The Phase 2 permission slice was approved on 2026-07-25. Later domain
-permissions remain unresolved and block their user-facing phases.
+The Phase 2 permission slice was approved on 2026-07-25. The Phase 3 project
+slice was approved on 2026-07-26. Later domain permissions remain unresolved
+and block their user-facing phases.
 
 ## Web Security
 
@@ -124,6 +125,13 @@ exceptions, export rights, and personal-data access require owner approval.
 Technical Admin alone may read Phase 2 audit records. Accounts, departments,
 and audit records are not hard-deleted. Expired throttle counters may be
 deleted as temporary security data.
+
+Phase 3 project audit is separated from the security scope. CEO and Executive
+Manager may read all project history; a Project Manager may read history only
+for a managed project. Technical Admin does not gain project-business access.
+Projects and reference records are archived, and membership removal is
+end-dated. Project uploads are deferred, so Phase 3 introduces no file attack
+surface.
 
 ## Security Verification
 

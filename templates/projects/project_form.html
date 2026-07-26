@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }} · {% translate "Projects" %}{% endblock %}
+
+{% block content %}
+  <div class="form-shell">
+    <h1 class="h2 mb-4">{{ page_title }}</h1>
+    {% if project %}<p class="text-body-secondary">{% translate "Project code is immutable:" %} <bdi>{{ project.code }}</bdi></p>{% endif %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include "includes/form_fields.html" %}
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" type="submit">{% translate "Save" %}</button>
+        <a class="btn btn-outline-secondary" href="{% if project %}{% url 'projects:detail' project.pk %}{% else %}{% url 'projects:list' %}{% endif %}">{% translate "Cancel" %}</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

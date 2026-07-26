@@ -35,32 +35,74 @@ EXPECTED_PERMISSIONS = {
         "accounts.view_user",
         "organizations.view_all_departments",
         "organizations.view_department",
+        "projects.view_all_projects",
+        "projects.view_category",
+        "projects.view_client",
+        "projects.view_project",
+        "projects.view_project_budget",
+        "projects.view_project_history",
     },
     "executive_manager": {
         "accounts.view_all_directory",
         "accounts.view_user",
         "organizations.view_all_departments",
         "organizations.view_department",
+        "projects.add_category",
+        "projects.add_client",
+        "projects.add_project",
+        "projects.archive_category",
+        "projects.archive_client",
+        "projects.archive_project",
+        "projects.change_category",
+        "projects.change_client",
+        "projects.change_project",
+        "projects.manage_project_team",
+        "projects.restore_category",
+        "projects.restore_client",
+        "projects.restore_project",
+        "projects.view_all_projects",
+        "projects.view_category",
+        "projects.view_client",
+        "projects.view_project",
+        "projects.view_project_budget",
+        "projects.view_project_history",
     },
     "project_manager": {
         "accounts.view_department_directory",
         "accounts.view_user",
         "organizations.view_department",
+        "projects.add_project",
+        "projects.archive_project",
+        "projects.change_project",
+        "projects.manage_project_team",
+        "projects.restore_project",
+        "projects.view_category",
+        "projects.view_client",
+        "projects.view_managed_projects",
+        "projects.view_project",
+        "projects.view_project_budget",
+        "projects.view_project_history",
     },
     "supervisor": {
         "accounts.view_department_directory",
         "accounts.view_user",
         "organizations.view_department",
+        "projects.view_assigned_projects",
+        "projects.view_project",
     },
     "employee": {
         "accounts.view_own_profile",
         "accounts.view_user",
         "organizations.view_department",
+        "projects.view_assigned_projects",
+        "projects.view_project",
     },
     "contractor": {
         "accounts.view_own_profile",
         "accounts.view_user",
         "organizations.view_department",
+        "projects.view_assigned_projects",
+        "projects.view_project",
     },
 }
 
@@ -91,7 +133,7 @@ def identifiers(users: Iterable[User]) -> set[str]:
 
 @pytest.mark.integration
 @pytest.mark.django_db
-def test_seeded_roles_exactly_match_the_approved_phase2_matrix() -> None:
+def test_seeded_roles_exactly_match_the_approved_phase3_matrix() -> None:
     assert set(
         Group.objects.filter(name__in=ROLE_CODES).values_list("name", flat=True)
     ) == set(ROLE_CODES)

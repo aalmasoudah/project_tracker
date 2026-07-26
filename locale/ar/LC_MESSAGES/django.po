@@ -577,6 +577,370 @@ msgstr "استخدم صفحة تغيير كلمة المرور الشخصية."
 msgid "You cannot deactivate your own account."
 msgstr "لا يمكنك تعطيل حسابك الشخصي."
 
+msgid "A record with this code already exists."
+msgstr "يوجد سجل بهذا الرمز مسبقًا."
+
+msgid "Active projects still use this record."
+msgstr "لا تزال هناك مشاريع نشطة تستخدم هذا السجل."
+
+msgid "All priorities"
+msgstr "جميع الأولويات"
+
+msgid "All statuses"
+msgstr "جميع الحالات"
+
+msgid "Archive project"
+msgstr "أرشفة المشروع"
+
+msgid "Archived categories cannot be assigned."
+msgstr "لا يمكن تعيين التصنيفات المؤرشفة."
+
+msgid "Archived clients cannot be assigned."
+msgstr "لا يمكن تعيين العملاء المؤرشفين."
+
+msgid "Archived projects become read-only."
+msgstr "تصبح المشاريع المؤرشفة للقراءة فقط."
+
+msgid "Archived reference records are read-only."
+msgstr "السجلات المرجعية المؤرشفة للقراءة فقط."
+
+msgid "Budget"
+msgstr "الميزانية"
+
+msgid "Cancelled"
+msgstr "ملغى"
+
+msgid "Categories"
+msgstr "التصنيفات"
+
+msgid "Category"
+msgstr "التصنيف"
+
+msgid "Category archived"
+msgstr "تمت أرشفة التصنيف"
+
+msgid "Category created"
+msgstr "تم إنشاء التصنيف"
+
+msgid "Category restored"
+msgstr "تمت استعادة التصنيف"
+
+msgid "Category updated"
+msgstr "تم تحديث التصنيف"
+
+msgid "Client"
+msgstr "العميل"
+
+msgid "Client archived"
+msgstr "تمت أرشفة العميل"
+
+msgid "Client created"
+msgstr "تم إنشاء العميل"
+
+msgid "Client restored"
+msgstr "تمت استعادة العميل"
+
+msgid "Client updated"
+msgstr "تم تحديث العميل"
+
+msgid "Clients"
+msgstr "العملاء"
+
+msgid "Code"
+msgstr "الرمز"
+
+msgid "Create"
+msgstr "إنشاء"
+
+msgid "Create category"
+msgstr "إنشاء تصنيف"
+
+msgid "Create client"
+msgstr "إنشاء عميل"
+
+msgid "Create project"
+msgstr "إنشاء مشروع"
+
+msgid "Critical"
+msgstr "حرجة"
+
+msgid "Dates"
+msgstr "التواريخ"
+
+msgid "Draft"
+msgstr "مسودة"
+
+msgid "Edit category"
+msgstr "تعديل التصنيف"
+
+msgid "Edit client"
+msgstr "تعديل العميل"
+
+msgid "Edit project"
+msgstr "تعديل المشروع"
+
+msgid "End date cannot precede start date."
+msgstr "لا يمكن أن يسبق تاريخ الانتهاء تاريخ البدء."
+
+msgid "Every team member must be eligible and active."
+msgstr "يجب أن يكون كل عضو في الفريق مؤهلًا ونشطًا."
+
+msgid "Filter"
+msgstr "تصفية"
+
+msgid "Goals"
+msgstr "الأهداف"
+
+msgid "High"
+msgstr "عالية"
+
+msgid "History"
+msgstr "السجل"
+
+msgid "Include archived"
+msgstr "تضمين المؤرشف"
+
+msgid "Low"
+msgstr "منخفضة"
+
+msgid "Manage team"
+msgstr "إدارة الفريق"
+
+msgid "Manager"
+msgstr "مدير المشروع"
+
+msgid "Manager and supervisor must differ."
+msgstr "يجب أن يكون مدير المشروع والمشرف شخصين مختلفين."
+
+msgid "Medium"
+msgstr "متوسطة"
+
+msgid "Name"
+msgstr "الاسم"
+
+msgid "New projects must start as Draft."
+msgstr "يجب أن تبدأ المشاريع الجديدة بحالة مسودة."
+
+msgid "No additional team members."
+msgstr "لا يوجد أعضاء إضافيون في الفريق."
+
+msgid "No project history found."
+msgstr "لا يوجد سجل للمشروع."
+
+msgid "No projects found."
+msgstr "لم يتم العثور على مشاريع."
+
+msgid "No records found."
+msgstr "لم يتم العثور على سجلات."
+
+msgid "Notes"
+msgstr "الملاحظات"
+
+msgid "On Hold"
+msgstr "معلق"
+
+msgid "Priority"
+msgstr "الأولوية"
+
+msgid "Project"
+msgstr "المشروع"
+
+msgid "Project Managers cannot transfer project ownership."
+msgstr "لا يمكن لمديري المشاريع نقل ملكية المشروع."
+
+msgid "Project Managers may create only their own projects."
+msgstr "يمكن لمديري المشاريع إنشاء مشاريعهم فقط."
+
+msgid "Project archive permission is required."
+msgstr "يلزم إذن أرشفة المشروع."
+
+msgid "Project archived"
+msgstr "تمت أرشفة المشروع"
+
+msgid "Project archived successfully."
+msgstr "تمت أرشفة المشروع بنجاح."
+
+msgid "Project code is immutable:"
+msgstr "رمز المشروع غير قابل للتغيير:"
+
+msgid "Project created"
+msgstr "تم إنشاء المشروع"
+
+msgid "Project created successfully."
+msgstr "تم إنشاء المشروع بنجاح."
+
+msgid "Project creation permission is required."
+msgstr "يلزم إذن إنشاء المشروع."
+
+msgid "Project history"
+msgstr "سجل المشروع"
+
+msgid "Project pagination"
+msgstr "صفحات المشاريع"
+
+msgid "Project restore permission is required."
+msgstr "يلزم إذن استعادة المشروع."
+
+msgid "Project restored"
+msgstr "تمت استعادة المشروع"
+
+msgid "Project restored successfully."
+msgstr "تمت استعادة المشروع بنجاح."
+
+msgid "Project status changed"
+msgstr "تم تغيير حالة المشروع"
+
+msgid "Project team permission is required."
+msgstr "يلزم إذن إدارة فريق المشروع."
+
+msgid "Project team updated"
+msgstr "تم تحديث فريق المشروع"
+
+msgid "Project team updated successfully."
+msgstr "تم تحديث فريق المشروع بنجاح."
+
+msgid "Project update permission is required."
+msgstr "يلزم إذن تحديث المشروع."
+
+msgid "Project updated"
+msgstr "تم تحديث المشروع"
+
+msgid "Project updated successfully."
+msgstr "تم تحديث المشروع بنجاح."
+
+msgid "Projects"
+msgstr "المشاريع"
+
+msgid "Projects visible to your approved role."
+msgstr "المشاريع المتاحة وفقًا لصلاحيات دورك."
+
+msgid "Reference administration permission is required."
+msgstr "يلزم إذن إدارة السجلات المرجعية."
+
+msgid "Reference archive permission is required."
+msgstr "يلزم إذن أرشفة السجلات المرجعية."
+
+msgid "Reference archive state updated."
+msgstr "تم تحديث حالة أرشفة السجل المرجعي."
+
+msgid "Reference record saved successfully."
+msgstr "تم حفظ السجل المرجعي بنجاح."
+
+msgid "Requirements"
+msgstr "المتطلبات"
+
+msgid "Restore archived client or category first."
+msgstr "استعد العميل أو التصنيف المؤرشف أولًا."
+
+msgid "Restore project"
+msgstr "استعادة المشروع"
+
+msgid "Save team"
+msgstr "حفظ الفريق"
+
+msgid "Search projects"
+msgstr "البحث في المشاريع"
+
+msgid "Security"
+msgstr "الأمان"
+
+msgid "Select an eligible Project Manager."
+msgstr "اختر مدير مشروع مؤهلًا."
+
+msgid "Select an eligible Supervisor."
+msgstr "اختر مشرفًا مؤهلًا."
+
+msgid "Team members"
+msgstr "أعضاء الفريق"
+
+msgid "The project will become editable again."
+msgstr "سيصبح المشروع قابلًا للتعديل مرة أخرى."
+
+msgid "This project is archived and read-only."
+msgstr "هذا المشروع مؤرشف ومتاح للقراءة فقط."
+
+msgid "This project status transition is not allowed."
+msgstr "الانتقال إلى حالة المشروع هذه غير مسموح."
+
+msgid ""
+"Use 2-30 uppercase English letters, numbers, underscores, or hyphens, "
+"starting with a letter."
+msgstr ""
+"استخدم من 2 إلى 30 حرفًا إنجليزيًا كبيرًا أو رقمًا أو شرطة سفلية أو واصلة، "
+"على أن يبدأ الرمز بحرف."
+
+msgid "archived by"
+msgstr "أرشفه"
+
+msgid "budget"
+msgstr "الميزانية"
+
+msgid "categories"
+msgstr "التصنيفات"
+
+msgid "category"
+msgstr "التصنيف"
+
+msgid "client"
+msgstr "العميل"
+
+msgid "clients"
+msgstr "العملاء"
+
+msgid "created by"
+msgstr "أنشأه"
+
+msgid "currency"
+msgstr "العملة"
+
+msgid "end date"
+msgstr "تاريخ الانتهاء"
+
+msgid "goals"
+msgstr "الأهداف"
+
+msgid "notes"
+msgstr "الملاحظات"
+
+msgid "priority"
+msgstr "الأولوية"
+
+msgid "project manager"
+msgstr "مدير المشروع"
+
+msgid "requirements"
+msgstr "المتطلبات"
+
+msgid "scope"
+msgstr "النطاق"
+
+msgid "start date"
+msgstr "تاريخ البدء"
+
+msgid "status"
+msgstr "الحالة"
+
+msgid "supervisor"
+msgstr "المشرف"
+
+msgid "updated by"
+msgstr "حدّثه"
+
+msgid "Project codes cannot be changed."
+msgstr "لا يمكن تغيير رموز المشاريع."
+
+msgid "Reference codes cannot be changed."
+msgstr "لا يمكن تغيير رموز السجلات المرجعية."
+
+msgid "A project with this code already exists."
+msgstr "يوجد مشروع بهذا الرمز مسبقًا."
+
+msgid "Manager and supervisor are assigned separately from team members."
+msgstr "يُعيَّن مدير المشروع والمشرف بشكل منفصل عن أعضاء الفريق."
+
+msgid "Archived departments cannot own projects."
+msgstr "لا يمكن للأقسام المؤرشفة امتلاك مشاريع."
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

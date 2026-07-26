@@ -16,9 +16,23 @@ hard-deleted.
 
 ## Project and Course Lifecycle
 
-Projects contain teams and may contain courses, tasks, milestones, files, and
-approval history. Exact statuses, transitions, required fields, and approval
-steps remain to be approved.
+Phase 3 project lifecycle:
+
+1. Executive Manager or Project Manager creates a Draft project in an owning
+   department with a required eligible manager.
+2. The creator may assign an eligible supervisor and active department team
+   members.
+3. Executive Manager may manage any project. Project Manager may manage only
+   a project for which they are the manager.
+4. Draft may become Active or Cancelled; Active may become On Hold or
+   Cancelled; On Hold may become Active or Cancelled; Cancelled may return to
+   Draft.
+5. Authorized actors archive instead of deleting. Archived projects are
+   read-only until restored.
+6. Project, status, team, archive, client, and category changes are audited.
+
+Project completion and its approval workflow remain deferred to Phase 7.
+Course lifecycle remains unresolved for Phase 4.
 
 ## Task Lifecycle
 
@@ -66,5 +80,5 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: High-level workflows only. Phase-specific transitions and permissions
-must be approved before implementation.
+Status: Account lifecycle and the Phase 3 project lifecycle are approved.
+Other phase-specific transitions and permissions require later approval.

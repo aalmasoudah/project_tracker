@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}<div class="form-shell"><h1 class="h2">{{ page_title }}</h1><p>{{ record|localized_reference_name }}</p><form method="post">{% csrf_token %}<button class="btn {{ submit_class }}" type="submit">{{ submit_label }}</button> <a class="btn btn-outline-secondary" href="{% url list_url %}">{% translate "Cancel" %}</a></form></div>{% endblock %}

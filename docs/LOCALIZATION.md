@@ -63,13 +63,20 @@ Approved for Phase 2:
 - Account identity preserves original Arabic text. Derived search may ignore
   diacritics/tatweel and normalize Alef and Persian keyboard variants without
   merging `ة/ه` or `ى/ي`.
+- Phase 3 project terminology, Gregorian date-only display, Western digits,
+  and conservative project/client/category search normalization are approved
+  in decision 0008.
+- Phase 3 status translations are: Draft `مسودة`, Active `نشط`, On Hold
+  `معلّق`, and Cancelled `ملغى`.
+- Phase 3 priority translations are: Low `منخفضة`, Medium `متوسطة`, High
+  `عالية`, and Critical `حرجة`.
 
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display by screen/report.
-- Arabic-Indic/Western digit display.
+- Gregorian/Hijri display outside the approved Phase 3 date-only screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account search.
 

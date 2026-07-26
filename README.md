@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 and 2 are complete. Phase 2, Accounts, Roles, and Organization, was
-implemented and verified on 2026-07-25.
+Phases 1 through 3 are complete. Phase 3, Projects and Teams, was implemented
+and verified on 2026-07-26.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -43,6 +43,7 @@ Open:
 
 - User login: <http://127.0.0.1:8000/accounts/login/>
 - Authenticated application: <http://127.0.0.1:8000/>
+- Projects: <http://127.0.0.1:8000/projects/>
 - Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 

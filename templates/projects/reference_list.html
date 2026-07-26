@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+  <div class="d-flex justify-content-between mb-4"><h1 class="h2">{{ page_title }}</h1>{% if perms.projects.add_client and model_name == "client" or perms.projects.add_category and model_name == "category" %}<a class="btn btn-primary" href="{% url create_url %}">{% translate "Create" %}</a>{% endif %}</div>
+  <div class="table-responsive"><table class="table"><thead><tr><th>{% translate "Code" %}</th><th>{% translate "Name" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead><tbody>
+    {% for record in records %}<tr><td><bdi>{{ record.code }}</bdi></td><td>{{ record|localized_reference_name }}</td><td>{% if record.is_archived %}{% translate "Archived" %}{% else %}{% translate "Active" %}{% endif %}</td><td>
+      {% if model_name == "client" %}
+        {% if perms.projects.change_client and not record.is_archived %}<a class="btn btn-sm btn-outline-primary" href="{% url 'projects:client_update' record.pk %}">{% translate "Edit" %}</a>{% endif %}
+        {% if record.is_archived and perms.projects.restore_client %}<a class="btn btn-sm btn-outline-success" href="{% url 'projects:client_restore' record.pk %}">{% translate "Restore" %}</a>{% elif perms.projects.archive_client %}<a class="btn btn-sm btn-outline-danger" href="{% url 'projects:client_archive' record.pk %}">{% translate "Archive" %}</a>{% endif %}
+      {% else %}
+        {% if perms.projects.change_category and not record.is_archived %}<a class="btn btn-sm btn-outline-primary" href="{% url 'projects:category_update' record.pk %}">{% translate "Edit" %}</a>{% endif %}
+        {% if record.is_archived and perms.projects.restore_category %}<a class="btn btn-sm btn-outline-success" href="{% url 'projects:category_restore' record.pk %}">{% translate "Restore" %}</a>{% elif perms.projects.archive_category %}<a class="btn btn-sm btn-outline-danger" href="{% url 'projects:category_archive' record.pk %}">{% translate "Archive" %}</a>{% endif %}
+      {% endif %}
+    </td></tr>{% empty %}<tr><td colspan="4">{% translate "No records found." %}</td></tr>{% endfor %}
+  </tbody></table></div>
+{% endblock %}

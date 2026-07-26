@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+
+{% block title %}{{ project|localized_project_name }} · {% translate "Projects" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+    <div><p class="text-primary fw-semibold mb-1"><bdi>{{ project.code }}</bdi></p><h1 class="h2">{{ project|localized_project_name }}</h1></div>
+    <div class="d-flex flex-wrap gap-2">
+      {% if can_manage %}<a class="btn btn-outline-primary" href="{% url 'projects:update' project.pk %}">{% translate "Edit" %}</a><a class="btn btn-outline-primary" href="{% url 'projects:team' project.pk %}">{% translate "Manage team" %}</a>{% endif %}
+      {% if can_history %}<a class="btn btn-outline-secondary" href="{% url 'projects:history' project.pk %}">{% translate "History" %}</a>{% endif %}
+      {% if can_archive %}
+        {% if project.is_archived %}<a class="btn btn-outline-success" href="{% url 'projects:restore' project.pk %}">{% translate "Restore" %}</a>{% else %}<a class="btn btn-outline-danger" href="{% url 'projects:archive' project.pk %}">{% translate "Archive" %}</a>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+  {% if project.is_archived %}<div class="alert alert-secondary">{% translate "This project is archived and read-only." %}</div>{% endif %}
+  <dl class="detail-grid">
+    <div><dt>{% translate "Arabic name" %}</dt><dd>{{ project.name_ar }}</dd></div>
+    <div><dt>{% translate "English name" %}</dt><dd>{{ project.name_en }}</dd></div>
+    <div><dt>{% translate "Department" %}</dt><dd>{{ project.department|localized_reference_name }}</dd></div>
+    <div><dt>{% translate "Client" %}</dt><dd>{{ project.client|localized_reference_name }}</dd></div>
+    <div><dt>{% translate "Category" %}</dt><dd>{{ project.category|localized_reference_name }}</dd></div>
+    <div><dt>{% translate "Manager" %}</dt><dd>{{ project.manager.display_name }}</dd></div>
+    <div><dt>{% translate "Supervisor" %}</dt><dd>{{ project.supervisor.display_name|default:"—" }}</dd></div>
+    <div><dt>{% translate "Status" %}</dt><dd>{{ project.get_status_display }}</dd></div>
+    <div><dt>{% translate "Priority" %}</dt><dd>{{ project.get_priority_display }}</dd></div>
+    <div><dt>{% translate "Dates" %}</dt><dd><bdi>{{ project.start_date|date:"Y-m-d" }} – {{ project.end_date|date:"Y-m-d" }}</bdi></dd></div>
+    {% if show_budget %}<div><dt>{% translate "Budget" %}</dt><dd><bdi>{{ project.budget|default:"—" }} SAR</bdi></dd></div>{% endif %}
+  </dl>
+  <div class="row g-4 mt-1">
+    <section class="col-12 col-lg-4"><h2 class="h5">{% translate "Goals" %}</h2><div class="preserve-lines">{{ project.goals|default:"—" }}</div></section>
+    <section class="col-12 col-lg-4"><h2 class="h5">{% translate "Requirements" %}</h2><div class="preserve-lines">{{ project.requirements|default:"—" }}</div></section>
+    <section class="col-12 col-lg-4"><h2 class="h5">{% translate "Notes" %}</h2><div class="preserve-lines">{{ project.notes|default:"—" }}</div></section>
+  </div>
+  <section class="mt-5"><h2 class="h4">{% translate "Team members" %}</h2><ul>{% for membership in memberships %}<li>{{ membership.user.display_name }}</li>{% empty %}<li>{% translate "No additional team members." %}</li>{% endfor %}</ul></section>
+{% endblock %}

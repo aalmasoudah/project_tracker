@@ -71,9 +71,11 @@ def record_audit_event(
     target_label: str = "",
     metadata: Mapping[str, Any] | None = None,
     request: HttpRequest | None = None,
+    scope: str = AuditEvent.Scope.SECURITY,
 ) -> AuditEvent:
     """Create one sanitized append-only audit event."""
     return AuditEvent.objects.create(
+        scope=scope,
         actor=actor if actor is not None and actor.is_authenticated else None,
         action=action,
         target_type=target_type,

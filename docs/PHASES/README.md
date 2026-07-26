@@ -32,7 +32,7 @@ project owner resolves the open decisions in the core documents.
 | --- | --- | --- |
 | 1 | `PHASE_01_ENGINEERING_FOUNDATION.md` | Completed and verified on 2026-07-23 |
 | 2 | `PHASE_02_ACCOUNTS_ROLES_ORGANIZATION.md` | Completed and verified on 2026-07-25 |
-| 3 | `PHASE_03_PROJECTS_TEAMS.md` | Draft; blocked by business and permission decisions |
+| 3 | `PHASE_03_PROJECTS_TEAMS.md` | Completed and verified on 2026-07-26 |
 | 4 | `PHASE_04_COURSES_TRAINERS.md` | Draft; blocked by business and permission decisions |
 | 5 | `PHASE_05_TASKS_COLLABORATION.md` | Draft; blocked by task decisions |
 | 6 | `PHASE_06_PROGRESS_ENGINE.md` | Draft; blocked by progress decisions |

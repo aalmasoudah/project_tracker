@@ -35,6 +35,15 @@ must be approved before their implementation phase.
 - Account identity preserves original Arabic text. Username and email identity
   comparisons are case-insensitive, while Arabic letter folding is limited to
   derived search behavior and never changes stored text.
+- Phase 3 project statuses are Draft, Active, On Hold, and Cancelled with the
+  transitions recorded in decision 0008. Project completion remains deferred
+  to Phase 7.
+- Phase 3 project dates are required Gregorian date-only values using Western
+  digits; the end date cannot precede the start date.
+- Phase 3 budgets are optional, non-negative SAR amounts with at most two
+  decimal places. Extra precision is rejected.
+- Projects, clients, categories, and memberships are archived or end-dated
+  instead of hard-deleted through the application.
 
 ## Decisions Required Before Planning
 
@@ -48,16 +57,21 @@ The project owner must approve answers to these questions:
 5. How is course progress calculated?
 6. How are milestone and project progress calculated?
 7. Can progress exceed 100 percent?
-8. What are the project and course status transitions?
+8. [Approved for Phase 3 projects] What are the project and course status
+   transitions? Course transitions remain open.
 9. Which approval steps are required for milestone and project completion?
 10. Who may reject, reopen, correct, or override each workflow?
 11. What makes two trainees or imports duplicates?
 12. What attendance values are allowed?
 13. What happens when a trainer link expires during data entry?
-14. Which dates and times are stored, displayed, and considered overdue?
-15. Which currencies are supported, and how are monetary values rounded?
-16. [Approved for Phase 2] Accounts, departments, and audit events are not
-    hard-deleted; expired throttle counters may be deleted. Later-domain
+14. [Approved for Phase 3 date-only project fields] Which dates and times are
+    stored, displayed, and considered overdue? Later time/overdue rules remain
+    open.
+15. [Approved for Phase 3 project budgets] Which currencies are supported,
+    and how are monetary values rounded? Later monetary outputs remain open.
+16. [Approved through Phase 3] Accounts, departments, audit events, projects,
+    clients, and categories are not hard-deleted; project membership removal
+    is end-dated. Expired throttle counters may be deleted. Later-domain
     exceptions remain open.
 17. Which notification categories may users disable?
 18. What retention periods apply to files, audit records, and archived data?
@@ -74,5 +88,6 @@ The project owner must approve answers to these questions:
 
 ## Rule Approval
 
-Status: Phase 2 decisions 16, 19, 20, and the account-search portion of 22 were
-approved on 2026-07-25. Remaining decisions still block their listed phases.
+Status: Phase 2 decisions were approved on 2026-07-25. The Phase 3 project
+portions of decisions 8, 14, 15, 16, 21, and 22 were approved on 2026-07-26
+in decision 0008. Remaining decisions still block their listed phases.
