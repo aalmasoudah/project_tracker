@@ -2,8 +2,8 @@
 
 ## Status and Objective
 
-Status: Approved scope requirement. Phase 2 account policy was approved on
-2026-07-25; later output policies remain open.
+Status: Approved scope requirement. Account, project, and course localization
+slices are approved through Phase 4; later output policies remain open.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -71,12 +71,19 @@ Approved for Phase 2:
 - Phase 3 priority translations are: Low `منخفضة`, Medium `متوسطة`, High
   `عالية`, and Critical `حرجة`.
 
+Phase 4 terminology is Course `دورة`, Courses `الدورات`, Trainer `مدرب`,
+Trainers `المدربون`, In person `حضوري`, Online `عن بُعد`, and Hybrid `هجين`.
+Course schedules use Gregorian dates, Western digits, and Asia/Riyadh time.
+Course and trainer search uses the approved conservative Arabic normalization
+while preserving original text.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 date-only screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 screens.
+- Gregorian/Hijri display outside the approved Phase 3 and Phase 4 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 and Phase 4
+  screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account search.
 

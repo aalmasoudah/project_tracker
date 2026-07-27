@@ -44,6 +44,13 @@ must be approved before their implementation phase.
   decimal places. Extra precision is rejected.
 - Projects, clients, categories, and memberships are archived or end-dated
   instead of hard-deleted through the application.
+- Phase 4 course statuses are Draft, Active, On Hold, and Cancelled with the
+  transitions recorded in decision 0009. Course completion remains deferred
+  to Phase 7.
+- Phase 4 course schedules use timezone-aware datetimes entered and displayed
+  in Asia/Riyadh with Gregorian dates and Western digits.
+- Courses and trainers are archived rather than hard-deleted; trainer
+  assignments are end-dated.
 
 ## Decisions Required Before Planning
 
@@ -57,30 +64,32 @@ The project owner must approve answers to these questions:
 5. How is course progress calculated?
 6. How are milestone and project progress calculated?
 7. Can progress exceed 100 percent?
-8. [Approved for Phase 3 projects] What are the project and course status
-   transitions? Course transitions remain open.
+8. [Approved for Phase 3 projects and Phase 4 courses] What are the project
+   and course status transitions?
 9. Which approval steps are required for milestone and project completion?
 10. Who may reject, reopen, correct, or override each workflow?
 11. What makes two trainees or imports duplicates?
 12. What attendance values are allowed?
 13. What happens when a trainer link expires during data entry?
-14. [Approved for Phase 3 date-only project fields] Which dates and times are
-    stored, displayed, and considered overdue? Later time/overdue rules remain
-    open.
+14. [Approved for Phase 3 date-only project fields and Phase 4 Riyadh course
+    schedules] Which dates and times are stored, displayed, and considered
+    overdue? Task overdue rules remain open.
 15. [Approved for Phase 3 project budgets] Which currencies are supported,
     and how are monetary values rounded? Later monetary outputs remain open.
-16. [Approved through Phase 3] Accounts, departments, audit events, projects,
-    clients, and categories are not hard-deleted; project membership removal
-    is end-dated. Expired throttle counters may be deleted. Later-domain
-    exceptions remain open.
+16. [Approved through Phase 4] Accounts, departments, audit events, projects,
+    clients, categories, courses, and trainers are not hard-deleted; project
+    membership and trainer assignment removal are end-dated. Expired throttle
+    counters may be deleted. Later-domain exceptions remain open.
 17. Which notification categories may users disable?
 18. What retention periods apply to files, audit records, and archived data?
 19. [Approved] Arabic is the default language, and each internal user may
     persist Arabic or English.
 20. [Approved] The project owner approves official Arabic terminology.
-21. Should Arabic display use Gregorian or Hijri dates and Arabic-Indic or
-    Western digits in each output type?
-22. [Approved for Phase 2] Preserve account identity text; apply NFKC to
+21. [Approved for Phase 3 and Phase 4 screens] Should Arabic display use
+    Gregorian or Hijri dates and Arabic-Indic or Western digits in each output
+    type? Later outputs remain open.
+22. [Approved through Phase 4 search/identity slices] Preserve account
+    identity text; apply NFKC to
     usernames and case-insensitive username/email comparison. Derived account
     search may ignore diacritics/tatweel and normalize Alef and Persian
     keyboard variants without merging `ة/ه` or `ى/ي`. Later duplicate policies
@@ -88,6 +97,7 @@ The project owner must approve answers to these questions:
 
 ## Rule Approval
 
-Status: Phase 2 decisions were approved on 2026-07-25. The Phase 3 project
-portions of decisions 8, 14, 15, 16, 21, and 22 were approved on 2026-07-26
-in decision 0008. Remaining decisions still block their listed phases.
+Status: Phase 2 decisions were approved on 2026-07-25. Phase 3 decisions were
+approved on 2026-07-26 in decision 0008. Phase 4 course portions of decisions
+8, 14, 16, 21, and 22 were approved on 2026-07-27 in decision 0009.
+Remaining decisions still block their listed phases.

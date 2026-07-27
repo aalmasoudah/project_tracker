@@ -31,8 +31,22 @@ Phase 3 project lifecycle:
    read-only until restored.
 6. Project, status, team, archive, client, and category changes are audited.
 
-Project completion and its approval workflow remain deferred to Phase 7.
-Course lifecycle remains unresolved for Phase 4.
+Phase 4 course lifecycle:
+
+1. Executive Manager or the owning Project Manager creates a Draft course
+   inside a non-archived permitted project.
+2. Draft may become Active or Cancelled; Active may become On Hold or
+   Cancelled; On Hold may become Active or Cancelled; Cancelled may return to
+   Draft.
+3. A course may be Active only while its project is Active.
+4. Authorized actors assign active external trainers and upload approved
+   private files.
+5. Course archive makes the course read-only and end-dates active trainer
+   assignments. Restore does not reactivate prior assignments.
+6. Course, trainer, assignment, file, status, archive, and restore actions are
+   audited.
+
+Project and course completion approval remain deferred to Phase 7.
 
 ## Task Lifecycle
 
@@ -80,5 +94,6 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: Account lifecycle and the Phase 3 project lifecycle are approved.
-Other phase-specific transitions and permissions require later approval.
+Status: Account lifecycle, Phase 3 project lifecycle, and Phase 4 course
+lifecycle are approved. Other phase-specific transitions and permissions
+require later approval.

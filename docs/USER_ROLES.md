@@ -66,18 +66,30 @@ members must be active, have an eligible role, and belong to that department.
 Executive Manager manages clients and categories. Project Managers select
 active reference records but do not administer them.
 
+## Phase 4 Permission Matrix
+
+| Role | Course visibility | Course changes | Trainer contact/administration |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | All, including archived, files, and history | None | View all contact data |
+| Executive Manager | All | Full course, assignment, file, archive, and restore management | Full trainer administration |
+| Project Manager | Courses in managed projects | Manage courses, assignments, files, archive, and restore | View active trainers and contact data |
+| Supervisor | Active courses through approved active-project access | None | Trainer names only |
+| Employee | Active courses through approved active-project access | None | Trainer names only |
+| Contractor | Active courses through approved active-project access | None | Trainer names only |
+
 ## Object-Level Access Questions
 
-1. [Approved through Phase 3] Use the account/department scopes above and the
-   project scopes in the Phase 3 matrix. Later domains remain open.
+1. [Approved through Phase 4] Use the account/department, project, and course
+   scopes above. Later domains remain open.
 2. [Approved for Phase 3] Project Managers cannot access projects they do not
    manage unless a later phase grants a separate assignment.
-3. [Approved through Phase 3] Supervisors do not receive cross-department
-   directory or project access.
+3. [Approved through Phase 4] Supervisors do not receive cross-department
+   directory, project, or course access.
 4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
 5. Who may view personal attendance information?
 6. Who may export reports containing personal data?
-7. [Approved through Phase 3] Technical Admin may archive/restore departments.
+7. [Approved through Phase 4] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
    so only for a managed project. Accounts are deactivated/reactivated. Later
    records remain open.
@@ -88,4 +100,5 @@ active reference records but do not administer them.
 
 Status: The role model and Phase 2 permission slice were approved on
 2026-07-25. The Phase 3 project slice was approved on 2026-07-26 in decision
-0008. Later-domain matrix entries remain open.
+0008. The Phase 4 course/trainer slice was approved on 2026-07-27 in decision
+0009. Later-domain matrix entries remain open.
