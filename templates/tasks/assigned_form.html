@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Update my task" %}{% endblock %}
+{% block content %}<div class="form-shell"><h1>{% translate "Update my task" %}</h1><p><bdi>{{ task.code }}</bdi></p><form method="post">{% csrf_token %}{% include "includes/form_fields.html" with form=form %}<button class="btn btn-primary">{% translate "Save" %}</button></form></div>{% endblock %}

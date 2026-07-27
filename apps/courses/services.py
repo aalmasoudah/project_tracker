@@ -137,11 +137,15 @@ def update_course(
 def archive_course(
     *, actor: User, course: Course, request: HttpRequest | None = None
 ) -> Course:
+    from apps.tasks.models import Task
+
     course = Course.objects.select_for_update().get(pk=course.pk)
     if not can_archive_course(actor, course):
         raise PermissionDenied(_("Course archive permission is required."))
     if course.is_archived:
         return course
+    if Task.objects.filter(course=course, is_archived=False).exists():
+        raise ValidationError(_("Archive every task before archiving this course."))
     now = timezone.now()
     CourseTrainerAssignment.objects.filter(
         course=course, removed_at__isnull=True

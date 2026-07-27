@@ -69,6 +69,11 @@
                   <a class="nav-link" href="{% url 'courses:list' %}">{% translate "Courses" %}</a>
                 </li>
               {% endif %}
+              {% if perms.tasks.view_task %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'tasks:list' %}">{% translate "Tasks" %}</a>
+                </li>
+              {% endif %}
               {% if perms.audit.view_auditevent %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'audit:list' %}">{% translate "Audit" %}</a>

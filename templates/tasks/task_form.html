@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}<div class="form-shell"><h1>{{ page_title }}</h1><p class="text-body-secondary">{% translate "Select exactly one project or course and one primary owner." %}</p><form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" with form=form %}<button class="btn btn-primary" type="submit">{% translate "Save" %}</button> <a class="btn btn-outline-secondary" href="{% if task %}{% url 'tasks:detail' task.pk %}{% else %}{% url 'tasks:list' %}{% endif %}">{% translate "Cancel" %}</a></form></div>{% endblock %}

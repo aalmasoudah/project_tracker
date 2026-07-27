@@ -50,10 +50,27 @@ Project and course completion approval remain deferred to Phase 7.
 
 ## Task Lifecycle
 
-Tasks may belong to projects or courses and may include subtasks, assignees,
-dependencies, recurrence, comments, files, tags, status history, and approval.
-Exact statuses, dependency rules, recurrence rules, and completion behavior
-remain to be approved.
+Phase 5 task lifecycle:
+
+1. Executive Manager or the owning Project Manager creates a To Do task under
+   exactly one non-archived project or course.
+2. A task has one or more eligible assignees, exactly one active primary
+   owner, and up to three acyclic same-owner hierarchy levels.
+3. To Do may become In Progress or Cancelled; In Progress may become Blocked,
+   Completed, or Cancelled; Blocked may become In Progress or Cancelled;
+   Completed may return to In Progress; Cancelled may return to To Do.
+4. Blocked requires a reason. An assignee may update only status, actual
+   hours, and blocking reason.
+5. Authorized collaborators add immutable comments and approved private
+   files. Managers select and administer bilingual tags.
+6. Archive makes a task read-only, end-dates active assignments and tag links,
+   and requires subtasks to be archived first. Restore recreates the latest
+   still-eligible assignment set without rewriting history.
+7. Task, assignment, status, comment, file, tag, archive, and restore actions
+   create append-only task-scope audit events.
+
+Dependencies, recurrence, task approvals, watchers, notifications, and
+progress semantics remain deferred.
 
 ## Trainee Import
 
@@ -94,6 +111,6 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: Account lifecycle, Phase 3 project lifecycle, and Phase 4 course
-lifecycle are approved. Other phase-specific transitions and permissions
-require later approval.
+Status: Account lifecycle and Phase 3 through Phase 5 domain lifecycles are
+approved. Other phase-specific transitions and permissions require later
+approval.

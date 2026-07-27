@@ -35,8 +35,8 @@ remain understandable as the system grows.
 | `organizations` | Departments and organization membership | 2 |
 | `projects` | Projects, clients, categories, teams, and project files | 3 |
 | `courses` | Courses, trainers, schedules, capacity, and course files | 4 |
-| `tasks` | Project/course tasks, hierarchy, assignments, dependencies, recurrence, comments, and tags | 5 |
-| `approvals` | Approved task approval primitives, then milestones and completion approval state/history | 5 or 7, pending sequencing decision |
+| `tasks` | Project/course tasks, bounded hierarchy, assignments, comments, files, and tags | 5 |
+| `approvals` | Milestones and completion/task approval state/history | 7 |
 | `trainees` | Trainees and transactional import batches | 8 |
 | `attendance` | Sessions, secure trainer links, submissions, review, and corrections | 9 |
 | `notifications` | In-app notifications, preferences, and delivery records | 11 |
@@ -79,19 +79,18 @@ visibility, currency, rounding, and object-level access are unresolved.
 
 ### Tasks and Progress
 
-- `tasks.Task` may reference a project or course through explicit nullable
-  relationships plus a database constraint requiring exactly one supported
-  owner.
-- A self-referential parent relationship may model subtasks after the maximum
-  nesting depth is approved.
-- Separate assignment, dependency, recurrence, comment, tag, file, and status
-  history records are expected where they carry their own behavior or audit
-  trail.
+- `tasks.Task` references exactly one project or course through explicit
+  nullable relationships and a database constraint.
+- A self-referential parent relationship models an approved acyclic maximum
+  of three levels within one owner context.
+- `TaskAssignment`, `TaskComment`, `Tag`, `TaskTag`, and `TaskFile` preserve
+  collaboration and lifecycle history. Task events use append-only
+  task-scoped audit records.
 - Progress is calculated by one approved service shared by dashboards and
   reports.
 
-Open gate: task statuses, completed/cancelled behavior, progress formulas,
-dependency behavior, recurrence behavior, and nesting depth are unresolved.
+Open gate: progress formulas, cancelled denominator behavior, dependencies,
+recurrence, and task approvals remain unresolved/deferred.
 
 ### Milestones and Approvals
 
@@ -182,7 +181,6 @@ requirements are finalized only in an approved phase.
 
 ## Data Decisions Still Required
 
-All twenty-two questions in `BUSINESS_RULES.md` remain open. The permission
-matrix and eight object-level questions in `USER_ROLES.md` also remain open.
-No affected model, constraint, status field, progress calculation, or
-retention job may be finalized by inference.
+The remaining open questions in `BUSINESS_RULES.md` and `USER_ROLES.md` still
+gate their listed later phases. Approved decisions 0007 through 0010 govern
+the implemented account, project, course, and task models.

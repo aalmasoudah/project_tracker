@@ -35,4 +35,5 @@
   </div>
   <section class="mt-5"><h2 class="h4">{% translate "Team members" %}</h2><ul>{% for membership in memberships %}<li>{{ membership.user.display_name }}</li>{% empty %}<li>{% translate "No additional team members." %}</li>{% endfor %}</ul></section>
   {% if perms.courses.view_course %}<section class="mt-4"><a class="btn btn-outline-secondary" href="{% url 'courses:list' %}?q={{ project.code|urlencode }}">{% translate "View project courses" %}</a></section>{% endif %}
+  {% if perms.tasks.view_task %}<section class="mt-2"><a class="btn btn-outline-secondary" href="{% url 'tasks:list' %}?q={{ project.code|urlencode }}">{% translate "View project tasks" %}</a></section>{% endif %}
 {% endblock %}

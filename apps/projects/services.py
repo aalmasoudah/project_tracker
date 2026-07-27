@@ -176,11 +176,17 @@ def update_project(
 def archive_project(
     *, actor: User, project: Project, request: HttpRequest | None = None
 ) -> Project:
+    from apps.tasks.models import Task
+
     project = Project.objects.select_for_update().get(pk=project.pk)
     if not can_archive_project(actor, project):
         raise PermissionDenied(_("Project archive permission is required."))
     if Course.objects.filter(project=project, is_archived=False).exists():
         raise ValidationError(_("Archive every course before archiving this project."))
+    if Task.objects.filter(project=project, is_archived=False).exists():
+        raise ValidationError(
+            _("Archive every project task before archiving this project.")
+        )
     if not project.is_archived:
         project.is_archived = True
         project.archived_at = timezone.now()

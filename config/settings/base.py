@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "apps.audit.apps.AuditConfig",
     "apps.projects.apps.ProjectsConfig",
     "apps.courses.apps.CoursesConfig",
+    "apps.tasks.apps.TasksConfig",
 ]
 
 MIDDLEWARE = [

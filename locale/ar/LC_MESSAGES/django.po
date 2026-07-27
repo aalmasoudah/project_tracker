@@ -1227,6 +1227,300 @@ msgstr "المشروع"
 msgid "starts at"
 msgstr "يبدأ في"
 
+msgid "A blocking reason is required."
+msgstr "سبب التعطيل مطلوب."
+
+msgid "A tag with this code already exists."
+msgstr "توجد علامة بهذا الرمز بالفعل."
+
+msgid "A task cannot be its own parent."
+msgstr "لا يمكن أن تكون المهمة أصلًا لنفسها."
+
+msgid "A task with this code already exists."
+msgstr "توجد مهمة بهذا الرمز بالفعل."
+
+msgid "Actions"
+msgstr "الإجراءات"
+
+msgid "Active tasks still use this tag."
+msgstr "لا تزال مهام نشطة تستخدم هذه العلامة."
+
+msgid "Add comment"
+msgstr "إضافة تعليق"
+
+msgid "Archive every project task before archiving this project."
+msgstr "أرشف جميع مهام المشروع قبل أرشفة هذا المشروع."
+
+msgid "Archive every task before archiving this course."
+msgstr "أرشف جميع المهام قبل أرشفة هذه الدورة."
+
+msgid "Archive subtasks before archiving their parent."
+msgstr "أرشف المهام الفرعية قبل أرشفة المهمة الأصل."
+
+msgid "Archive tag"
+msgstr "أرشفة العلامة"
+
+msgid "Archive task"
+msgstr "أرشفة المهمة"
+
+msgid "Archived contexts cannot own editable tasks."
+msgstr "لا يمكن للسياقات المؤرشفة احتواء مهام قابلة للتعديل."
+
+msgid "Archived courses cannot own editable tasks."
+msgstr "لا يمكن للدورات المؤرشفة احتواء مهام قابلة للتعديل."
+
+msgid "Archived tags are read-only."
+msgstr "العلامات المؤرشفة متاحة للقراءة فقط."
+
+msgid "Archived tags cannot be assigned."
+msgstr "لا يمكن إسناد علامات مؤرشفة."
+
+msgid "Archived tasks are read-only."
+msgstr "المهام المؤرشفة متاحة للقراءة فقط."
+
+msgid "Assigned-task update permission is required."
+msgstr "يلزم إذن تحديث المهام المسندة."
+
+msgid "Assignees"
+msgstr "المكلّفون"
+
+msgid "Blocked"
+msgstr "متعطلة"
+
+msgid "Blocking reason"
+msgstr "سبب التعطيل"
+
+msgid "Comment"
+msgstr "التعليق"
+
+msgid "Comment added successfully."
+msgstr "أُضيف التعليق بنجاح."
+
+msgid "Comments"
+msgstr "التعليقات"
+
+msgid "Completed"
+msgstr "مكتملة"
+
+msgid "Create tag"
+msgstr "إنشاء علامة"
+
+msgid "Create task"
+msgstr "إنشاء مهمة"
+
+msgid "Due date"
+msgstr "تاريخ الاستحقاق"
+
+msgid "Due date cannot precede start date."
+msgstr "لا يمكن أن يسبق تاريخ الاستحقاق تاريخ البدء."
+
+msgid "Edit tag"
+msgstr "تعديل العلامة"
+
+msgid "Edit task"
+msgstr "تعديل المهمة"
+
+msgid "Every assignee must be eligible and active."
+msgstr "يجب أن يكون كل مكلّف مؤهلًا ونشطًا."
+
+msgid "Hours"
+msgstr "الساعات"
+
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+msgid "Manage tags"
+msgstr "إدارة العلامات"
+
+msgid "Maximum task depth is three levels."
+msgstr "الحد الأقصى لعمق المهام هو ثلاثة مستويات."
+
+msgid "New tasks must start as To Do."
+msgstr "يجب أن تبدأ المهام الجديدة بحالة قيد الانتظار."
+
+msgid "No assignees."
+msgstr "لا يوجد مكلّفون."
+
+msgid "No comments."
+msgstr "لا توجد تعليقات."
+
+msgid "No subtasks."
+msgstr "لا توجد مهام فرعية."
+
+msgid "No tags."
+msgstr "لا توجد علامات."
+
+msgid "No task files."
+msgstr "لا توجد ملفات للمهمة."
+
+msgid "No tasks found."
+msgstr "لم يُعثر على مهام."
+
+msgid "Owner context"
+msgstr "السياق المالك"
+
+msgid "Parent and subtask must share an owner."
+msgstr "يجب أن تشترك المهمة الأصل والفرعية في السياق المالك."
+
+msgid "Parent task"
+msgstr "المهمة الأصل"
+
+msgid "Primary owner"
+msgstr "المسؤول الأساسي"
+
+msgid "Primary owner must be an assignee."
+msgstr "يجب أن يكون المسؤول الأساسي من المكلّفين."
+
+msgid "Project and course work items."
+msgstr "بنود عمل المشاريع والدورات."
+
+msgid "Restore tag"
+msgstr "استعادة العلامة"
+
+msgid "Restore task"
+msgstr "استعادة المهمة"
+
+msgid "Restore the parent task first."
+msgstr "استعد المهمة الأصل أولًا."
+
+msgid "Search tasks"
+msgstr "البحث في المهام"
+
+msgid "Select exactly one project or course and one primary owner."
+msgstr "اختر مشروعًا واحدًا أو دورة واحدة ومسؤولًا أساسيًا واحدًا."
+
+msgid "Select exactly one project or course."
+msgstr "اختر مشروعًا واحدًا أو دورة واحدة فقط."
+
+msgid "Subtasks"
+msgstr "المهام الفرعية"
+
+msgid "Tag"
+msgstr "العلامة"
+
+msgid "Tag administration permission is required."
+msgstr "يلزم إذن إدارة العلامات."
+
+msgid "Tag archive permission is required."
+msgstr "يلزم إذن أرشفة العلامات."
+
+msgid "Tag archive state updated."
+msgstr "حُدّثت حالة أرشفة العلامة."
+
+msgid "Tag codes cannot be changed."
+msgstr "لا يمكن تغيير رموز العلامات."
+
+msgid "Tag saved successfully."
+msgstr "حُفظت العلامة بنجاح."
+
+msgid "Tags"
+msgstr "العلامات"
+
+msgid "Task"
+msgstr "المهمة"
+
+msgid "Task archive permission is required."
+msgstr "يلزم إذن أرشفة المهام."
+
+msgid "Task archive state updated."
+msgstr "حُدّثت حالة أرشفة المهمة."
+
+msgid "Task assignment permission is required."
+msgstr "يلزم إذن إسناد المهام."
+
+msgid "Task code and owner context cannot be changed."
+msgstr "لا يمكن تغيير رمز المهمة أو سياقها المالك."
+
+msgid "Task comment permission is required."
+msgstr "يلزم إذن التعليق على المهام."
+
+msgid "Task created successfully."
+msgstr "أُنشئت المهمة بنجاح."
+
+msgid "Task creation permission is required."
+msgstr "يلزم إذن إنشاء المهام."
+
+msgid "Task dates must be inside the course schedule."
+msgstr "يجب أن تكون تواريخ المهمة ضمن جدول الدورة."
+
+msgid "Task dates must be inside the owner dates."
+msgstr "يجب أن تكون تواريخ المهمة ضمن تواريخ السياق المالك."
+
+msgid "Task file upload permission is required."
+msgstr "يلزم إذن رفع ملفات المهام."
+
+msgid "Task file uploaded successfully."
+msgstr "رُفع ملف المهمة بنجاح."
+
+msgid "Task files cannot exceed 25 MiB."
+msgstr "لا يمكن أن يتجاوز حجم ملف المهمة 25 ميبيبايت."
+
+msgid "Task hierarchy cannot contain a cycle."
+msgstr "لا يمكن أن يحتوي تسلسل المهام على حلقة."
+
+msgid "Task history"
+msgstr "سجل المهمة"
+
+msgid "Task restore permission is required."
+msgstr "يلزم إذن استعادة المهام."
+
+msgid "Task tag permission is required."
+msgstr "يلزم إذن إدارة علامات المهام."
+
+msgid "Task tags updated successfully."
+msgstr "حُدّثت علامات المهمة بنجاح."
+
+msgid "Task update permission is required."
+msgstr "يلزم إذن تعديل المهام."
+
+msgid "Task updated successfully."
+msgstr "حُدّثت المهمة بنجاح."
+
+msgid "Tasks"
+msgstr "المهام"
+
+msgid "Tasks may be created only in managed contexts."
+msgstr "لا يمكن إنشاء المهام إلا ضمن السياقات التي تديرها."
+
+msgid "This task is archived and read-only."
+msgstr "هذه المهمة مؤرشفة ومتاحة للقراءة فقط."
+
+msgid "This task status transition is not allowed."
+msgstr "الانتقال إلى حالة المهمة هذه غير مسموح."
+
+msgid "To Do"
+msgstr "قيد الانتظار"
+
+msgid "Update my task"
+msgstr "تحديث مهمتي"
+
+msgid "Upload task file"
+msgstr "رفع ملف للمهمة"
+
+msgid "View course tasks"
+msgstr "عرض مهام الدورة"
+
+msgid "View project tasks"
+msgstr "عرض مهام المشروع"
+
+msgid "actual hours"
+msgstr "الساعات الفعلية"
+
+msgid "blocking reason"
+msgstr "سبب التعطيل"
+
+msgid "comment"
+msgstr "التعليق"
+
+msgid "due date"
+msgstr "تاريخ الاستحقاق"
+
+msgid "estimated hours"
+msgstr "الساعات المقدّرة"
+
+msgid "Assign an eligible primary owner before restoring."
+msgstr "عيّن مسؤولًا أساسيًا مؤهلًا قبل الاستعادة."
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

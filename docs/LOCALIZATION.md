@@ -3,7 +3,7 @@
 ## Status and Objective
 
 Status: Approved scope requirement. Account, project, and course localization
-slices are approved through Phase 4; later output policies remain open.
+slices are approved through Phase 5; later output policies remain open.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -77,12 +77,19 @@ Course schedules use Gregorian dates, Western digits, and Asia/Riyadh time.
 Course and trainer search uses the approved conservative Arabic normalization
 while preserving original text.
 
+Phase 5 terminology includes Task `مهمة`, Tasks `المهام`, To Do
+`قيد الانتظار`, In Progress `قيد التنفيذ`, Blocked `متعطلة`, Completed
+`مكتملة`, and Tags `العلامات`. Task dates use Gregorian dates and Western
+digits. Task/tag search applies the approved conservative Arabic
+normalization while preserving original task names, descriptions, comments,
+and tag names.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 and Phase 4 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 and Phase 4
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 5 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 5
   screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account search.

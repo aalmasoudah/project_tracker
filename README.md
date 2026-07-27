@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 through 4 are complete. Phase 4, Courses and Trainers, was implemented
-and verified on 2026-07-27.
+Phases 1 through 5 are complete. Phase 5, Tasks and Collaboration, was
+implemented and verified on 2026-07-27.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -45,6 +45,7 @@ Open:
 - Authenticated application: <http://127.0.0.1:8000/>
 - Projects: <http://127.0.0.1:8000/projects/>
 - Courses and trainers: <http://127.0.0.1:8000/courses/>
+- Tasks and collaboration: <http://127.0.0.1:8000/tasks/>
 - Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 
