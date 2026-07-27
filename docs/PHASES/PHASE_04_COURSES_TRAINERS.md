@@ -1,6 +1,6 @@
 # Phase 4: Courses and Trainers
 
-Status: Draft; blocked by course lifecycle, permission, and time decisions.
+Status: Completed and verified on 2026-07-27.
 
 ## 1. Goal
 

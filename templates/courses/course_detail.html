@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load course_tags i18n %}
+{% block title %}{{ course|localized_course_name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><p class="text-primary fw-semibold mb-1"><bdi>{{ course.code }}</bdi></p><h1>{{ course|localized_course_name }}</h1></div><div class="d-flex flex-wrap gap-2">
+{% if can_manage %}<a class="btn btn-outline-primary" href="{% url 'courses:update' course.pk %}">{% translate "Edit" %}</a>{% endif %}
+{% if can_manage_trainers %}<a class="btn btn-outline-primary" href="{% url 'courses:trainers' course.pk %}">{% translate "Assign trainers" %}</a>{% endif %}
+{% if can_upload_file %}<a class="btn btn-outline-primary" href="{% url 'courses:file_upload' course.pk %}">{% translate "Upload file" %}</a>{% endif %}
+{% if can_history %}<a class="btn btn-outline-secondary" href="{% url 'courses:history' course.pk %}">{% translate "History" %}</a>{% endif %}
+{% if can_archive %}{% if course.is_archived %}<a class="btn btn-outline-success" href="{% url 'courses:restore' course.pk %}">{% translate "Restore" %}</a>{% else %}<a class="btn btn-outline-danger" href="{% url 'courses:archive' course.pk %}">{% translate "Archive" %}</a>{% endif %}{% endif %}
+</div></div>
+{% if course.is_archived %}<div class="alert alert-secondary">{% translate "This course is archived and read-only." %}</div>{% endif %}
+<dl class="detail-grid">
+<div><dt>{% translate "Arabic name" %}</dt><dd>{{ course.name_ar }}</dd></div><div><dt>{% translate "English name" %}</dt><dd>{{ course.name_en }}</dd></div>
+<div><dt>{% translate "Project" %}</dt><dd><a href="{% url 'projects:detail' course.project.pk %}"><bdi>{{ course.project.code }}</bdi></a></dd></div>
+<div><dt>{% translate "Status" %}</dt><dd>{{ course.get_status_display }}</dd></div><div><dt>{% translate "Delivery type" %}</dt><dd>{{ course.get_delivery_type_display }}</dd></div>
+<div><dt>{% translate "Location" %}</dt><dd>{{ course.location|default:"—" }}</dd></div><div><dt>{% translate "Capacity" %}</dt><dd><bdi>{{ course.capacity }}</bdi></dd></div>
+<div><dt>{% translate "Schedule" %}</dt><dd><bdi>{{ course.start_at|date:"Y-m-d H:i" }} – {{ course.end_at|date:"Y-m-d H:i" }}</bdi></dd></div>
+</dl>
+<div class="row g-4 mt-1"><section class="col-12 col-lg-6"><h2 class="h5">{% translate "Description" %}</h2><div class="preserve-lines">{{ course.description|default:"—" }}</div></section><section class="col-12 col-lg-6"><h2 class="h5">{% translate "Notes" %}</h2><div class="preserve-lines">{{ course.notes|default:"—" }}</div></section></div>
+<section class="mt-5"><h2 class="h4">{% translate "Trainers" %}</h2><ul>{% for assignment in assignments %}<li>{{ assignment.trainer|localized_trainer_name }}{% if show_contact %} – <bdi>{{ assignment.trainer.email }}</bdi>{% endif %}</li>{% empty %}<li>{% translate "No trainers assigned." %}</li>{% endfor %}</ul></section>
+<section class="mt-5"><h2 class="h4">{% translate "Files" %}</h2><ul>{% for item in files %}<li><a href="{% url 'courses:file_download' item.pk %}"><bdi>{{ item.original_name }}</bdi></a> <small>(<bdi>{{ item.size }}</bdi> {% translate "bytes" %})</small></li>{% empty %}<li>{% translate "No course files." %}</li>{% endfor %}</ul></section>
+{% endblock %}

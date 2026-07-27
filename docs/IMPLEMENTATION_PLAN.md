@@ -2,7 +2,7 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phases 1 through 3 are completed;
+Status: Planning pass completed on 2026-07-23. Phases 1 through 4 are completed;
 later phase specifications remain unapproved until the project owner
 explicitly approves them.
 
@@ -17,7 +17,7 @@ phase specifications.
 | 1 | Engineering Foundation | Approved scope and technical plan | Completed on 2026-07-23 |
 | 2 | Accounts, Roles, and Organization | Phase 1; Phase 2 permission slice | Completed on 2026-07-25 |
 | 3 | Projects and Teams | Phase 2; project access/status/currency rules | Completed on 2026-07-26 |
-| 4 | Courses and Trainers | Phase 3; course lifecycle/access rules | Blocked by business decisions |
+| 4 | Courses and Trainers | Phase 3; course lifecycle/access rules | Completed on 2026-07-27 |
 | 5 | Tasks and Collaboration | Phases 3-4; task rules | Blocked by business decisions |
 | 6 | Progress Engine | Phase 5; all progress formulas | Blocked by business decisions |
 | 7 | Milestones and Approvals | Phase 6; approval actors/steps | Blocked by business decisions |
@@ -46,30 +46,30 @@ requirements.
 | BR-05 | Course progress formula | Question 5 | 6 |
 | BR-06 | Milestone/project progress formula | Question 6 | 6 |
 | BR-07 | Whether progress may exceed 100 percent | Question 7 | 6 |
-| BR-08 | Project/course status transitions | Question 8 | Project slice approved; course open |
+| BR-08 | Project/course status transitions | Question 8 | Project and course slices approved |
 | BR-09 | Milestone/project completion approval steps | Question 9 | 7 |
 | BR-10 | Reject/reopen/correct/override actors | Question 10 | 7 |
 | BR-11 | Trainee/import duplicate identity | Question 11 | 8 |
 | BR-12 | Allowed attendance values | Question 12 | 9 |
 | BR-13 | Expiry during trainer data entry | Question 13 | 9 |
-| BR-14 | Date/time storage, display, and overdue semantics | Question 14 | Phase 3 date-only slice approved |
+| BR-14 | Date/time storage, display, and overdue semantics | Question 14 | Phase 3 dates and Phase 4 Riyadh schedule slices approved |
 | BR-15 | Supported currencies and rounding | Question 15 | Phase 3 SAR budget slice approved |
-| BR-16 | Hard-deletable records | Question 16 | Through Phase 3 approved; later records open |
+| BR-16 | Hard-deletable records | Question 16 | Through Phase 4 approved; later records open |
 | BR-17 | User-disableable notification categories | Question 17 | 11 |
 | BR-18 | File/audit/archive retention periods | Question 18 | 14 |
-| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Phase 2 slice approved |
-| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 3 approved |
+| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Through Phase 4 approved |
+| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 4 approved |
 | RBAC-03 | Project-manager cross-project access | Question 2 | Approved |
-| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 3 approved |
+| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 4 approved |
 | RBAC-05 | Employee/contractor budget visibility | Question 4 | Approved |
 | RBAC-06 | Personal attendance visibility | Question 5 | 10 |
 | RBAC-07 | Personal-data report export rights | Question 6 | 13 |
-| RBAC-08 | Archive/restore authority | Question 7 | Through Phase 3 approved |
+| RBAC-08 | Archive/restore authority | Question 7 | Through Phase 4 approved |
 | RBAC-09 | Audit/health visibility | Question 8 | 14 |
 | L10N-01 | Default language and preference persistence | `BUSINESS_RULES.md` question 19 | Approved |
 | L10N-02 | Official Arabic terminology approver | Question 20 | Approved |
-| L10N-03 | Calendar and digit display policy | Question 21 | Phase 3 date-only slice approved |
-| L10N-04 | Arabic normalization for identity/search/duplicates | Question 22 | Account/project search approved; later duplicates open |
+| L10N-03 | Calendar and digit display policy | Question 21 | Phase 3 dates and Phase 4 schedule slice approved |
+| L10N-04 | Arabic normalization for identity/search/duplicates | Question 22 | Account, project, course, and trainer slices approved |
 
 Phase owners must update the source documents when decisions are approved and
 then revise the affected phase specification. A status or formula must never

@@ -34,4 +34,5 @@
     <section class="col-12 col-lg-4"><h2 class="h5">{% translate "Notes" %}</h2><div class="preserve-lines">{{ project.notes|default:"—" }}</div></section>
   </div>
   <section class="mt-5"><h2 class="h4">{% translate "Team members" %}</h2><ul>{% for membership in memberships %}<li>{{ membership.user.display_name }}</li>{% empty %}<li>{% translate "No additional team members." %}</li>{% endfor %}</ul></section>
+  {% if perms.courses.view_course %}<section class="mt-4"><a class="btn btn-outline-secondary" href="{% url 'courses:list' %}?q={{ project.code|urlencode }}">{% translate "View project courses" %}</a></section>{% endif %}
 {% endblock %}

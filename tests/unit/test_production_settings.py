@@ -19,6 +19,9 @@ def production_environment() -> dict[str, str]:
             "DEFAULT_LANGUAGE": "ar",
             "DJANGO_SETTINGS_MODULE": "config.settings.production",
             "SECRET_KEY": "fictional-production-key-with-sufficient-length-123",
+            "AWS_STORAGE_BUCKET_NAME": "fictional-private-bucket",
+            "AWS_ACCESS_KEY_ID": "fictional-access-key",
+            "AWS_SECRET_ACCESS_KEY": "fictional-secret-key",
         }
     )
     return environment

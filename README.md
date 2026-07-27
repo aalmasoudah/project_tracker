@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 through 3 are complete. Phase 3, Projects and Teams, was implemented
-and verified on 2026-07-26.
+Phases 1 through 4 are complete. Phase 4, Courses and Trainers, was implemented
+and verified on 2026-07-27.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -44,6 +44,7 @@ Open:
 - User login: <http://127.0.0.1:8000/accounts/login/>
 - Authenticated application: <http://127.0.0.1:8000/>
 - Projects: <http://127.0.0.1:8000/projects/>
+- Courses and trainers: <http://127.0.0.1:8000/courses/>
 - Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 
@@ -73,8 +74,9 @@ Python compiler script so gettext does not need a system-wide installation.
 
 - `config.settings.development` loads local `.env`.
 - `config.settings.testing` requires `TEST_DATABASE_URL` ending in `_test`.
-- `config.settings.production` fails closed when the database, secret key, or
-  allowed hosts are missing or unsafe.
+- `config.settings.production` fails closed when the database, secret key,
+  allowed hosts, or private S3-compatible storage credentials are missing or
+  unsafe.
 - SQLite is not configured in any environment.
 
 ## Project Documentation

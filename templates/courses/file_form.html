@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Upload course file" %}{% endblock %}
+{% block content %}<div class="form-shell"><h1>{% translate "Upload course file" %}</h1><p>{% translate "Allowed: PDF, DOCX, XLSX, PPTX, PNG, JPEG. Maximum 25 MiB." %}</p><form method="post" enctype="multipart/form-data">{% csrf_token %}{% include "includes/form_fields.html" with form=form %}<button class="btn btn-primary" type="submit">{% translate "Upload" %}</button> <a class="btn btn-outline-secondary" href="{% url 'courses:detail' course.pk %}">{% translate "Cancel" %}</a></form></div>{% endblock %}

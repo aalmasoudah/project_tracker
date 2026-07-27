@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Course history" %}{% endblock %}
+{% block content %}<h1>{% translate "Course history" %}</h1><p><bdi>{{ course.code }}</bdi></p><div class="table-responsive"><table class="table"><thead><tr><th>{% translate "Time" %}</th><th>{% translate "Action" %}</th><th>{% translate "Actor" %}</th></tr></thead><tbody>{% for event in history %}<tr><td><bdi>{{ event.created_at|date:"Y-m-d H:i" }}</bdi></td><td><bdi>{{ event.action }}</bdi></td><td>{{ event.actor.display_name|default:"—" }}</td></tr>{% empty %}<tr><td colspan="3">{% translate "No history." %}</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

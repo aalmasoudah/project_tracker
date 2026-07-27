@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "apps.organizations.apps.OrganizationsConfig",
     "apps.audit.apps.AuditConfig",
     "apps.projects.apps.ProjectsConfig",
+    "apps.courses.apps.CoursesConfig",
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ if LANGUAGE_CODE not in SUPPORTED_LANGUAGE_CODES:
         f"DEFAULT_LANGUAGE must be one of: {supported_languages}."
     )
 
-TIME_ZONE = env_string("TIME_ZONE", default="UTC")
+TIME_ZONE = env_string("TIME_ZONE", default="Asia/Riyadh")
 USE_I18N = True
 USE_TZ = True
 LOCALE_PATHS = [BASE_DIR / "locale"]
@@ -93,6 +94,7 @@ LANGUAGE_COOKIE_SAMESITE = "Lax"
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+MEDIA_URL = "/private-media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"

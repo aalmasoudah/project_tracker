@@ -13,6 +13,7 @@ from apps.accounts.roles import CONTRACTOR, EMPLOYEE, PROJECT_MANAGER, SUPERVISO
 from apps.audit import actions
 from apps.audit.models import AuditEvent
 from apps.audit.services import record_audit_event
+from apps.courses.models import Course
 from apps.projects.models import Category, Client, Project, ProjectMembership
 from apps.projects.policies import STATUS_TRANSITIONS
 from apps.projects.selectors import can_archive_project, can_manage_project
@@ -133,6 +134,21 @@ def update_project(
     for field_name, value in data.items():
         setattr(project, field_name, value)
     if (
+        previous_status == Project.Status.ACTIVE
+        and project.status != Project.Status.ACTIVE
+        and Course.objects.filter(
+            project=project,
+            is_archived=False,
+            status=Course.Status.ACTIVE,
+        ).exists()
+    ):
+        raise ValidationError(
+            _(
+                "Place active courses on hold or cancel them before changing "
+                "the project."
+            )
+        )
+    if (
         project.status != previous_status
         and project.status not in STATUS_TRANSITIONS[previous_status]
     ):
@@ -163,6 +179,8 @@ def archive_project(
     project = Project.objects.select_for_update().get(pk=project.pk)
     if not can_archive_project(actor, project):
         raise PermissionDenied(_("Project archive permission is required."))
+    if Course.objects.filter(project=project, is_archived=False).exists():
+        raise ValidationError(_("Archive every course before archiving this project."))
     if not project.is_archived:
         project.is_archived = True
         project.archived_at = timezone.now()

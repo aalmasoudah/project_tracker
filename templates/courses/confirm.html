@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}<div class="form-shell"><h1>{{ page_title }}</h1><p>{{ message }}</p><p class="fw-semibold"><bdi>{{ object.code }}</bdi></p><form method="post">{% csrf_token %}<button class="btn {{ submit_class }}" type="submit">{{ submit_label }}</button> <a class="btn btn-outline-secondary" href="javascript:history.back()">{% translate "Cancel" %}</a></form></div>{% endblock %}

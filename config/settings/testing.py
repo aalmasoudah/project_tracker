@@ -1,7 +1,7 @@
 """Automated test settings."""
 
 from config.settings.database import postgres_database_from_url
-from config.settings.environment import env_string
+from config.settings.environment import BASE_DIR, env_string
 
 from .base import *
 
@@ -17,3 +17,4 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+MEDIA_ROOT = BASE_DIR / "tmp" / "test-media"

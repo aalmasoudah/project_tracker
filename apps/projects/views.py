@@ -182,8 +182,12 @@ def project_archive(request: HttpRequest, project_id: int) -> HttpResponse:
     if not can_archive_project(actor, project):
         raise PermissionDenied
     if request.method == "POST":
-        archive_project(actor=actor, project=project, request=request)
-        messages.success(request, _("Project archived successfully."))
+        try:
+            archive_project(actor=actor, project=project, request=request)
+        except ValidationError as error:
+            messages.error(request, error.messages[0])
+        else:
+            messages.success(request, _("Project archived successfully."))
         return redirect("projects:detail", project_id=project.pk)
     return render(
         request,

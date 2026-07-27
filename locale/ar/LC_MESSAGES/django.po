@@ -941,6 +941,292 @@ msgstr "يُعيَّن مدير المشروع والمشرف بشكل منفص�
 msgid "Archived departments cannot own projects."
 msgstr "لا يمكن للأقسام المؤرشفة امتلاك مشاريع."
 
+msgid "A course with this code already exists."
+msgstr "توجد دورة بهذا الرمز مسبقًا."
+
+msgid "A trainer with this code already exists."
+msgstr "يوجد مدرب بهذا الرمز مسبقًا."
+
+msgid "A trainer with this email already exists."
+msgstr "يوجد مدرب بهذا البريد الإلكتروني مسبقًا."
+
+msgid "Active course assignments still use this trainer."
+msgstr "لا تزال هناك دورات نشطة مسندة إلى هذا المدرب."
+
+msgid "Allowed: PDF, DOCX, XLSX, PPTX, PNG, JPEG. Maximum 25 MiB."
+msgstr "المسموح: PDF وDOCX وXLSX وPPTX وPNG وJPEG. الحد الأقصى 25 ميبيبايت."
+
+msgid "Archive course"
+msgstr "أرشفة الدورة"
+
+msgid "Archive every course before archiving this project."
+msgstr "أرشف جميع الدورات قبل أرشفة هذا المشروع."
+
+msgid "Archive trainer"
+msgstr "أرشفة المدرب"
+
+msgid "Archived projects cannot own editable courses."
+msgstr "لا يمكن للمشاريع المؤرشفة امتلاك دورات قابلة للتعديل."
+
+msgid "Archived trainers are read-only."
+msgstr "المدربون المؤرشفون متاحون للقراءة فقط."
+
+msgid "Archived trainers cannot be assigned."
+msgstr "لا يمكن إسناد المدربين المؤرشفين."
+
+msgid "Archiving makes the course read-only."
+msgstr "ستصبح الدورة متاحة للقراءة فقط بعد أرشفتها."
+
+msgid "Assign trainers"
+msgstr "إسناد المدربين"
+
+msgid "Capacity"
+msgstr "السعة"
+
+msgid "Confirm the trainer archive change."
+msgstr "أكّد تغيير حالة أرشفة المدرب."
+
+msgid "Course"
+msgstr "الدورة"
+
+msgid "Course archive permission is required."
+msgstr "يلزم إذن أرشفة الدورة."
+
+msgid "Course archived successfully."
+msgstr "أُرشفت الدورة بنجاح."
+
+msgid "Course code and project cannot be changed."
+msgstr "لا يمكن تغيير رمز الدورة أو مشروعها."
+
+msgid "Course created successfully."
+msgstr "أُنشئت الدورة بنجاح."
+
+msgid "Course creation permission is required."
+msgstr "يلزم إذن إنشاء الدورات."
+
+msgid "Course file upload permission is required."
+msgstr "يلزم إذن رفع ملفات الدورة."
+
+msgid "Course file uploaded successfully."
+msgstr "رُفع ملف الدورة بنجاح."
+
+msgid "Course files cannot exceed 25 MiB."
+msgstr "لا يمكن أن يتجاوز ملف الدورة 25 ميبيبايت."
+
+msgid "Course history"
+msgstr "سجل الدورة"
+
+msgid "Course restore permission is required."
+msgstr "يلزم إذن استعادة الدورة."
+
+msgid "Course restored successfully."
+msgstr "استُعيدت الدورة بنجاح."
+
+msgid "Course schedule must be inside the project dates."
+msgstr "يجب أن يكون جدول الدورة ضمن تواريخ المشروع."
+
+msgid "Course trainer permission is required."
+msgstr "يلزم إذن إدارة مدربي الدورة."
+
+msgid "Course trainers updated successfully."
+msgstr "حُدّث مدربو الدورة بنجاح."
+
+msgid "Course update permission is required."
+msgstr "يلزم إذن تعديل الدورة."
+
+msgid "Course updated successfully."
+msgstr "حُدّثت الدورة بنجاح."
+
+msgid "Courses"
+msgstr "الدورات"
+
+msgid "Courses may be created only in managed projects."
+msgstr "لا يمكن إنشاء الدورات إلا داخل المشاريع التي تديرها."
+
+msgid "Create course"
+msgstr "إنشاء دورة"
+
+msgid "Create trainer"
+msgstr "إنشاء مدرب"
+
+msgid "Delivery type"
+msgstr "نوع التقديم"
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Edit course"
+msgstr "تعديل الدورة"
+
+msgid "Edit trainer"
+msgstr "تعديل المدرب"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "End date and time must be after the start."
+msgstr "يجب أن يكون تاريخ ووقت الانتهاء بعد البداية."
+
+msgid "File"
+msgstr "الملف"
+
+msgid "Files"
+msgstr "الملفات"
+
+msgid "Hybrid"
+msgstr "هجين"
+
+msgid "In person"
+msgstr "حضوري"
+
+msgid "Location"
+msgstr "الموقع"
+
+msgid "Location is required for this delivery type."
+msgstr "الموقع مطلوب لنوع التقديم هذا."
+
+msgid "New courses must start as Draft."
+msgstr "يجب أن تبدأ الدورات الجديدة بحالة مسودة."
+
+msgid "No course files."
+msgstr "لا توجد ملفات للدورة."
+
+msgid "No courses found."
+msgstr "لم يُعثر على دورات."
+
+msgid "No history."
+msgstr "لا يوجد سجل."
+
+msgid "No trainers assigned."
+msgstr "لم يُسند أي مدرب."
+
+msgid "No trainers found."
+msgstr "لم يُعثر على مدربين."
+
+msgid "Online"
+msgstr "عن بُعد"
+
+msgid "Only an active project can contain an active course."
+msgstr "لا يمكن أن يحتوي دورة نشطة إلا مشروع نشط."
+
+msgid "Organization"
+msgstr "الجهة"
+
+msgid "Phone"
+msgstr "الهاتف"
+
+msgid ""
+"Place active courses on hold or cancel them before changing the project."
+msgstr "علّق الدورات النشطة أو ألغها قبل تغيير حالة المشروع."
+
+msgid "Project training courses and schedules."
+msgstr "دورات المشاريع وجداولها التدريبية."
+
+msgid "Restore course"
+msgstr "استعادة الدورة"
+
+msgid "Restore the parent project first."
+msgstr "استعد المشروع التابع له أولًا."
+
+msgid "Restore trainer"
+msgstr "استعادة المدرب"
+
+msgid "Schedule"
+msgstr "الجدول"
+
+msgid "Search courses"
+msgstr "البحث في الدورات"
+
+msgid "Search trainers"
+msgstr "البحث في المدربين"
+
+msgid "The course will become editable again."
+msgstr "ستصبح الدورة قابلة للتعديل مرة أخرى."
+
+msgid "The declared file type does not match its extension."
+msgstr "نوع الملف المعلن لا يطابق امتداده."
+
+msgid "The file content does not match the allowed type."
+msgstr "محتوى الملف لا يطابق النوع المسموح."
+
+msgid "This course is archived and read-only."
+msgstr "هذه الدورة مؤرشفة ومتاحة للقراءة فقط."
+
+msgid "This course status transition is not allowed."
+msgstr "الانتقال إلى حالة الدورة هذه غير مسموح."
+
+msgid "This file type is not allowed."
+msgstr "نوع الملف هذا غير مسموح."
+
+msgid "This trainer is archived and read-only."
+msgstr "هذا المدرب مؤرشف ومتاح للقراءة فقط."
+
+msgid "Times are entered in Riyadh time."
+msgstr "تُدخل الأوقات بتوقيت الرياض."
+
+msgid "Trainer"
+msgstr "المدرب"
+
+msgid "Trainer administration permission is required."
+msgstr "يلزم إذن إدارة المدربين."
+
+msgid "Trainer archive permission is required."
+msgstr "يلزم إذن أرشفة المدربين."
+
+msgid "Trainer archive state updated."
+msgstr "حُدّثت حالة أرشفة المدرب."
+
+msgid "Trainer codes cannot be changed."
+msgstr "لا يمكن تغيير رموز المدربين."
+
+msgid "Trainer saved successfully."
+msgstr "حُفظ المدرب بنجاح."
+
+msgid "Trainers"
+msgstr "المدربون"
+
+msgid "Upload"
+msgstr "رفع"
+
+msgid "Upload course file"
+msgstr "رفع ملف للدورة"
+
+msgid "Upload file"
+msgstr "رفع ملف"
+
+msgid "View project courses"
+msgstr "عرض دورات المشروع"
+
+msgid "bytes"
+msgstr "بايت"
+
+msgid "capacity"
+msgstr "السعة"
+
+msgid "delivery type"
+msgstr "نوع التقديم"
+
+msgid "description"
+msgstr "الوصف"
+
+msgid "ends at"
+msgstr "ينتهي في"
+
+msgid "location"
+msgstr "الموقع"
+
+msgid "organization"
+msgstr "الجهة"
+
+msgid "phone"
+msgstr "الهاتف"
+
+msgid "project"
+msgstr "المشروع"
+
+msgid "starts at"
+msgstr "يبدأ في"
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

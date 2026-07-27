@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load course_tags i18n %}
+{% block title %}{% translate "Courses" %}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+  <div><h1>{% translate "Courses" %}</h1><p class="text-body-secondary">{% translate "Project training courses and schedules." %}</p></div>
+  <div class="d-flex gap-2">
+    {% if perms.courses.view_trainer %}<a class="btn btn-outline-secondary" href="{% url 'courses:trainer_list' %}">{% translate "Trainers" %}</a>{% endif %}
+    {% if perms.courses.add_course %}<a class="btn btn-primary" href="{% url 'courses:create' %}">{% translate "Create course" %}</a>{% endif %}
+  </div>
+</div>
+<form class="row g-2 mb-4" method="get">
+  <div class="col-12 col-md-5"><label class="visually-hidden" for="course-search">{% translate "Search" %}</label><input class="form-control" id="course-search" name="q" value="{{ search }}" placeholder="{% translate 'Search courses' %}"></div>
+  <div class="col-8 col-md-3"><label class="visually-hidden" for="course-status">{% translate "Status" %}</label><select class="form-select" id="course-status" name="status"><option value="">{% translate "All statuses" %}</option>{% for value,label in status_choices %}<option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-4 col-md-2"><button class="btn btn-outline-primary w-100">{% translate "Filter" %}</button></div>
+  {% if perms.courses.view_all_courses or perms.courses.view_managed_courses %}<div class="col-12 col-md-2 form-check align-self-center"><input class="form-check-input" id="archived" name="archived" type="checkbox" value="1" {% if include_archived %}checked{% endif %}><label class="form-check-label" for="archived">{% translate "Include archived" %}</label></div>{% endif %}
+</form>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% translate "Code" %}</th><th>{% translate "Course" %}</th><th>{% translate "Project" %}</th><th>{% translate "Status" %}</th><th>{% translate "Schedule" %}</th></tr></thead><tbody>
+{% for course in page %}<tr><td><bdi>{{ course.code }}</bdi></td><td><a href="{% url 'courses:detail' course.pk %}">{{ course|localized_course_name }}</a>{% if course.is_archived %} <span class="badge text-bg-secondary">{% translate "Archived" %}</span>{% endif %}</td><td><bdi>{{ course.project.code }}</bdi></td><td>{{ course.get_status_display }}</td><td><bdi>{{ course.start_at|date:"Y-m-d H:i" }}</bdi></td></tr>
+{% empty %}<tr><td colspan="5">{% translate "No courses found." %}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

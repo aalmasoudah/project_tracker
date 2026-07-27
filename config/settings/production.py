@@ -24,6 +24,12 @@ DATABASES = {
     ),
 }
 
+storage_bucket = env_string("AWS_STORAGE_BUCKET_NAME")
+storage_access_key = env_string("AWS_ACCESS_KEY_ID")
+storage_secret_key = env_string("AWS_SECRET_ACCESS_KEY")
+if not all((storage_bucket, storage_access_key, storage_secret_key)):
+    raise ImproperlyConfigured("Private S3 storage credentials are required.")
+
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -36,7 +42,17 @@ SECURE_HSTS_PRELOAD = SECURE_HSTS_SECONDS > 0
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": storage_bucket,
+            "access_key": storage_access_key,
+            "secret_key": storage_secret_key,
+            "endpoint_url": env_string("AWS_S3_ENDPOINT_URL") or None,
+            "region_name": env_string("AWS_S3_REGION_NAME") or None,
+            "default_acl": None,
+            "querystring_auth": True,
+            "file_overwrite": False,
+        },
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",

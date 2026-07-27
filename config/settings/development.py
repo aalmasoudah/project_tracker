@@ -1,7 +1,7 @@
 """Local development settings."""
 
 from config.settings.database import postgres_database_from_url
-from config.settings.environment import env_list, env_string
+from config.settings.environment import BASE_DIR, env_list, env_string
 
 from .base import *
 
@@ -20,3 +20,5 @@ DATABASES = {
         env_string("DATABASE_URL"),
     ),
 }
+
+MEDIA_ROOT = BASE_DIR / "private-media"

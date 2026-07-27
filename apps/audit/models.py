@@ -25,6 +25,7 @@ class AuditEvent(models.Model):
     class Scope(models.TextChoices):
         SECURITY = "security", _("Security")
         PROJECTS = "projects", _("Projects")
+        COURSES = "courses", _("Courses")
 
     scope = models.CharField(
         _("scope"),

@@ -1,0 +1,1 @@
+"""Course database migrations."""

@@ -141,7 +141,14 @@ def test_seeded_roles_exactly_match_the_approved_phase3_matrix() -> None:
         group = Group.objects.get(name=role_code)
         actual = {
             f"{permission.content_type.app_label}.{permission.codename}"
-            for permission in group.permissions.select_related("content_type")
+            for permission in group.permissions.select_related("content_type").filter(
+                content_type__app_label__in=(
+                    "accounts",
+                    "audit",
+                    "organizations",
+                    "projects",
+                )
+            )
         }
         assert actual == expected
 

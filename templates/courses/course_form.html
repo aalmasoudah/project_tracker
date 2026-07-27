@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="form-shell"><h1>{{ page_title }}</h1><p class="text-body-secondary">{% translate "Times are entered in Riyadh time." %}</p>
+<form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" with form=form %}<div class="d-flex gap-2"><button class="btn btn-primary" type="submit">{% translate "Save" %}</button><a class="btn btn-outline-secondary" href="{% if course %}{% url 'courses:detail' course.pk %}{% else %}{% url 'courses:list' %}{% endif %}">{% translate "Cancel" %}</a></div></form></div>
+{% endblock %}
