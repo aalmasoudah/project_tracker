@@ -65,6 +65,19 @@ must be approved before their implementation phase.
   progress in Phase 5.
 - Tasks and tags are archived, comments/files are immutable, and assignments
   and task-tag links are end-dated instead of hard-deleted.
+- Phase 6 leaf-task progress is status-based: Completed is 100 percent and
+  To Do, In Progress, and Blocked are 0 percent. Cancelled/archived task
+  branches are excluded.
+- A parent task recursively averages its direct countable children. With no
+  countable children, its own leaf status applies.
+- Course progress averages top-level course tasks. Project progress equally
+  averages the direct-project-task and course categories that exist; records
+  inside each category have equal weight.
+- Empty countable collections produce 0 percent with an explicit empty state.
+  Cancelled/archived courses and projects are not applicable.
+- Progress uses unrounded `Decimal` calculations and public two-decimal
+  `ROUND_HALF_UP` results bounded from 0 through 100. Task hours do not affect
+  progress.
 
 ## Decisions Required Before Planning
 
@@ -73,12 +86,15 @@ The project owner must approve answers to these questions:
 1. [Approved for Phase 5] Maximum task nesting depth is three levels.
 2. [Approved for Phase 5] Task statuses and transitions are defined in
    decision 0010. Progress interpretation remains deferred to Phase 6.
-3. Do cancelled tasks contribute to progress denominators?
-4. How is task progress calculated: status, checklist, manual percentage, or
-   weighted work?
-5. How is course progress calculated?
-6. How are milestone and project progress calculated?
-7. Can progress exceed 100 percent?
+3. [Approved for Phase 6] Cancelled and archived task branches are excluded
+   from progress denominators.
+4. [Approved for Phase 6] Task progress is status-based and recursively
+   averaged as defined in decision 0011.
+5. [Approved for Phase 6] Course progress averages top-level course tasks.
+6. [Approved for Phase 6 projects] Project progress uses equal available
+   categories as defined in decision 0011. Milestone progress remains
+   deferred to Phase 7.
+7. [Approved for Phase 6] Progress is bounded from 0 through 100 percent.
 8. [Approved for Phase 3 projects and Phase 4 courses] What are the project
    and course status transitions?
 9. Which approval steps are required for milestone and project completion?
@@ -116,5 +132,6 @@ The project owner must approve answers to these questions:
 Status: Phase 2 decisions were approved on 2026-07-25. Phase 3 decisions were
 approved on 2026-07-26 in decision 0008. Phase 4 course portions were approved
 on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
-2026-07-27 in decision 0010. Remaining decisions still block their listed
+2026-07-27 in decision 0010. Phase 6 progress portions were approved on
+2026-07-28 in decision 0011. Remaining decisions still block their listed
 phases.

@@ -90,18 +90,34 @@ active reference records but do not administer them.
 | Employee | Assigned tasks in active contexts | Comment/upload; update status, actual hours, and block reason | View tags; no history |
 | Contractor | Assigned tasks in active contexts | Comment/upload; update status, actual hours, and block reason | View tags; no history |
 
+## Phase 6 Progress Visibility
+
+| Role | Task progress | Course progress | Project progress |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | All visible records | All visible records | All visible records |
+| Executive Manager | All visible records | All visible records | All visible records |
+| Project Manager | Managed contexts | Managed contexts | Managed projects |
+| Supervisor | Complete visible contexts | Active visible courses | Active visible projects only when every course source is visible |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+Phase 6 adds no permission codenames. It derives progress visibility from
+approved source-record permissions and withholds a value whenever the actor's
+scope might omit hierarchy or aggregate inputs.
+
 ## Object-Level Access Questions
 
-1. [Approved through Phase 5] Use the account/department, project, course, and task
-   scopes above. Later domains remain open.
+1. [Approved through Phase 6] Use the account/department, project, course,
+   task, and progress scopes above. Later domains remain open.
 2. [Approved for Phase 3] Project Managers cannot access projects they do not
    manage unless a later phase grants a separate assignment.
-3. [Approved through Phase 5] Supervisors do not receive cross-department
+3. [Approved through Phase 6] Supervisors do not receive cross-department
    directory, project, course, or task access.
 4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
 5. Who may view personal attendance information?
 6. Who may export reports containing personal data?
-7. [Approved through Phase 5] Technical Admin may archive/restore departments.
+7. [Approved through Phase 6] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
    so only for a managed project. Accounts are deactivated/reactivated. Later
    records remain open.
@@ -114,4 +130,5 @@ Status: The role model and Phase 2 permission slice were approved on
 2026-07-25. The Phase 3 project slice was approved on 2026-07-26 in decision
 0008. The Phase 4 course/trainer slice was approved on 2026-07-27 in decision
 0009. The Phase 5 task/collaboration slice was approved on 2026-07-27 in
-decision 0010. Later-domain matrix entries remain open.
+decision 0010. The Phase 6 progress-visibility slice was approved on
+2026-07-28 in decision 0011. Later-domain matrix entries remain open.

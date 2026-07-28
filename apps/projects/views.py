@@ -12,6 +12,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from apps.accounts.models import User
+from apps.progress.services import project_progress_for
 from apps.projects.forms import ProjectForm, ReferenceForm, TeamForm
 from apps.projects.models import Category, Client, Project
 from apps.projects.selectors import (
@@ -104,6 +105,7 @@ def project_detail(request: HttpRequest, project_id: int) -> HttpResponse:
             "memberships": project.memberships.filter(
                 removed_at__isnull=True
             ).select_related("user"),
+            "progress": project_progress_for(actor, project),
         },
     )
 

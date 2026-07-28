@@ -89,6 +89,21 @@ def visible_task_or_404(actor: User, task_id: int) -> Task:
         raise Http404 from error
 
 
+def visible_task_relationships(
+    actor: User,
+    task: Task,
+) -> tuple[Task | None, QuerySet[Task]]:
+    """Return only parent/children independently visible to the actor."""
+    visible = tasks_visible_to(actor, include_archived=True)
+    parent = (
+        visible.filter(pk=task.parent_id).first()
+        if task.parent_id is not None
+        else None
+    )
+    children = visible.filter(parent=task, is_archived=False).order_by("code")
+    return parent, children
+
+
 def task_manager_id(task: Task) -> int:
     if task.project_id:
         project = task.project

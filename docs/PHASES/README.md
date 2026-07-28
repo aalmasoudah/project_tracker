@@ -35,7 +35,7 @@ project owner resolves the open decisions in the core documents.
 | 3 | `PHASE_03_PROJECTS_TEAMS.md` | Completed and verified on 2026-07-26 |
 | 4 | `PHASE_04_COURSES_TRAINERS.md` | Completed and verified on 2026-07-27 |
 | 5 | `PHASE_05_TASKS_COLLABORATION.md` | Completed and verified on 2026-07-27 |
-| 6 | `PHASE_06_PROGRESS_ENGINE.md` | Draft; blocked by progress decisions |
+| 6 | `PHASE_06_PROGRESS_ENGINE.md` | Completed and verified on 2026-07-28 |
 | 7 | `PHASE_07_MILESTONES_APPROVALS.md` | Draft; blocked by approval decisions |
 | 8 | `PHASE_08_TRAINEES_IMPORTS.md` | Draft; blocked by import/privacy decisions |
 | 9 | `PHASE_09_SESSIONS_TRAINER_LINKS.md` | Draft; blocked by attendance/time decisions |

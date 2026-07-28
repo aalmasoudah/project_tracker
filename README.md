@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 through 5 are complete. Phase 5, Tasks and Collaboration, was
-implemented and verified on 2026-07-27.
+Phases 1 through 6 are complete. Phase 6, the centralized Progress Engine,
+was implemented and verified on 2026-07-28.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel

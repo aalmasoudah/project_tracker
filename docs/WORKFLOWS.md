@@ -69,8 +69,24 @@ Phase 5 task lifecycle:
 7. Task, assignment, status, comment, file, tag, archive, and restore actions
    create append-only task-scope audit events.
 
-Dependencies, recurrence, task approvals, watchers, notifications, and
-progress semantics remain deferred.
+Dependencies, recurrence, task approvals, watchers, and notifications remain
+deferred.
+
+## Progress Calculation
+
+Phase 6 progress is calculated on demand through one service:
+
+1. Completed leaf tasks are 100 percent; other countable leaf statuses are
+   0 percent.
+2. Cancelled/archived task branches are excluded.
+3. Parent tasks average direct countable children recursively.
+4. Courses average top-level course tasks.
+5. Projects equally average available direct-task and course categories.
+6. Empty and excluded states are explicit; public values are Decimal-safe,
+   bounded, and rounded half-up to two decimal places.
+
+Milestones, approvals, attendance components, dashboards, and reports extend
+the same service only in their approved later phases.
 
 ## Trainee Import
 

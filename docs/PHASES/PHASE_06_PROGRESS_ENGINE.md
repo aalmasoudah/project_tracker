@@ -1,6 +1,6 @@
 # Phase 6: Progress Engine
 
-Status: Draft; blocked by all progress formulas and milestone sequencing.
+Status: Completed and verified on 2026-07-28.
 
 ## 1. Goal
 
@@ -10,7 +10,7 @@ or duplicate calculations.
 
 ## 2. Included Features
 
-- Approved task, course, project, and milestone progress formulas.
+- Approved task, course, and project progress formulas.
 - Cancelled-item denominator behavior and percentage bounds.
 - Service interfaces with explicit inputs/outputs and Decimal-safe behavior
   where weighting is approved.
@@ -33,8 +33,7 @@ or duplicate calculations.
 ## 5. Models Involved
 
 - Existing `tasks.Task`, `courses.Course`, and `projects.Project`.
-- `approvals.Milestone` only after it is introduced by an approved sequencing
-  decision or Phase 7.
+- `approvals.Milestone` remains deferred to Phase 7.
 
 Progress remains calculated unless an approved caching design proves necessary.
 
@@ -59,8 +58,9 @@ scope where results are user-specific.
 
 ## 9. Business Rules
 
-`BR-02` through `BR-07`, plus relevant project/course status and rounding
-decisions, must be approved. Reports must use the same centralized services.
+Decision 0011 defines the Phase 6 formulas, cancellation, empty states,
+rounding, bounds, and visibility. Reports must use the same centralized
+services when implemented.
 
 ## 10. Expected Migrations
 
@@ -112,8 +112,7 @@ decisions, must be approved. Reports must use the same centralized services.
 ## 17. Dependencies
 
 - Completed Phase 5.
-- Approved `BR-02` through `BR-07`, related rounding, and visibility policy.
-- Owner resolution of the milestone-before-Phase-7 sequencing conflict.
+- Approved decision 0011.
 
 ## 18. Rollback Considerations
 

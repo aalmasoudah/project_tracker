@@ -36,6 +36,7 @@ remain understandable as the system grows.
 | `projects` | Projects, clients, categories, teams, and project files | 3 |
 | `courses` | Courses, trainers, schedules, capacity, and course files | 4 |
 | `tasks` | Project/course tasks, bounded hierarchy, assignments, comments, files, and tags | 5 |
+| `progress` | Calculation-only task/course/project progress services and authorized selectors | 6 |
 | `approvals` | Milestones and completion/task approval state/history | 7 |
 | `trainees` | Trainees and transactional import batches | 8 |
 | `attendance` | Sessions, secure trainer links, submissions, review, and corrections | 9 |

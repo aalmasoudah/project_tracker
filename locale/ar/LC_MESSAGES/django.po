@@ -1521,6 +1521,15 @@ msgstr "الساعات المقدّرة"
 msgid "Assign an eligible primary owner before restoring."
 msgstr "عيّن مسؤولًا أساسيًا مؤهلًا قبل الاستعادة."
 
+msgid "No countable work"
+msgstr "لا يوجد عمل قابل للاحتساب"
+
+msgid "Not applicable"
+msgstr "لا ينطبق"
+
+msgid "Progress"
+msgstr "التقدم"
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

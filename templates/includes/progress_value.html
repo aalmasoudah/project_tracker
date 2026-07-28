@@ -1,0 +1,8 @@
+{% load i18n %}
+{% if progress.state == "value" %}
+  <bdi>{{ progress.percentage }}%</bdi>
+{% elif progress.state == "empty" %}
+  {% translate "No countable work" %}
+{% else %}
+  {% translate "Not applicable" %}
+{% endif %}

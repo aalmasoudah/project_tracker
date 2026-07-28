@@ -84,6 +84,11 @@ digits. Task/tag search applies the approved conservative Arabic
 normalization while preserving original task names, descriptions, comments,
 and tag names.
 
+Phase 6 terminology is Progress `التقدم`, No countable work
+`لا يوجد عمل قابل للاحتساب`, and Not applicable `لا ينطبق`. Arabic and English
+show the same two-decimal bounded percentage with Western digits; locale
+changes presentation only, never the numeric calculation.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and

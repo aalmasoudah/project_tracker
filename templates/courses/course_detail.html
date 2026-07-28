@@ -16,6 +16,7 @@
 <div><dt>{% translate "Status" %}</dt><dd>{{ course.get_status_display }}</dd></div><div><dt>{% translate "Delivery type" %}</dt><dd>{{ course.get_delivery_type_display }}</dd></div>
 <div><dt>{% translate "Location" %}</dt><dd>{{ course.location|default:"—" }}</dd></div><div><dt>{% translate "Capacity" %}</dt><dd><bdi>{{ course.capacity }}</bdi></dd></div>
 <div><dt>{% translate "Schedule" %}</dt><dd><bdi>{{ course.start_at|date:"Y-m-d H:i" }} – {{ course.end_at|date:"Y-m-d H:i" }}</bdi></dd></div>
+{% if progress %}<div><dt>{% translate "Progress" %}</dt><dd>{% include "includes/progress_value.html" with progress=progress %}</dd></div>{% endif %}
 </dl>
 <div class="row g-4 mt-1"><section class="col-12 col-lg-6"><h2 class="h5">{% translate "Description" %}</h2><div class="preserve-lines">{{ course.description|default:"—" }}</div></section><section class="col-12 col-lg-6"><h2 class="h5">{% translate "Notes" %}</h2><div class="preserve-lines">{{ course.notes|default:"—" }}</div></section></div>
 <section class="mt-5"><h2 class="h4">{% translate "Trainers" %}</h2><ul>{% for assignment in assignments %}<li>{{ assignment.trainer|localized_trainer_name }}{% if show_contact %} – <bdi>{{ assignment.trainer.email }}</bdi>{% endif %}</li>{% empty %}<li>{% translate "No trainers assigned." %}</li>{% endfor %}</ul></section>

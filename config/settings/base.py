@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "apps.projects.apps.ProjectsConfig",
     "apps.courses.apps.CoursesConfig",
     "apps.tasks.apps.TasksConfig",
+    "apps.progress.apps.ProgressConfig",
 ]
 
 MIDDLEWARE = [

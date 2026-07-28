@@ -2,7 +2,7 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phases 1 through 5 are completed;
+Status: Planning pass completed on 2026-07-23. Phases 1 through 6 are completed;
 later phase specifications remain unapproved until the project owner
 explicitly approves them.
 
@@ -19,7 +19,7 @@ phase specifications.
 | 3 | Projects and Teams | Phase 2; project access/status/currency rules | Completed on 2026-07-26 |
 | 4 | Courses and Trainers | Phase 3; course lifecycle/access rules | Completed on 2026-07-27 |
 | 5 | Tasks and Collaboration | Phases 3-4; task rules | Completed on 2026-07-27 |
-| 6 | Progress Engine | Phase 5; all progress formulas | Blocked by business decisions |
+| 6 | Progress Engine | Phase 5; available progress formulas | Completed on 2026-07-28 |
 | 7 | Milestones and Approvals | Phase 6; approval actors/steps | Blocked by business decisions |
 | 8 | Trainees and Imports | Phase 4; duplicate/import/privacy rules | Blocked by business decisions |
 | 9 | Sessions and Trainer Links | Phase 8; time/token/attendance rules | Blocked by business decisions |
@@ -41,11 +41,11 @@ requirements.
 | --- | --- | --- | --- |
 | BR-01 | Maximum task nesting depth | `BUSINESS_RULES.md` question 1 | Approved |
 | BR-02 | Task statuses and completion statuses | Question 2 | Approved |
-| BR-03 | Cancelled-task denominator behavior | Question 3 | 6 |
-| BR-04 | Task progress formula | Question 4 | 6 |
-| BR-05 | Course progress formula | Question 5 | 6 |
-| BR-06 | Milestone/project progress formula | Question 6 | 6 |
-| BR-07 | Whether progress may exceed 100 percent | Question 7 | 6 |
+| BR-03 | Cancelled-task denominator behavior | Question 3 | Approved |
+| BR-04 | Task progress formula | Question 4 | Approved |
+| BR-05 | Course progress formula | Question 5 | Approved |
+| BR-06 | Milestone/project progress formula | Question 6 | Project approved; milestone deferred to Phase 7 |
+| BR-07 | Whether progress may exceed 100 percent | Question 7 | Approved |
 | BR-08 | Project/course status transitions | Question 8 | Project and course slices approved |
 | BR-09 | Milestone/project completion approval steps | Question 9 | 7 |
 | BR-10 | Reject/reopen/correct/override actors | Question 10 | 7 |
@@ -57,10 +57,10 @@ requirements.
 | BR-16 | Hard-deletable records | Question 16 | Through Phase 5 approved; later records open |
 | BR-17 | User-disableable notification categories | Question 17 | 11 |
 | BR-18 | File/audit/archive retention periods | Question 18 | 14 |
-| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Through Phase 5 approved |
-| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 5 approved |
+| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Through Phase 6 approved |
+| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 6 approved |
 | RBAC-03 | Project-manager cross-project access | Question 2 | Approved |
-| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 5 approved |
+| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 6 approved |
 | RBAC-05 | Employee/contractor budget visibility | Question 4 | Approved |
 | RBAC-06 | Personal attendance visibility | Question 5 | 10 |
 | RBAC-07 | Personal-data report export rights | Question 6 | 13 |
@@ -80,11 +80,9 @@ be inferred from mockups, fixtures, or developer preference.
 These sequencing gaps exist in the approved playbook and have not been
 silently resolved:
 
-1. `SEQ-01`: Phase 6 requests milestone progress, but the milestone model is
-   not introduced until Phase 7. Proposed smallest resolution: Phase 6 creates
-   the centralized interface and implements only models then available; Phase
-   7 adds milestone calculation through that interface. The owner must approve
-   this allocation before Phases 6 or 7.
+1. `SEQ-01`: Resolved in decision 0011. Phase 6 implements the centralized
+   engine for available task/course/project models; Phase 7 extends it with
+   milestones.
 2. `SEQ-02`: Resolved in decision 0010 by deferring task approvals and reusable
    approval state machines to Phase 7.
 3. `ALLOC-01`: Project files, custom fields, and templates were explicitly

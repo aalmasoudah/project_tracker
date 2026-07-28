@@ -40,6 +40,7 @@ from apps.courses.services import (
     update_course,
     upload_course_file,
 )
+from apps.progress.services import course_progress_for
 
 COURSE_FIELDS = (
     "code",
@@ -117,6 +118,7 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
                 actor.has_perm("courses.view_all_courses")
                 or course.project.manager_id == actor.pk
             ),
+            "progress": course_progress_for(actor, course),
         },
     )
 

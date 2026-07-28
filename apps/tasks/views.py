@@ -13,6 +13,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from apps.accounts.models import User
+from apps.progress.services import task_progress_for
 from apps.tasks.forms import (
     AssignedTaskForm,
     TagForm,
@@ -30,6 +31,7 @@ from apps.tasks.selectors import (
     task_history_visible_to,
     tasks_visible_to,
     visible_task_or_404,
+    visible_task_relationships,
 )
 from apps.tasks.services import (
     add_task_comment,
@@ -96,11 +98,15 @@ def task_detail(request: HttpRequest, task_id: int) -> HttpResponse:
     task = visible_task_or_404(actor, task_id)
     manager = can_manage_task(actor, task)
     assigned_update = can_update_assigned_task(actor, task)
+    visible_parent, visible_subtasks = visible_task_relationships(actor, task)
     return render(
         request,
         "tasks/task_detail.html",
         {
             "task": task,
+            "progress": task_progress_for(actor, task),
+            "visible_parent": visible_parent,
+            "visible_subtasks": visible_subtasks,
             "assignments": task.assignments.filter(
                 removed_at__isnull=True
             ).select_related("user"),

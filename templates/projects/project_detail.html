@@ -26,6 +26,7 @@
     <div><dt>{% translate "Status" %}</dt><dd>{{ project.get_status_display }}</dd></div>
     <div><dt>{% translate "Priority" %}</dt><dd>{{ project.get_priority_display }}</dd></div>
     <div><dt>{% translate "Dates" %}</dt><dd><bdi>{{ project.start_date|date:"Y-m-d" }} – {{ project.end_date|date:"Y-m-d" }}</bdi></dd></div>
+    {% if progress %}<div><dt>{% translate "Progress" %}</dt><dd>{% include "includes/progress_value.html" with progress=progress %}</dd></div>{% endif %}
     {% if show_budget %}<div><dt>{% translate "Budget" %}</dt><dd><bdi>{{ project.budget|default:"—" }} SAR</bdi></dd></div>{% endif %}
   </dl>
   <div class="row g-4 mt-1">
