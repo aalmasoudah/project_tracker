@@ -96,15 +96,23 @@ Phase 7 terminology includes Milestone `مرحلة رئيسية`, Milestones
 reasons and bilingual identifiers preserve their original text and render
 with direction isolation.
 
+Phase 8 terminology includes Trainee `متدرب`, Trainees `المتدربون`, Import
+`استيراد`, Preview `معاينة`, Duplicate `مكرر`, Warning `تحذير`, Skip `تخطي`,
+and Update `تحديث`. Approved Arabic headers include `الاسم الكامل`,
+`رقم الجوال`, and `البريد الإلكتروني`. Original values are preserved while
+duplicate keys use decision 0013 normalization. Course-specific numbers use
+Western digits.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 7 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 7
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 8 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 8
   screens.
 - Date/time, timezone, currency, and rounding conventions.
-- Arabic duplicate and sorting rules outside the approved account search.
+- Arabic duplicate and sorting rules outside the approved account and Phase 8
+  trainee duplicate behavior.
 
 Until approved, implementation keeps these policies configurable or defers the
 affected feature; it does not guess.

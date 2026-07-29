@@ -123,19 +123,35 @@ then an assigned Project Manager completes step two. The same person cannot
 fill both steps. Rejection requires a reason, and immutable decisions remain
 available only within the approved object scope.
 
+## Phase 8 Trainee and Import Matrix
+
+| Role | Roster visibility | Contact data | Changes/imports | History |
+| --- | --- | --- | --- | --- |
+| Technical Admin | None | None | None | Phase 2 security audit only |
+| CEO | All names/numbers, including archived | None | None | None |
+| Executive Manager | All | Full | Full lifecycle, preview, and confirm | All import history |
+| Project Manager | Managed-project courses | Full | Full lifecycle, preview, and confirm in managed courses | Managed-course imports |
+| Supervisor | Active visible course names/numbers | None | None | None |
+| Employee | None | None | None | None |
+| Contractor | None | None | None | None |
+
+Import upload does not bypass course scope. Only Executive Managers and the
+owning Project Manager receive both preview and confirmation permission.
+
 ## Object-Level Access Questions
 
-1. [Approved through Phase 7] Use the account/department, project, course,
-   task, milestone, approval, and progress scopes above. Later domains remain
-   open.
+1. [Approved through Phase 8] Use the account/department, project, course,
+   task, milestone, approval, trainee, import, and progress scopes above.
+   Later domains remain open.
 2. [Approved for Phase 3] Project Managers cannot access projects they do not
    manage unless a later phase grants a separate assignment.
-3. [Approved through Phase 7] Supervisors do not receive cross-department
-   directory, project, course, task, milestone, or approval access.
+3. [Approved through Phase 8] Supervisors do not receive cross-department
+   directory, project, course, task, milestone, approval, trainee, or import
+   access.
 4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
 5. Who may view personal attendance information?
 6. Who may export reports containing personal data?
-7. [Approved through Phase 7] Technical Admin may archive/restore departments.
+7. [Approved through Phase 8] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
    so only for a managed project. Accounts are deactivated/reactivated. Later
    records remain open.
@@ -150,4 +166,5 @@ Status: The role model and Phase 2 permission slice were approved on
 0009. The Phase 5 task/collaboration slice was approved on 2026-07-27 in
 decision 0010. The Phase 6 progress-visibility slice was approved on
 2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
-on 2026-07-28 in decision 0012. Later-domain matrix entries remain open.
+on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
+on 2026-07-29 in decision 0013. Later-domain matrix entries remain open.

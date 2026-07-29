@@ -107,11 +107,13 @@ the same service only in their approved later phases.
 2. The system validates format and content without committing data.
 3. The user reviews a preview containing valid rows, warnings, duplicates,
    and errors.
-4. The user confirms the import.
-5. The system writes valid records in a transaction and records an audit
-   entry.
-
-Duplicate identity rules and partial-import behavior require approval.
+4. Existing-course duplicates are explicitly skipped or updated. A duplicate
+   repeated inside the same file can only be skipped.
+5. Errors block confirmation. The system locks the course, rechecks duplicate
+   and capacity state, and writes every valid resolution atomically.
+6. The system allocates new course-specific trainee numbers in original file
+   order and records an audit entry.
+7. Cancellation retains protected preview evidence but writes no trainees.
 
 ## Trainer Attendance
 
@@ -140,6 +142,6 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: Account lifecycle and Phase 3 through Phase 5 domain lifecycles are
+Status: Account lifecycle and Phase 3 through Phase 8 domain lifecycles are
 approved. Other phase-specific transitions and permissions require later
 approval.

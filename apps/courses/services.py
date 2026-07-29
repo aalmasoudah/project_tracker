@@ -114,6 +114,15 @@ def update_course(
         raise ValidationError(_("Course code and project cannot be changed."))
     for field_name, value in data.items():
         setattr(course, field_name, value)
+    from apps.trainees.models import CourseEnrollment
+
+    if (
+        CourseEnrollment.objects.filter(course=course, is_archived=False).count()
+        > course.capacity
+    ):
+        raise ValidationError(
+            _("Course capacity cannot be below active trainee enrollment.")
+        )
     if (
         course.status != previous_status
         and course.status not in COURSE_STATUS_TRANSITIONS[previous_status]

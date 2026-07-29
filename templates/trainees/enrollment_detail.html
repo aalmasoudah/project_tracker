@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ enrollment.trainee.full_name }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3"><h1 class="h3 mb-0">{{ enrollment.trainee.full_name }}</h1><a class="btn btn-outline-secondary" href="{% url 'trainees:list' %}">{% translate "Back" %}</a></div>
+<dl class="row"><dt class="col-sm-4">{% translate "Trainee number" %}</dt><dd class="col-sm-8"><bdi>{{ enrollment.trainee_number }}</bdi></dd><dt class="col-sm-4">{% translate "Course" %}</dt><dd class="col-sm-8"><bdi>{{ enrollment.course.code }}</bdi> — {{ enrollment.course.name_ar }}</dd>{% if show_contact %}<dt class="col-sm-4">{% translate "Phone" %}</dt><dd class="col-sm-8"><bdi>{{ enrollment.trainee.phone }}</bdi></dd><dt class="col-sm-4">{% translate "Email address" %}</dt><dd class="col-sm-8"><bdi>{{ enrollment.trainee.email|default:"—" }}</bdi></dd>{% endif %}</dl>
+<div class="d-flex gap-2">{% if can_manage %}<a class="btn btn-primary" href="{% url 'trainees:update' enrollment.pk %}">{% translate "Edit" %}</a>{% endif %}{% if can_archive %}<form method="post" action="{% if enrollment.is_archived %}{% url 'trainees:restore' enrollment.pk %}{% else %}{% url 'trainees:archive' enrollment.pk %}{% endif %}">{% csrf_token %}<button class="btn btn-outline-danger">{% if enrollment.is_archived %}{% translate "Restore" %}{% else %}{% translate "Archive" %}{% endif %}</button></form>{% endif %}</div>
+{% endblock %}

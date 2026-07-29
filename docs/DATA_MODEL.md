@@ -105,14 +105,15 @@ and their effects on project completion are unresolved.
 
 ### Trainees and Imports
 
-- `trainees.Trainee` holds the approved trainee identity fields.
-- `ImportBatch` and `ImportRow` retain preview status, validation outcomes,
-  and confirmation/audit metadata without committing unapproved rows.
-- Import confirmation writes valid records atomically according to the
-  approved partial-import rule.
-
-Open gate: duplicate identity, allowed file columns, partial-import behavior,
-and personal-data visibility are unresolved.
+- `trainees.Trainee` holds original full name, phone, optional email, and
+  derived duplicate keys without an account.
+- `CourseEnrollment` owns the immutable course-specific number, course
+  identity constraint, and archive lifecycle.
+- `ImportBatch` and `ImportRow` retain protected preview status, validation
+  outcomes, duplicate resolution, and confirmation/audit metadata without
+  retaining the source file.
+- Import confirmation locks the course and writes all approved valid
+  resolutions atomically according to decision 0013.
 
 ### Sessions and Attendance
 

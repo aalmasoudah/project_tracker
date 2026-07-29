@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Import trainees" %}{% endblock %}
+{% block content %}<h1 class="h3 mb-3">{% translate "Import trainees" %}</h1><div class="alert alert-info">{% translate "Preview does not save trainees. Use UTF-8 CSV or XLSX with full_name and phone headers; email is optional." %} <a href="{% url 'trainees:sample-csv' %}">{% translate "Download sample CSV" %}</a></div><form method="post" enctype="multipart/form-data" class="card card-body">{% csrf_token %}{% include "includes/form_errors.html" %}{% include "includes/form_fields.html" %}<div><button class="btn btn-primary">{% translate "Create preview" %}</button></div></form>{% endblock %}

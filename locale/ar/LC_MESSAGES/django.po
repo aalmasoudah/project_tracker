@@ -1767,6 +1767,238 @@ msgstr "الدور"
 msgid "sequence"
 msgstr "التسلسل"
 
+msgid "Back"
+msgstr "رجوع"
+
+msgid "CSV files must use UTF-8 encoding."
+msgstr "يجب أن تستخدم ملفات CSV ترميز UTF-8."
+
+msgid "CSV or XLSX file"
+msgstr "ملف CSV أو XLSX"
+
+msgid "Cancel import"
+msgstr "إلغاء الاستيراد"
+
+msgid "Choose Skip or Update for every duplicate."
+msgstr "اختر تخطي أو تحديث لكل سجل مكرر."
+
+msgid "Confirm import"
+msgstr "تأكيد الاستيراد"
+
+msgid "Confirmed"
+msgstr "مؤكد"
+
+msgid "Course capacity would be exceeded."
+msgstr "سيتم تجاوز سعة الدورة."
+
+msgid "Create preview"
+msgstr "إنشاء معاينة"
+
+msgid "Download sample CSV"
+msgstr "تنزيل نموذج CSV"
+
+msgid "Duplicate"
+msgstr "مكرر"
+
+msgid "Duplicates"
+msgstr "السجلات المكررة"
+
+msgid "Duplicates inside the same file can only be skipped."
+msgstr "لا يمكن إلا تخطي السجلات المكررة داخل الملف نفسه."
+
+msgid "Edit trainee"
+msgstr "تعديل المتدرب"
+
+msgid "Enroll trainee"
+msgstr "تسجيل متدرب"
+
+msgid "Enter a valid phone number."
+msgstr "أدخل رقم هاتف صالحًا."
+
+msgid "Error"
+msgstr "خطأ"
+
+msgid "Errors"
+msgstr "الأخطاء"
+
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+msgid "Full name is required."
+msgstr "الاسم الكامل مطلوب."
+
+msgid "Import cancelled."
+msgstr "تم إلغاء الاستيراد."
+
+msgid "Import confirmed successfully."
+msgstr "تم تأكيد الاستيراد بنجاح."
+
+msgid "Import files must be 5 MB or smaller."
+msgstr "يجب ألا يتجاوز حجم ملف الاستيراد 5 ميجابايت."
+
+msgid "Import history"
+msgstr "سجل الاستيراد"
+
+msgid "Import preview"
+msgstr "معاينة الاستيراد"
+
+msgid "Import preview created. No trainees were saved."
+msgstr "تم إنشاء معاينة الاستيراد. لم يتم حفظ أي متدربين."
+
+msgid "Import trainees"
+msgstr "استيراد المتدربين"
+
+msgid "Macros and external workbook links are not allowed."
+msgstr "وحدات الماكرو وروابط المصنفات الخارجية غير مسموح بها."
+
+msgid "New import"
+msgstr "استيراد جديد"
+
+msgid "No imports found."
+msgstr "لم يتم العثور على عمليات استيراد."
+
+msgid "No trainees found."
+msgstr "لم يتم العثور على متدربين."
+
+msgid "Number"
+msgstr "الرقم"
+
+msgid "Only CSV and XLSX files are allowed."
+msgstr "يسمح فقط بملفات CSV وXLSX."
+
+msgid "Preview"
+msgstr "معاينة"
+
+msgid ""
+"Preview does not save trainees. Use UTF-8 CSV or XLSX with full_name and "
+"phone headers; email is optional."
+msgstr ""
+"المعاينة لا تحفظ المتدربين. استخدم ملف CSV بترميز UTF-8 أو ملف XLSX بعناوين "
+"full_name وphone؛ البريد الإلكتروني اختياري."
+
+msgid "Resolve all import errors before confirmation."
+msgstr "عالج جميع أخطاء الاستيراد قبل التأكيد."
+
+msgid "Result"
+msgstr "النتيجة"
+
+msgid "Row"
+msgstr "الصف"
+
+msgid "Row %(row)s"
+msgstr "الصف %(row)s"
+
+msgid "Rows"
+msgstr "الصفوف"
+
+msgid "Search trainees"
+msgstr "البحث عن المتدربين"
+
+msgid "Skip"
+msgstr "تخطي"
+
+msgid "Spreadsheet formulas are not allowed."
+msgstr "صيغ جداول البيانات غير مسموح بها."
+
+msgid "The CSV file is malformed."
+msgstr "ملف CSV غير صالح."
+
+msgid "The Excel file is malformed."
+msgstr "ملف Excel غير صالح."
+
+msgid "The Excel workbook is too large to process."
+msgstr "مصنف Excel كبير جدًا ولا يمكن معالجته."
+
+msgid "The duplicate record changed after preview."
+msgstr "تغير السجل المكرر بعد المعاينة."
+
+msgid "The file content type does not match its extension."
+msgstr "نوع محتوى الملف لا يطابق امتداده."
+
+msgid "The import contains an unsupported header."
+msgstr "يحتوي ملف الاستيراد على عنوان غير مدعوم."
+
+msgid "The import contains duplicate headers."
+msgstr "يحتوي ملف الاستيراد على عناوين مكررة."
+
+msgid "The import contains no trainee rows."
+msgstr "لا يحتوي ملف الاستيراد على صفوف متدربين."
+
+msgid "The import file is empty."
+msgstr "ملف الاستيراد فارغ."
+
+msgid "The import is missing required headers."
+msgstr "يفتقد ملف الاستيراد العناوين المطلوبة."
+
+msgid "The import may contain at most 5000 rows."
+msgstr "يمكن أن يحتوي ملف الاستيراد على 5000 صف كحد أقصى."
+
+msgid "The uploaded file could not be read safely."
+msgstr "تعذرت قراءة الملف المرفوع بأمان."
+
+msgid "The workbook must contain exactly one sheet."
+msgstr "يجب أن يحتوي المصنف على ورقة واحدة فقط."
+
+msgid "This import is no longer awaiting confirmation."
+msgstr "لم تعد عملية الاستيراد هذه بانتظار التأكيد."
+
+msgid "This trainee already exists in this course."
+msgstr "هذا المتدرب موجود بالفعل في هذه الدورة."
+
+msgid "Trainee archive permission is required."
+msgstr "يلزم إذن أرشفة المتدربين."
+
+msgid "Trainee archived successfully."
+msgstr "تمت أرشفة المتدرب بنجاح."
+
+msgid "Trainee data changed after preview; preview again."
+msgstr "تغيرت بيانات المتدرب بعد المعاينة؛ أنشئ معاينة جديدة."
+
+msgid "Trainee enrolled successfully."
+msgstr "تم تسجيل المتدرب بنجاح."
+
+msgid "Trainee management permission is required."
+msgstr "يلزم إذن إدارة المتدربين."
+
+msgid "Trainee number"
+msgstr "رقم المتدرب"
+
+msgid "Trainee restored successfully."
+msgstr "تمت استعادة المتدرب بنجاح."
+
+msgid "Trainee updated successfully."
+msgstr "تم تحديث المتدرب بنجاح."
+
+msgid "Trainees"
+msgstr "المتدربون"
+
+msgid "Update"
+msgstr "تحديث"
+
+msgid "Valid"
+msgstr "صالح"
+
+msgid "Warning"
+msgstr "تحذير"
+
+msgid "Warnings"
+msgstr "التحذيرات"
+
+msgid "course"
+msgstr "الدورة"
+
+msgid "full name"
+msgstr "الاسم الكامل"
+
+msgid "trainee number"
+msgstr "رقم المتدرب"
+
+msgid "Course capacity cannot be below active trainee enrollment."
+msgstr "لا يمكن أن تقل سعة الدورة عن عدد المتدربين النشطين."
+
+msgid "The row does not match the number of headers."
+msgstr "عدد قيم الصف لا يطابق عدد العناوين."
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

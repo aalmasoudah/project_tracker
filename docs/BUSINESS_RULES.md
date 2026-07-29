@@ -89,6 +89,13 @@ must be approved before their implementation phase.
   them to Completed.
 - Approved course and project completion adds a Completed status reachable
   only through the approval service. Phase 7 provides no override.
+- Phase 8 trainee identity requires full name and phone. A duplicate exists
+  only when their approved derived keys repeat in the same course.
+- Enrollment numbers are positive, course-specific, allocated in source order,
+  immutable, and never reused. Active enrollments cannot exceed capacity.
+- Phase 8 imports are previewed without trainee writes. Errors block
+  confirmation; duplicates use explicit Skip/Update resolution; confirmation
+  is atomic and audited.
 
 ## Decisions Required Before Planning
 
@@ -113,7 +120,8 @@ The project owner must approve answers to these questions:
 10. [Approved for Phase 7 completion workflows] Assigned approvers may reject
     with a reason; rejected work may be resubmitted as a new attempt. No
     override exists. Later attendance correction actors remain open.
-11. What makes two trainees or imports duplicates?
+11. [Approved for Phase 8] A duplicate is normalized full name plus phone
+    inside the same course, as defined in decision 0013.
 12. What attendance values are allowed?
 13. What happens when a trainer link expires during data entry?
 14. [Approved for Phase 3 date-only project fields, Phase 4 Riyadh course
@@ -121,25 +129,27 @@ The project owner must approve answers to these questions:
     stored, displayed, and considered overdue? Task overdue rules remain open.
 15. [Approved for Phase 3 project budgets] Which currencies are supported,
     and how are monetary values rounded? Later monetary outputs remain open.
-16. [Approved through Phase 5] Accounts, departments, audit events, projects,
+16. [Approved through Phase 8] Accounts, departments, audit events, projects,
     clients, categories, courses, trainers, tasks, tags, comments, and files
     are not hard-deleted; memberships and assignment/tag relationships are
-    end-dated. Expired throttle counters may be deleted. Later-domain
+    end-dated. Trainees, enrollments, import batches/rows, and approval history
+    are also protected. Expired throttle counters may be deleted. Later-domain
     exceptions remain open.
 17. Which notification categories may users disable?
 18. What retention periods apply to files, audit records, and archived data?
 19. [Approved] Arabic is the default language, and each internal user may
     persist Arabic or English.
 20. [Approved] The project owner approves official Arabic terminology.
-21. [Approved for Phase 3 through Phase 5 screens] Should Arabic display use
+21. [Approved for Phase 3 through Phase 8 screens] Should Arabic display use
     Gregorian or Hijri dates and Arabic-Indic or Western digits in each output
     type? Later outputs remain open.
-22. [Approved through Phase 5 search/identity slices] Preserve account
+22. [Approved through Phase 8 search/identity slices] Preserve account
     identity text; apply NFKC to
     usernames and case-insensitive username/email comparison. Derived account
     search may ignore diacritics/tatweel and normalize Alef and Persian
     keyboard variants without merging `ة/ه` or `ى/ي`. Later duplicate policies
-    remain open.
+    remain open. Phase 8 trainee duplicate normalization is defined in decision
+    0013.
 
 ## Rule Approval
 
@@ -147,5 +157,5 @@ Status: Phase 2 decisions were approved on 2026-07-25. Phase 3 decisions were
 approved on 2026-07-26 in decision 0008. Phase 4 course portions were approved
 on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
-2026-07-28 in decision 0011. Remaining decisions still block their listed
-phases.
+2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
+in decision 0013. Remaining decisions still block their listed phases.

@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Import history" %}{% endblock %}
+{% block content %}<div class="d-flex justify-content-between mb-3"><h1 class="h3">{% translate "Import history" %}</h1><a class="btn btn-primary" href="{% url 'trainees:import-upload' %}">{% translate "New import" %}</a></div><div class="table-responsive"><table class="table"><thead><tr><th>{% translate "File" %}</th><th>{% translate "Course" %}</th><th>{% translate "Rows" %}</th><th>{% translate "Status" %}</th></tr></thead><tbody>{% for batch in page %}<tr><td><a href="{% url 'trainees:import-preview' batch.pk %}"><bdi>{{ batch.original_name }}</bdi></a></td><td><bdi>{{ batch.course.code }}</bdi></td><td>{{ batch.row_count }}</td><td>{{ batch.get_status_display }}</td></tr>{% empty %}<tr><td colspan="4">{% translate "No imports found." %}</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

@@ -5,7 +5,7 @@ system.
 
 ## Current Status
 
-Phases 1 through 7 are complete. Phase 7, Milestones and Approvals, was
+Phases 1 through 8 are complete. Phase 8, Trainees and Imports, was
 implemented and verified on 2026-07-29.
 
 Approved scope includes first-class Arabic and English support across the UI,
@@ -48,6 +48,7 @@ Open:
 - Tasks and collaboration: <http://127.0.0.1:8000/tasks/>
 - Milestones: <http://127.0.0.1:8000/approvals/milestones/>
 - Approval queue: <http://127.0.0.1:8000/approvals/>
+- Trainees and imports: <http://127.0.0.1:8000/trainees/>
 - Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 

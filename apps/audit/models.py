@@ -28,6 +28,7 @@ class AuditEvent(models.Model):
         COURSES = "courses", _("Courses")
         TASKS = "tasks", _("Tasks")
         APPROVALS = "approvals", _("Approvals")
+        TRAINEES = "trainees", _("Trainees")
 
     scope = models.CharField(
         _("scope"),

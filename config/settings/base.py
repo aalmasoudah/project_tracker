@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "apps.courses.apps.CoursesConfig",
     "apps.tasks.apps.TasksConfig",
     "apps.approvals.apps.ApprovalsConfig",
+    "apps.trainees.apps.TraineesConfig",
     "apps.progress.apps.ProgressConfig",
 ]
 

@@ -2,7 +2,7 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phases 1 through 7 are completed.
+Status: Planning pass completed on 2026-07-23. Phases 1 through 8 are completed.
 The project owner approved the remaining phases on 2026-07-29; each phase must
 still resolve and record its blocking decisions before implementation.
 
@@ -21,7 +21,7 @@ phase specifications.
 | 5 | Tasks and Collaboration | Phases 3-4; task rules | Completed on 2026-07-27 |
 | 6 | Progress Engine | Phase 5; available progress formulas | Completed on 2026-07-28 |
 | 7 | Milestones and Approvals | Phase 6; approval actors/steps | Completed on 2026-07-29 |
-| 8 | Trainees and Imports | Phase 4; duplicate/import/privacy rules | Blocked by business decisions |
+| 8 | Trainees and Imports | Phase 4; duplicate/import/privacy rules | Completed on 2026-07-29 |
 | 9 | Sessions and Trainer Links | Phase 8; time/token/attendance rules | Blocked by business decisions |
 | 10 | Attendance Approval and Corrections | Phase 9; actor/value rules | Blocked by business decisions |
 | 11 | Notifications and Background Jobs | Relevant event-producing phases; preference rules | Blocked by business decisions |
@@ -49,7 +49,7 @@ requirements.
 | BR-08 | Project/course status transitions | Question 8 | Project and course slices approved |
 | BR-09 | Milestone/project completion approval steps | Question 9 | Approved for Phase 7 |
 | BR-10 | Reject/reopen/correct/override actors | Question 10 | Phase 7 approved; attendance actors remain open |
-| BR-11 | Trainee/import duplicate identity | Question 11 | 8 |
+| BR-11 | Trainee/import duplicate identity | Question 11 | Approved |
 | BR-12 | Allowed attendance values | Question 12 | 9 |
 | BR-13 | Expiry during trainer data entry | Question 13 | 9 |
 | BR-14 | Date/time storage, display, and overdue semantics | Question 14 | Phase 3-5 date/schedule slices approved; overdue remains open |
@@ -57,10 +57,10 @@ requirements.
 | BR-16 | Hard-deletable records | Question 16 | Through Phase 5 approved; later records open |
 | BR-17 | User-disableable notification categories | Question 17 | 11 |
 | BR-18 | File/audit/archive retention periods | Question 18 | 14 |
-| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Through Phase 7 approved |
-| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 7 approved |
+| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Through Phase 8 approved |
+| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 8 approved |
 | RBAC-03 | Project-manager cross-project access | Question 2 | Approved |
-| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 7 approved |
+| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 8 approved |
 | RBAC-05 | Employee/contractor budget visibility | Question 4 | Approved |
 | RBAC-06 | Personal attendance visibility | Question 5 | 10 |
 | RBAC-07 | Personal-data report export rights | Question 6 | 13 |
