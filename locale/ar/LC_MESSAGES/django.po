@@ -238,9 +238,6 @@ msgstr "الاسم بالإنجليزية مطلوب."
 msgid "Executive Manager"
 msgstr "المدير التنفيذي"
 
-msgid "Home"
-msgstr "الرئيسية"
-
 msgid "IP address"
 msgstr "عنوان IP"
 
@@ -2471,6 +2468,172 @@ msgstr[2] "تم تحديد إشعارين كمقروءين."
 msgstr[3] "تم تحديد %(count)s إشعارات كمقروءة."
 msgstr[4] "تم تحديد %(count)s إشعارًا كمقروء."
 msgstr[5] "تم تحديد %(count)s إشعار كمقروء."
+
+msgid "A saved filter with this name already exists."
+msgstr "يوجد مرشح محفوظ بهذا الاسم بالفعل."
+
+msgid "Apply filters"
+msgstr "تطبيق المرشحات"
+
+msgid "Calendar"
+msgstr "التقويم"
+
+msgid "Current tasks"
+msgstr "المهام الحالية"
+
+msgid "Dashboard"
+msgstr "لوحة المعلومات"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "End"
+msgstr "النهاية"
+
+msgid "Enter at least two characters to search."
+msgstr "أدخل حرفين على الأقل للبحث."
+
+msgid "Enter at least two characters."
+msgstr "أدخل حرفين على الأقل."
+
+msgid "Filter name"
+msgstr "اسم المرشح"
+
+msgid "Filter saved."
+msgstr "تم حفظ المرشح."
+
+msgid "From date"
+msgstr "من تاريخ"
+
+msgid "Gantt"
+msgstr "جانت"
+
+msgid "Global search"
+msgstr "البحث الشامل"
+
+msgid "Item"
+msgstr "العنصر"
+
+msgid "Kanban"
+msgstr "كانبان"
+
+msgid "No calendar items in this range."
+msgstr "لا توجد عناصر تقويم ضمن هذا النطاق."
+
+msgid "No dashboard metrics are available for your current permissions."
+msgstr "لا تتوفر مؤشرات لوحة معلومات لصلاحياتك الحالية."
+
+msgid "No planning items in this range."
+msgstr "لا توجد عناصر تخطيط ضمن هذا النطاق."
+
+msgid "No results."
+msgstr "لا توجد نتائج."
+
+msgid "No tasks."
+msgstr "لا توجد مهام."
+
+msgid "No visible tasks."
+msgstr "لا توجد مهام متاحة للعرض."
+
+msgid "Operational views"
+msgstr "العروض التشغيلية"
+
+msgid "Pending approvals"
+msgstr "الموافقات المعلقة"
+
+msgid "Permission-scoped planning dates."
+msgstr "تواريخ التخطيط ضمن نطاق الصلاحيات."
+
+msgid "Project progress"
+msgstr "تقدم المشاريع"
+
+msgid "Project progress is unavailable for this scope."
+msgstr "تقدم المشاريع غير متاح لهذا النطاق."
+
+msgid ""
+"Projects, courses, tasks, milestones, and sessions in the selected range."
+msgstr "المشاريع والدورات والمهام والمعالم والجلسات ضمن النطاق المحدد."
+
+msgid "Read only"
+msgstr "للقراءة فقط"
+
+msgid "Read-only task board grouped by approved status."
+msgstr "لوحة مهام للقراءة فقط مجمعة حسب الحالات المعتمدة."
+
+msgid "Save current filter"
+msgstr "حفظ المرشح الحالي"
+
+msgid "Saved filter deleted."
+msgstr "تم حذف المرشح المحفوظ."
+
+msgid "Saved filters"
+msgstr "المرشحات المحفوظة"
+
+msgid "Search only records you are allowed to view."
+msgstr "ابحث فقط في السجلات المسموح لك بعرضها."
+
+msgid "Search workspace"
+msgstr "البحث في مساحة العمل"
+
+msgid "Select a date range of %(days)s days or fewer."
+msgstr "حدد نطاقًا زمنيًا لا يتجاوز %(days)s يومًا."
+
+msgid "Start"
+msgstr "البداية"
+
+msgid "Summary"
+msgstr "الملخص"
+
+msgid "Task status board"
+msgstr "لوحة حالات المهام"
+
+msgid "The end date cannot precede the start date."
+msgstr "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية."
+
+msgid "The filter could not be saved."
+msgstr "تعذر حفظ المرشح."
+
+msgid "The saved date range is invalid."
+msgstr "نطاق التاريخ المحفوظ غير صالح."
+
+msgid "Timeline"
+msgstr "الخط الزمني"
+
+msgid "To date"
+msgstr "إلى تاريخ"
+
+msgid "View"
+msgstr "العرض"
+
+msgid "Workspace"
+msgstr "مساحة العمل"
+
+msgid "You have no saved filters."
+msgstr "ليس لديك مرشحات محفوظة."
+
+msgid "Your private shortcuts to approved workspace views."
+msgstr "اختصاراتك الخاصة إلى عروض مساحة العمل المعتمدة."
+
+msgid "Your workspace"
+msgstr "مساحة عملك"
+
+msgid "criteria"
+msgstr "المعايير"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "view"
+msgstr "العرض"
+
+msgid "Role view"
+msgstr "عرض الدور"
+
+msgid "results"
+msgstr "نتائج"
+
+#~ msgid "Home"
+#~ msgstr "الرئيسية"
 
 #~ msgid "Marked %(count)s notification(s) as read."
 #~ msgstr "تم تحديد %(count)s من الإشعارات كمقروءة."

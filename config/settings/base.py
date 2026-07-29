@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "apps.attendance.apps.AttendanceConfig",
     "apps.notifications.apps.NotificationsConfig",
     "apps.progress.apps.ProgressConfig",
+    "apps.workspace.apps.WorkspaceConfig",
 ]
 
 MIDDLEWARE = [

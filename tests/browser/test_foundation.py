@@ -55,7 +55,7 @@ def test_authenticated_shell_switches_between_rtl_and_ltr(
         assert page.locator("html").get_attribute("dir") == "rtl"
         assert page.get_by_role(
             "heading",
-            name="الحسابات والهيكل التنظيمي",
+            name="لوحة المعلومات",
         ).is_visible()
         assert page.evaluate("typeof window.htmx") == "object"
         assert "Noto Sans Arabic" in page.locator("body").evaluate(
@@ -70,7 +70,7 @@ def test_authenticated_shell_switches_between_rtl_and_ltr(
         assert page.locator("html").get_attribute("dir") == "ltr"
         assert page.get_by_role(
             "heading",
-            name="Accounts and organization",
+            name="Dashboard",
         ).is_visible()
 
         health_response = page.request.get(f"{live_server.url}/health/")

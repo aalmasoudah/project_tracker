@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><h1>{{ page_title }}</h1><p class="text-body-secondary">{% translate "Permission-scoped planning dates." %}</p></div><span class="badge text-bg-secondary align-self-start">{% translate "Read only" %}</span></div>
+{% include "workspace/_filter_form.html" %}
+{% include "workspace/_save_filter.html" %}
+<div class="table-responsive">
+  <table class="table align-middle">
+    <thead><tr><th>{% translate "Type" %}</th><th>{% translate "Item" %}</th><th>{% translate "Start" %}</th><th>{% translate "End" %}</th><th>{% translate "Status" %}</th>{% if view_type == "gantt" %}<th>{% translate "Progress" %}</th>{% endif %}</tr></thead>
+    <tbody>
+      {% for item in items %}
+        <tr><td>{{ item.kind }}</td><td><a href="{{ item.url }}"><bdi>{{ item.code }}</bdi> {{ item.label }}</a></td><td><bdi>{{ item.start|date:"Y-m-d" }}</bdi></td><td><bdi>{{ item.end|date:"Y-m-d" }}</bdi></td><td>{{ item.status }}</td>{% if view_type == "gantt" %}<td>{% if item.progress != None %}<bdi>{{ item.progress }}%</bdi>{% else %}—{% endif %}</td>{% endif %}</tr>
+      {% empty %}<tr><td colspan="6">{% translate "No planning items in this range." %}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

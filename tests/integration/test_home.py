@@ -9,7 +9,6 @@ from django.urls import reverse
 @pytest.mark.django_db
 def test_anonymous_user_is_redirected_to_user_login(client: Client) -> None:
     response = client.get(reverse("home"))
-
     assert response.status_code == 302
     assert response["Location"] == "/accounts/login/?next=/"
 
@@ -25,13 +24,12 @@ def test_authenticated_english_shell_uses_ltr_assets(
         follow=True,
     )
     content = response.content.decode()
-
     assert response.status_code == 200
     assert '<html lang="en" dir="ltr">' in content
     assert "bootstrap.min.css" in content
     assert "bootstrap.rtl.min.css" not in content
     assert "htmx.min.js" in content
-    assert "Accounts and organization" in content
+    assert "Dashboard" in content
 
 
 @pytest.mark.integration
@@ -45,11 +43,10 @@ def test_authenticated_arabic_shell_uses_rtl_assets(
         follow=True,
     )
     content = response.content.decode()
-
     assert response.status_code == 200
     assert '<html lang="ar" dir="rtl">' in content
     assert "bootstrap.rtl.min.css" in content
-    assert "الحسابات والهيكل التنظيمي" in content
+    assert "لوحة المعلومات" in content
     assert "Phase One User" in content
 
 
@@ -66,6 +63,5 @@ def test_language_switch_rejects_external_return_url(
             "next": "https://attacker.example/collect",
         },
     )
-
     assert response.status_code == 302
     assert response["Location"] == "/"

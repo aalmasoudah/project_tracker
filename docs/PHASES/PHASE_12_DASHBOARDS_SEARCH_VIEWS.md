@@ -1,7 +1,6 @@
 # Phase 12: Dashboards, Search, and Operational Views
 
-Status: Draft; depends on approved domain permissions, statuses, dates, and
-Arabic search behavior.
+Status: Approved, implemented, and verified on 2026-07-29.
 
 ## 1. Goal
 

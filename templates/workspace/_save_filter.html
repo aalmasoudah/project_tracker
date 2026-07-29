@@ -1,0 +1,21 @@
+{% load i18n %}
+<details class="mb-4">
+  <summary class="btn btn-outline-secondary">{% translate "Save current filter" %}</summary>
+  <form class="card card-body mt-2" action="{% url 'workspace:filter_save' %}" method="post">
+    {% csrf_token %}
+    <input name="view_type" type="hidden" value="{{ view_type }}">
+    <input name="q" type="hidden" value="{{ request.GET.q }}">
+    <input name="date_from" type="hidden" value="{{ request.GET.date_from }}">
+    <input name="date_to" type="hidden" value="{{ request.GET.date_to }}">
+    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+    <div class="row g-2 align-items-end">
+      <div class="col-12 col-md">
+        <label class="form-label" for="saved-filter-name">{% translate "Filter name" %}</label>
+        <input class="form-control" id="saved-filter-name" maxlength="100" name="name" required>
+      </div>
+      <div class="col-12 col-md-auto">
+        <button class="btn btn-primary w-100" type="submit">{% translate "Save" %}</button>
+      </div>
+    </div>
+  </form>
+</details>

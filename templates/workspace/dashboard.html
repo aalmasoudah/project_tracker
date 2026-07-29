@@ -1,0 +1,78 @@
+{% extends "base.html" %}{% load i18n workspace_tags %}
+{% block title %}{% translate "Dashboard" %}{% endblock %}
+{% block content %}
+<header class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+  <div>
+    <p class="text-primary fw-semibold mb-1">{% translate "Your workspace" %}</p>
+    <h1>{% translate "Dashboard" %}</h1>
+    <p class="text-body-secondary mb-0">{% translate "Role view" %}: {{ dashboard_role }}</p>
+  </div>
+  <a class="btn btn-primary" href="{% url 'workspace:search' %}">{% translate "Search workspace" %}</a>
+</header>
+
+<section aria-labelledby="summary-title">
+  <h2 class="h4 mb-3" id="summary-title">{% translate "Summary" %}</h2>
+  <div class="row g-3 mb-5">
+    {% for card in cards %}
+      <div class="col-6 col-lg-3">
+        <a class="card dashboard-card h-100 text-decoration-none" href="{{ card.url }}">
+          <div class="card-body">
+            <p class="text-body-secondary mb-2">{{ card.label }}</p>
+            <p class="display-6 fw-bold text-body mb-0"><bdi>{{ card.value }}</bdi></p>
+          </div>
+        </a>
+      </div>
+    {% empty %}
+      <div class="col-12"><p class="alert alert-info">{% translate "No dashboard metrics are available for your current permissions." %}</p></div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="row g-4">
+  <section class="col-12 col-xl-7" aria-labelledby="work-title">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h4" id="work-title">{% translate "Current tasks" %}</h2>
+        <div class="list-group list-group-flush">
+          {% for task in tasks %}
+            <a class="list-group-item list-group-item-action px-0 d-flex justify-content-between gap-3" href="{% url 'tasks:detail' task.pk %}">
+              <span><bdi class="text-body-secondary">{{ task.code }}</bdi> {{ task|localized_name }}</span>
+              <span class="badge text-bg-light">{{ task.get_status_display }}</span>
+            </a>
+          {% empty %}
+            <p class="text-body-secondary mb-0">{% translate "No visible tasks." %}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="col-12 col-xl-5" aria-labelledby="progress-title">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h4" id="progress-title">{% translate "Project progress" %}</h2>
+        {% for row in progress_rows %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between gap-2 mb-1"><span>{{ row.label }}</span><bdi>{{ row.progress.percentage }}%</bdi></div>
+            <div class="progress" role="progressbar" aria-label="{{ row.label }}" aria-valuenow="{{ row.progress.percentage }}" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" style="width: {{ row.progress.percentage }}%"></div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-body-secondary mb-0">{% translate "Project progress is unavailable for this scope." %}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="mt-4" aria-labelledby="views-title">
+  <h2 class="h4 mb-3" id="views-title">{% translate "Operational views" %}</h2>
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'workspace:kanban' %}">{% translate "Kanban" %}</a>
+    <a class="btn btn-outline-primary" href="{% url 'workspace:calendar' %}">{% translate "Calendar" %}</a>
+    <a class="btn btn-outline-primary" href="{% url 'workspace:timeline' %}">{% translate "Timeline" %}</a>
+    <a class="btn btn-outline-primary" href="{% url 'workspace:gantt' %}">{% translate "Gantt" %}</a>
+    <a class="btn btn-outline-secondary" href="{% url 'workspace:filters' %}">{% translate "Saved filters" %}</a>
+  </div>
+</section>
+{% endblock %}

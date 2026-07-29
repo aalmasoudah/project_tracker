@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Saved filters" %}{% endblock %}
+{% block content %}
+<div class="mb-4"><h1>{% translate "Saved filters" %}</h1><p class="text-body-secondary">{% translate "Your private shortcuts to approved workspace views." %}</p></div>
+<div class="list-group">
+  {% for saved_filter in saved_filters %}
+    <div class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div><h2 class="h6 mb-1">{{ saved_filter.name }}</h2><span class="badge text-bg-light">{{ saved_filter.get_view_type_display }}</span></div>
+      <div class="d-flex gap-2"><a class="btn btn-primary btn-sm" href="{% url 'workspace:filter_use' saved_filter.pk %}">{% translate "Open" %}</a><form action="{% url 'workspace:filter_delete' saved_filter.pk %}" method="post">{% csrf_token %}<button class="btn btn-outline-danger btn-sm" type="submit">{% translate "Delete" %}</button></form></div>
+    </div>
+  {% empty %}<p class="alert alert-info">{% translate "You have no saved filters." %}</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Calendar" %}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><h1>{% translate "Calendar" %}</h1><p class="text-body-secondary">{% translate "Projects, courses, tasks, milestones, and sessions in the selected range." %}</p></div><span class="badge text-bg-secondary align-self-start">{% translate "Read only" %}</span></div>
+{% include "workspace/_filter_form.html" %}
+{% include "workspace/_save_filter.html" %}
+<div class="row g-3">
+  {% for item in items %}
+    <div class="col-12 col-md-6 col-xl-4"><article class="card h-100"><div class="card-body"><div class="d-flex justify-content-between gap-2"><span class="badge text-bg-light">{{ item.kind }}</span><bdi class="small">{{ item.start|date:"Y-m-d" }}</bdi></div><h2 class="h6 mt-3"><a class="stretched-link" href="{{ item.url }}"><bdi>{{ item.code }}</bdi> {{ item.label }}</a></h2><p class="small text-body-secondary mb-0">{{ item.status }} · <bdi>{{ item.start|date:"Y-m-d" }} – {{ item.end|date:"Y-m-d" }}</bdi></p></div></article></div>
+  {% empty %}<div class="col-12"><p class="alert alert-info">{% translate "No calendar items in this range." %}</p></div>{% endfor %}
+</div>
+{% endblock %}
