@@ -94,6 +94,11 @@
                   <a class="nav-link" href="{% url 'attendance:list' %}">{% translate "Sessions" %}</a>
                 </li>
               {% endif %}
+              {% if perms.attendance.review_attendance %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'attendance:review-queue' %}">{% translate "Attendance reviews" %}</a>
+                </li>
+              {% endif %}
               {% if perms.audit.view_auditevent %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'audit:list' %}">{% translate "Audit" %}</a>

@@ -1,4 +1,4 @@
-"""Internal scheduling and safe external capability views."""
+"""Internal scheduling/review and safe external capability views."""
 
 from typing import cast
 
@@ -10,24 +10,68 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.accounts.models import User
-from apps.attendance.forms import AttendanceForm, LinkIssueForm, SessionForm
-from apps.attendance.models import SessionParticipant, TrainerLink
+from apps.attendance.forms import (
+    AttendanceForm,
+    CorrectionForm,
+    LinkIssueForm,
+    RejectionForm,
+    SessionForm,
+)
+from apps.attendance.models import (
+    AttendanceEntry,
+    AttendanceReview,
+    AttendanceSubmission,
+    SessionParticipant,
+    TrainerLink,
+)
 from apps.attendance.selectors import (
+    can_correct_submission,
     can_manage_session,
+    can_review_submission,
+    pending_submissions_for,
     resolve_token,
     sessions_visible_to,
     visible_session_or_404,
+    visible_submission_or_404,
 )
 from apps.attendance.services import (
     archive_session,
+    correct_attendance,
     create_sessions,
     issue_trainer_link,
+    review_attendance,
     submit_attendance,
 )
+
+
+def _display_snapshot(
+    snapshot: list[dict[str, object]],
+    participant_names: dict[int, str],
+) -> list[dict[str, object]]:
+    labels = dict(AttendanceEntry.Value.choices)
+    displayed: list[dict[str, object]] = []
+    for item in snapshot:
+        raw_participant_id = item.get("participant_id")
+        participant_id = (
+            raw_participant_id if isinstance(raw_participant_id, int) else 0
+        )
+        value = str(item.get("value", ""))
+        displayed.append(
+            {
+                "participant_id": participant_id,
+                "participant_name": participant_names.get(
+                    participant_id, _("Unknown participant")
+                ),
+                "value": labels.get(value, value),
+                "notes": item.get("notes", ""),
+            }
+        )
+    return displayed
 
 
 @login_required
@@ -58,6 +102,7 @@ def session_detail(request: HttpRequest, session_id: int) -> HttpResponse:
             "participants": participants,
             "can_manage": can_manage_session(actor, session),
             "issue_form": LinkIssueForm(),
+            "session_title": session.localized_title(get_language() or "ar"),
         },
     )
 
@@ -128,12 +173,31 @@ def trainer_attendance(request: HttpRequest, token: str) -> HttpResponse:
     if link is None:
         response = render(request, "attendance/link_unavailable.html", status=410)
         return _secure_external_response(response)
-    invalid = (
-        link.state != TrainerLink.State.ACTIVE
-        or link.expires_at <= timezone.now()
-        or link.session.is_archived
-    )
-    if invalid:
+    submission = getattr(link, "submission", None)
+    if link.session.is_archived or link.state == TrainerLink.State.REVOKED:
+        response = render(request, "attendance/link_unavailable.html", status=410)
+        return _secure_external_response(response)
+    if link.state == TrainerLink.State.SUBMITTED:
+        if submission is None:
+            response = render(request, "attendance/link_unavailable.html", status=410)
+        elif submission.state == AttendanceSubmission.State.APPROVED:
+            response = render(
+                request,
+                "attendance/trainer_read_only.html",
+                {
+                    "submission": submission,
+                    "entries": submission.entries.select_related(
+                        "participant__enrollment__trainee"
+                    ),
+                    "session_title": link.session.localized_title(
+                        get_language() or "ar"
+                    ),
+                },
+            )
+        else:
+            response = render(request, "attendance/submitted.html")
+        return _secure_external_response(response)
+    if link.state != TrainerLink.State.ACTIVE or link.expires_at <= timezone.now():
         response = render(request, "attendance/link_unavailable.html", status=410)
         return _secure_external_response(response)
     participants = list(
@@ -141,10 +205,25 @@ def trainer_attendance(request: HttpRequest, token: str) -> HttpResponse:
             "enrollment__trainee"
         )
     )
+    initial: dict[str, str] = {}
+    rejection_reason = ""
+    if (
+        submission is not None
+        and submission.state == AttendanceSubmission.State.REJECTED
+    ):
+        initial["trainer_notes"] = submission.trainer_notes
+        for entry in submission.entries.all():
+            initial[f"value_{entry.participant_id}"] = entry.value
+            initial[f"notes_{entry.participant_id}"] = entry.notes
+        latest_rejection = submission.reviews.filter(
+            decision=AttendanceReview.Decision.REJECTED
+        ).last()
+        rejection_reason = latest_rejection.reason if latest_rejection else ""
     form = AttendanceForm(
         request.POST or None,
         request.FILES or None,
         participants=participants,
+        initial=initial,
     )
     attendance_rows = [
         (
@@ -176,9 +255,160 @@ def trainer_attendance(request: HttpRequest, token: str) -> HttpResponse:
             "session": link.session,
             "attendance_rows": attendance_rows,
             "form": form,
+            "rejection_reason": rejection_reason,
+            "session_title": link.session.localized_title(get_language() or "ar"),
         },
     )
     return _secure_external_response(response)
+
+
+@login_required
+@permission_required("attendance.review_attendance", raise_exception=True)
+def review_queue(request: HttpRequest) -> HttpResponse:
+    actor = cast(User, request.user)
+    page = Paginator(pending_submissions_for(actor), 25).get_page(
+        request.GET.get("page")
+    )
+    return render(request, "attendance/review_queue.html", {"page": page})
+
+
+@login_required
+def submission_detail(request: HttpRequest, submission_id: int) -> HttpResponse:
+    actor = cast(User, request.user)
+    submission = visible_submission_or_404(actor, submission_id)
+    entries = list(
+        submission.entries.select_related("participant__enrollment__trainee")
+    )
+    participant_names = {
+        entry.participant_id: entry.participant.enrollment.trainee.full_name
+        for entry in entries
+    }
+    review_history = [
+        (review, _display_snapshot(review.entry_snapshot, participant_names))
+        for review in submission.reviews.all()
+    ]
+    correction_history = [
+        (
+            correction,
+            _display_snapshot(correction.before_snapshot, participant_names),
+            _display_snapshot(correction.after_snapshot, participant_names),
+        )
+        for correction in submission.corrections.all()
+    ]
+    return render(
+        request,
+        "attendance/review_detail.html",
+        {
+            "submission": submission,
+            "entries": entries,
+            "can_review": can_review_submission(actor, submission),
+            "can_correct": can_correct_submission(actor, submission),
+            "rejection_form": RejectionForm(),
+            "review_history": review_history,
+            "correction_history": correction_history,
+            "session_title": submission.session.localized_title(get_language() or "ar"),
+        },
+    )
+
+
+@login_required
+@require_POST
+def submission_approve(request: HttpRequest, submission_id: int) -> HttpResponse:
+    actor = cast(User, request.user)
+    submission = visible_submission_or_404(actor, submission_id)
+    review_attendance(
+        actor=actor,
+        submission=submission,
+        decision=AttendanceReview.Decision.APPROVED,
+        request=request,
+    )
+    messages.success(request, _("Attendance approved."))
+    return redirect("attendance:submission-detail", submission_id=submission.pk)
+
+
+@login_required
+@require_POST
+def submission_reject(request: HttpRequest, submission_id: int) -> HttpResponse:
+    actor = cast(User, request.user)
+    submission = visible_submission_or_404(actor, submission_id)
+    form = RejectionForm(request.POST)
+    if not form.is_valid():
+        entries = submission.entries.select_related("participant__enrollment__trainee")
+        return render(
+            request,
+            "attendance/review_detail.html",
+            {
+                "submission": submission,
+                "entries": entries,
+                "can_review": can_review_submission(actor, submission),
+                "can_correct": can_correct_submission(actor, submission),
+                "rejection_form": form,
+                "session_title": submission.session.localized_title(
+                    get_language() or "ar"
+                ),
+            },
+            status=400,
+        )
+    review_attendance(
+        actor=actor,
+        submission=submission,
+        decision=AttendanceReview.Decision.REJECTED,
+        reason=form.cleaned_data["reason"],
+        request=request,
+    )
+    messages.success(request, _("Attendance rejected and the trainer link reopened."))
+    return redirect("attendance:submission-detail", submission_id=submission.pk)
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def submission_correct(request: HttpRequest, submission_id: int) -> HttpResponse:
+    actor = cast(User, request.user)
+    submission = visible_submission_or_404(actor, submission_id)
+    if not can_correct_submission(actor, submission):
+        raise PermissionDenied
+    participants = list(
+        SessionParticipant.objects.filter(session=submission.session).select_related(
+            "enrollment__trainee"
+        )
+    )
+    form = CorrectionForm(
+        request.POST or None,
+        submission=submission,
+        participants=participants,
+    )
+    rows = [
+        (
+            participant,
+            form[f"value_{participant.pk}"],
+            form[f"notes_{participant.pk}"],
+        )
+        for participant in participants
+    ]
+    if request.method == "POST" and form.is_valid():
+        try:
+            correct_attendance(
+                actor=actor,
+                submission=submission,
+                entries=form.entry_values(),
+                reason=form.cleaned_data["reason"],
+                request=request,
+            )
+        except ValidationError as error:
+            form.add_error(None, str(error))
+        else:
+            messages.success(request, _("Attendance corrected without reapproval."))
+            return redirect("attendance:submission-detail", submission_id=submission.pk)
+    return render(
+        request,
+        "attendance/correction_form.html",
+        {
+            "submission": submission,
+            "attendance_rows": rows,
+            "form": form,
+            "session_title": submission.session.localized_title(get_language() or "ar"),
+        },
+    )
 
 
 def _secure_external_response(response: HttpResponse) -> HttpResponse:

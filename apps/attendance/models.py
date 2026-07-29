@@ -1,4 +1,4 @@
-"""Phase 9 sessions, hash-only capability links, and submissions."""
+"""Sessions, hash-only capability links, and reviewed attendance records."""
 
 from pathlib import Path
 from typing import Any, ClassVar
@@ -13,6 +13,14 @@ from django.utils.translation import gettext_lazy as _
 class ProtectedAttendanceQuerySet[ModelT: models.Model](models.QuerySet[ModelT]):
     def delete(self) -> tuple[int, dict[str, int]]:
         raise PermissionDenied("Attendance records cannot be hard-deleted.")
+
+
+class ImmutableAttendanceQuerySet[ModelT: models.Model](
+    ProtectedAttendanceQuerySet[ModelT]
+):
+    def update(self, **kwargs: Any) -> int:
+        del kwargs
+        raise PermissionDenied("Attendance history is immutable.")
 
 
 class Session(models.Model):
@@ -184,6 +192,8 @@ class TrainerLink(models.Model):
 class AttendanceSubmission(models.Model):
     class State(models.TextChoices):
         PENDING_REVIEW = "pending_review", _("Pending supervisor review")
+        APPROVED = "approved", _("Approved")
+        REJECTED = "rejected", _("Rejected")
 
     session = models.OneToOneField(
         Session, on_delete=models.PROTECT, related_name="attendance_submission"
@@ -196,6 +206,7 @@ class AttendanceSubmission(models.Model):
         max_length=24,
         choices=State.choices,
         default=State.PENDING_REVIEW,
+        db_index=True,
     )
     trainer_notes = models.TextField(_("trainer notes"), blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
@@ -204,6 +215,22 @@ class AttendanceSubmission(models.Model):
 
     class Meta:
         ordering = ("-submitted_at",)
+        constraints: ClassVar[list[models.BaseConstraint]] = [
+            models.CheckConstraint(
+                condition=models.Q(
+                    state__in=("pending_review", "approved", "rejected")
+                ),
+                name="attendance_submission_state_valid",
+            )
+        ]
+        permissions = (
+            ("review_attendance", "Can review supervised attendance"),
+            ("view_all_attendance", "Can view all attendance"),
+            ("view_managed_attendance", "Can view managed attendance"),
+            ("view_supervised_attendance", "Can view supervised attendance"),
+            ("correct_all_attendance", "Can correct all attendance"),
+            ("correct_managed_attendance", "Can correct managed attendance"),
+        )
 
     def __str__(self) -> str:
         return f"{self.session_id}:{self.state}"
@@ -269,3 +296,94 @@ class AttendanceEvidence(models.Model):
 
     def __str__(self) -> str:
         return self.original_name
+
+
+class ImmutableAttendanceRecord(models.Model):
+    """Prevent normal mutation of review and correction evidence."""
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        if not self._state.adding:
+            raise PermissionDenied("Attendance history is immutable.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        del args, kwargs
+        raise PermissionDenied("Attendance history cannot be deleted.")
+
+
+class AttendanceReview(ImmutableAttendanceRecord):
+    class Decision(models.TextChoices):
+        APPROVED = "approved", _("Approved")
+        REJECTED = "rejected", _("Rejected")
+
+    submission = models.ForeignKey(
+        AttendanceSubmission, on_delete=models.PROTECT, related_name="reviews"
+    )
+    attempt = models.PositiveIntegerField()
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="attendance_reviews",
+    )
+    decision = models.CharField(_("decision"), max_length=16, choices=Decision.choices)
+    reason = models.CharField(_("reason"), max_length=1000, blank=True)
+    entry_snapshot = models.JSONField(default=list)
+    trainer_notes_snapshot = models.TextField(blank=True)
+    decided_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    objects = ImmutableAttendanceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("attempt", "pk")
+        constraints: ClassVar[list[models.BaseConstraint]] = [
+            models.UniqueConstraint(
+                fields=("submission", "attempt"),
+                name="attendance_review_attempt_unique",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(decision__in=("approved", "rejected")),
+                name="attendance_review_decision_valid",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(decision="approved", reason="")
+                    | (models.Q(decision="rejected") & ~models.Q(reason=""))
+                ),
+                name="attendance_review_reason_valid",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.submission_id}:{self.attempt}:{self.decision}"
+
+
+class AttendanceCorrection(ImmutableAttendanceRecord):
+    submission = models.ForeignKey(
+        AttendanceSubmission, on_delete=models.PROTECT, related_name="corrections"
+    )
+    corrected_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="attendance_corrections",
+    )
+    reason = models.CharField(_("correction reason"), max_length=1000)
+    before_snapshot = models.JSONField(default=list)
+    after_snapshot = models.JSONField(default=list)
+    corrected_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    objects = ImmutableAttendanceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("corrected_at", "pk")
+        constraints: ClassVar[list[models.BaseConstraint]] = [
+            models.CheckConstraint(
+                condition=~models.Q(reason=""),
+                name="attendance_correction_reason_required",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.submission_id}:{self.pk}"

@@ -128,8 +128,8 @@ Confirmed lifecycle: submission requires supervisor approval; rejection
 requires a reason and reopens the same link with a new expiration; authorized
 correction requires a reason and audit entry without reapproval.
 
-Open gate: attendance values, expiry-during-entry behavior, session time
-semantics, and actor permissions are unresolved.
+Decisions 0014 and 0015 define the attendance values, expiry semantics,
+session time policy, reviewer/corrector roles, and personal-data visibility.
 
 ### Notifications, Reports, Files, and Audit
 

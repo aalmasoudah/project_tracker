@@ -144,6 +144,6 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: Account lifecycle and Phase 3 through Phase 9 domain lifecycles are
+Status: Account lifecycle and Phase 3 through Phase 10 domain lifecycles are
 approved. Other phase-specific transitions and permissions require later
 approval.

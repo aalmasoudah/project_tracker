@@ -2217,6 +2217,120 @@ msgstr "الحالة"
 msgid "trainer notes"
 msgstr "ملاحظات المدرب"
 
+msgid "Pending attendance reviews"
+msgstr "مراجعات الحضور المعلقة"
+
+msgid "No pending attendance reviews."
+msgstr "لا توجد مراجعات حضور معلقة."
+
+msgid "Attendance review"
+msgstr "مراجعة الحضور"
+
+msgid "Correct attendance"
+msgstr "تصحيح الحضور"
+
+msgid "Approve attendance"
+msgstr "اعتماد الحضور"
+
+msgid "Reject and reopen link"
+msgstr "رفض وإعادة فتح الرابط"
+
+msgid "Review history"
+msgstr "سجل المراجعات"
+
+msgid "No review decisions yet."
+msgstr "لا توجد قرارات مراجعة حتى الآن."
+
+msgid "Correction history"
+msgstr "سجل التصحيحات"
+
+msgid "No corrections."
+msgstr "لا توجد تصحيحات."
+
+msgid "Before"
+msgstr "قبل"
+
+msgid "After"
+msgstr "بعد"
+
+msgid "Approved attendance remains approved after this correction."
+msgstr "يبقى الحضور معتمدًا بعد هذا التصحيح."
+
+msgid "Save correction"
+msgstr "حفظ التصحيح"
+
+msgid "Approved attendance"
+msgstr "الحضور المعتمد"
+
+msgid "This attendance is approved and read-only."
+msgstr "تم اعتماد هذا الحضور وهو للقراءة فقط."
+
+msgid "Correct the attendance and submit it again before the new expiration."
+msgstr "صحح الحضور وأعد إرساله قبل انتهاء الصلاحية الجديدة."
+
+msgid "Attendance reviews"
+msgstr "مراجعات الحضور"
+
+msgid "decision"
+msgstr "القرار"
+
+msgid "correction reason"
+msgstr "سبب التصحيح"
+
+msgid "Ensure attendance notes have at most 500 characters."
+msgstr "تأكد من ألا تتجاوز ملاحظات الحضور 500 حرف."
+
+msgid "The attendance roster changed unexpectedly."
+msgstr "تغيرت قائمة الحضور بشكل غير متوقع."
+
+msgid "A correction reason is required."
+msgstr "سبب التصحيح مطلوب."
+
+msgid "Ensure the reason has at most 1000 characters."
+msgstr "تأكد من ألا يتجاوز السبب 1000 حرف."
+
+msgid "You are not the assigned attendance reviewer."
+msgstr "أنت لست مراجع الحضور المعيّن."
+
+msgid "Only pending attendance may be reviewed."
+msgstr "يمكن مراجعة الحضور المعلق فقط."
+
+msgid "Select a valid attendance decision."
+msgstr "اختر قرار حضور صالحًا."
+
+msgid "Attendance correction permission is required."
+msgstr "يلزم إذن تصحيح الحضور."
+
+msgid "Only approved attendance may be corrected."
+msgstr "يمكن تصحيح الحضور المعتمد فقط."
+
+msgid "Change at least one attendance entry."
+msgstr "غيّر سجل حضور واحدًا على الأقل."
+
+msgid "Unknown participant"
+msgstr "مشارك غير معروف"
+
+msgid "Attendance approved."
+msgstr "تم اعتماد الحضور."
+
+msgid "Attendance rejected and the trainer link reopened."
+msgstr "رُفض الحضور وأُعيد فتح رابط المدرب."
+
+msgid "Attendance corrected without reapproval."
+msgstr "تم تصحيح الحضور دون إعادة الاعتماد."
+
+msgid "View attendance"
+msgstr "عرض الحضور"
+
+msgid "Correction reason"
+msgstr "سبب التصحيح"
+
+msgid "Review"
+msgstr "مراجعة"
+
+msgid "Trainee"
+msgstr "متدرب"
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

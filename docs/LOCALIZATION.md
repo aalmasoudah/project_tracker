@@ -3,7 +3,7 @@
 ## Status and Objective
 
 Status: Approved scope requirement. User-visible localization slices are
-approved through Phase 7; later output policies remain open.
+approved through Phase 10; later output policies remain open.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -108,12 +108,19 @@ Phase 9 terminology includes Session `جلسة`, Sessions `الجلسات`, Atte
 and Pending Supervisor Review `بانتظار مراجعة المشرف`. Scheduling and expiry
 use Asia/Riyadh, Gregorian dates, and Western digits.
 
+Phase 10 terminology includes Attendance Review `مراجعة الحضور`, Attendance
+Reviews `مراجعات الحضور`, Approved Attendance `الحضور المعتمد`, Correct
+Attendance `تصحيح الحضور`, Correction `تصحيح`, and Correction Reason
+`سبب التصحيح`. Review, reopened-link, and correction dates use Asia/Riyadh,
+Gregorian dates, and Western digits. Arabic reasons and names preserve their
+original text.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 9 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 9
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 10 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 10
   screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account and Phase 8

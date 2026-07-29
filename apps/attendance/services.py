@@ -1,4 +1,4 @@
-"""Transactional Phase 9 scheduling, capability, and submission services."""
+"""Transactional scheduling, capability, review, and correction services."""
 
 import hashlib
 import secrets
@@ -14,8 +14,10 @@ from django.utils.translation import gettext as _
 
 from apps.accounts.models import User
 from apps.attendance.models import (
+    AttendanceCorrection,
     AttendanceEntry,
     AttendanceEvidence,
+    AttendanceReview,
     AttendanceSubmission,
     Session,
     SessionParticipant,
@@ -23,13 +25,19 @@ from apps.attendance.models import (
 )
 from apps.attendance.policies import (
     EVIDENCE_TYPES,
+    MAX_DECISION_REASON_LENGTH,
     MAX_EVIDENCE_FILES,
     MAX_EVIDENCE_SIZE,
     MAX_LINK_HOURS,
     MAX_RECURRENCE_COUNT,
     MIN_LINK_HOURS,
+    REJECTION_LINK_HOURS,
 )
-from apps.attendance.selectors import can_manage_session
+from apps.attendance.selectors import (
+    can_correct_submission,
+    can_manage_session,
+    can_review_submission,
+)
 from apps.audit import actions
 from apps.audit.models import AuditEvent
 from apps.audit.services import record_audit_event
@@ -287,6 +295,50 @@ def validate_evidence(upload: UploadedFile) -> tuple[str, bytes]:
     return suffix, content
 
 
+def _validate_entries(
+    *,
+    participants: list[SessionParticipant],
+    entries: dict[int, tuple[str, str]],
+) -> None:
+    if set(entries) != {item.pk for item in participants}:
+        raise ValidationError(_("Attendance is required for every session trainee."))
+    for value, notes in entries.values():
+        if value not in AttendanceEntry.Value.values:
+            raise ValidationError(_("Select a valid attendance value."))
+        if len(notes.strip()) > 500:
+            raise ValidationError(
+                _("Ensure attendance notes have at most 500 characters.")
+            )
+
+
+def _entry_snapshot(submission: AttendanceSubmission) -> list[dict[str, object]]:
+    return [
+        {
+            "participant_id": entry.participant_id,
+            "value": entry.value,
+            "notes": entry.notes,
+        }
+        for entry in submission.entries.order_by("participant_id")
+    ]
+
+
+def _store_evidence(
+    *,
+    submission: AttendanceSubmission,
+    prepared_files: list[tuple[UploadedFile, str, bytes]],
+) -> None:
+    for upload, _suffix, content in prepared_files:
+        record = AttendanceEvidence(
+            submission=submission,
+            original_name=Path(upload.name or "").name[:255],
+            size=len(content),
+            content_type=upload.content_type or "application/octet-stream",
+            sha256=hashlib.sha256(content).hexdigest(),
+        )
+        record.file.save(record.original_name, upload, save=False)
+        record.save()
+
+
 @transaction.atomic
 def submit_attendance(
     *,
@@ -309,55 +361,209 @@ def submit_attendance(
         or session.is_archived
     ):
         raise ValidationError(_("This trainer link is invalid or expired."))
-    if AttendanceSubmission.objects.filter(session=session).exists():
-        raise ValidationError(_("Attendance has already been submitted."))
     participants = list(
         SessionParticipant.objects.filter(session=session).select_related(
             "enrollment__trainee"
         )
     )
-    participant_ids = {item.pk for item in participants}
-    if set(entries) != participant_ids:
-        raise ValidationError(_("Attendance is required for every session trainee."))
-    if len(evidence_files) > MAX_EVIDENCE_FILES:
+    _validate_entries(participants=participants, entries=entries)
+    existing = (
+        AttendanceSubmission.objects.select_for_update().filter(session=session).first()
+    )
+    existing_evidence_count = existing.evidence.count() if existing is not None else 0
+    if existing_evidence_count + len(evidence_files) > MAX_EVIDENCE_FILES:
         raise ValidationError(_("At most five evidence files may be uploaded."))
     prepared_files = [(upload, *validate_evidence(upload)) for upload in evidence_files]
-    for value, _notes in entries.values():
-        if value not in AttendanceEntry.Value.values:
-            raise ValidationError(_("Select a valid attendance value."))
-    submission = AttendanceSubmission.objects.create(
-        session=session,
-        trainer_link=link,
-        trainer_notes=trainer_notes.strip(),
-    )
-    AttendanceEntry.objects.bulk_create(
-        [
-            AttendanceEntry(
-                submission=submission,
-                participant=participant,
-                value=entries[participant.pk][0],
-                notes=entries[participant.pk][1].strip(),
-            )
-            for participant in participants
-        ]
-    )
-    for upload, _suffix, content in prepared_files:
-        record = AttendanceEvidence(
-            submission=submission,
-            original_name=Path(upload.name or "").name[:255],
-            size=len(content),
-            content_type=upload.content_type or "application/octet-stream",
-            sha256=hashlib.sha256(content).hexdigest(),
+    if existing is None:
+        submission = AttendanceSubmission.objects.create(
+            session=session,
+            trainer_link=link,
+            trainer_notes=trainer_notes.strip(),
         )
-        record.file.save(record.original_name, upload, save=False)
-        record.save()
+        AttendanceEntry.objects.bulk_create(
+            [
+                AttendanceEntry(
+                    submission=submission,
+                    participant=participant,
+                    value=entries[participant.pk][0],
+                    notes=entries[participant.pk][1].strip(),
+                )
+                for participant in participants
+            ]
+        )
+        action = actions.ATTENDANCE_SUBMITTED
+    else:
+        if (
+            existing.state != AttendanceSubmission.State.REJECTED
+            or existing.trainer_link_id != link.pk
+        ):
+            raise ValidationError(_("Attendance has already been submitted."))
+        current_entries = {
+            entry.participant_id: entry
+            for entry in AttendanceEntry.objects.select_for_update().filter(
+                submission=existing
+            )
+        }
+        if set(current_entries) != {participant.pk for participant in participants}:
+            raise ValidationError(_("The attendance roster changed unexpectedly."))
+        for participant in participants:
+            entry = current_entries[participant.pk]
+            entry.value = entries[participant.pk][0]
+            entry.notes = entries[participant.pk][1].strip()
+            entry.save(update_fields=("value", "notes"))
+        existing.state = AttendanceSubmission.State.PENDING_REVIEW
+        existing.trainer_notes = trainer_notes.strip()
+        existing.submitted_at = now
+        existing.save(update_fields=("state", "trainer_notes", "submitted_at"))
+        submission = existing
+        action = actions.ATTENDANCE_RESUBMITTED
+    _store_evidence(submission=submission, prepared_files=prepared_files)
     link.state = TrainerLink.State.SUBMITTED
     link.save(update_fields=("state",))
     _audit(
         actor=None,
-        action=actions.ATTENDANCE_SUBMITTED,
+        action=action,
         session=session,
-        metadata={"entries": len(entries), "evidence": len(evidence_files)},
+        metadata={
+            "entries": len(entries),
+            "evidence": len(evidence_files),
+            "review_attempt": submission.reviews.count() + 1,
+        },
         request=request,
     )
     return submission
+
+
+def _clean_reason(reason: str, *, correction: bool = False) -> str:
+    cleaned = reason.strip()
+    if not cleaned:
+        message = (
+            _("A correction reason is required.")
+            if correction
+            else _("A rejection reason is required.")
+        )
+        raise ValidationError(message)
+    if len(cleaned) > MAX_DECISION_REASON_LENGTH:
+        raise ValidationError(_("Ensure the reason has at most 1000 characters."))
+    return cleaned
+
+
+@transaction.atomic
+def review_attendance(
+    *,
+    actor: User,
+    submission: AttendanceSubmission,
+    decision: str,
+    reason: str = "",
+    request: HttpRequest | None = None,
+) -> AttendanceSubmission:
+    submission = (
+        AttendanceSubmission.objects.select_for_update()
+        .select_related("session__course__project", "trainer_link")
+        .get(pk=submission.pk)
+    )
+    if not can_review_submission(actor, submission):
+        raise PermissionDenied(_("You are not the assigned attendance reviewer."))
+    if submission.state != AttendanceSubmission.State.PENDING_REVIEW:
+        raise ValidationError(_("Only pending attendance may be reviewed."))
+    if decision not in AttendanceReview.Decision.values:
+        raise ValidationError(_("Select a valid attendance decision."))
+    reason = (
+        _clean_reason(reason) if decision == AttendanceReview.Decision.REJECTED else ""
+    )
+    snapshot = _entry_snapshot(submission)
+    attempt = submission.reviews.count() + 1
+    AttendanceReview.objects.create(
+        submission=submission,
+        attempt=attempt,
+        reviewer=actor,
+        decision=decision,
+        reason=reason,
+        entry_snapshot=snapshot,
+        trainer_notes_snapshot=submission.trainer_notes,
+    )
+    if decision == AttendanceReview.Decision.APPROVED:
+        submission.state = AttendanceSubmission.State.APPROVED
+        action = actions.ATTENDANCE_APPROVED
+    else:
+        submission.state = AttendanceSubmission.State.REJECTED
+        submission.trainer_link.state = TrainerLink.State.ACTIVE
+        submission.trainer_link.expires_at = timezone.now() + timedelta(
+            hours=REJECTION_LINK_HOURS
+        )
+        submission.trainer_link.revoked_at = None
+        submission.trainer_link.save(
+            update_fields=("state", "expires_at", "revoked_at")
+        )
+        action = actions.ATTENDANCE_REJECTED
+    submission.save(update_fields=("state",))
+    _audit(
+        actor=actor,
+        action=action,
+        session=submission.session,
+        metadata={"submission_id": submission.pk, "attempt": attempt},
+        request=request,
+    )
+    return submission
+
+
+@transaction.atomic
+def correct_attendance(
+    *,
+    actor: User,
+    submission: AttendanceSubmission,
+    entries: dict[int, tuple[str, str]],
+    reason: str,
+    request: HttpRequest | None = None,
+) -> AttendanceCorrection:
+    submission = (
+        AttendanceSubmission.objects.select_for_update()
+        .select_related("session__course__project", "trainer_link")
+        .get(pk=submission.pk)
+    )
+    if not can_correct_submission(actor, submission):
+        raise PermissionDenied(_("Attendance correction permission is required."))
+    if submission.state != AttendanceSubmission.State.APPROVED:
+        raise ValidationError(_("Only approved attendance may be corrected."))
+    cleaned_reason = _clean_reason(reason, correction=True)
+    participants = list(
+        SessionParticipant.objects.filter(session=submission.session).select_related(
+            "enrollment__trainee"
+        )
+    )
+    _validate_entries(participants=participants, entries=entries)
+    current_entries = {
+        entry.participant_id: entry
+        for entry in AttendanceEntry.objects.select_for_update().filter(
+            submission=submission
+        )
+    }
+    if set(current_entries) != {participant.pk for participant in participants}:
+        raise ValidationError(_("The attendance roster changed unexpectedly."))
+    before = _entry_snapshot(submission)
+    for participant in participants:
+        entry = current_entries[participant.pk]
+        entry.value = entries[participant.pk][0]
+        entry.notes = entries[participant.pk][1].strip()
+        entry.save(update_fields=("value", "notes"))
+    after = _entry_snapshot(submission)
+    if before == after:
+        raise ValidationError(_("Change at least one attendance entry."))
+    correction = AttendanceCorrection.objects.create(
+        submission=submission,
+        corrected_by=actor,
+        reason=cleaned_reason,
+        before_snapshot=before,
+        after_snapshot=after,
+    )
+    _audit(
+        actor=actor,
+        action=actions.ATTENDANCE_CORRECTED,
+        session=submission.session,
+        metadata={
+            "submission_id": submission.pk,
+            "correction_id": correction.pk,
+        },
+        request=request,
+    )
+    return correction

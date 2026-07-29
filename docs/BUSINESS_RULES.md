@@ -100,6 +100,13 @@ must be approved before their implementation phase.
   submissions require every locked roster row and enter pending review.
 - Trainer tokens contain 256 random bits, are stored only as SHA-256 hashes,
   expire at submission time, and are limited to one session.
+- Phase 10 attendance is reviewed only by the active owning project's assigned
+  Supervisor. Rejection preserves a decision snapshot and reopens the same
+  hash-only token for 72 hours.
+- Executive Managers may correct any approved attendance and the owning
+  Project Manager may correct managed-course attendance. Corrections require
+  a reason and immutable before/after evidence, remain approved, and do not
+  return to review.
 
 ## Decisions Required Before Planning
 
@@ -121,9 +128,8 @@ The project owner must approve answers to these questions:
    and course status transitions?
 9. [Approved for Phase 7] Completion approval requires Supervisor then Project
    Manager as defined in decision 0012.
-10. [Approved for Phase 7 completion workflows] Assigned approvers may reject
-    with a reason; rejected work may be resubmitted as a new attempt. No
-    override exists. Later attendance correction actors remain open.
+10. [Approved through Phase 10] Phase 7 completion approvers and Phase 10
+    attendance reviewers/correctors are defined in decisions 0012 and 0015.
 11. [Approved for Phase 8] A duplicate is normalized full name plus phone
     inside the same course, as defined in decision 0013.
 12. [Approved for Phase 9] Present, Absent, Late, and Excused.
@@ -134,18 +140,20 @@ The project owner must approve answers to these questions:
     stored, displayed, and considered overdue? Task overdue rules remain open.
 15. [Approved for Phase 3 project budgets] Which currencies are supported,
     and how are monetary values rounded? Later monetary outputs remain open.
-16. [Approved through Phase 8] Accounts, departments, audit events, projects,
+16. [Approved through Phase 10] Accounts, departments, audit events, projects,
     clients, categories, courses, trainers, tasks, tags, comments, and files
     are not hard-deleted; memberships and assignment/tag relationships are
     end-dated. Trainees, enrollments, import batches/rows, and approval history
-    are also protected. Expired throttle counters may be deleted. Later-domain
-    exceptions remain open.
+    are also protected. Attendance sessions, locked rosters, links,
+    submissions, entries, evidence, reviews, and corrections are protected.
+    Expired throttle counters may be deleted. Later-domain exceptions remain
+    open.
 17. Which notification categories may users disable?
 18. What retention periods apply to files, audit records, and archived data?
 19. [Approved] Arabic is the default language, and each internal user may
     persist Arabic or English.
 20. [Approved] The project owner approves official Arabic terminology.
-21. [Approved for Phase 3 through Phase 8 screens] Should Arabic display use
+21. [Approved for Phase 3 through Phase 10 screens] Should Arabic display use
     Gregorian or Hijri dates and Arabic-Indic or Western digits in each output
     type? Later outputs remain open.
 22. [Approved through Phase 8 search/identity slices] Preserve account
@@ -163,5 +171,5 @@ approved on 2026-07-26 in decision 0008. Phase 4 course portions were approved
 on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
 2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
-in decision 0013. Phase 9 was approved in decision 0014. Remaining decisions
-still block their listed phases.
+in decision 0013. Phase 9 was approved in decision 0014 and Phase 10 in
+decision 0015. Remaining decisions still block their listed phases.

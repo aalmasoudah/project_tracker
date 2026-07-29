@@ -1,4 +1,4 @@
-"""Localized internal and external Phase 9 forms."""
+"""Localized internal, external, review, and correction forms."""
 
 from typing import Any, cast
 
@@ -7,8 +7,13 @@ from django.core.files.uploadedfile import UploadedFile
 from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import User
-from apps.attendance.models import AttendanceEntry, Session, SessionParticipant
-from apps.attendance.policies import DEFAULT_LINK_HOURS
+from apps.attendance.models import (
+    AttendanceEntry,
+    AttendanceSubmission,
+    Session,
+    SessionParticipant,
+)
+from apps.attendance.policies import DEFAULT_LINK_HOURS, MAX_DECISION_REASON_LENGTH
 from apps.courses.models import Course, Trainer
 
 
@@ -109,6 +114,63 @@ class AttendanceForm(forms.Form):
     def __init__(
         self, *args: Any, participants: list[SessionParticipant], **kwargs: Any
     ) -> None:
+        super().__init__(*args, **kwargs)
+        self.participants = participants
+        for participant in participants:
+            suffix = str(participant.pk)
+            self.fields[f"value_{suffix}"] = forms.ChoiceField(
+                label=_("Attendance"),
+                choices=AttendanceEntry.Value.choices,
+                widget=forms.RadioSelect,
+            )
+            self.fields[f"notes_{suffix}"] = forms.CharField(
+                label=_("Notes"), max_length=500, required=False
+            )
+        _style(self)
+
+    def entry_values(self) -> dict[int, tuple[str, str]]:
+        return {
+            participant.pk: (
+                str(self.cleaned_data[f"value_{participant.pk}"]),
+                str(self.cleaned_data[f"notes_{participant.pk}"]),
+            )
+            for participant in self.participants
+        }
+
+
+class RejectionForm(forms.Form):
+    reason = forms.CharField(
+        label=_("Rejection reason"),
+        max_length=MAX_DECISION_REASON_LENGTH,
+        widget=forms.Textarea(attrs={"rows": 3}),
+    )
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        _style(self)
+
+
+class CorrectionForm(forms.Form):
+    reason = forms.CharField(
+        label=_("Correction reason"),
+        max_length=MAX_DECISION_REASON_LENGTH,
+        widget=forms.Textarea(attrs={"rows": 3}),
+    )
+
+    def __init__(
+        self,
+        *args: Any,
+        submission: AttendanceSubmission,
+        participants: list[SessionParticipant],
+        **kwargs: Any,
+    ) -> None:
+        current = {entry.participant_id: entry for entry in submission.entries.all()}
+        initial = dict(kwargs.pop("initial", {}))
+        for participant in participants:
+            entry = current[participant.pk]
+            initial.setdefault(f"value_{participant.pk}", entry.value)
+            initial.setdefault(f"notes_{participant.pk}", entry.notes)
+        kwargs["initial"] = initial
         super().__init__(*args, **kwargs)
         self.participants = participants
         for participant in participants:

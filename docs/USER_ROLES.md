@@ -153,6 +153,22 @@ owning Project Manager receive both preview and confirmation permission.
 External trainers have no account or internal navigation. A valid expiring
 capability link grants access only to one locked session roster.
 
+## Phase 10 Attendance Review and Correction Matrix
+
+| Role | Attendance visibility | Review | Correction/history |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | Phase 2 security audit only |
+| CEO | All read-only | None | View all decisions and corrections |
+| Executive Manager | All | None | Correct any approved attendance; view all history |
+| Project Manager | Managed-project courses | None | Correct approved managed attendance; managed history |
+| Supervisor | Active assigned-project sessions | Approve/reject pending submissions | View supervised history; no correction |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+The assigned Supervisor is the only reviewer. Rejection reopens the same
+external capability. Executive Managers and owning Project Managers are the
+only Phase 10 correctors.
+
 ## Object-Level Access Questions
 
 1. [Approved through Phase 8] Use the account/department, project, course,
@@ -164,7 +180,9 @@ capability link grants access only to one locked session roster.
    directory, project, course, task, milestone, approval, trainee, or import
    access.
 4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
-5. Who may view personal attendance information?
+5. [Approved for Phase 10] CEO and Executive Manager see all attendance;
+   owning Project Managers and assigned Supervisors see their scoped
+   attendance. Employees and Contractors have no Phase 10 access.
 6. Who may export reports containing personal data?
 7. [Approved through Phase 8] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
@@ -182,4 +200,5 @@ Status: The role model and Phase 2 permission slice were approved on
 decision 0010. The Phase 6 progress-visibility slice was approved on
 2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
 on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
-on 2026-07-29 in decision 0013. Later-domain matrix entries remain open.
+on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014 and
+Phase 10 in decision 0015. Later-domain matrix entries remain open.

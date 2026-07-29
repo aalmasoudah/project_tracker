@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 through 9 are complete. Phase 9, Sessions and Trainer Links, was
-implemented and verified on 2026-07-29.
+Phases 1 through 10 are complete. Phase 10, Attendance Approval and
+Corrections, was implemented and verified on 2026-07-29.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -50,6 +50,7 @@ Open:
 - Approval queue: <http://127.0.0.1:8000/approvals/>
 - Trainees and imports: <http://127.0.0.1:8000/trainees/>
 - Sessions: <http://127.0.0.1:8000/attendance/>
+- Attendance review queue: <http://127.0.0.1:8000/attendance/review/>
 - Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 

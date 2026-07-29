@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Correct attendance" %}{% endblock %}
+{% block content %}
+  <h1 class="h3">{% translate "Correct attendance" %}</h1>
+  <p>{{ session_title }} — {% translate "Approved attendance remains approved after this correction." %}</p>
+  <form method="post">
+    {% csrf_token %}
+    {% include "includes/form_errors.html" %}
+    {% for participant, value_field, notes_field in attendance_rows %}
+      <fieldset class="card card-body mb-2">
+        <legend class="h6"><bdi>{{ participant.enrollment.trainee_number }}</bdi> — {{ participant.enrollment.trainee.full_name }}</legend>
+        <div>{{ value_field }}</div>
+        <label class="form-label mt-2" for="{{ notes_field.id_for_label }}">{{ notes_field.label }}</label>
+        {{ notes_field }}
+      </fieldset>
+    {% endfor %}
+    <div class="card card-body mb-2">
+      <label class="form-label" for="{{ form.reason.id_for_label }}">{{ form.reason.label }}</label>
+      {{ form.reason }}
+      {% for error in form.reason.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+    </div>
+    <button class="btn btn-primary">{% translate "Save correction" %}</button>
+  </form>
+{% endblock %}
