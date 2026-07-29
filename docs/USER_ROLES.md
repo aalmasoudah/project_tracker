@@ -138,6 +138,21 @@ available only within the approved object scope.
 Import upload does not bypass course scope. Only Executive Managers and the
 owning Project Manager receive both preview and confirmation permission.
 
+## Phase 9 Session and Trainer-Link Matrix
+
+| Role | Sessions | Issue links | Submission visibility |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | All read-only | None | All read-only |
+| Executive Manager | Manage all | All | All |
+| Project Manager | Manage owned-project courses | Managed sessions | Managed sessions |
+| Supervisor | Active supervised-project sessions | None | Active supervised sessions |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+External trainers have no account or internal navigation. A valid expiring
+capability link grants access only to one locked session roster.
+
 ## Object-Level Access Questions
 
 1. [Approved through Phase 8] Use the account/department, project, course,

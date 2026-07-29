@@ -38,7 +38,7 @@ project owner resolves the open decisions in the core documents.
 | 6 | `PHASE_06_PROGRESS_ENGINE.md` | Completed and verified on 2026-07-28 |
 | 7 | `PHASE_07_MILESTONES_APPROVALS.md` | Completed and verified on 2026-07-29 |
 | 8 | `PHASE_08_TRAINEES_IMPORTS.md` | Completed and verified on 2026-07-29 |
-| 9 | `PHASE_09_SESSIONS_TRAINER_LINKS.md` | Draft; blocked by attendance/time decisions |
+| 9 | `PHASE_09_SESSIONS_TRAINER_LINKS.md` | Completed and verified on 2026-07-29 |
 | 10 | `PHASE_10_ATTENDANCE_APPROVAL_CORRECTIONS.md` | Draft; blocked by actor/value decisions |
 | 11 | `PHASE_11_NOTIFICATIONS_BACKGROUND_JOBS.md` | Draft; blocked by notification decisions |
 | 12 | `PHASE_12_DASHBOARDS_SEARCH_VIEWS.md` | Draft; depends on approved domain permissions |

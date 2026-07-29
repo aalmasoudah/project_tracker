@@ -2,7 +2,7 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phases 1 through 8 are completed.
+Status: Planning pass completed on 2026-07-23. Phases 1 through 9 are completed.
 The project owner approved the remaining phases on 2026-07-29; each phase must
 still resolve and record its blocking decisions before implementation.
 
@@ -22,7 +22,7 @@ phase specifications.
 | 6 | Progress Engine | Phase 5; available progress formulas | Completed on 2026-07-28 |
 | 7 | Milestones and Approvals | Phase 6; approval actors/steps | Completed on 2026-07-29 |
 | 8 | Trainees and Imports | Phase 4; duplicate/import/privacy rules | Completed on 2026-07-29 |
-| 9 | Sessions and Trainer Links | Phase 8; time/token/attendance rules | Blocked by business decisions |
+| 9 | Sessions and Trainer Links | Phase 8; time/token/attendance rules | Completed on 2026-07-29 |
 | 10 | Attendance Approval and Corrections | Phase 9; actor/value rules | Blocked by business decisions |
 | 11 | Notifications and Background Jobs | Relevant event-producing phases; preference rules | Blocked by business decisions |
 | 12 | Dashboards, Search, and Operational Views | Core domains and approved permissions | Blocked by business decisions |
@@ -50,8 +50,8 @@ requirements.
 | BR-09 | Milestone/project completion approval steps | Question 9 | Approved for Phase 7 |
 | BR-10 | Reject/reopen/correct/override actors | Question 10 | Phase 7 approved; attendance actors remain open |
 | BR-11 | Trainee/import duplicate identity | Question 11 | Approved |
-| BR-12 | Allowed attendance values | Question 12 | 9 |
-| BR-13 | Expiry during trainer data entry | Question 13 | 9 |
+| BR-12 | Allowed attendance values | Question 12 | Approved |
+| BR-13 | Expiry during trainer data entry | Question 13 | Approved |
 | BR-14 | Date/time storage, display, and overdue semantics | Question 14 | Phase 3-5 date/schedule slices approved; overdue remains open |
 | BR-15 | Supported currencies and rounding | Question 15 | Phase 3 SAR budget slice approved |
 | BR-16 | Hard-deletable records | Question 16 | Through Phase 5 approved; later records open |

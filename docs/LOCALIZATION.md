@@ -103,12 +103,17 @@ and Update `تحديث`. Approved Arabic headers include `الاسم الكام�
 duplicate keys use decision 0013 normalization. Course-specific numbers use
 Western digits.
 
+Phase 9 terminology includes Session `جلسة`, Sessions `الجلسات`, Attendance
+`الحضور`, Present `حاضر`, Absent `غائب`, Late `متأخر`, Excused `غائب بعذر`,
+and Pending Supervisor Review `بانتظار مراجعة المشرف`. Scheduling and expiry
+use Asia/Riyadh, Gregorian dates, and Western digits.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 8 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 8
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 9 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 9
   screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account and Phase 8

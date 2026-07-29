@@ -1999,6 +1999,224 @@ msgstr "لا يمكن أن تقل سعة الدورة عن عدد المتدرب
 msgid "The row does not match the number of headers."
 msgstr "عدد قيم الصف لا يطابق عدد العناوين."
 
+msgid "A session already exists at this start time."
+msgstr "توجد جلسة بالفعل في وقت البدء هذا."
+
+msgid "Absent"
+msgstr "غائب"
+
+msgid "Arabic title"
+msgstr "العنوان العربي"
+
+msgid "Archived courses cannot contain sessions."
+msgstr "لا يمكن أن تحتوي الدورات المؤرشفة على جلسات."
+
+msgid "At most five evidence files may be uploaded."
+msgstr "يمكن رفع خمسة ملفات إثبات كحد أقصى."
+
+msgid "Attendance"
+msgstr "الحضور"
+
+msgid "Attendance has already been submitted."
+msgstr "تم إرسال الحضور بالفعل."
+
+msgid "Attendance is required for every session trainee."
+msgstr "يجب تسجيل الحضور لكل متدرب في الجلسة."
+
+msgid "Attendance submitted"
+msgstr "تم إرسال الحضور"
+
+msgid "Completed courses cannot contain sessions."
+msgstr "لا يمكن أن تحتوي الدورات المكتملة على جلسات."
+
+msgid "Copy this link now. It will not be shown again."
+msgstr "انسخ هذا الرابط الآن. لن يظهر مرة أخرى."
+
+msgid "Create session"
+msgstr "إنشاء جلسة"
+
+msgid "Created %(count)s session(s)."
+msgstr "تم إنشاء %(count)s جلسة."
+
+msgid "Daily"
+msgstr "يومي"
+
+msgid "Does not repeat"
+msgstr "لا يتكرر"
+
+msgid "Ends at"
+msgstr "ينتهي في"
+
+msgid "English title"
+msgstr "العنوان الإنجليزي"
+
+msgid "Evidence files"
+msgstr "ملفات الإثبات"
+
+msgid "Evidence files must be 10 MB or smaller."
+msgstr "يجب ألا يتجاوز حجم ملف الإثبات 10 ميجابايت."
+
+msgid "Excused"
+msgstr "غائب بعذر"
+
+msgid "Expires at"
+msgstr "ينتهي في"
+
+msgid "Invalid recurrence choice."
+msgstr "خيار التكرار غير صالح."
+
+msgid "Issue trainer link"
+msgstr "إصدار رابط المدرب"
+
+msgid "Late"
+msgstr "متأخر"
+
+msgid "Link lifetime in hours"
+msgstr "مدة الرابط بالساعات"
+
+msgid "Link lifetime must be between 1 hour and 14 days."
+msgstr "يجب أن تكون مدة الرابط بين ساعة واحدة و14 يومًا."
+
+msgid "Link unavailable"
+msgstr "الرابط غير متاح"
+
+msgid "Locked roster"
+msgstr "قائمة المتدربين المقفلة"
+
+msgid "No sessions found."
+msgstr "لم يتم العثور على جلسات."
+
+msgid "Occurrences"
+msgstr "عدد مرات التكرار"
+
+msgid "Only PDF, PNG, and JPEG evidence is allowed."
+msgstr "يسمح فقط بملفات إثبات PDF وPNG وJPEG."
+
+msgid "Pending supervisor review"
+msgstr "بانتظار مراجعة المشرف"
+
+msgid "Present"
+msgstr "حاضر"
+
+msgid "Record attendance"
+msgstr "تسجيل الحضور"
+
+msgid "Recurrence"
+msgstr "التكرار"
+
+msgid "Recurrence count must be between 1 and 52."
+msgstr "يجب أن يكون عدد مرات التكرار بين 1 و52."
+
+msgid "Revoked"
+msgstr "ملغى"
+
+msgid "Roster locks when a link is issued."
+msgstr "تُقفل قائمة المتدربين عند إصدار الرابط."
+
+msgid "Scheduled"
+msgstr "مجدولة"
+
+msgid "Select a valid attendance value."
+msgstr "اختر قيمة حضور صالحة."
+
+msgid "Select an active trainer assigned to this course."
+msgstr "اختر مدربًا نشطًا معيّنًا لهذه الدورة."
+
+msgid "Session"
+msgstr "الجلسة"
+
+msgid "Session archive permission is required."
+msgstr "يلزم إذن أرشفة الجلسات."
+
+msgid "Session archived."
+msgstr "تمت أرشفة الجلسة."
+
+msgid "Session end must be after its start."
+msgstr "يجب أن يكون انتهاء الجلسة بعد بدايتها."
+
+msgid "Session management permission is required."
+msgstr "يلزم إذن إدارة الجلسات."
+
+msgid "Session time must be inside the course schedule."
+msgstr "يجب أن يكون وقت الجلسة ضمن جدول الدورة."
+
+msgid "Sessions"
+msgstr "الجلسات"
+
+msgid "Sessions may be created only in managed courses."
+msgstr "لا يمكن إنشاء الجلسات إلا في الدورات التي تديرها."
+
+msgid "Starts at"
+msgstr "يبدأ في"
+
+msgid "Submit attendance"
+msgstr "إرسال الحضور"
+
+msgid "Submitted"
+msgstr "مُرسل"
+
+msgid "Submitted sessions cannot be archived."
+msgstr "لا يمكن أرشفة الجلسات المرسلة."
+
+msgid "The JPEG evidence is malformed."
+msgstr "ملف إثبات JPEG غير صالح."
+
+msgid "The PDF evidence is malformed."
+msgstr "ملف إثبات PDF غير صالح."
+
+msgid "The PNG evidence is malformed."
+msgstr "ملف إثبات PNG غير صالح."
+
+msgid "The evidence file could not be read safely."
+msgstr "تعذرت قراءة ملف الإثبات بأمان."
+
+msgid "The evidence type does not match its extension."
+msgstr "نوع ملف الإثبات لا يطابق امتداده."
+
+msgid "The session has no active trainees."
+msgstr "لا تحتوي الجلسة على متدربين نشطين."
+
+msgid "The session roster is already locked."
+msgstr "قائمة متدربي الجلسة مقفلة بالفعل."
+
+msgid ""
+"The submission is pending Supervisor review and can no longer be edited "
+"through this link."
+msgstr "الإرسال بانتظار مراجعة المشرف ولا يمكن تعديله عبر هذا الرابط."
+
+msgid "This trainer link is invalid or expired."
+msgstr "رابط المدرب هذا غير صالح أو منتهي."
+
+msgid "This trainer link is invalid, expired, revoked, or already used."
+msgstr "رابط المدرب غير صالح أو منتهي أو ملغى أو مستخدم بالفعل."
+
+msgid "Trainer link"
+msgstr "رابط المدرب"
+
+msgid "Trainer link issue permission is required."
+msgstr "يلزم إذن إصدار رابط المدرب."
+
+msgid "Trainer link issued"
+msgstr "تم إصدار رابط المدرب"
+
+msgid "Trainer notes"
+msgstr "ملاحظات المدرب"
+
+msgid "Weekly"
+msgstr "أسبوعي"
+
+msgid "attendance"
+msgstr "الحضور"
+
+msgid "expires at"
+msgstr "ينتهي في"
+
+msgid "state"
+msgstr "الحالة"
+
+msgid "trainer notes"
+msgstr "ملاحظات المدرب"
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

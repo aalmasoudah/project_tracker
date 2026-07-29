@@ -120,6 +120,8 @@ the same service only in their approved later phases.
 1. An authorized user creates a scheduled session.
 2. The system generates a random, expiring trainer link.
 3. The external trainer opens the link and submits attendance.
+   The link is token-bound to one session, expiry is rechecked on submit, and
+   every locked trainee requires Present, Absent, Late, or Excused.
 4. The submission enters supervisor review.
 5. The supervisor approves or rejects it.
 6. Rejection requires a reason, reopens the same link, and assigns a new
@@ -142,6 +144,6 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: Account lifecycle and Phase 3 through Phase 8 domain lifecycles are
+Status: Account lifecycle and Phase 3 through Phase 9 domain lifecycles are
 approved. Other phase-specific transitions and permissions require later
 approval.

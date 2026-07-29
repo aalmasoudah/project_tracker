@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "apps.tasks.apps.TasksConfig",
     "apps.approvals.apps.ApprovalsConfig",
     "apps.trainees.apps.TraineesConfig",
+    "apps.attendance.apps.AttendanceConfig",
     "apps.progress.apps.ProgressConfig",
 ]
 

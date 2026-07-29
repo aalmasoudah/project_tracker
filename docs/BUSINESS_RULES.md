@@ -96,6 +96,10 @@ must be approved before their implementation phase.
 - Phase 8 imports are previewed without trainee writes. Errors block
   confirmation; duplicates use explicit Skip/Update resolution; confirmation
   is atomic and audited.
+- Phase 9 attendance values are Present, Absent, Late, and Excused. Session
+  submissions require every locked roster row and enter pending review.
+- Trainer tokens contain 256 random bits, are stored only as SHA-256 hashes,
+  expire at submission time, and are limited to one session.
 
 ## Decisions Required Before Planning
 
@@ -122,8 +126,9 @@ The project owner must approve answers to these questions:
     override exists. Later attendance correction actors remain open.
 11. [Approved for Phase 8] A duplicate is normalized full name plus phone
     inside the same course, as defined in decision 0013.
-12. What attendance values are allowed?
-13. What happens when a trainer link expires during data entry?
+12. [Approved for Phase 9] Present, Absent, Late, and Excused.
+13. [Approved for Phase 9] Expiry is rechecked at submission and commits
+    nothing; an authorized actor must issue a new link.
 14. [Approved for Phase 3 date-only project fields, Phase 4 Riyadh course
     schedules, and Phase 5 date-only task fields] Which dates and times are
     stored, displayed, and considered overdue? Task overdue rules remain open.
@@ -158,4 +163,5 @@ approved on 2026-07-26 in decision 0008. Phase 4 course portions were approved
 on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
 2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
-in decision 0013. Remaining decisions still block their listed phases.
+in decision 0013. Phase 9 was approved in decision 0014. Remaining decisions
+still block their listed phases.
