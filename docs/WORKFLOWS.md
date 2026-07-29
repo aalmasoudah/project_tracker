@@ -46,7 +46,7 @@ Phase 4 course lifecycle:
 6. Course, trainer, assignment, file, status, archive, and restore actions are
    audited.
 
-Project and course completion approval remain deferred to Phase 7.
+Project and course completion use the Phase 7 approval workflow below.
 
 ## Task Lifecycle
 
@@ -87,6 +87,19 @@ Phase 6 progress is calculated on demand through one service:
 
 Milestones, approvals, attendance components, dashboards, and reports extend
 the same service only in their approved later phases.
+
+## Milestone and Completion Approval
+
+1. Executive Manager or the owning Project Manager maintains milestones.
+2. An eligible task, course, milestone, or project completion is submitted.
+3. The project Supervisor decides first.
+4. Approval advances the request to the Project Manager; rejection requires a
+   reason and returns the target to active work.
+5. Project Manager approval completes the request and its target.
+6. A rejected target may be resubmitted as a new attempt; prior attempts and
+   decisions remain immutable.
+7. Pending targets cannot be normally edited or archived. Phase 7 has no
+   override.
 
 ## Trainee Import
 

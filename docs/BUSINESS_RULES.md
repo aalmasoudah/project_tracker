@@ -78,6 +78,17 @@ must be approved before their implementation phase.
 - Progress uses unrounded `Decimal` calculations and public two-decimal
   `ROUND_HALF_UP` results bounded from 0 through 100. Task hours do not affect
   progress.
+- Phase 7 completion approval is sequential: the owning project Supervisor,
+  then Project Manager. Rejection requires a reason and resubmission creates a
+  new immutable attempt.
+- Completed milestones are 100 percent; other countable milestone statuses
+  are 0 percent. Cancelled/archived milestones are excluded, and milestones
+  form an equal available category in project progress.
+- Tasks, courses, and projects require 100-percent progress before completion
+  submission. Milestones may submit from In Progress because approval changes
+  them to Completed.
+- Approved course and project completion adds a Completed status reachable
+  only through the approval service. Phase 7 provides no override.
 
 ## Decisions Required Before Planning
 
@@ -97,8 +108,11 @@ The project owner must approve answers to these questions:
 7. [Approved for Phase 6] Progress is bounded from 0 through 100 percent.
 8. [Approved for Phase 3 projects and Phase 4 courses] What are the project
    and course status transitions?
-9. Which approval steps are required for milestone and project completion?
-10. Who may reject, reopen, correct, or override each workflow?
+9. [Approved for Phase 7] Completion approval requires Supervisor then Project
+   Manager as defined in decision 0012.
+10. [Approved for Phase 7 completion workflows] Assigned approvers may reject
+    with a reason; rejected work may be resubmitted as a new attempt. No
+    override exists. Later attendance correction actors remain open.
 11. What makes two trainees or imports duplicates?
 12. What attendance values are allowed?
 13. What happens when a trainer link expires during data entry?

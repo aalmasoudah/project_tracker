@@ -74,6 +74,16 @@
                   <a class="nav-link" href="{% url 'tasks:list' %}">{% translate "Tasks" %}</a>
                 </li>
               {% endif %}
+              {% if perms.approvals.view_milestone %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'approvals:milestone_list' %}">{% translate "Milestones" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.approvals.view_approvalrequest %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'approvals:queue' %}">{% translate "Approvals" %}</a>
+                </li>
+              {% endif %}
               {% if perms.audit.view_auditevent %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'audit:list' %}">{% translate "Audit" %}</a>

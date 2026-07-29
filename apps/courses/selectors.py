@@ -55,7 +55,11 @@ def visible_course_or_404(actor: User, course_id: int) -> Course:
 
 
 def can_manage_course(actor: User, course: Course) -> bool:
-    if not actor.has_perm("courses.change_course") or course.is_archived:
+    if (
+        not actor.has_perm("courses.change_course")
+        or course.is_archived
+        or course.status == Course.Status.COMPLETED
+    ):
         return False
     return (
         actor.has_perm("courses.view_all_courses")

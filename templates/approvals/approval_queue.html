@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Approvals" %}{% endblock %}
+{% block content %}
+<h1>{% translate "Approvals" %}</h1><p class="text-body-secondary mb-4">{% translate "Completion approval queue and immutable history." %}</p>
+<form class="row g-2 mb-4" method="get"><div class="col-12 col-md-5"><label class="form-label" for="approval-status">{% translate "Status" %}</label><select class="form-select" id="approval-status" name="status"><option value="">{% translate "All" %}</option>{% for value,label in statuses %}<option value="{{ value }}" {% if value == selected_status %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div><div class="col-auto align-self-end"><button class="btn btn-outline-primary" type="submit">{% translate "Filter" %}</button></div></form>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% translate "Target" %}</th><th>{% translate "Type" %}</th><th>{% translate "Attempt" %}</th><th>{% translate "Submitted by" %}</th><th>{% translate "Status" %}</th></tr></thead><tbody>{% for item in page %}<tr><td><a href="{% url 'approvals:detail' item.pk %}"><bdi>{{ item.target_code }}</bdi></a></td><td>{{ item.get_target_type_display }}</td><td><bdi>{{ item.attempt }}</bdi></td><td>{{ item.submitted_by.display_name }}</td><td>{{ item.get_status_display }}</td></tr>{% empty %}<tr><td colspan="5">{% translate "No approval requests found." %}</td></tr>{% endfor %}</tbody></table></div>
+{% include "includes/pagination.html" with page=page %}
+{% endblock %}

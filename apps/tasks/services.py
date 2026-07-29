@@ -175,6 +175,10 @@ def update_task(
         .select_related("project", "course", "course__project", "parent")
         .get(pk=task.pk)
     )
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(task):
+        raise ValidationError(_("Pending approval prevents task changes."))
     if not can_manage_task(actor, task):
         raise PermissionDenied(_("Task update permission is required."))
     previous_status = task.status
@@ -219,6 +223,10 @@ def update_assigned_task(
     request: HttpRequest | None = None,
 ) -> Task:
     task = Task.objects.select_for_update().get(pk=task.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(task):
+        raise ValidationError(_("Pending approval prevents task changes."))
     if not can_update_assigned_task(actor, task):
         raise PermissionDenied(_("Assigned-task update permission is required."))
     previous_status = task.status
@@ -253,6 +261,10 @@ def replace_task_assignments(
     request: HttpRequest | None = None,
 ) -> None:
     task = Task.objects.select_for_update().get(pk=task.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(task):
+        raise ValidationError(_("Pending approval prevents task archiving."))
     if not (
         actor.has_perm("tasks.manage_task_assignments") and can_manage_task(actor, task)
     ):

@@ -5,8 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 through 6 are complete. Phase 6, the centralized Progress Engine,
-was implemented and verified on 2026-07-28.
+Phases 1 through 7 are complete. Phase 7, Milestones and Approvals, was
+implemented and verified on 2026-07-29.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -46,6 +46,8 @@ Open:
 - Projects: <http://127.0.0.1:8000/projects/>
 - Courses and trainers: <http://127.0.0.1:8000/courses/>
 - Tasks and collaboration: <http://127.0.0.1:8000/tasks/>
+- Milestones: <http://127.0.0.1:8000/approvals/milestones/>
+- Approval queue: <http://127.0.0.1:8000/approvals/>
 - Recovery-only Django administration: <http://127.0.0.1:8000/admin/>
 - Health check: <http://127.0.0.1:8000/health/>
 

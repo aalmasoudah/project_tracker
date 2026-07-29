@@ -121,6 +121,10 @@ def update_project(
 ) -> Project:
     """Update a visible mutable project with transition enforcement."""
     project = Project.objects.select_for_update().get(pk=project.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(project):
+        raise ValidationError(_("Pending approval prevents project changes."))
     if not can_manage_project(actor, project):
         raise PermissionDenied(_("Project update permission is required."))
     previous_status = project.status
@@ -179,6 +183,10 @@ def archive_project(
     from apps.tasks.models import Task
 
     project = Project.objects.select_for_update().get(pk=project.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(project):
+        raise ValidationError(_("Pending approval prevents project archiving."))
     if not can_archive_project(actor, project):
         raise PermissionDenied(_("Project archive permission is required."))
     if Course.objects.filter(project=project, is_archived=False).exists():

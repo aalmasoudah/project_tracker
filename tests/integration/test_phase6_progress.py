@@ -157,7 +157,7 @@ def test_task_course_and_equal_category_project_formulas(
     assert course_result is not None
     assert task_result.percentage == Decimal("50.00")
     assert course_result.percentage == Decimal("100.00")
-    with django_assert_num_queries(4):
+    with django_assert_num_queries(5):
         project_result = project_progress_for(manager, project)
 
     assert project_result is not None

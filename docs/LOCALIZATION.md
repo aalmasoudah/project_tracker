@@ -2,8 +2,8 @@
 
 ## Status and Objective
 
-Status: Approved scope requirement. Account, project, and course localization
-slices are approved through Phase 5; later output policies remain open.
+Status: Approved scope requirement. User-visible localization slices are
+approved through Phase 7; later output policies remain open.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -89,12 +89,19 @@ Phase 6 terminology is Progress `التقدم`, No countable work
 show the same two-decimal bounded percentage with Western digits; locale
 changes presentation only, never the numeric calculation.
 
+Phase 7 terminology includes Milestone `مرحلة رئيسية`, Milestones
+`المراحل الرئيسية`, Approval `موافقة`, Approvals `الموافقات`, Pending approval
+`بانتظار الموافقة`, Approve `موافقة`, Reject `رفض`, and Rejection reason
+`سبب الرفض`. Approval dates use Gregorian dates and Western digits. Arabic
+reasons and bilingual identifiers preserve their original text and render
+with direction isolation.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 5 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 5
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 7 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 7
   screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account search.

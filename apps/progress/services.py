@@ -6,9 +6,13 @@ from collections.abc import Iterable
 from django.db.models import QuerySet
 
 from apps.accounts.models import User
+from apps.approvals.models import Milestone
+from apps.approvals.selectors import milestones_visible_to
 from apps.courses.models import Course
 from apps.courses.selectors import courses_visible_to
 from apps.progress.calculations import (
+    HUNDRED,
+    ZERO,
     ProgressResult,
     ProgressState,
     TaskProgressInput,
@@ -63,6 +67,11 @@ def task_progress_for(actor: User, task: Task) -> ProgressResult | None:
         return None
     if not _can_view_complete_task_context(actor, task):
         return None
+    return calculate_task_progress(task)
+
+
+def calculate_task_progress(task: Task) -> ProgressResult:
+    """Calculate one task for trusted domain workflows."""
     tree = TaskProgressTree(_task_inputs(_owner_tasks(task)))
     return tree.result_for(task.pk)
 
@@ -100,8 +109,39 @@ def course_progress_for(actor: User, course: Course) -> ProgressResult | None:
         return None
     if not _can_view_course_progress(actor, course):
         return None
-    tasks = Task.objects.filter(course=course)
-    return _course_progress_from_tasks(course, tasks)
+    return calculate_course_progress(course)
+
+
+def calculate_course_progress(course: Course) -> ProgressResult:
+    """Calculate one course for trusted domain workflows."""
+    return _course_progress_from_tasks(course, Task.objects.filter(course=course))
+
+
+def calculate_milestone_progress(milestone: Milestone) -> ProgressResult:
+    """Return approved status-based milestone progress."""
+    if milestone.is_archived or milestone.status == Milestone.Status.CANCELLED:
+        return ProgressResult.excluded()
+    return ProgressResult(
+        raw_percentage=(
+            HUNDRED if milestone.status == Milestone.Status.COMPLETED else ZERO
+        ),
+        state=ProgressState.VALUE,
+        included_items=1,
+    )
+
+
+def milestone_progress_for(
+    actor: User,
+    milestone: Milestone,
+) -> ProgressResult | None:
+    """Return milestone progress only inside the actor's object scope."""
+    if (
+        not milestones_visible_to(actor, include_archived=True)
+        .filter(pk=milestone.pk)
+        .exists()
+    ):
+        return None
+    return calculate_milestone_progress(milestone)
 
 
 def _can_view_project_progress(actor: User, project: Project) -> bool:
@@ -132,6 +172,11 @@ def project_progress_for(actor: User, project: Project) -> ProgressResult | None
         return None
     if not _can_view_project_progress(actor, project):
         return None
+    return calculate_project_progress(project)
+
+
+def calculate_project_progress(project: Project) -> ProgressResult:
+    """Calculate project categories for trusted domain workflows."""
     if project.is_archived or project.status == Project.Status.CANCELLED:
         return ProgressResult.excluded()
 
@@ -158,6 +203,14 @@ def project_progress_for(actor: User, project: Project) -> ProgressResult | None
         category_values.append(task_category.raw_percentage)
     if course_values:
         category_values.append(average(course_values))
+    milestone_values = [
+        result.raw_percentage
+        for milestone in Milestone.objects.filter(project=project).order_by("pk")
+        if (result := calculate_milestone_progress(milestone)).state
+        != ProgressState.EXCLUDED
+    ]
+    if milestone_values:
+        category_values.append(average(milestone_values))
     if not category_values:
         return ProgressResult.empty()
     return ProgressResult(

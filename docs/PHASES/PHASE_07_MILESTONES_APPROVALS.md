@@ -1,7 +1,6 @@
 # Phase 7: Milestones and Approvals
 
-Status: Draft; blocked by approval, progress, permission, and sequencing
-decisions.
+Status: Completed and verified on 2026-07-29.
 
 ## 1. Goal
 
@@ -67,8 +66,9 @@ for another step or a project they cannot access.
 
 ## 9. Business Rules
 
-Resolve `BR-06`, `BR-08`, `BR-09`, `BR-10`, `BR-14`, `BR-16`, and approval
-permissions. No unapproved transition is represented even if technically easy.
+Decision 0012 defines milestone progress, approval actors/order, eligibility,
+rejection/resubmission, dates, archive behavior, and visibility. No override
+path is included.
 
 ## 10. Expected Migrations
 
@@ -123,8 +123,7 @@ permissions. No unapproved transition is represented even if technically easy.
 ## 17. Dependencies
 
 - Completed Phase 6 and approved milestone/progress availability.
-- Approved approval steps, actors, transitions, self-approval, override,
-  rejection/reopen, date, archive, and permission rules.
+- Approved decision 0012.
 - Approved Arabic approval terminology.
 - Owner resolution of Phase 5 task-approval and Phase 6 milestone sequencing.
 

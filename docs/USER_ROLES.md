@@ -106,18 +106,36 @@ Phase 6 adds no permission codenames. It derives progress visibility from
 approved source-record permissions and withholds a value whenever the actor's
 scope might omit hierarchy or aggregate inputs.
 
+## Phase 7 Milestone and Approval Matrix
+
+| Role | Milestones | Submit completion | Approve/reject | History |
+| --- | --- | --- | --- | --- |
+| Technical Admin | None | None | None | Phase 2 security audit only |
+| CEO | View all, including archived | None | None | View all requests and decisions |
+| Executive Manager | Full administration | Any eligible item | Assigned step | View all requests and decisions |
+| Project Manager | Manage milestones in managed projects | Eligible items in managed projects | Assigned Project Manager step | Managed-project history |
+| Supervisor | View active visible milestones | Assigned eligible tasks | Assigned Supervisor step | Active visible context only |
+| Employee | None | Assigned eligible tasks | None | Own submitted requests only |
+| Contractor | None | Assigned eligible tasks | None | Own submitted requests only |
+
+Approval is strictly sequential: an assigned Supervisor completes step one,
+then an assigned Project Manager completes step two. The same person cannot
+fill both steps. Rejection requires a reason, and immutable decisions remain
+available only within the approved object scope.
+
 ## Object-Level Access Questions
 
-1. [Approved through Phase 6] Use the account/department, project, course,
-   task, and progress scopes above. Later domains remain open.
+1. [Approved through Phase 7] Use the account/department, project, course,
+   task, milestone, approval, and progress scopes above. Later domains remain
+   open.
 2. [Approved for Phase 3] Project Managers cannot access projects they do not
    manage unless a later phase grants a separate assignment.
-3. [Approved through Phase 6] Supervisors do not receive cross-department
-   directory, project, course, or task access.
+3. [Approved through Phase 7] Supervisors do not receive cross-department
+   directory, project, course, task, milestone, or approval access.
 4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
 5. Who may view personal attendance information?
 6. Who may export reports containing personal data?
-7. [Approved through Phase 6] Technical Admin may archive/restore departments.
+7. [Approved through Phase 7] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
    so only for a managed project. Accounts are deactivated/reactivated. Later
    records remain open.
@@ -131,4 +149,5 @@ Status: The role model and Phase 2 permission slice were approved on
 0008. The Phase 4 course/trainer slice was approved on 2026-07-27 in decision
 0009. The Phase 5 task/collaboration slice was approved on 2026-07-27 in
 decision 0010. The Phase 6 progress-visibility slice was approved on
-2026-07-28 in decision 0011. Later-domain matrix entries remain open.
+2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
+on 2026-07-28 in decision 0012. Later-domain matrix entries remain open.

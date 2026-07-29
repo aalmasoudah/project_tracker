@@ -3,6 +3,7 @@
 {% block title %}{{ course|localized_course_name }}{% endblock %}
 {% block content %}
 <div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><p class="text-primary fw-semibold mb-1"><bdi>{{ course.code }}</bdi></p><h1>{{ course|localized_course_name }}</h1></div><div class="d-flex flex-wrap gap-2">
+{% if perms.approvals.submit_approval and course.status == "active" %}<a class="btn btn-primary" href="{% url 'approvals:submit' 'course' course.pk %}">{% translate "Submit for approval" %}</a>{% endif %}
 {% if can_manage %}<a class="btn btn-outline-primary" href="{% url 'courses:update' course.pk %}">{% translate "Edit" %}</a>{% endif %}
 {% if can_manage_trainers %}<a class="btn btn-outline-primary" href="{% url 'courses:trainers' course.pk %}">{% translate "Assign trainers" %}</a>{% endif %}
 {% if can_upload_file %}<a class="btn btn-outline-primary" href="{% url 'courses:file_upload' course.pk %}">{% translate "Upload file" %}</a>{% endif %}

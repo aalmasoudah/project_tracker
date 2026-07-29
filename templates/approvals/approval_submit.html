@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Submit for approval" %}{% endblock %}
+{% block content %}
+<h1>{% translate "Submit for approval" %}</h1><p>{% translate "Submit completion to the Supervisor and then the Project Manager." %}</p><p><strong>{% translate "Target" %}:</strong> <bdi>{{ target.code }}</bdi></p>
+<form method="post">{% csrf_token %}<button class="btn btn-primary" type="submit">{% translate "Confirm submission" %}</button></form>
+{% endblock %}

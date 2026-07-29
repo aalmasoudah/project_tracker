@@ -142,6 +142,7 @@ class Project(models.Model):
         ACTIVE = "active", _("Active")
         ON_HOLD = "on_hold", _("On Hold")
         CANCELLED = "cancelled", _("Cancelled")
+        COMPLETED = "completed", _("Completed")
 
     class Priority(models.TextChoices):
         LOW = "low", _("Low")
@@ -269,7 +270,13 @@ class Project(models.Model):
             ),
             models.CheckConstraint(
                 condition=models.Q(
-                    status__in=("draft", "active", "on_hold", "cancelled")
+                    status__in=(
+                        "draft",
+                        "active",
+                        "on_hold",
+                        "cancelled",
+                        "completed",
+                    )
                 ),
                 name="projects_project_status_valid",
             ),

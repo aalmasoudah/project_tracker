@@ -7,6 +7,7 @@ COURSE_STATUS_TRANSITIONS: Final[dict[str, tuple[str, ...]]] = {
     "active": ("on_hold", "cancelled"),
     "on_hold": ("active", "cancelled"),
     "cancelled": ("draft",),
+    "completed": (),
 }
 
 MAX_COURSE_FILE_SIZE: Final = 25 * 1024 * 1024

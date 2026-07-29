@@ -1530,6 +1530,243 @@ msgstr "لا ينطبق"
 msgid "Progress"
 msgstr "التقدم"
 
+msgid "A completion approval is already pending."
+msgstr "يوجد طلب موافقة على الإكمال قيد الانتظار بالفعل."
+
+msgid "A milestone with this code already exists."
+msgstr "توجد مرحلة رئيسية بهذا الرمز بالفعل."
+
+msgid "A rejection reason is required."
+msgstr "سبب الرفض مطلوب."
+
+msgid "All"
+msgstr "الكل"
+
+msgid "Approval history"
+msgstr "سجل الموافقات"
+
+msgid "Approval recorded."
+msgstr "تم تسجيل الموافقة."
+
+msgid "Approval request"
+msgstr "طلب الموافقة"
+
+msgid "Approval steps"
+msgstr "خطوات الموافقة"
+
+msgid "Approvals"
+msgstr "الموافقات"
+
+msgid "Approve"
+msgstr "موافقة"
+
+msgid "Approved"
+msgstr "تمت الموافقة"
+
+msgid "Archived projects cannot own milestones."
+msgstr "لا يمكن للمشاريع المؤرشفة أن تتضمن مراحل رئيسية."
+
+msgid "Archived records cannot be submitted."
+msgstr "لا يمكن إرسال السجلات المؤرشفة."
+
+msgid "Assign a project Supervisor before submission."
+msgstr "عيّن مشرفًا للمشروع قبل الإرسال."
+
+msgid "Attempt"
+msgstr "المحاولة"
+
+msgid "Both approvers must be active."
+msgstr "يجب أن يكون كلا المعتمدين نشطين."
+
+msgid "Completion approval queue and immutable history."
+msgstr "قائمة انتظار موافقات الإكمال والسجل غير القابل للتغيير."
+
+msgid "Completion submission permission is required."
+msgstr "يلزم إذن إرسال الإكمال للموافقة."
+
+msgid "Completion submission requires 100 percent progress."
+msgstr "يتطلب إرسال الإكمال تقدمًا بنسبة 100 بالمئة."
+
+msgid "Completion submitted for approval."
+msgstr "تم إرسال الإكمال للموافقة."
+
+msgid "Confirm submission"
+msgstr "تأكيد الإرسال"
+
+msgid "Create milestone"
+msgstr "إنشاء مرحلة رئيسية"
+
+msgid "Edit milestone"
+msgstr "تعديل المرحلة الرئيسية"
+
+msgid "Milestone"
+msgstr "مرحلة رئيسية"
+
+msgid "Milestone archive permission is required."
+msgstr "يلزم إذن أرشفة المراحل الرئيسية."
+
+msgid "Milestone archived."
+msgstr "تمت أرشفة المرحلة الرئيسية."
+
+msgid "Milestone code and project cannot be changed."
+msgstr "لا يمكن تغيير رمز المرحلة الرئيسية أو مشروعها."
+
+msgid "Milestone created."
+msgstr "تم إنشاء المرحلة الرئيسية."
+
+msgid "Milestone creation permission is required."
+msgstr "يلزم إذن إنشاء المراحل الرئيسية."
+
+msgid "Milestone dates must be inside project dates."
+msgstr "يجب أن تكون تواريخ المرحلة الرئيسية ضمن تواريخ المشروع."
+
+msgid "Milestone restore permission is required."
+msgstr "يلزم إذن استعادة المراحل الرئيسية."
+
+msgid "Milestone restored."
+msgstr "تمت استعادة المرحلة الرئيسية."
+
+msgid "Milestone update permission is required."
+msgstr "يلزم إذن تحديث المراحل الرئيسية."
+
+msgid "Milestone updated."
+msgstr "تم تحديث المرحلة الرئيسية."
+
+msgid "Milestones"
+msgstr "المراحل الرئيسية"
+
+msgid "Milestones and approvals"
+msgstr "المراحل الرئيسية والموافقات"
+
+msgid "Milestones may be created only in managed projects."
+msgstr "لا يمكن إنشاء المراحل الرئيسية إلا في المشاريع المُدارة."
+
+msgid "New milestones must start as Draft."
+msgstr "يجب أن تبدأ المراحل الرئيسية الجديدة بحالة مسودة."
+
+msgid "No approval attempts."
+msgstr "لا توجد محاولات موافقة."
+
+msgid "No approval requests found."
+msgstr "لم يتم العثور على طلبات موافقة."
+
+msgid "No milestones found."
+msgstr "لم يتم العثور على مراحل رئيسية."
+
+msgid "Only an In Progress milestone can be submitted."
+msgstr "لا يمكن إرسال إلا مرحلة رئيسية قيد التنفيذ."
+
+msgid "Only the current pending step can be decided."
+msgstr "لا يمكن اتخاذ قرار إلا بشأن الخطوة الحالية قيد الانتظار."
+
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+msgid "Pending Project Manager"
+msgstr "بانتظار مدير المشروع"
+
+msgid "Pending Supervisor"
+msgstr "بانتظار المشرف"
+
+msgid "Pending approval"
+msgstr "بانتظار الموافقة"
+
+msgid "Pending approval prevents course archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة الدورة."
+
+msgid "Pending approval prevents course changes."
+msgstr "تمنع الموافقة المعلقة تعديل الدورة."
+
+msgid "Pending approval prevents milestone archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة المرحلة الرئيسية."
+
+msgid "Pending approval prevents milestone changes."
+msgstr "تمنع الموافقة المعلقة تعديل المرحلة الرئيسية."
+
+msgid "Pending approval prevents project archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة المشروع."
+
+msgid "Pending approval prevents project changes."
+msgstr "تمنع الموافقة المعلقة تعديل المشروع."
+
+msgid "Pending approval prevents task archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة المهمة."
+
+msgid "Pending approval prevents task changes."
+msgstr "تمنع الموافقة المعلقة تعديل المهمة."
+
+msgid "Project milestone delivery and completion status."
+msgstr "حالة إنجاز المراحل الرئيسية للمشروع وإكمالها."
+
+msgid "Reject"
+msgstr "رفض"
+
+msgid "Reject approval"
+msgstr "رفض الموافقة"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "Rejection reason"
+msgstr "سبب الرفض"
+
+msgid "Rejection recorded."
+msgstr "تم تسجيل الرفض."
+
+msgid "Search milestones"
+msgstr "البحث في المراحل الرئيسية"
+
+msgid "Submit completion to the Supervisor and then the Project Manager."
+msgstr "أرسل الإكمال إلى المشرف ثم إلى مدير المشروع."
+
+msgid "Submit for approval"
+msgstr "إرسال للموافقة"
+
+msgid "Submitted at"
+msgstr "وقت الإرسال"
+
+msgid "Submitted by"
+msgstr "مُرسل بواسطة"
+
+msgid "The completed task state changed during approval."
+msgstr "تغيرت حالة المهمة المكتملة أثناء الموافقة."
+
+msgid "The target project is not eligible for approval."
+msgstr "المشروع المستهدف غير مؤهل للموافقة."
+
+msgid "This approval request is already resolved."
+msgstr "تمت معالجة طلب الموافقة هذا بالفعل."
+
+msgid "This milestone status transition is not allowed."
+msgstr "الانتقال إلى حالة المرحلة الرئيسية هذه غير مسموح."
+
+msgid "This project cannot contain editable milestones."
+msgstr "لا يمكن لهذا المشروع أن يتضمن مراحل رئيسية قابلة للتعديل."
+
+msgid "Type"
+msgstr "النوع"
+
+msgid "Waiting"
+msgstr "منتظر"
+
+msgid "You are not the assigned approver for this step."
+msgstr "لست المعتمد المعيّن لهذه الخطوة."
+
+msgid "attempt"
+msgstr "المحاولة"
+
+msgid "outcome"
+msgstr "النتيجة"
+
+msgid "reason"
+msgstr "السبب"
+
+msgid "role"
+msgstr "الدور"
+
+msgid "sequence"
+msgstr "التسلسل"
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

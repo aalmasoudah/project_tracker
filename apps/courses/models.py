@@ -134,6 +134,7 @@ class Course(models.Model):
         ACTIVE = "active", _("Active")
         ON_HOLD = "on_hold", _("On Hold")
         CANCELLED = "cancelled", _("Cancelled")
+        COMPLETED = "completed", _("Completed")
 
     class DeliveryType(models.TextChoices):
         IN_PERSON = "in_person", _("In person")
@@ -210,7 +211,13 @@ class Course(models.Model):
             ),
             models.CheckConstraint(
                 condition=models.Q(
-                    status__in=("draft", "active", "on_hold", "cancelled")
+                    status__in=(
+                        "draft",
+                        "active",
+                        "on_hold",
+                        "cancelled",
+                        "completed",
+                    )
                 ),
                 name="courses_course_status_valid",
             ),

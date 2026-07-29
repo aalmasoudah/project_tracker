@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1 class="mb-4">{{ title }}</h1>
+<form method="post" class="card card-body" novalidate>{% csrf_token %}{% include "includes/form_errors.html" with form=form %}<div class="row g-3">{% for field in form %}<div class="{% if field.name == 'description' %}col-12{% else %}col-12 col-md-6{% endif %}"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div>{% endfor %}</div><div class="mt-4"><button class="btn btn-primary" type="submit">{% translate "Save" %}</button></div></form>
+{% endblock %}
