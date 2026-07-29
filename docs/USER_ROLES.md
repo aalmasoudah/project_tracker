@@ -169,10 +169,27 @@ The assigned Supervisor is the only reviewer. Rejection reopens the same
 external capability. Executive Managers and owning Project Managers are the
 only Phase 10 correctors.
 
+## Phase 11 Notification Matrix
+
+| Role | Own notifications/preferences | Delivery operations |
+| --- | --- | --- |
+| Technical Admin | Own notifications and preferences | View delivery status |
+| CEO | Own notifications and preferences | None |
+| Executive Manager | Own notifications and preferences | None |
+| Project Manager | Own notifications and preferences | None |
+| Supervisor | Own notifications and preferences | None |
+| Employee | Own notifications and preferences | None |
+| Contractor | Own notifications and preferences | None |
+
+Notification ownership never grants target access. The linked domain view
+rechecks its existing object-level permission. Technical Admin delivery access
+shows safe operational metadata and grants no business-record access.
+
 ## Object-Level Access Questions
 
-1. [Approved through Phase 8] Use the account/department, project, course,
-   task, milestone, approval, trainee, import, and progress scopes above.
+1. [Approved through Phase 11] Use the account/department, project, course,
+   task, milestone, approval, trainee, import, progress, attendance, and
+   notification scopes above.
    Later domains remain open.
 2. [Approved for Phase 3] Project Managers cannot access projects they do not
    manage unless a later phase grants a separate assignment.
@@ -200,5 +217,6 @@ Status: The role model and Phase 2 permission slice were approved on
 decision 0010. The Phase 6 progress-visibility slice was approved on
 2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
 on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
-on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014 and
-Phase 10 in decision 0015. Later-domain matrix entries remain open.
+on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014, Phase
+10 in decision 0015, and Phase 11 in decision 0016. Later-domain matrix
+entries remain open.

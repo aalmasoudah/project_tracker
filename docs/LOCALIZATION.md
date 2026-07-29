@@ -3,7 +3,7 @@
 ## Status and Objective
 
 Status: Approved scope requirement. User-visible localization slices are
-approved through Phase 10; later output policies remain open.
+approved through Phase 11; later output policies remain open.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -115,12 +115,20 @@ Attendance `تصحيح الحضور`, Correction `تصحيح`, and Correction Re
 Gregorian dates, and Western digits. Arabic reasons and names preserve their
 original text.
 
+Phase 11 terminology includes Notifications `الإشعارات`, Notification
+Preferences `تفضيلات الإشعارات`, Task Assignments `إسناد المهام`, Approvals
+`الموافقات`, Deadlines and Overdue `المواعيد النهائية والمهام المتأخرة`, and
+Mentions `الإشارات`. Stored notification content is complete in Arabic and
+English. Email uses the recipient's persisted language with RTL Arabic or LTR
+English, while task reminder dates use Asia/Riyadh, Gregorian dates, and
+Western digits.
+
 The following still require explicit owner approval in their later phases:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 10 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 10
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 11 screens.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 11
   screens.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account and Phase 8

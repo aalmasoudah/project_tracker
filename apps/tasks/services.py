@@ -151,14 +151,19 @@ def create_task(
     _validate_task(task)
     users = _validate_assignees(task, assignees, primary_owner)
     task.save()
-    for user in users:
+    assignments = [
         TaskAssignment.objects.create(
             task=task,
             user=user,
             is_primary=user.pk == primary_owner.pk,
             assigned_by=actor,
         )
+        for user in users
+    ]
     _task_event(actor=actor, action=actions.TASK_CREATED, task=task, request=request)
+    from apps.notifications.events import notify_task_assignments
+
+    notify_task_assignments(assignments)
     return task
 
 
@@ -277,17 +282,20 @@ def replace_task_assignments(
     now = timezone.now()
     active.exclude(user_id__in=requested).update(removed_by=actor, removed_at=now)
     active.filter(user_id__in=requested).update(is_primary=False)
+    new_assignments: list[TaskAssignment] = []
     for user in users:
         assignment = active.filter(user=user).first()
         if assignment:
             assignment.is_primary = user.pk == primary_owner.pk
             assignment.save(update_fields=("is_primary",))
         else:
-            TaskAssignment.objects.create(
-                task=task,
-                user=user,
-                is_primary=user.pk == primary_owner.pk,
-                assigned_by=actor,
+            new_assignments.append(
+                TaskAssignment.objects.create(
+                    task=task,
+                    user=user,
+                    is_primary=user.pk == primary_owner.pk,
+                    assigned_by=actor,
+                )
             )
     _task_event(
         actor=actor,
@@ -295,6 +303,9 @@ def replace_task_assignments(
         task=task,
         request=request,
     )
+    from apps.notifications.events import notify_task_assignments
+
+    notify_task_assignments(new_assignments)
 
 
 @transaction.atomic
@@ -366,14 +377,19 @@ def restore_task(
     task.updated_by = actor
     _validate_task(task)
     task.save()
-    for user in users:
+    assignments = [
         TaskAssignment.objects.create(
             task=task,
             user=user,
             is_primary=user.pk == primary.pk,
             assigned_by=actor,
         )
+        for user in users
+    ]
     _task_event(actor=actor, action=actions.TASK_RESTORED, task=task, request=request)
+    from apps.notifications.events import notify_task_assignments
+
+    notify_task_assignments(assignments)
     return task
 
 
@@ -402,6 +418,9 @@ def add_task_comment(
         metadata={"comment_id": comment.pk},
         request=request,
     )
+    from apps.notifications.events import notify_task_mentions
+
+    notify_task_mentions(comment)
     return comment
 
 

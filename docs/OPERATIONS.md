@@ -117,6 +117,25 @@ privileged users must:
 
 These commands are added only in the phase that owns their behavior.
 
+## Notification Worker Runbook
+
+- Run one or more Celery workers with `celery -A config worker`; Windows local
+  development uses `--pool=solo`.
+- Run exactly one Celery Beat scheduler with `celery -A config beat`.
+- Monitor pending/retry/failed delivery records and Redis queue depth. Only
+  Technical Admin has application access to delivery status.
+- A dispatcher retries due pending records every minute and recovers
+  processing records left stale for 15 minutes.
+- Delivery is attempted at most four times with bounded backoff. Stored errors
+  contain only an exception class, never provider responses, addresses, or
+  message content.
+- After an outage, restore Redis/worker availability and let the dispatcher
+  resume due records. Do not reset sent records or manually replay business
+  events.
+- Development uses console email and tests use in-memory email. Production
+  requires the HTTPS application origin, Redis URL, authenticated SMTP
+  credentials, and an approved sender address.
+
 ## Required Runbooks Before Launch
 
 - Deploy and rollback.

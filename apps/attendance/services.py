@@ -431,6 +431,9 @@ def submit_attendance(
         },
         request=request,
     )
+    from apps.notifications.events import notify_attendance_review
+
+    notify_attendance_review(submission)
     return submission
 
 
@@ -503,6 +506,13 @@ def review_attendance(
         session=submission.session,
         metadata={"submission_id": submission.pk, "attempt": attempt},
         request=request,
+    )
+    from apps.notifications.events import notify_attendance_updated
+
+    notify_attendance_updated(
+        submission,
+        event=decision,
+        actor=actor,
     )
     return submission
 

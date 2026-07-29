@@ -107,6 +107,15 @@ must be approved before their implementation phase.
   Project Manager may correct managed-course attendance. Corrections require
   a reason and immutable before/after evidence, remain approved, and do not
   return to review.
+- Phase 11 notification categories are task assignment, approval,
+  deadline/overdue, and mention. Approval is mandatory in-app; users may
+  configure the other in-app channels and every email channel.
+- Task reminders run at 08:00 Asia/Riyadh on the day before the due date and
+  daily while overdue. Only active assignees receive them; completed,
+  cancelled, archived, and cancelled-owner-context tasks are excluded.
+- Notification content is fixed, generic, bilingual, and permission-safe.
+  Notification, preference, and delivery records are protected from normal
+  hard deletion. Celery email jobs are bounded, deduplicated, and retry-safe.
 
 ## Decisions Required Before Planning
 
@@ -135,20 +144,21 @@ The project owner must approve answers to these questions:
 12. [Approved for Phase 9] Present, Absent, Late, and Excused.
 13. [Approved for Phase 9] Expiry is rechecked at submission and commits
     nothing; an authorized actor must issue a new link.
-14. [Approved for Phase 3 date-only project fields, Phase 4 Riyadh course
-    schedules, and Phase 5 date-only task fields] Which dates and times are
-    stored, displayed, and considered overdue? Task overdue rules remain open.
+14. [Approved through Phase 11] Project/task date fields, Riyadh course
+    schedules, and task reminder/overdue timing are defined in decisions 0008,
+    0009, 0010, and 0016.
 15. [Approved for Phase 3 project budgets] Which currencies are supported,
     and how are monetary values rounded? Later monetary outputs remain open.
-16. [Approved through Phase 10] Accounts, departments, audit events, projects,
+16. [Approved through Phase 11] Accounts, departments, audit events, projects,
     clients, categories, courses, trainers, tasks, tags, comments, and files
     are not hard-deleted; memberships and assignment/tag relationships are
     end-dated. Trainees, enrollments, import batches/rows, and approval history
     are also protected. Attendance sessions, locked rosters, links,
-    submissions, entries, evidence, reviews, and corrections are protected.
-    Expired throttle counters may be deleted. Later-domain exceptions remain
-    open.
-17. Which notification categories may users disable?
+    submissions, entries, evidence, reviews, corrections, notifications,
+    preferences, and delivery attempts are protected. Expired throttle
+    counters may be deleted. Later-domain exceptions remain open.
+17. [Approved for Phase 11] Optional category channels and mandatory approval
+    in-app behavior are defined in decision 0016.
 18. What retention periods apply to files, audit records, and archived data?
 19. [Approved] Arabic is the default language, and each internal user may
     persist Arabic or English.
@@ -171,5 +181,6 @@ approved on 2026-07-26 in decision 0008. Phase 4 course portions were approved
 on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
 2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
-in decision 0013. Phase 9 was approved in decision 0014 and Phase 10 in
-decision 0015. Remaining decisions still block their listed phases.
+in decision 0013. Phase 9 was approved in decision 0014, Phase 10 in decision
+0015, and Phase 11 in decision 0016. Remaining decisions still block their
+listed phases.

@@ -2331,6 +2331,150 @@ msgstr "مراجعة"
 msgid "Trainee"
 msgstr "متدرب"
 
+msgid "An active account is required."
+msgstr "يلزم حساب نشط."
+
+msgid "Approval email notifications"
+msgstr "إشعارات الموافقات عبر البريد الإلكتروني"
+
+msgid "Approval in-app notifications"
+msgstr "إشعارات الموافقات داخل النظام"
+
+msgid "Approval in-app notifications are mandatory."
+msgstr "إشعارات الموافقات داخل النظام إلزامية."
+
+msgid "Attempts"
+msgstr "المحاولات"
+
+msgid ""
+"Choose which optional categories appear in the application or arrive by "
+"email."
+msgstr ""
+"اختر الفئات الاختيارية التي تظهر داخل النظام أو تصلك عبر البريد الإلكتروني."
+
+msgid "Deadline and overdue email notifications"
+msgstr "إشعارات المواعيد النهائية والتأخير عبر البريد الإلكتروني"
+
+msgid "Deadline and overdue in-app notifications"
+msgstr "إشعارات المواعيد النهائية والتأخير داخل النظام"
+
+msgid "Deadlines and overdue"
+msgstr "المواعيد النهائية والمهام المتأخرة"
+
+msgid "Email notifications"
+msgstr "إشعارات البريد الإلكتروني"
+
+msgid "Failed"
+msgstr "فشل"
+
+msgid "In-app notifications"
+msgstr "الإشعارات داخل النظام"
+
+msgid "Mark all as read"
+msgstr "تحديد الكل كمقروء"
+
+msgid "Mark as read"
+msgstr "تحديد كمقروء"
+
+msgid "Mention email notifications"
+msgstr "إشعارات الإشارات عبر البريد الإلكتروني"
+
+msgid "Mention in-app notifications"
+msgstr "إشعارات الإشارات داخل النظام"
+
+msgid "Mentions"
+msgstr "الإشارات"
+
+msgid "No delivery records found."
+msgstr "لا توجد سجلات تسليم."
+
+msgid "No notifications found."
+msgstr "لا توجد إشعارات."
+
+msgid "Notification delivery status"
+msgstr "حالة تسليم الإشعارات"
+
+msgid "Notification links must stay inside the application."
+msgstr "يجب أن تبقى روابط الإشعارات داخل النظام."
+
+msgid "Notification preferences"
+msgstr "تفضيلات الإشعارات"
+
+msgid "Notification preferences saved."
+msgstr "تم حفظ تفضيلات الإشعارات."
+
+msgid "Notifications"
+msgstr "الإشعارات"
+
+msgid "Open"
+msgstr "فتح"
+
+msgid "Preferences"
+msgstr "التفضيلات"
+
+msgid "Processing"
+msgstr "قيد المعالجة"
+
+msgid "Recipient"
+msgstr "المستلم"
+
+msgid "Retry scheduled"
+msgstr "تمت جدولة إعادة المحاولة"
+
+msgid "Save preferences"
+msgstr "حفظ التفضيلات"
+
+msgid "Select a valid notification message."
+msgstr "اختر رسالة إشعار صالحة."
+
+msgid "Select valid notification categories."
+msgstr "اختر فئات إشعارات صالحة."
+
+msgid "Sent"
+msgstr "تم الإرسال"
+
+msgid "Task assignment email notifications"
+msgstr "إشعارات إسناد المهام عبر البريد الإلكتروني"
+
+msgid "Task assignment in-app notifications"
+msgstr "إشعارات إسناد المهام داخل النظام"
+
+msgid "Task assignments"
+msgstr "إسناد المهام"
+
+msgid "This notification is not available."
+msgstr "هذا الإشعار غير متاح."
+
+msgid "Unread"
+msgstr "غير المقروءة"
+
+msgid "Updated at"
+msgstr "آخر تحديث"
+
+msgid "read"
+msgstr "مقروء"
+
+msgid "Delivery pagination"
+msgstr "ترقيم صفحات التسليم"
+
+msgid "Delivery status"
+msgstr "حالة التسليم"
+
+msgid "Notification pagination"
+msgstr "ترقيم صفحات الإشعارات"
+
+msgid "Marked %(count)s notification as read."
+msgid_plural "Marked %(count)s notifications as read."
+msgstr[0] "لم يتم تحديد أي إشعار كمقروء."
+msgstr[1] "تم تحديد إشعار واحد كمقروء."
+msgstr[2] "تم تحديد إشعارين كمقروءين."
+msgstr[3] "تم تحديد %(count)s إشعارات كمقروءة."
+msgstr[4] "تم تحديد %(count)s إشعارًا كمقروء."
+msgstr[5] "تم تحديد %(count)s إشعار كمقروء."
+
+#~ msgid "Marked %(count)s notification(s) as read."
+#~ msgstr "تم تحديد %(count)s من الإشعارات كمقروءة."
+
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"
 

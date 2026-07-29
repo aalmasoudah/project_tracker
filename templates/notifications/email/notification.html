@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="{{ language_code }}" dir="{{ direction }}">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; line-height: 1.6; text-align: {% if direction == 'rtl' %}right{% else %}left{% endif %};">
+    <h1 style="font-size: 20px;">{{ title }}</h1>
+    <p>{{ body }}</p>
+    <p><a href="{{ target_url }}">{% if language_code == "ar" %}فتح في النظام{% else %}Open in the system{% endif %}</a></p>
+  </body>
+</html>

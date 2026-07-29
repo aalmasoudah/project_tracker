@@ -132,9 +132,16 @@ the same service only in their approved later phases.
 
 ## Notifications
 
-Business events create in-app notifications. Approved categories may also
-send email through a background job. Jobs are idempotent and retry-safe.
-Category rules, timing, recipients, and escalation require approval.
+Task assignment, approval, deadline/overdue, and mention events create
+permission-safe in-app notifications. Approval alerts are mandatory in-app;
+users configure the other in-app channels and all email channels. Email is
+queued after the domain transaction commits.
+
+At 08:00 Asia/Riyadh, scheduled work creates one active-assignee reminder for
+tasks due tomorrow and one reminder for each overdue day. Completed,
+cancelled, archived, and cancelled-owner-context tasks are excluded. Stable
+recipient/event keys deduplicate notification creation, and bounded Celery
+jobs record retry-safe delivery state. Phase 11 has no escalation chain.
 
 ## Archive and Recovery
 

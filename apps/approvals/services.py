@@ -358,24 +358,23 @@ def submit_completion(
         submitted_by=actor,
         **_target_kwargs(target),
     )
-    ApprovalStep.objects.bulk_create(
-        (
-            ApprovalStep(
-                request=approval_request,
-                sequence=1,
-                role=ApprovalStep.Role.SUPERVISOR,
-                approver=supervisor,
-                status=ApprovalStep.Status.PENDING,
-            ),
-            ApprovalStep(
-                request=approval_request,
-                sequence=2,
-                role=ApprovalStep.Role.PROJECT_MANAGER,
-                approver=project.manager,
-                status=ApprovalStep.Status.WAITING,
-            ),
-        )
+    steps = (
+        ApprovalStep(
+            request=approval_request,
+            sequence=1,
+            role=ApprovalStep.Role.SUPERVISOR,
+            approver=supervisor,
+            status=ApprovalStep.Status.PENDING,
+        ),
+        ApprovalStep(
+            request=approval_request,
+            sequence=2,
+            role=ApprovalStep.Role.PROJECT_MANAGER,
+            approver=project.manager,
+            status=ApprovalStep.Status.WAITING,
+        ),
     )
+    ApprovalStep.objects.bulk_create(steps)
     if isinstance(target, Milestone):
         target.status = Milestone.Status.PENDING_APPROVAL
         target.updated_by = actor
@@ -393,6 +392,9 @@ def submit_completion(
         },
         request=request,
     )
+    from apps.notifications.events import notify_approval_action
+
+    notify_approval_action(approval_request, steps[0])
     return approval_request
 
 
@@ -488,11 +490,21 @@ def approve_request(
         next_step.save(update_fields=("status",))
         approval_request.status = ApprovalRequest.Status.PENDING_MANAGER
         approval_request.save(update_fields=("status",))
+        from apps.notifications.events import notify_approval_action
+
+        notify_approval_action(approval_request, next_step)
     else:
         _complete_target(target, actor)
         approval_request.status = ApprovalRequest.Status.APPROVED
         approval_request.resolved_at = now
         approval_request.save(update_fields=("status", "resolved_at"))
+        from apps.notifications.events import notify_approval_updated
+
+        notify_approval_updated(
+            approval_request,
+            event="approved",
+            actor=actor,
+        )
     _record_event(
         actor=actor,
         action=actions.APPROVAL_APPROVED,
@@ -544,5 +556,12 @@ def reject_request(
         target_label=str(approval_request),
         metadata={"sequence": step.sequence, "attempt": approval_request.attempt},
         request=request,
+    )
+    from apps.notifications.events import notify_approval_updated
+
+    notify_approval_updated(
+        approval_request,
+        event="rejected",
+        actor=actor,
     )
     return approval_request

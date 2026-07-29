@@ -40,7 +40,7 @@ project owner resolves the open decisions in the core documents.
 | 8 | `PHASE_08_TRAINEES_IMPORTS.md` | Completed and verified on 2026-07-29 |
 | 9 | `PHASE_09_SESSIONS_TRAINER_LINKS.md` | Completed and verified on 2026-07-29 |
 | 10 | `PHASE_10_ATTENDANCE_APPROVAL_CORRECTIONS.md` | Completed and verified on 2026-07-29 |
-| 11 | `PHASE_11_NOTIFICATIONS_BACKGROUND_JOBS.md` | Draft; blocked by notification decisions |
+| 11 | `PHASE_11_NOTIFICATIONS_BACKGROUND_JOBS.md` | Completed and verified on 2026-07-29 |
 | 12 | `PHASE_12_DASHBOARDS_SEARCH_VIEWS.md` | Draft; depends on approved domain permissions |
 | 13 | `PHASE_13_REPORTS_EXPORTS.md` | Draft; blocked by report/privacy decisions |
 | 14 | `PHASE_14_ADMIN_AUDIT_OPERATIONS.md` | Draft; blocked by retention/operations decisions |
