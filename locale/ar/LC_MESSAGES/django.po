@@ -2632,6 +2632,108 @@ msgstr "عرض الدور"
 msgid "results"
 msgstr "نتائج"
 
+msgid "All permitted projects"
+msgstr "جميع المشاريع المصرح بها"
+
+msgid "Attendance reports contain aggregate totals only."
+msgstr "تتضمن تقارير الحضور إجماليات مجمعة فقط."
+
+msgid "Course attendance"
+msgstr "حضور الدورة"
+
+msgid "Course attendance summary"
+msgstr "ملخص حضور الدورة"
+
+msgid "Create report"
+msgstr "إنشاء تقرير"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Dates include Gregorian and Hijri values using Western digits."
+msgstr "تتضمن التواريخ القيم الميلادية والهجرية بالأرقام الغربية."
+
+msgid "Days overdue"
+msgstr "أيام التأخير"
+
+msgid "Excel"
+msgstr "إكسل"
+
+msgid "Export safeguards"
+msgstr "ضوابط التصدير"
+
+msgid "Format"
+msgstr "التنسيق"
+
+msgid "Generate a permission-scoped PDF or Excel report in Arabic or English."
+msgstr "أنشئ تقرير PDF أو إكسل ضمن نطاق صلاحياتك بالعربية أو الإنجليزية."
+
+msgid "Generate and download"
+msgstr "إنشاء وتنزيل"
+
+msgid "Generated files are not retained by the application."
+msgstr "لا يحتفظ النظام بالملفات المُنشأة."
+
+msgid "Maximum 5,000 rows per report."
+msgstr "الحد الأقصى 5,000 صف لكل تقرير."
+
+msgid "Overdue task report"
+msgstr "تقرير المهام المتأخرة"
+
+msgid "Overdue tasks"
+msgstr "المهام المتأخرة"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "Project Insight"
+msgstr "بروجكت إنسايت"
+
+msgid "Project attendance"
+msgstr "حضور المشروع"
+
+msgid "Project attendance summary"
+msgstr "ملخص حضور المشروع"
+
+msgid "Project progress report"
+msgstr "تقرير تقدم المشاريع"
+
+msgid "Report"
+msgstr "التقرير"
+
+msgid "Report language"
+msgstr "لغة التقرير"
+
+msgid "Reports"
+msgstr "التقارير"
+
+msgid "Reports and exports"
+msgstr "التقارير والتصدير"
+
+msgid "Select a course"
+msgstr "اختر دورة"
+
+msgid "Select a course."
+msgstr "اختر دورة."
+
+msgid "Select a project."
+msgstr "اختر مشروعًا."
+
+msgid "Select a report you are allowed to export."
+msgstr "اختر تقريرًا مسموحًا لك بتصديره."
+
+msgid "The report exceeds the maximum of %(rows)s rows."
+msgstr "يتجاوز التقرير الحد الأقصى البالغ %(rows)s صفًا."
+
+msgid "This format is not available for the selected report."
+msgstr "هذا التنسيق غير متاح للتقرير المحدد."
+
+msgid "Total"
+msgstr "الإجمالي"
+
+msgid "Unavailable"
+msgstr "غير متاح"
+
 #~ msgid "Home"
 #~ msgstr "الرئيسية"
 

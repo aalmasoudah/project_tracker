@@ -1,7 +1,6 @@
 # Phase 13: Reports and Exports
 
-Status: Draft; blocked by report list, authorization, branding, localization,
-date, and privacy decisions.
+Status: Approved, implemented, and verified on 2026-07-30.
 
 ## 1. Goal
 
@@ -11,18 +10,20 @@ Arabic RTL/English LTR rendering.
 
 ## 2. Included Features
 
-- Approved subset of project progress, overdue-task, individual attendance,
-  course attendance, and project attendance summary reports.
-- PDF and Excel formats exactly as approved per report.
-- Fixed approved branding and metadata.
+- Project-progress reports in PDF and Excel.
+- Overdue-task reports in Excel.
+- Course- and project-attendance summaries in PDF and Excel.
+- Fixed Project Insight branding derived from the approved supplied logo.
 - Date-range/filter validation and empty/large dataset behavior.
 - Embedded Arabic-capable fonts, correct shaping/bidi/RTL layout, localized
   headers/values, and safe bilingual content.
+- Gregorian and Umm al-Qura Hijri dates with Western digits.
 
 ## 3. Excluded Features
 
-- Unapproved ad hoc report builder, scheduled delivery, public links, or
-  dashboards.
+- Individual attendance or personal-data exports.
+- Unapproved ad hoc report builder, scheduled delivery, public links,
+  dashboards, or report history.
 - Duplicate progress formulas or report-only business logic.
 - Real data in tests/staging.
 
@@ -37,20 +38,23 @@ Arabic RTL/English LTR rendering.
 ## 5. Models Involved
 
 - Existing domain models through selectors/progress services.
-- Optional report request/audit metadata if approved; generated output is not
-  a second system of record.
+- An unmanaged permission-owning model; generated outputs and report requests
+  are not retained as a second system of record.
 
 ## 6. Pages Involved
 
 - Approved report index, filter form, generate/download response, and safe
   error/empty states.
-- Operational generation history only if approved.
+- No operational generation history is retained.
 
 ## 7. Permission Requirements
 
-Each report has explicit view/export permissions and actor-scoped selectors.
-Personal attendance, budgets, files, and cross-department/project data require
-separate approval. Possessing a generated URL must not bypass authorization.
+Each report has an explicit export permission and actor-scoped selector.
+CEO and Executive Manager may export all records already visible to them;
+Project Manager may export managed records; Supervisor may export only
+supervised course/project attendance summaries. Employee, Contractor, and
+Technical Admin receive no report export permission. No persistent generated
+URL exists.
 
 ## 8. Validation Rules
 
@@ -60,21 +64,22 @@ separate approval. Possessing a generated URL must not bypass authorization.
 - PDF fonts are embedded/licensed and Arabic shaping/bidi is verified.
 - Numbers/dates/currencies use approved locale policy without changing source
   numeric values.
-- Large generation behavior is approved before introducing background jobs.
+- Synchronous generation is limited to 5,000 rows and a 366-day filter range.
+- Spreadsheet formula prefixes are neutralized.
 
 ## 9. Business Rules
 
 - Reports use centralized progress calculations.
 - Only approved reports/fields/filters exist.
-- Resolve report authorization, `BR-03` through `BR-07`, `BR-14`, `BR-15`,
-  `RBAC-06`/`RBAC-07`, branding, Arabic terminology, calendar/digits, and
-  retention.
+- Attendance reports expose approved aggregate counts only.
+- Dates contain Gregorian and Umm al-Qura Hijri values with Western digits.
+- Output is generated in memory and returned with private no-store headers.
 
 ## 10. Expected Migrations
 
-- None for synchronous stateless generation.
-- Report request/audit/output metadata migrations only if approved, with
-  retention/indexes documented.
+- `reports.0001_initial` adds permission state only through an unmanaged model.
+- `reports.0002_seed_phase13_permissions` seeds the approved role matrix.
+- No report request, output, history, or retention table exists.
 
 ## 11. Unit Tests
 
@@ -123,14 +128,13 @@ separate approval. Possessing a generated URL must not bypass authorization.
 ## 17. Dependencies
 
 - Completed progress, attendance, dashboard/search selectors, and permissions.
-- Approved report catalog, fields, formats, branding assets, date/number/
-  currency policy, export rights, size/background behavior, and retention.
-- Approved Arabic terminology and font/branding review.
+- Approved report catalog, fields, formats, branding assets, date/number
+  policy, export rights, synchronous size bounds, and no-retention policy.
+- Approved Arabic terminology and font/branding review are complete.
 
 ## 18. Rollback Considerations
 
-- Generated files are disposable outputs unless retention is approved; do not
-  delete retained audit metadata without policy.
+- Generated files are disposable outputs and no report output is retained.
 - Template rollback must remain compatible with source selectors.
 - Remove temporary output safely and never leave report data in public/local
   production paths.

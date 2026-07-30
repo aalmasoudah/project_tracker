@@ -6,8 +6,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="data:,">
-    <title>{% block title %}{% translate "Company Project Tracker" %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/project-insight-mark.png' %}">
+    <title>{% block title %}{% translate "Project Insight" %}{% endblock %}</title>
     {% if LANGUAGE_BIDI %}
       <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.rtl.min.css' %}">
     {% else %}
@@ -22,13 +22,20 @@
       {% translate "Skip to main content" %}
     </a>
 
-    <header class="border-bottom bg-body-tertiary sticky-top">
+    <header class="app-header border-bottom sticky-top">
       <nav
         class="navbar navbar-expand-lg container"
         aria-label="{% translate 'Primary navigation' %}"
       >
-        <a class="navbar-brand fw-semibold" href="{% url 'home' %}">
-          {% translate "Company Project Tracker" %}
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="{% url 'home' %}">
+          <img
+            alt=""
+            class="navbar-brand-mark"
+            height="34"
+            src="{% static 'img/project-insight-mark.png' %}"
+            width="34"
+          >
+          <span>{% translate "Project Insight" %}</span>
         </a>
 
         <button
@@ -116,6 +123,11 @@
               {% if perms.attendance.review_attendance %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'attendance:review-queue' %}">{% translate "Attendance reviews" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.reports.export_project_progress or perms.reports.export_overdue_tasks or perms.reports.export_course_attendance or perms.reports.export_project_attendance %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'reports:index' %}">{% translate "Reports" %}</a>
                 </li>
               {% endif %}
               <li class="nav-item">

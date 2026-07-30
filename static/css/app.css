@@ -13,8 +13,19 @@
 }
 
 :root {
-  --insight-focus: #0a58ca;
-  --insight-surface: #f7f9fc;
+  --insight-primary: #0a400c;
+  --insight-primary-dark: #063008;
+  --insight-sage: #819067;
+  --insight-stone: #b1ab86;
+  --insight-stone-soft: #f3f1e8;
+  --insight-focus: #819067;
+  --insight-surface: #f7f8f3;
+  --bs-primary: #0a400c;
+  --bs-primary-rgb: 10, 64, 12;
+  --bs-link-color: #0a400c;
+  --bs-link-color-rgb: 10, 64, 12;
+  --bs-link-hover-color: #063008;
+  --bs-link-hover-color-rgb: 6, 48, 8;
 }
 
 html {
@@ -87,6 +98,65 @@ bdi {
 
 code bdi {
   unicode-bidi: isolate;
+}
+
+.app-header {
+  background: rgba(255, 255, 255, 0.97);
+  border-color: rgba(129, 144, 103, 0.45) !important;
+  box-shadow: 0 0.125rem 0.5rem rgba(10, 64, 12, 0.06);
+}
+
+.navbar-brand {
+  color: var(--insight-primary);
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+  color: var(--insight-primary-dark);
+}
+
+.navbar-brand-mark {
+  object-fit: contain;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--insight-primary);
+  --bs-btn-border-color: var(--insight-primary);
+  --bs-btn-hover-bg: var(--insight-primary-dark);
+  --bs-btn-hover-border-color: var(--insight-primary-dark);
+  --bs-btn-active-bg: var(--insight-primary-dark);
+  --bs-btn-active-border-color: var(--insight-primary-dark);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--insight-primary);
+  --bs-btn-border-color: var(--insight-primary);
+  --bs-btn-hover-bg: var(--insight-primary);
+  --bs-btn-hover-border-color: var(--insight-primary);
+  --bs-btn-active-bg: var(--insight-primary-dark);
+  --bs-btn-active-border-color: var(--insight-primary-dark);
+}
+
+.badge.text-bg-primary {
+  background-color: var(--insight-primary) !important;
+}
+
+.report-intro {
+  background:
+    linear-gradient(135deg, rgba(10, 64, 12, 0.97), rgba(129, 144, 103, 0.94));
+  color: #fff;
+}
+
+.report-logo {
+  background: #fff;
+  border-radius: 0.5rem;
+  max-width: 13rem;
+  padding: 0.4rem 0.7rem;
+}
+
+.report-policy-note {
+  background: var(--insight-stone-soft);
+  border-inline-start: 0.25rem solid var(--insight-stone);
 }
 
 .dashboard-card {

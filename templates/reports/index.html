@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Reports" %}{% endblock %}
+
+{% block content %}
+  <section class="report-intro rounded-3 p-4 p-lg-5 mb-4">
+    <div class="row align-items-center g-4">
+      <div class="col-lg">
+        <h1 class="h2 mb-2">{% translate "Reports and exports" %}</h1>
+        <p class="mb-0">
+          {% translate "Generate a permission-scoped PDF or Excel report in Arabic or English." %}
+        </p>
+      </div>
+      <div class="col-lg-auto">
+        <img
+          alt="{% translate 'Project Insight' %}"
+          class="report-logo img-fluid"
+          src="{% static 'img/project-insight-logo.png' %}"
+        >
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h2 class="h4">{% translate "Create report" %}</h2>
+          <form action="{% url 'reports:generate' %}" method="post" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="row g-3">
+              {% for field in form %}
+                <div class="{% if field.name == 'date_from' or field.name == 'date_to' %}col-md-6{% else %}col-12{% endif %}">
+                  <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                  {% endif %}
+                  {% for error in field.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+            <button class="btn btn-primary mt-4" type="submit">
+              {% translate "Generate and download" %}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <aside class="col-lg-4">
+      <div class="report-policy-note rounded-3 p-4">
+        <h2 class="h5">{% translate "Export safeguards" %}</h2>
+        <ul class="mb-0">
+          <li>{% translate "Maximum 5,000 rows per report." %}</li>
+          <li>{% translate "Dates include Gregorian and Hijri values using Western digits." %}</li>
+          <li>{% translate "Attendance reports contain aggregate totals only." %}</li>
+          <li>{% translate "Generated files are not retained by the application." %}</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+{% endblock %}
