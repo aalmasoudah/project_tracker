@@ -42,7 +42,8 @@ def test_audit_filter_choices_are_permission_scoped_and_bounded() -> None:
 
     assert not form.is_valid()
     scope_field = cast(forms.ChoiceField, form.fields["scope"])
-    assert "projects" not in {code for code, _label in scope_field.choices}
+    scope_choices = cast("list[tuple[str, str]]", scope_field.choices)
+    assert "projects" not in {code for code, _label in scope_choices}
 
 
 @pytest.mark.unit

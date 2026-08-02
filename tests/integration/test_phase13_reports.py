@@ -237,7 +237,7 @@ def test_every_approved_report_format_generates_in_both_languages() -> None:
     manager, _supervisor, course, _trainer = setup_course()
     client = Client()
     client.force_login(manager)
-    approved = (
+    approved: tuple[tuple[str, str, dict[str, int]], ...] = (
         ("project_progress", "pdf", {}),
         ("project_progress", "xlsx", {}),
         ("overdue_tasks", "xlsx", {}),
