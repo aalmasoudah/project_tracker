@@ -44,7 +44,7 @@ msgid ""
 "A department can be archived only after all active users move or are "
 "deactivated."
 msgstr ""
-"لا يمكن أرشفة القسم حتى يُنقل جميع المستخدمين النشطين أو تُعطّل حساباتهم."
+"لا يمكن أرشفة الإدارة إلا بعد نقل جميع المستخدمين النشطين أو إلغاء تنشيطهم."
 
 msgid "A department is required for this role."
 msgstr "القسم مطلوب لهذا الدور."
@@ -105,9 +105,6 @@ msgstr "سيتم إنهاء جميع الجلسات النشطة."
 
 msgid "An account with this email already exists."
 msgstr "يوجد حساب بهذا البريد الإلكتروني مسبقًا."
-
-msgid "Append-only Phase 2 account and department events."
-msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."
 
 msgid "Approved profile"
 msgstr "الملف المعتمد"
@@ -277,9 +274,6 @@ msgstr "لم يتم العثور على حسابات."
 msgid "No assigned role"
 msgstr "لا يوجد دور معيّن"
 
-msgid "No audit events found."
-msgstr "لم يتم العثور على أحداث تدقيق."
-
 msgid "No departments found."
 msgstr "لم يتم العثور على أقسام."
 
@@ -364,9 +358,6 @@ msgstr "البحث في الأقسام"
 msgid "Secure bilingual account and department administration."
 msgstr "إدارة آمنة وثنائية اللغة للحسابات والأقسام."
 
-msgid "Security audit"
-msgstr "سجل التدقيق الأمني"
-
 msgid "Set a temporary password for"
 msgstr "تعيين كلمة مرور مؤقتة لـ"
 
@@ -426,7 +417,8 @@ msgid ""
 "Unable to sign in with the provided credentials. Try again later or contact "
 "an administrator."
 msgstr ""
-"تعذّر تسجيل الدخول بالبيانات المقدمة. حاول لاحقًا أو تواصل مع المسؤول."
+"تعذّر تسجيل الدخول بالبيانات المقدمة. حاول مرة أخرى لاحقًا أو تواصل مع "
+"مسؤول."
 
 msgid "Unknown role"
 msgstr "دور غير معروف"
@@ -435,15 +427,14 @@ msgid ""
 "Use 2-20 uppercase English letters, numbers, underscores, or hyphens, "
 "starting with a letter."
 msgstr ""
-"استخدم من حرفين إلى 20 من الأحرف الإنجليزية الكبيرة أو الأرقام أو الشرطة "
-"السفلية أو الواصلة، على أن يبدأ الرمز بحرف."
+"استخدم من 2 إلى 20 حرفًا إنجليزيًا كبيرًا أو رقمًا أو شرطة سفلية أو واصلة، "
+"على أن يبدأ بحرف."
 
 msgid "Use the internal account created for you by an administrator."
 msgstr "استخدم الحساب الداخلي الذي أنشأه لك المسؤول."
 
 msgid "Use uppercase English letters, numbers, underscores, or hyphens."
-msgstr ""
-"استخدم الأحرف الإنجليزية الكبيرة أو الأرقام أو الشرطة السفلية أو الواصلة."
+msgstr "استخدم أحرفًا إنجليزية كبيرة وأرقامًا وشرطات سفلية أو واصلات."
 
 msgid "Username"
 msgstr "اسم المستخدم"
@@ -864,7 +855,7 @@ msgid ""
 "starting with a letter."
 msgstr ""
 "استخدم من 2 إلى 30 حرفًا إنجليزيًا كبيرًا أو رقمًا أو شرطة سفلية أو واصلة، "
-"على أن يبدأ الرمز بحرف."
+"على أن يبدأ بحرف."
 
 msgid "archived by"
 msgstr "أرشفه"
@@ -1870,8 +1861,8 @@ msgid ""
 "Preview does not save trainees. Use UTF-8 CSV or XLSX with full_name and "
 "phone headers; email is optional."
 msgstr ""
-"المعاينة لا تحفظ المتدربين. استخدم ملف CSV بترميز UTF-8 أو ملف XLSX بعناوين "
-"full_name وphone؛ البريد الإلكتروني اختياري."
+"لا تحفظ المعاينة المتدربين. استخدم ملف CSV بترميز UTF-8 أو XLSX بعناوين "
+"full_name وphone؛ والبريد الإلكتروني اختياري."
 
 msgid "Resolve all import errors before confirmation."
 msgstr "عالج جميع أخطاء الاستيراد قبل التأكيد."
@@ -2347,7 +2338,7 @@ msgid ""
 "Choose which optional categories appear in the application or arrive by "
 "email."
 msgstr ""
-"اختر الفئات الاختيارية التي تظهر داخل النظام أو تصلك عبر البريد الإلكتروني."
+"اختر الفئات الاختيارية التي تظهر في التطبيق أو تصل عبر البريد الإلكتروني."
 
 msgid "Deadline and overdue email notifications"
 msgstr "إشعارات المواعيد النهائية والتأخير عبر البريد الإلكتروني"
@@ -2733,6 +2724,373 @@ msgstr "الإجمالي"
 
 msgid "Unavailable"
 msgstr "غير متاح"
+
+msgid "Action code"
+msgstr "رمز الإجراء"
+
+msgid "All actions"
+msgstr "كل الإجراءات"
+
+msgid "All permitted scopes"
+msgstr "كل النطاقات المسموح بها"
+
+msgid "All target types"
+msgstr "كل أنواع الأهداف"
+
+msgid "Application"
+msgstr "التطبيق"
+
+msgid ""
+"Application records, files, audit evidence, notifications, and archives are "
+"retained indefinitely for the initial release."
+msgstr ""
+"يتم الاحتفاظ بسجلات التطبيق وملفاته وأدلة التدقيق وإشعاراته وأرشيفاته إلى "
+"أجل غير محدد في الإصدار الأولي."
+
+msgid "Approval"
+msgstr "الموافقة"
+
+msgid "Approval approved"
+msgstr "تم اعتماد الموافقة"
+
+msgid "Approval rejected"
+msgstr "تم رفض الموافقة"
+
+msgid "Approval submitted"
+msgstr "تم إرسال طلب الموافقة"
+
+msgid "Archive management"
+msgstr "إدارة الأرشيف"
+
+msgid "Archive pagination"
+msgstr "ترقيم صفحات الأرشيف"
+
+msgid "Archived at"
+msgstr "تاريخ الأرشفة"
+
+msgid "Archives"
+msgstr "الأرشيف"
+
+msgid "Attendance approved"
+msgstr "تم اعتماد الحضور"
+
+msgid "Attendance corrected"
+msgstr "تم تصحيح الحضور"
+
+msgid "Attendance rejected"
+msgstr "تم رفض الحضور"
+
+msgid "Attendance resubmitted"
+msgstr "تمت إعادة إرسال الحضور"
+
+msgid "Audit event details"
+msgstr "تفاصيل حدث التدقيق"
+
+msgid "Audit export"
+msgstr "تصدير سجل التدقيق"
+
+msgid "Audit exported"
+msgstr "تم تصدير سجل التدقيق"
+
+msgid "Audit log"
+msgstr "سجل التدقيق"
+
+msgid "Authentication"
+msgstr "المصادقة"
+
+msgid "Available"
+msgstr "متاح"
+
+msgid "Back to audit log"
+msgstr "العودة إلى سجل التدقيق"
+
+msgid "Backup"
+msgstr "النسخة الاحتياطية"
+
+msgid "Backup status"
+msgstr "حالة النسخ الاحتياطي"
+
+msgid "Backup status recorded"
+msgstr "تم تسجيل حالة النسخ الاحتياطي"
+
+msgid "Completed at"
+msgstr "اكتمل في"
+
+msgid "Course archived"
+msgstr "تمت أرشفة الدورة"
+
+msgid "Course created"
+msgstr "تم إنشاء الدورة"
+
+msgid "Course file uploaded"
+msgstr "تم رفع ملف الدورة"
+
+msgid "Course restored"
+msgstr "تمت استعادة الدورة"
+
+msgid "Course status changed"
+msgstr "تم تغيير حالة الدورة"
+
+msgid "Course trainers updated"
+msgstr "تم تحديث مدربي الدورة"
+
+msgid "Course updated"
+msgstr "تم تحديث الدورة"
+
+msgid "Current"
+msgstr "حديثة"
+
+msgid "Database"
+msgstr "قاعدة البيانات"
+
+msgid ""
+"Database backup restoration is an authorized infrastructure procedure and is"
+" never available from this page."
+msgstr ""
+"استعادة النسخة الاحتياطية لقاعدة البيانات إجراء بنية تحتية مخول، ولا تتوفر "
+"مطلقًا من هذه الصفحة."
+
+msgid "Details"
+msgstr "التفاصيل"
+
+msgid "Encrypted backup retention"
+msgstr "مدة الاحتفاظ بالنسخ الاحتياطية المشفرة"
+
+msgid "Environment"
+msgstr "البيئة"
+
+msgid "Export sanitized CSV"
+msgstr "تصدير CSV منقح"
+
+msgid ""
+"Find archived application records within your existing restore permissions."
+msgstr "ابحث عن سجلات التطبيق المؤرشفة ضمن صلاحيات الاستعادة الحالية لديك."
+
+msgid "Import batch"
+msgstr "دفعة الاستيراد"
+
+msgid "Invalid record"
+msgstr "سجل غير صالح"
+
+msgid "Milestone archived"
+msgstr "تمت أرشفة المرحلة الرئيسية"
+
+msgid "Milestone created"
+msgstr "تم إنشاء المرحلة الرئيسية"
+
+msgid "Milestone restored"
+msgstr "تمت استعادة المرحلة الرئيسية"
+
+msgid "Milestone updated"
+msgstr "تم تحديث المرحلة الرئيسية"
+
+msgid "Narrow the filters to %(rows)s audit rows or fewer."
+msgstr "ضيّق عوامل التصفية إلى %(rows)s صف تدقيق أو أقل."
+
+msgid "No archived records match these filters."
+msgstr "لا توجد سجلات مؤرشفة تطابق عوامل التصفية هذه."
+
+msgid "No audit events match these filters."
+msgstr "لا توجد أحداث تدقيق تطابق عوامل التصفية هذه."
+
+msgid "No automated purge or hard-delete action is approved."
+msgstr "لم تتم الموافقة على أي إجراء مسح آلي أو حذف نهائي."
+
+msgid "No display-safe metadata is available."
+msgstr "لا تتوفر بيانات وصفية آمنة للعرض."
+
+msgid "Not recorded"
+msgstr "غير مسجلة"
+
+msgid "Notification preferences updated"
+msgstr "تم تحديث تفضيلات الإشعارات"
+
+msgid "Only explicitly approved safe metadata is displayed."
+msgstr "تُعرض فقط البيانات الوصفية الآمنة المعتمدة صراحةً."
+
+msgid "Operations"
+msgstr "العمليات"
+
+msgid "Permission-scoped, append-only security and business history."
+msgstr "سجل أمني وتجاري محدد الصلاحيات وقابل للإضافة فقط."
+
+msgid "Quarterly"
+msgstr "كل ثلاثة أشهر"
+
+msgid "Record type"
+msgstr "نوع السجل"
+
+msgid "Recovery point objective"
+msgstr "هدف نقطة الاستعادة"
+
+msgid "Recovery targets"
+msgstr "أهداف الاستعادة"
+
+msgid "Recovery time objective"
+msgstr "هدف زمن الاستعادة"
+
+msgid "Reset"
+msgstr "إعادة تعيين"
+
+msgid "Restoration test"
+msgstr "اختبار الاستعادة"
+
+msgid "Restoration test cadence"
+msgstr "وتيرة اختبار الاستعادة"
+
+msgid "Restore test"
+msgstr "اختبار الاستعادة"
+
+msgid "Restore test status recorded"
+msgstr "تم تسجيل حالة اختبار الاستعادة"
+
+msgid "Retention inventory"
+msgstr "جرد الاحتفاظ"
+
+msgid "Retention inventory recorded"
+msgstr "تم تسجيل جرد الاحتفاظ"
+
+msgid "Retention policy"
+msgstr "سياسة الاحتفاظ"
+
+msgid "Review restore"
+msgstr "مراجعة الاستعادة"
+
+msgid "Safe application status and approved recovery policy."
+msgstr "حالة آمنة للتطبيق وسياسة الاستعادة المعتمدة."
+
+msgid "Safe metadata"
+msgstr "البيانات الوصفية الآمنة"
+
+msgid "Scope"
+msgstr "النطاق"
+
+msgid "Search actor or target"
+msgstr "البحث عن المنفذ أو الهدف"
+
+msgid "Search archived records"
+msgstr "البحث في السجلات المؤرشفة"
+
+msgid "Session archived"
+msgstr "تمت أرشفة الجلسة"
+
+msgid "Session created"
+msgstr "تم إنشاء الجلسة"
+
+msgid "Stale"
+msgstr "قديمة"
+
+msgid "System health"
+msgstr "سلامة النظام"
+
+msgid "Tag archived"
+msgstr "تمت أرشفة العلامة"
+
+msgid "Tag created"
+msgstr "تم إنشاء العلامة"
+
+msgid "Tag restored"
+msgstr "تمت استعادة العلامة"
+
+msgid "Tag updated"
+msgstr "تم تحديث العلامة"
+
+msgid "Target ID"
+msgstr "معرف الهدف"
+
+msgid "Target type"
+msgstr "نوع الهدف"
+
+msgid "Task archived"
+msgstr "تمت أرشفة المهمة"
+
+msgid "Task assignments updated"
+msgstr "تم تحديث إسنادات المهمة"
+
+msgid "Task comment added"
+msgstr "تمت إضافة تعليق على المهمة"
+
+msgid "Task created"
+msgstr "تم إنشاء المهمة"
+
+msgid "Task file uploaded"
+msgstr "تم رفع ملف المهمة"
+
+msgid "Task restored"
+msgstr "تمت استعادة المهمة"
+
+msgid "Task status changed"
+msgstr "تم تغيير حالة المهمة"
+
+msgid "Task tags updated"
+msgstr "تم تحديث علامات المهمة"
+
+msgid "Task updated"
+msgstr "تم تحديث المهمة"
+
+msgid "The target type is not available in the selected scope."
+msgstr "نوع الهدف غير متاح في النطاق المحدد."
+
+msgid ""
+"This center does not grant additional access and cannot restore database "
+"backups."
+msgstr ""
+"لا يمنح هذا المركز صلاحيات إضافية ولا يمكنه استعادة النسخ الاحتياطية لقاعدة "
+"البيانات."
+
+msgid "Trainee archived"
+msgstr "تمت أرشفة المتدرب"
+
+msgid "Trainee enrolled"
+msgstr "تم تسجيل المتدرب"
+
+msgid "Trainee enrollment"
+msgstr "تسجيل المتدرب"
+
+msgid "Trainee enrollments"
+msgstr "تسجيلات المتدربين"
+
+msgid "Trainee import cancelled"
+msgstr "تم إلغاء استيراد المتدربين"
+
+msgid "Trainee import confirmed"
+msgstr "تم تأكيد استيراد المتدربين"
+
+msgid "Trainee import previewed"
+msgstr "تمت معاينة استيراد المتدربين"
+
+msgid "Trainee restored"
+msgstr "تمت استعادة المتدرب"
+
+msgid "Trainee updated"
+msgstr "تم تحديث المتدرب"
+
+msgid "Trainer archived"
+msgstr "تمت أرشفة المدرب"
+
+msgid "Trainer created"
+msgstr "تم إنشاء المدرب"
+
+msgid "Trainer restored"
+msgstr "تمت استعادة المدرب"
+
+msgid "Trainer updated"
+msgstr "تم تحديث المدرب"
+
+msgid "days"
+msgstr "يومًا"
+
+msgid "hours"
+msgstr "ساعة"
+
+#~ msgid "Append-only Phase 2 account and department events."
+#~ msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."
+
+#~ msgid "No audit events found."
+#~ msgstr "لم يتم العثور على أحداث تدقيق."
+
+#~ msgid "Security audit"
+#~ msgstr "سجل التدقيق الأمني"
 
 #~ msgid "Home"
 #~ msgstr "الرئيسية"

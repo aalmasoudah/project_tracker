@@ -2,7 +2,8 @@
 
 ## Status and Purpose
 
-Status: Planning baseline.
+Status: Phase 14 application and recovery policy approved. Provider details,
+named contacts, and production routing remain production-readiness inputs.
 
 This plan defines the operational capabilities required before company data is
 placed in production. Named owners, escalation contacts, retention periods,
@@ -25,6 +26,15 @@ Before staging, assign owners for:
 
 Production credentials must be role-limited and unavailable to ordinary
 application users.
+
+Approved responsibility separation:
+
+- The project owner owns business-data, privacy, retention, and audit policy.
+- Technical Admin owns application access administration and safe in-app
+  health/backup-status review.
+- A separately authorized infrastructure operator owns releases, database and
+  storage access, backup execution, and isolated restoration. Application
+  roles do not grant shell or provider access.
 
 ## Monitoring
 
@@ -71,9 +81,16 @@ machine-readable response. It must:
 - Record restoration evidence, elapsed time, owner, and outcome.
 - Securely remove temporary restoration resources.
 
-Retention duration, recovery point objective, recovery time objective, and
-restoration cadence require owner approval. The application must not expose an
-unrestricted database-restore web page.
+The approved initial targets are:
+
+- Recovery point objective: 24 hours.
+- Recovery time objective: 8 hours.
+- Encrypted backup retention: 35 days.
+- Isolated restoration test: quarterly.
+- Application records/files/audit/archive retention: indefinite for the
+  initial release, with no automated purge.
+
+The application must not expose an unrestricted database-restore web page.
 
 ## Incident Response
 
@@ -138,6 +155,10 @@ These commands are added only in the phase that owns their behavior.
 
 ## Required Runbooks Before Launch
 
+The Phase 14 application command, retention, audit-export, archive, backup
+verification, and isolated restoration procedure is documented in
+`docs/RUNBOOKS/PHASE_14_OPERATIONS.md`.
+
 - Deploy and rollback.
 - Create/revoke privileged access.
 - Database backup verification and isolated restoration test.
@@ -153,8 +174,10 @@ These commands are added only in the phase that owns their behavior.
 
 - Named owners, support contact, and escalation path.
 - Production region, provider plans, and contractual requirements.
-- RPO, RTO, backup/retention periods, and restoration cadence.
-- Data/file/audit retention and approved hard-delete exceptions.
+- Provider implementation of the approved RPO, RTO, backup retention, and
+  quarterly restoration cadence.
+- Any future change from indefinite application-data retention or any
+  hard-delete exception.
 - Monitoring thresholds and notification routes.
 - Maintenance windows and release approval authority.
 - Staging and production domain names.

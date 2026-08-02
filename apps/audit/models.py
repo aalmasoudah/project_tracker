@@ -31,6 +31,7 @@ class AuditEvent(models.Model):
         TRAINEES = "trainees", _("Trainees")
         ATTENDANCE = "attendance", _("Attendance")
         NOTIFICATIONS = "notifications", _("Notifications")
+        OPERATIONS = "operations", _("Operations")
 
     scope = models.CharField(
         _("scope"),
@@ -68,6 +69,12 @@ class AuditEvent(models.Model):
 
     class Meta:
         default_permissions = ("view",)
+        permissions = (
+            ("view_security_audit", "Can view security and operations audit"),
+            ("view_business_audit", "Can view business audit"),
+            ("export_security_audit", "Can export security and operations audit"),
+            ("export_business_audit", "Can export business audit"),
+        )
         ordering = ("-created_at", "-pk")
         verbose_name = _("audit event")
         verbose_name_plural = _("audit events")
@@ -75,7 +82,15 @@ class AuditEvent(models.Model):
             models.Index(
                 fields=("target_type", "target_id"),
                 name="audit_target_lookup_idx",
-            )
+            ),
+            models.Index(
+                fields=("scope", "-created_at"),
+                name="audit_scope_created_idx",
+            ),
+            models.Index(
+                fields=("action", "-created_at"),
+                name="audit_action_created_idx",
+            ),
         ]
 
     def __str__(self) -> str:

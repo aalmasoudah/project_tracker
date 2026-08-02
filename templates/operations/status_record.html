@@ -1,0 +1,20 @@
+{% load audit_tags i18n %}
+{% if status.state == "current" %}
+  <p><span class="badge text-bg-success">{% translate "Current" %}</span></p>
+{% elif status.state == "stale" %}
+  <p><span class="badge text-bg-warning">{% translate "Stale" %}</span></p>
+{% elif status.state == "failed" %}
+  <p><span class="badge text-bg-danger">{% translate "Failed" %}</span></p>
+{% elif status.state == "invalid" %}
+  <p><span class="badge text-bg-danger">{% translate "Invalid record" %}</span></p>
+{% else %}
+  <p><span class="badge text-bg-secondary">{% translate "Not recorded" %}</span></p>
+{% endif %}
+{% if status.completed_at %}
+  <dl class="mb-0">
+    <dt>{% translate "Completed at" %}</dt>
+    <dd>{{ status.completed_at|dual_datetime }}</dd>
+    <dt>{% translate "Environment" %}</dt>
+    <dd><code><bdi>{{ status.environment }}</bdi></code></dd>
+  </dl>
+{% endif %}

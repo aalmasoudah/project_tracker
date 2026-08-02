@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "apps.notifications.apps.NotificationsConfig",
     "apps.progress.apps.ProgressConfig",
     "apps.reports.apps.ReportsConfig",
+    "apps.operations.apps.OperationsConfig",
     "apps.workspace.apps.WorkspaceConfig",
 ]
 
@@ -121,6 +122,14 @@ LOGGING = build_logging_config(
 )
 
 APP_BASE_URL = env_string("APP_BASE_URL", default="http://127.0.0.1:8000")
+DEPLOYMENT_ENVIRONMENT = env_string(
+    "DEPLOYMENT_ENVIRONMENT",
+    default="development",
+)
+if DEPLOYMENT_ENVIRONMENT not in {"development", "test", "staging", "production"}:
+    raise ImproperlyConfigured(
+        "DEPLOYMENT_ENVIRONMENT must be development, test, staging, or production."
+    )
 DEFAULT_FROM_EMAIL = env_string("DEFAULT_FROM_EMAIL", default="tracker@example.test")
 CELERY_BROKER_URL = env_string("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
 CELERY_TASK_SERIALIZER = "json"

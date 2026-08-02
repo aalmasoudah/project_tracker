@@ -185,6 +185,25 @@ Notification ownership never grants target access. The linked domain view
 rechecks its existing object-level permission. Technical Admin delivery access
 shows safe operational metadata and grants no business-record access.
 
+## Phase 14 Administration and Operations Matrix
+
+| Role | Central audit | Archive center | Operations |
+| --- | --- | --- | --- |
+| Technical Admin | Security/operations view and sanitized CSV export | Departments only | Safe health/backup status |
+| CEO | Business view and sanitized CSV export | None | None |
+| Executive Manager | Business view and sanitized CSV export | All supported business archives | None |
+| Project Manager | Existing domain history only | Managed records and task tags under existing permissions | None |
+| Supervisor | Existing scoped history only | None | None |
+| Employee | Existing own-history views only | None | None |
+| Contractor | Existing own-history views only | None | None |
+
+The archive center only aggregates existing permissions and object scopes. It
+does not grant a cross-domain override. Audit export excludes raw metadata,
+personal-data fields, individual attendance, files, and backup contents.
+Shell-level backup, restoration, deployment, and protected-command authority
+is an infrastructure responsibility and is not granted by an application
+role.
+
 ## Object-Level Access Questions
 
 1. [Approved through Phase 11] Use the account/department, project, course,
@@ -200,13 +219,17 @@ shows safe operational metadata and grants no business-record access.
 5. [Approved for Phase 10] CEO and Executive Manager see all attendance;
    owning Project Managers and assigned Supervisors see their scoped
    attendance. Employees and Contractors have no Phase 10 access.
-6. Who may export reports containing personal data?
-7. [Approved through Phase 8] Technical Admin may archive/restore departments.
+6. [Approved through Phase 14] No personal-data report or administrative
+   export is approved. Phase 13 aggregate reports and Phase 14 sanitized audit
+   CSV are the complete approved export catalog.
+7. [Approved through Phase 14] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
-   so only for a managed project. Accounts are deactivated/reactivated. Later
-   records remain open.
-8. [Approved for Phase 2] Technical Admin may read Phase 2 audit records.
-   Detailed operational health remains deferred.
+   so only for a managed project. Existing course, task, milestone, enrollment,
+   reference, trainer, and tag permissions remain authoritative. Accounts are
+   deactivated/reactivated. The archive center adds no override.
+8. [Approved for Phase 14] Technical Admin may read security/operations audit
+   and safe operational health/backup status. CEO and Executive Manager may
+   read business audit. Technical Admin receives no business audit access.
 
 ## Role Approval
 
@@ -218,5 +241,5 @@ decision 0010. The Phase 6 progress-visibility slice was approved on
 2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
 on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
 on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014, Phase
-10 in decision 0015, and Phase 11 in decision 0016. Later-domain matrix
-entries remain open.
+10 in decision 0015, Phase 11 in decision 0016, and Phase 14 in decision 0019.
+Separately approved extensions require their own permission decisions.

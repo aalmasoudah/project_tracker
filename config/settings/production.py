@@ -11,6 +11,10 @@ from config.settings.environment import env_bool, env_int, env_list, env_string
 from .base import *
 
 DEBUG = False
+if DEPLOYMENT_ENVIRONMENT != "production":
+    raise ImproperlyConfigured(
+        "Production settings require DEPLOYMENT_ENVIRONMENT=production."
+    )
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 SECRET_KEY = env_string("SECRET_KEY")
 if not SECRET_KEY or SECRET_KEY.startswith("django-insecure-"):

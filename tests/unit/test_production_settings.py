@@ -19,6 +19,7 @@ def production_environment() -> dict[str, str]:
             "CELERY_BROKER_URL": "rediss://redis.example.test:6379/0",
             "DATABASE_URL": ("postgresql://tracker:password@localhost:5432/tracker"),
             "DEFAULT_LANGUAGE": "ar",
+            "DEPLOYMENT_ENVIRONMENT": "production",
             "DEFAULT_FROM_EMAIL": "tracker@example.test",
             "DJANGO_SETTINGS_MODULE": "config.settings.production",
             "EMAIL_HOST": "smtp.example.test",

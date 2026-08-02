@@ -41,9 +41,9 @@ project owner resolves the open decisions in the core documents.
 | 9 | `PHASE_09_SESSIONS_TRAINER_LINKS.md` | Completed and verified on 2026-07-29 |
 | 10 | `PHASE_10_ATTENDANCE_APPROVAL_CORRECTIONS.md` | Completed and verified on 2026-07-29 |
 | 11 | `PHASE_11_NOTIFICATIONS_BACKGROUND_JOBS.md` | Completed and verified on 2026-07-29 |
-| 12 | `PHASE_12_DASHBOARDS_SEARCH_VIEWS.md` | Draft; depends on approved domain permissions |
-| 13 | `PHASE_13_REPORTS_EXPORTS.md` | Draft; blocked by report/privacy decisions |
-| 14 | `PHASE_14_ADMIN_AUDIT_OPERATIONS.md` | Draft; blocked by retention/operations decisions |
+| 12 | `PHASE_12_DASHBOARDS_SEARCH_VIEWS.md` | Completed and verified on 2026-07-29 |
+| 13 | `PHASE_13_REPORTS_EXPORTS.md` | Completed and verified on 2026-07-30 |
+| 14 | `PHASE_14_ADMIN_AUDIT_OPERATIONS.md` | Completed and verified on 2026-08-02 |
 
 An approved phase must have its `Status` changed explicitly by the project
 owner. Approval of `docs/SCOPE.md` or this planning pass does not implicitly

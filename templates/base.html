@@ -138,9 +138,19 @@
                   {% endif %}
                 </a>
               </li>
-              {% if perms.audit.view_auditevent %}
+              {% if perms.audit.view_security_audit or perms.audit.view_business_audit %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'audit:list' %}">{% translate "Audit" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.operations.view_archive_center %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'operations:archives' %}">{% translate "Archives" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.operations.view_operations_status %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'operations:status' %}">{% translate "Operations" %}</a>
                 </li>
               {% endif %}
             </ul>

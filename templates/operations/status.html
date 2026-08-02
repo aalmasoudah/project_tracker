@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load audit_tags i18n %}
+
+{% block title %}{% translate "Operations" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+    <div>
+      <h1 class="h2 mb-1">{% translate "Operations" %}</h1>
+      <p class="text-body-secondary mb-0">
+        {% translate "Safe application status and approved recovery policy." %}
+      </p>
+    </div>
+    {% if perms.operations.view_archive_center %}
+      <a class="btn btn-outline-primary" href="{% url 'operations:archives' %}">
+        {% translate "Archive management" %}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="alert alert-warning" role="status">
+    {% translate "Database backup restoration is an authorized infrastructure procedure and is never available from this page." %}
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-md-6 col-xl-4">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5">{% translate "System health" %}</h2>
+          <dl class="mb-0">
+            <dt>{% translate "Application" %}</dt>
+            <dd><span class="badge text-bg-success">{% translate "Available" %}</span></dd>
+            <dt>{% translate "Database" %}</dt>
+            <dd>
+              {% if database_status == "ok" %}
+                <span class="badge text-bg-success">{% translate "Available" %}</span>
+              {% else %}
+                <span class="badge text-bg-danger">{% translate "Unavailable" %}</span>
+              {% endif %}
+            </dd>
+          </dl>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5">{% translate "Backup status" %}</h2>
+          {% include "operations/status_record.html" with status=backup %}
+        </div>
+      </section>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5">{% translate "Restoration test" %}</h2>
+          {% include "operations/status_record.html" with status=restore_test %}
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-6">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5">{% translate "Recovery targets" %}</h2>
+          <dl class="row mb-0">
+            <dt class="col-7">{% translate "Recovery point objective" %}</dt>
+            <dd class="col-5"><bdi>{{ rpo_hours }}</bdi> {% translate "hours" %}</dd>
+            <dt class="col-7">{% translate "Recovery time objective" %}</dt>
+            <dd class="col-5"><bdi>{{ rto_hours }}</bdi> {% translate "hours" %}</dd>
+            <dt class="col-7">{% translate "Encrypted backup retention" %}</dt>
+            <dd class="col-5"><bdi>{{ backup_retention_days }}</bdi> {% translate "days" %}</dd>
+            <dt class="col-7">{% translate "Restoration test cadence" %}</dt>
+            <dd class="col-5">{% translate "Quarterly" %}</dd>
+          </dl>
+        </div>
+      </section>
+    </div>
+    <div class="col-12 col-lg-6">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5">{% translate "Retention policy" %}</h2>
+          <p class="mb-2">
+            {% translate "Application records, files, audit evidence, notifications, and archives are retained indefinitely for the initial release." %}
+          </p>
+          <p class="text-body-secondary mb-0">
+            {% translate "No automated purge or hard-delete action is approved." %}
+          </p>
+          <code class="d-block mt-3"><bdi>{{ retention_policy }}</bdi></code>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}

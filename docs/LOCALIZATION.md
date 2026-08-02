@@ -3,7 +3,7 @@
 ## Status and Objective
 
 Status: Approved scope requirement. User-visible localization slices are
-approved through Phase 11; later output policies remain open.
+approved through Phase 14.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -123,13 +123,22 @@ English. Email uses the recipient's persisted language with RTL Arabic or LTR
 English, while task reminder dates use Asia/Riyadh, Gregorian dates, and
 Western digits.
 
-The following still require explicit owner approval in their later phases:
+Phase 14 terminology includes Audit log `سجل التدقيق`, Archive management
+`إدارة الأرشيف`, Operations `العمليات`, System health `سلامة النظام`, Backup
+status `حالة النسخ الاحتياطي`, Retention policy `سياسة الاحتفاظ`, and Restore
+`استعادة`. Administrative timestamps use Asia/Riyadh and display Gregorian
+plus Umm al-Qura Hijri dates with Western digits. Stable audit, environment,
+status, and command codes remain machine-readable and are translated only for
+presentation.
+
+Separately approved extensions must resolve:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 11 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 11
-  screens.
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 14
+  screens and outputs.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through
+  Phase 14 screens and outputs.
 - Date/time, timezone, currency, and rounding conventions.
 - Arabic duplicate and sorting rules outside the approved account and Phase 8
   trainee duplicate behavior.

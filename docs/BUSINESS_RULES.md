@@ -116,6 +116,16 @@ must be approved before their implementation phase.
 - Notification content is fixed, generic, bilingual, and permission-safe.
   Notification, preference, and delivery records are protected from normal
   hard deletion. Celery email jobs are bounded, deduplicated, and retry-safe.
+- Phase 14 retains application business records, uploaded files,
+  notifications, delivery evidence, audit records, and archived data
+  indefinitely for the initial release. It provides no automated purge or
+  hard-delete path.
+- Phase 14 administrative export is limited to sanitized, permission-scoped
+  audit CSV. Personal-data, individual-attendance, uploaded-file, and raw
+  metadata exports remain excluded.
+- Database backup and restoration remain infrastructure operations. Initial
+  recovery targets are a 24-hour RPO, an 8-hour RTO, 35-day encrypted backup
+  retention, and quarterly isolated restoration testing.
 
 ## Decisions Required Before Planning
 
@@ -149,17 +159,20 @@ The project owner must approve answers to these questions:
     0009, 0010, and 0016.
 15. [Approved for Phase 3 project budgets] Which currencies are supported,
     and how are monetary values rounded? Later monetary outputs remain open.
-16. [Approved through Phase 11] Accounts, departments, audit events, projects,
+16. [Approved through Phase 14] Accounts, departments, audit events, projects,
     clients, categories, courses, trainers, tasks, tags, comments, and files
     are not hard-deleted; memberships and assignment/tag relationships are
     end-dated. Trainees, enrollments, import batches/rows, and approval history
     are also protected. Attendance sessions, locked rosters, links,
     submissions, entries, evidence, reviews, corrections, notifications,
     preferences, and delivery attempts are protected. Expired throttle
-    counters may be deleted. Later-domain exceptions remain open.
+    counters may be deleted. Phase 14 operation evidence is protected and no
+    new hard-delete exception is approved.
 17. [Approved for Phase 11] Optional category channels and mandatory approval
     in-app behavior are defined in decision 0016.
-18. What retention periods apply to files, audit records, and archived data?
+18. [Approved for Phase 14] Files, audit records, and archived application
+    data are retained indefinitely for the initial release. Encrypted
+    infrastructure backups are retained for 35 days.
 19. [Approved] Arabic is the default language, and each internal user may
     persist Arabic or English.
 20. [Approved] The project owner approves official Arabic terminology.
@@ -182,5 +195,5 @@ on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
 2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
 in decision 0013. Phase 9 was approved in decision 0014, Phase 10 in decision
-0015, and Phase 11 in decision 0016. Remaining decisions still block their
-listed phases.
+0015, Phase 11 in decision 0016, and Phase 14 in decision 0019. Remaining
+decisions still block only separately approved extensions.

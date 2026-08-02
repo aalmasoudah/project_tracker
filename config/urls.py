@@ -24,6 +24,7 @@ urlpatterns = [
     path("attendance/", include("apps.attendance.urls")),
     path("notifications/", include("apps.notifications.urls")),
     path("reports/", include("apps.reports.urls")),
+    path("operations/", include("apps.operations.urls")),
     path("workspace/", include("apps.workspace.urls")),
     path("health/", views.health, name="health"),
     path("", views.home, name="home"),
