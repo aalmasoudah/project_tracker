@@ -1,7 +1,7 @@
 # Phase 10: Attendance Approval and Corrections
 
-Status: Draft; blocked by attendance actor, value, permission, and correction
-decisions.
+Status: Completed and verified on 2026-07-29. Blocking decisions are recorded
+in decision 0015.
 
 ## 1. Goal
 
@@ -72,8 +72,9 @@ viewers. Correct permission is rechecked inside the transaction.
 - Rejection requires a reason and reopens the same link with a new expiration.
 - Approved attendance is external-link read-only.
 - Authorized correction requires reason/audit and no reapproval.
-- Resolve `BR-10`, `BR-12`, `BR-13`, `BR-14`, personal-data permissions, and
-  expiry durations.
+- Decision 0015 resolves `BR-10`, personal-data permissions, correction
+  actors, and the 72-hour rejection expiry. Decisions 0014 and 0015 resolve
+  the applicable `BR-12`, `BR-13`, and `BR-14` slices.
 
 ## 10. Expected Migrations
 
@@ -130,10 +131,9 @@ viewers. Correct permission is rechecked inside the transaction.
 ## 17. Dependencies
 
 - Completed Phase 9.
-- Approved reviewer/corrector/override permissions, attendance values, expiry
-  duration/semantics, personal-data visibility, and audit access.
-- Approved Arabic attendance/rejection/correction terminology and date/digit
-  policy.
+- Approved reviewer/corrector permissions, attendance values, expiry
+  semantics, personal-data visibility, audit access, and localization policy
+  in decisions 0014 and 0015.
 
 ## 18. Rollback Considerations
 

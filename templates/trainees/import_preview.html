@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Import preview" %}{% endblock %}
+{% block content %}
+<h1 class="h3">{% translate "Import preview" %}</h1><p><bdi>{{ batch.original_name }}</bdi> — <bdi>{{ batch.course.code }}</bdi></p>
+<div class="row g-2 mb-3"><div class="col"><div class="card card-body">{% translate "Valid" %}: {{ batch.valid_count }}</div></div><div class="col"><div class="card card-body">{% translate "Warnings" %}: {{ batch.warning_count }}</div></div><div class="col"><div class="card card-body">{% translate "Duplicates" %}: {{ batch.duplicate_count }}</div></div><div class="col"><div class="card card-body">{% translate "Errors" %}: {{ batch.error_count }}</div></div></div>
+<div class="table-responsive"><table class="table table-sm"><thead><tr><th>{% translate "Row" %}</th><th>{% translate "Full name" %}</th><th>{% translate "Phone" %}</th><th>{% translate "Email address" %}</th><th>{% translate "Result" %}</th></tr></thead><tbody>{% for row in rows %}<tr><td>{{ row.row_number }}</td><td>{{ row.full_name }}</td><td><bdi>{{ row.phone }}</bdi></td><td><bdi>{{ row.email }}</bdi></td><td>{{ row.get_classification_display }}{% if row.error_message %}: {{ row.error_message }}{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+{% if batch.status == "preview" %}<form method="post" class="card card-body mt-3">{% csrf_token %}{% include "includes/form_errors.html" %}{{ form.as_p }}<div class="d-flex gap-2"><button class="btn btn-primary" {% if batch.error_count %}disabled{% endif %}>{% translate "Confirm import" %}</button></div></form><form method="post" action="{% url 'trainees:import-cancel' batch.pk %}" class="mt-2">{% csrf_token %}<button class="btn btn-outline-danger">{% translate "Cancel import" %}</button></form>{% endif %}
+{% endblock %}

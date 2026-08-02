@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Approved attendance" %}{% endblock %}
+{% block content %}
+  <div class="alert alert-success">
+    <h1 class="h4">{% translate "Approved attendance" %}</h1>
+    <p class="mb-0">{% translate "This attendance is approved and read-only." %}</p>
+  </div>
+  <p>{{ session_title }} — <bdi>{{ submission.session.start_at|date:"Y-m-d H:i" }}</bdi></p>
+  <div class="table-responsive">
+    <table class="table">
+      <thead><tr><th>{% translate "Trainee number" %}</th><th>{% translate "Trainee" %}</th><th>{% translate "Attendance" %}</th><th>{% translate "Notes" %}</th></tr></thead>
+      <tbody>
+        {% for entry in entries %}
+          <tr><td><bdi>{{ entry.participant.enrollment.trainee_number }}</bdi></td><td>{{ entry.participant.enrollment.trainee.full_name }}</td><td>{{ entry.get_value_display }}</td><td>{{ entry.notes|default:"—" }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

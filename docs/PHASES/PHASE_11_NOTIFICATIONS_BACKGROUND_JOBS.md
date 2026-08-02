@@ -1,7 +1,6 @@
 # Phase 11: Notifications and Background Jobs
 
-Status: Draft; blocked by notification category, recipient, timing, language,
-and escalation decisions.
+Status: Approved on 2026-07-29; implemented and verified on 2026-07-29.
 
 ## 1. Goal
 
@@ -10,8 +9,8 @@ Celery, Redis, and scheduled reminders with idempotent retry-safe jobs.
 
 ## 2. Included Features
 
-- Approved in-app notification categories for assignments, approvals,
-  deadlines/overdue events, mentions, and other approved domain events.
+- In-app notification categories for task assignments, approvals,
+  deadlines/overdue events, and task-comment mentions.
 - Notification list/read state and approved preferences.
 - Email service abstraction with fake development/test backend.
 - Celery worker, Redis broker, scheduler, retry/deduplication records.
@@ -21,6 +20,7 @@ Celery, Redis, and scheduled reminders with idempotent retry-safe jobs.
 ## 3. Excluded Features
 
 - SMS, chat integrations, push notifications, and unapproved categories.
+- Escalation chains and notification expiry.
 - Background ownership of domain transactions.
 - Email containing sensitive data beyond approved policy.
 - User suppression of mandatory categories unless explicitly approved.
@@ -48,14 +48,19 @@ Celery, Redis, and scheduled reminders with idempotent retry-safe jobs.
 
 ## 7. Permission Requirements
 
+Recipients are newly active assignees, current completion/attendance
+approvers, affected submitters/link issuers, and accessible mentioned users.
 Recipients must be computed from approved object access at event time.
 Notification existence/content/target links cannot reveal inaccessible
 records. Preference and operational delivery views are owner/admin scoped.
 
 ## 8. Validation Rules
 
-- Categories, recipients, timing, escalation, expiry, and preference controls
-  come from approved policy.
+- Approval notifications are mandatory in-app. Other in-app channels and all
+  email channels are user-configurable.
+- Task reminders run at 08:00 Asia/Riyadh on the day before a due date and
+  daily while overdue, for active assignees and countable owner contexts.
+- Phase 11 has no escalation or expiry behavior.
 - Stable deduplication keys prevent repeated event/job delivery.
 - Jobs are idempotent, bounded, retry-safe, and record safe failure metadata.
 - Locale selection follows approved user preference/default; missing
@@ -65,8 +70,9 @@ records. Preference and operational delivery views are owner/admin scoped.
 ## 9. Business Rules
 
 - Background jobs must be idempotent and safe to retry.
-- Resolve `BR-14`, `BR-17`, recipient/timing/escalation rules, email-sensitive
-  content, and `L10N-01`/`L10N-02`.
+- Decision 0016 resolves Phase 11 portions of `BR-14`, `BR-17`,
+  recipient/timing/escalation rules, email-sensitive content, and
+  `L10N-01`/`L10N-02`.
 - Domain writes succeed independently of provider delivery while preserving a
   reliable approved event/outbox boundary.
 

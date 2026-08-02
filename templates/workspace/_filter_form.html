@@ -1,0 +1,25 @@
+{% load i18n %}
+<form class="card card-body mb-4" method="get">
+  <div class="row g-3 align-items-end">
+    <div class="col-12 col-lg">
+      <label class="form-label" for="id_q">{% translate "Search" %}</label>
+      <input class="form-control" id="id_q" maxlength="100" name="q" type="search" value="{{ request.GET.q }}">
+    </div>
+    {% if view_type != "search" and view_type != "kanban" %}
+      <div class="col-6 col-lg-3">
+        <label class="form-label" for="id_date_from">{% translate "From date" %}</label>
+        <input class="form-control" id="id_date_from" name="date_from" type="date" value="{{ form.date_from.value|default:'' }}">
+      </div>
+      <div class="col-6 col-lg-3">
+        <label class="form-label" for="id_date_to">{% translate "To date" %}</label>
+        <input class="form-control" id="id_date_to" name="date_to" type="date" value="{{ form.date_to.value|default:'' }}">
+      </div>
+    {% endif %}
+    <div class="col-12 col-lg-auto">
+      <button class="btn btn-primary w-100" type="submit">{% translate "Apply filters" %}</button>
+    </div>
+  </div>
+  {% if form.errors %}
+    <div class="alert alert-danger mt-3 mb-0" role="alert">{{ form.non_field_errors }}{{ form.q.errors }}{{ form.date_from.errors }}{{ form.date_to.errors }}</div>
+  {% endif %}
+</form>

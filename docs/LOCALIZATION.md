@@ -2,8 +2,8 @@
 
 ## Status and Objective
 
-Status: Approved scope requirement. Account, project, and course localization
-slices are approved through Phase 5; later output policies remain open.
+Status: Approved scope requirement. User-visible localization slices are
+approved through Phase 14.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -89,15 +89,59 @@ Phase 6 terminology is Progress `التقدم`, No countable work
 show the same two-decimal bounded percentage with Western digits; locale
 changes presentation only, never the numeric calculation.
 
-The following still require explicit owner approval in their later phases:
+Phase 7 terminology includes Milestone `مرحلة رئيسية`, Milestones
+`المراحل الرئيسية`, Approval `موافقة`, Approvals `الموافقات`, Pending approval
+`بانتظار الموافقة`, Approve `موافقة`, Reject `رفض`, and Rejection reason
+`سبب الرفض`. Approval dates use Gregorian dates and Western digits. Arabic
+reasons and bilingual identifiers preserve their original text and render
+with direction isolation.
+
+Phase 8 terminology includes Trainee `متدرب`, Trainees `المتدربون`, Import
+`استيراد`, Preview `معاينة`, Duplicate `مكرر`, Warning `تحذير`, Skip `تخطي`,
+and Update `تحديث`. Approved Arabic headers include `الاسم الكامل`,
+`رقم الجوال`, and `البريد الإلكتروني`. Original values are preserved while
+duplicate keys use decision 0013 normalization. Course-specific numbers use
+Western digits.
+
+Phase 9 terminology includes Session `جلسة`, Sessions `الجلسات`, Attendance
+`الحضور`, Present `حاضر`, Absent `غائب`, Late `متأخر`, Excused `غائب بعذر`,
+and Pending Supervisor Review `بانتظار مراجعة المشرف`. Scheduling and expiry
+use Asia/Riyadh, Gregorian dates, and Western digits.
+
+Phase 10 terminology includes Attendance Review `مراجعة الحضور`, Attendance
+Reviews `مراجعات الحضور`, Approved Attendance `الحضور المعتمد`, Correct
+Attendance `تصحيح الحضور`, Correction `تصحيح`, and Correction Reason
+`سبب التصحيح`. Review, reopened-link, and correction dates use Asia/Riyadh,
+Gregorian dates, and Western digits. Arabic reasons and names preserve their
+original text.
+
+Phase 11 terminology includes Notifications `الإشعارات`, Notification
+Preferences `تفضيلات الإشعارات`, Task Assignments `إسناد المهام`, Approvals
+`الموافقات`, Deadlines and Overdue `المواعيد النهائية والمهام المتأخرة`, and
+Mentions `الإشارات`. Stored notification content is complete in Arabic and
+English. Email uses the recipient's persisted language with RTL Arabic or LTR
+English, while task reminder dates use Asia/Riyadh, Gregorian dates, and
+Western digits.
+
+Phase 14 terminology includes Audit log `سجل التدقيق`, Archive management
+`إدارة الأرشيف`, Operations `العمليات`, System health `سلامة النظام`, Backup
+status `حالة النسخ الاحتياطي`, Retention policy `سياسة الاحتفاظ`, and Restore
+`استعادة`. Administrative timestamps use Asia/Riyadh and display Gregorian
+plus Umm al-Qura Hijri dates with Western digits. Stable audit, environment,
+status, and command codes remain machine-readable and are translated only for
+presentation.
+
+Separately approved extensions must resolve:
 
 - Official Arabic translations for later statuses, workflow actions, and
   report names.
-- Gregorian/Hijri display outside the approved Phase 3 through Phase 5 screens.
-- Arabic-Indic/Western digit display outside the approved Phase 3 through Phase 5
-  screens.
+- Gregorian/Hijri display outside the approved Phase 3 through Phase 14
+  screens and outputs.
+- Arabic-Indic/Western digit display outside the approved Phase 3 through
+  Phase 14 screens and outputs.
 - Date/time, timezone, currency, and rounding conventions.
-- Arabic duplicate and sorting rules outside the approved account search.
+- Arabic duplicate and sorting rules outside the approved account and Phase 8
+  trainee duplicate behavior.
 
 Until approved, implementation keeps these policies configurable or defers the
 affected feature; it does not guess.

@@ -62,7 +62,11 @@ def visible_project_or_404(actor: User, project_id: int) -> Project:
 
 def can_manage_project(actor: User, project: Project) -> bool:
     """Return whether the actor may modify this project."""
-    if not actor.has_perm("projects.change_project") or project.is_archived:
+    if (
+        not actor.has_perm("projects.change_project")
+        or project.is_archived
+        or project.status == Project.Status.COMPLETED
+    ):
         return False
     return (
         actor.has_perm("projects.view_all_projects") or project.manager_id == actor.pk

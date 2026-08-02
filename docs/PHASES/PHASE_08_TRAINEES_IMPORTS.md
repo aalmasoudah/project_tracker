@@ -1,7 +1,6 @@
 # Phase 8: Trainees and Imports
 
-Status: Draft; blocked by trainee identity, import, privacy, and permission
-decisions.
+Status: Completed and verified on 2026-07-29.
 
 ## 1. Goal
 
@@ -67,8 +66,9 @@ not automatically grant confirmation or broad personal-data visibility.
 
 - Preview never commits trainee records.
 - Confirm is transactional and audited.
-- Resolve `BR-11`, `BR-14`, `BR-16`, import column/partial behavior, privacy,
-  permissions, and Arabic normalization/header terminology.
+- Decision 0013 resolves `BR-11`, archive behavior, columns, atomicity,
+  privacy, permissions, file limits, and Arabic normalization/header
+  terminology.
 
 ## 10. Expected Migrations
 

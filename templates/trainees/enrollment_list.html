@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Trainees" %}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <h1 class="h3 mb-0">{% translate "Trainees" %}</h1>
+  <div class="d-flex gap-2">
+    {% if perms.trainees.import_trainees %}<a class="btn btn-outline-primary" href="{% url 'trainees:import-upload' %}">{% translate "Import trainees" %}</a>{% endif %}
+    {% if perms.trainees.add_courseenrollment %}<a class="btn btn-primary" href="{% url 'trainees:create' %}">{% translate "Enroll trainee" %}</a>{% endif %}
+  </div>
+</div>
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md"><input class="form-control" name="q" value="{{ search }}" placeholder="{% translate 'Search trainees' %}"></div>
+  <div class="col-auto form-check align-self-center"><input class="form-check-input" id="archived" type="checkbox" name="archived" value="1" {% if include_archived %}checked{% endif %}><label class="form-check-label" for="archived">{% translate "Include archived" %}</label></div>
+  <div class="col-auto"><button class="btn btn-outline-primary">{% translate "Filter" %}</button></div>
+</form>
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+  <thead><tr><th>{% translate "Number" %}</th><th>{% translate "Full name" %}</th><th>{% translate "Course" %}</th>{% if show_contact %}<th>{% translate "Phone" %}</th><th>{% translate "Email address" %}</th>{% endif %}<th>{% translate "Status" %}</th></tr></thead>
+  <tbody>{% for enrollment in page %}
+    <tr><td><bdi>{{ enrollment.trainee_number }}</bdi></td><td><a href="{% url 'trainees:detail' enrollment.pk %}">{{ enrollment.trainee.full_name }}</a></td><td><bdi>{{ enrollment.course.code }}</bdi></td>{% if show_contact %}<td><bdi>{{ enrollment.trainee.phone }}</bdi></td><td><bdi>{{ enrollment.trainee.email|default:"—" }}</bdi></td>{% endif %}<td>{% if enrollment.is_archived %}{% translate "Archived" %}{% else %}{% translate "Active" %}{% endif %}</td></tr>
+  {% empty %}<tr><td colspan="6" class="text-muted">{% translate "No trainees found." %}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

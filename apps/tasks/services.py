@@ -151,14 +151,19 @@ def create_task(
     _validate_task(task)
     users = _validate_assignees(task, assignees, primary_owner)
     task.save()
-    for user in users:
+    assignments = [
         TaskAssignment.objects.create(
             task=task,
             user=user,
             is_primary=user.pk == primary_owner.pk,
             assigned_by=actor,
         )
+        for user in users
+    ]
     _task_event(actor=actor, action=actions.TASK_CREATED, task=task, request=request)
+    from apps.notifications.events import notify_task_assignments
+
+    notify_task_assignments(assignments)
     return task
 
 
@@ -175,6 +180,10 @@ def update_task(
         .select_related("project", "course", "course__project", "parent")
         .get(pk=task.pk)
     )
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(task):
+        raise ValidationError(_("Pending approval prevents task changes."))
     if not can_manage_task(actor, task):
         raise PermissionDenied(_("Task update permission is required."))
     previous_status = task.status
@@ -219,6 +228,10 @@ def update_assigned_task(
     request: HttpRequest | None = None,
 ) -> Task:
     task = Task.objects.select_for_update().get(pk=task.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(task):
+        raise ValidationError(_("Pending approval prevents task changes."))
     if not can_update_assigned_task(actor, task):
         raise PermissionDenied(_("Assigned-task update permission is required."))
     previous_status = task.status
@@ -253,6 +266,10 @@ def replace_task_assignments(
     request: HttpRequest | None = None,
 ) -> None:
     task = Task.objects.select_for_update().get(pk=task.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(task):
+        raise ValidationError(_("Pending approval prevents task archiving."))
     if not (
         actor.has_perm("tasks.manage_task_assignments") and can_manage_task(actor, task)
     ):
@@ -265,17 +282,20 @@ def replace_task_assignments(
     now = timezone.now()
     active.exclude(user_id__in=requested).update(removed_by=actor, removed_at=now)
     active.filter(user_id__in=requested).update(is_primary=False)
+    new_assignments: list[TaskAssignment] = []
     for user in users:
         assignment = active.filter(user=user).first()
         if assignment:
             assignment.is_primary = user.pk == primary_owner.pk
             assignment.save(update_fields=("is_primary",))
         else:
-            TaskAssignment.objects.create(
-                task=task,
-                user=user,
-                is_primary=user.pk == primary_owner.pk,
-                assigned_by=actor,
+            new_assignments.append(
+                TaskAssignment.objects.create(
+                    task=task,
+                    user=user,
+                    is_primary=user.pk == primary_owner.pk,
+                    assigned_by=actor,
+                )
             )
     _task_event(
         actor=actor,
@@ -283,6 +303,9 @@ def replace_task_assignments(
         task=task,
         request=request,
     )
+    from apps.notifications.events import notify_task_assignments
+
+    notify_task_assignments(new_assignments)
 
 
 @transaction.atomic
@@ -354,14 +377,19 @@ def restore_task(
     task.updated_by = actor
     _validate_task(task)
     task.save()
-    for user in users:
+    assignments = [
         TaskAssignment.objects.create(
             task=task,
             user=user,
             is_primary=user.pk == primary.pk,
             assigned_by=actor,
         )
+        for user in users
+    ]
     _task_event(actor=actor, action=actions.TASK_RESTORED, task=task, request=request)
+    from apps.notifications.events import notify_task_assignments
+
+    notify_task_assignments(assignments)
     return task
 
 
@@ -390,6 +418,9 @@ def add_task_comment(
         metadata={"comment_id": comment.pk},
         request=request,
     )
+    from apps.notifications.events import notify_task_mentions
+
+    notify_task_mentions(comment)
     return comment
 
 

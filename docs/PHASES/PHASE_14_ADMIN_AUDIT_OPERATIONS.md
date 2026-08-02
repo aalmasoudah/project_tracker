@@ -1,7 +1,6 @@
 # Phase 14: Administration, Audit, and Operational Safety
 
-Status: Draft; blocked by audit visibility, retention, export, operational
-ownership, and recovery decisions.
+Status: Approved under decision 0019; implemented and verified on 2026-08-02.
 
 ## 1. Goal
 
@@ -19,6 +18,10 @@ database-restore feature.
 - Protected, dry-run-capable management commands.
 - Approved retention enforcement and operations/recovery runbooks.
 - Arabic/English administrative presentation and complete RTL/LTR workflows.
+
+The approved retention behavior is non-destructive: protected application
+data is retained indefinitely and the retention command reports inventory
+with zero deletion candidates.
 
 ## 3. Excluded Features
 
@@ -52,9 +55,9 @@ database-restore feature.
 
 ## 7. Permission Requirements
 
-Resolve `RBAC-08`, `RBAC-09`, export rights, personal-data access, and
-operational role separation. View, export, archive, restore, retention, and
-command execution are distinct permissions.
+Decision 0019 resolves `RBAC-08`, `RBAC-09`, export rights, personal-data
+access, and operational role separation. View, export, archive, restore,
+retention, and shell command execution remain distinct permissions.
 
 ## 8. Validation Rules
 
@@ -71,8 +74,9 @@ command execution are distinct permissions.
 - Important records are archived rather than normally deleted.
 - Database restoration is an infrastructure operation, not a general web
   action.
-- Resolve `BR-16`, `BR-18`, `RBAC-07` through `RBAC-09`, retention/legal hold,
-  backup/RPO/RTO, operation ownership, and localization policy.
+- Decision 0019 resolves `BR-16`, `BR-18`, `RBAC-07` through `RBAC-09`,
+  retention/legal-hold behavior, backup/RPO/RTO, operation ownership, and
+  localization policy.
 
 ## 10. Expected Migrations
 
@@ -133,8 +137,9 @@ command execution are distinct permissions.
 ## 17. Dependencies
 
 - Completed prior phases and consistent audit/archive behavior.
-- Approved audit/health/export/restore permissions, retention/hard-delete/legal
-  hold, operational ownership, backup/RPO/RTO, and protected command policy.
+- Decision 0019 and completed prior phases define audit/health/export/restore
+  permissions, retention/hard-delete/legal-hold behavior, operational
+  ownership, backup/RPO/RTO, and protected command policy.
 - Approved Arabic operational terminology and date/digit policy.
 
 ## 18. Rollback Considerations

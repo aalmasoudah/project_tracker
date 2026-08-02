@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Notification delivery status" %}{% endblock %}
+{% block content %}
+  <h1 class="h3">{% translate "Notification delivery status" %}</h1>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>{% translate "Recipient" %}</th><th>{% translate "Category" %}</th><th>{% translate "Status" %}</th><th>{% translate "Attempts" %}</th><th>{% translate "Updated at" %}</th></tr></thead>
+      <tbody>
+        {% for delivery in page %}
+          <tr>
+            <td><bdi>{{ delivery.notification.recipient.username }}</bdi></td>
+            <td>{{ delivery.notification.get_category_display }}</td>
+            <td>{{ delivery.get_status_display }}</td>
+            <td><bdi>{{ delivery.attempts }}</bdi></td>
+            <td><bdi>{{ delivery.updated_at|date:"Y-m-d H:i" }}</bdi></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">{% translate "No delivery records found." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if page.has_other_pages %}
+    <nav class="mt-4" aria-label="{% translate 'Delivery pagination' %}">
+      <ul class="pagination">
+        {% if page.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">{% translate "Previous" %}</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link"><bdi>{{ page.number }} / {{ page.paginator.num_pages }}</bdi></span></li>
+        {% if page.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">{% translate "Next" %}</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}

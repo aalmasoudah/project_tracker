@@ -106,23 +106,130 @@ Phase 6 adds no permission codenames. It derives progress visibility from
 approved source-record permissions and withholds a value whenever the actor's
 scope might omit hierarchy or aggregate inputs.
 
+## Phase 7 Milestone and Approval Matrix
+
+| Role | Milestones | Submit completion | Approve/reject | History |
+| --- | --- | --- | --- | --- |
+| Technical Admin | None | None | None | Phase 2 security audit only |
+| CEO | View all, including archived | None | None | View all requests and decisions |
+| Executive Manager | Full administration | Any eligible item | Assigned step | View all requests and decisions |
+| Project Manager | Manage milestones in managed projects | Eligible items in managed projects | Assigned Project Manager step | Managed-project history |
+| Supervisor | View active visible milestones | Assigned eligible tasks | Assigned Supervisor step | Active visible context only |
+| Employee | None | Assigned eligible tasks | None | Own submitted requests only |
+| Contractor | None | Assigned eligible tasks | None | Own submitted requests only |
+
+Approval is strictly sequential: an assigned Supervisor completes step one,
+then an assigned Project Manager completes step two. The same person cannot
+fill both steps. Rejection requires a reason, and immutable decisions remain
+available only within the approved object scope.
+
+## Phase 8 Trainee and Import Matrix
+
+| Role | Roster visibility | Contact data | Changes/imports | History |
+| --- | --- | --- | --- | --- |
+| Technical Admin | None | None | None | Phase 2 security audit only |
+| CEO | All names/numbers, including archived | None | None | None |
+| Executive Manager | All | Full | Full lifecycle, preview, and confirm | All import history |
+| Project Manager | Managed-project courses | Full | Full lifecycle, preview, and confirm in managed courses | Managed-course imports |
+| Supervisor | Active visible course names/numbers | None | None | None |
+| Employee | None | None | None | None |
+| Contractor | None | None | None | None |
+
+Import upload does not bypass course scope. Only Executive Managers and the
+owning Project Manager receive both preview and confirmation permission.
+
+## Phase 9 Session and Trainer-Link Matrix
+
+| Role | Sessions | Issue links | Submission visibility |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | All read-only | None | All read-only |
+| Executive Manager | Manage all | All | All |
+| Project Manager | Manage owned-project courses | Managed sessions | Managed sessions |
+| Supervisor | Active supervised-project sessions | None | Active supervised sessions |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+External trainers have no account or internal navigation. A valid expiring
+capability link grants access only to one locked session roster.
+
+## Phase 10 Attendance Review and Correction Matrix
+
+| Role | Attendance visibility | Review | Correction/history |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | Phase 2 security audit only |
+| CEO | All read-only | None | View all decisions and corrections |
+| Executive Manager | All | None | Correct any approved attendance; view all history |
+| Project Manager | Managed-project courses | None | Correct approved managed attendance; managed history |
+| Supervisor | Active assigned-project sessions | Approve/reject pending submissions | View supervised history; no correction |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+The assigned Supervisor is the only reviewer. Rejection reopens the same
+external capability. Executive Managers and owning Project Managers are the
+only Phase 10 correctors.
+
+## Phase 11 Notification Matrix
+
+| Role | Own notifications/preferences | Delivery operations |
+| --- | --- | --- |
+| Technical Admin | Own notifications and preferences | View delivery status |
+| CEO | Own notifications and preferences | None |
+| Executive Manager | Own notifications and preferences | None |
+| Project Manager | Own notifications and preferences | None |
+| Supervisor | Own notifications and preferences | None |
+| Employee | Own notifications and preferences | None |
+| Contractor | Own notifications and preferences | None |
+
+Notification ownership never grants target access. The linked domain view
+rechecks its existing object-level permission. Technical Admin delivery access
+shows safe operational metadata and grants no business-record access.
+
+## Phase 14 Administration and Operations Matrix
+
+| Role | Central audit | Archive center | Operations |
+| --- | --- | --- | --- |
+| Technical Admin | Security/operations view and sanitized CSV export | Departments only | Safe health/backup status |
+| CEO | Business view and sanitized CSV export | None | None |
+| Executive Manager | Business view and sanitized CSV export | All supported business archives | None |
+| Project Manager | Existing domain history only | Managed records and task tags under existing permissions | None |
+| Supervisor | Existing scoped history only | None | None |
+| Employee | Existing own-history views only | None | None |
+| Contractor | Existing own-history views only | None | None |
+
+The archive center only aggregates existing permissions and object scopes. It
+does not grant a cross-domain override. Audit export excludes raw metadata,
+personal-data fields, individual attendance, files, and backup contents.
+Shell-level backup, restoration, deployment, and protected-command authority
+is an infrastructure responsibility and is not granted by an application
+role.
+
 ## Object-Level Access Questions
 
-1. [Approved through Phase 6] Use the account/department, project, course,
-   task, and progress scopes above. Later domains remain open.
+1. [Approved through Phase 11] Use the account/department, project, course,
+   task, milestone, approval, trainee, import, progress, attendance, and
+   notification scopes above.
+   Later domains remain open.
 2. [Approved for Phase 3] Project Managers cannot access projects they do not
    manage unless a later phase grants a separate assignment.
-3. [Approved through Phase 6] Supervisors do not receive cross-department
-   directory, project, course, or task access.
+3. [Approved through Phase 8] Supervisors do not receive cross-department
+   directory, project, course, task, milestone, approval, trainee, or import
+   access.
 4. [Approved for Phase 3] Employees and Contractors cannot see budgets.
-5. Who may view personal attendance information?
-6. Who may export reports containing personal data?
-7. [Approved through Phase 6] Technical Admin may archive/restore departments.
+5. [Approved for Phase 10] CEO and Executive Manager see all attendance;
+   owning Project Managers and assigned Supervisors see their scoped
+   attendance. Employees and Contractors have no Phase 10 access.
+6. [Approved through Phase 14] No personal-data report or administrative
+   export is approved. Phase 13 aggregate reports and Phase 14 sanitized audit
+   CSV are the complete approved export catalog.
+7. [Approved through Phase 14] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
-   so only for a managed project. Accounts are deactivated/reactivated. Later
-   records remain open.
-8. [Approved for Phase 2] Technical Admin may read Phase 2 audit records.
-   Detailed operational health remains deferred.
+   so only for a managed project. Existing course, task, milestone, enrollment,
+   reference, trainer, and tag permissions remain authoritative. Accounts are
+   deactivated/reactivated. The archive center adds no override.
+8. [Approved for Phase 14] Technical Admin may read security/operations audit
+   and safe operational health/backup status. CEO and Executive Manager may
+   read business audit. Technical Admin receives no business audit access.
 
 ## Role Approval
 
@@ -131,4 +238,8 @@ Status: The role model and Phase 2 permission slice were approved on
 0008. The Phase 4 course/trainer slice was approved on 2026-07-27 in decision
 0009. The Phase 5 task/collaboration slice was approved on 2026-07-27 in
 decision 0010. The Phase 6 progress-visibility slice was approved on
-2026-07-28 in decision 0011. Later-domain matrix entries remain open.
+2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
+on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
+on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014, Phase
+10 in decision 0015, Phase 11 in decision 0016, and Phase 14 in decision 0019.
+Separately approved extensions require their own permission decisions.

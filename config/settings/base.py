@@ -1,5 +1,7 @@
 """Settings shared by every environment."""
 
+# Celery does not publish PEP 561 type metadata.
+from celery.schedules import crontab  # type: ignore[import-untyped]
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
@@ -19,7 +21,14 @@ INSTALLED_APPS = [
     "apps.projects.apps.ProjectsConfig",
     "apps.courses.apps.CoursesConfig",
     "apps.tasks.apps.TasksConfig",
+    "apps.approvals.apps.ApprovalsConfig",
+    "apps.trainees.apps.TraineesConfig",
+    "apps.attendance.apps.AttendanceConfig",
+    "apps.notifications.apps.NotificationsConfig",
     "apps.progress.apps.ProgressConfig",
+    "apps.reports.apps.ReportsConfig",
+    "apps.operations.apps.OperationsConfig",
+    "apps.workspace.apps.WorkspaceConfig",
 ]
 
 MIDDLEWARE = [
@@ -47,6 +56,7 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.notifications.context_processors.notification_summary",
             ],
         },
     },
@@ -110,3 +120,31 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 LOGGING = build_logging_config(
     json_logs=env_bool("DJANGO_JSON_LOGS", default=True),
 )
+
+APP_BASE_URL = env_string("APP_BASE_URL", default="http://127.0.0.1:8000")
+DEPLOYMENT_ENVIRONMENT = env_string(
+    "DEPLOYMENT_ENVIRONMENT",
+    default="development",
+)
+if DEPLOYMENT_ENVIRONMENT not in {"development", "test", "staging", "production"}:
+    raise ImproperlyConfigured(
+        "DEPLOYMENT_ENVIRONMENT must be development, test, staging, or production."
+    )
+DEFAULT_FROM_EMAIL = env_string("DEFAULT_FROM_EMAIL", default="tracker@example.test")
+CELERY_BROKER_URL = env_string("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_RESULT_BACKEND = None
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = False
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BEAT_SCHEDULE = {
+    "dispatch-notification-deliveries": {
+        "task": "apps.notifications.tasks.dispatch_pending_deliveries",
+        "schedule": 60.0,
+    },
+    "generate-task-reminders": {
+        "task": "apps.notifications.tasks.generate_task_reminders",
+        "schedule": crontab(minute=0, hour=8),
+    },
+}

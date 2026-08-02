@@ -2,9 +2,9 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phases 1 through 6 are completed;
-later phase specifications remain unapproved until the project owner
-explicitly approves them.
+Status: Planning pass completed on 2026-07-23. Phases 1 through 14 are
+implemented and verified. Production launch readiness remains subject to the
+final staging, UAT, ownership, provider, and recovery-exercise gates.
 
 The project proceeds one approved phase at a time. The approved scope permits
 planning, but it does not approve unresolved business rules, permissions, or
@@ -20,14 +20,14 @@ phase specifications.
 | 4 | Courses and Trainers | Phase 3; course lifecycle/access rules | Completed on 2026-07-27 |
 | 5 | Tasks and Collaboration | Phases 3-4; task rules | Completed on 2026-07-27 |
 | 6 | Progress Engine | Phase 5; available progress formulas | Completed on 2026-07-28 |
-| 7 | Milestones and Approvals | Phase 6; approval actors/steps | Blocked by business decisions |
-| 8 | Trainees and Imports | Phase 4; duplicate/import/privacy rules | Blocked by business decisions |
-| 9 | Sessions and Trainer Links | Phase 8; time/token/attendance rules | Blocked by business decisions |
-| 10 | Attendance Approval and Corrections | Phase 9; actor/value rules | Blocked by business decisions |
-| 11 | Notifications and Background Jobs | Relevant event-producing phases; preference rules | Blocked by business decisions |
-| 12 | Dashboards, Search, and Operational Views | Core domains and approved permissions | Blocked by business decisions |
-| 13 | Reports and Exports | Central progress services and report permissions | Blocked by business decisions |
-| 14 | Administration, Audit, and Operational Safety | Prior audit/archive behavior; retention policy | Blocked by business decisions |
+| 7 | Milestones and Approvals | Phase 6; approval actors/steps | Completed on 2026-07-29 |
+| 8 | Trainees and Imports | Phase 4; duplicate/import/privacy rules | Completed on 2026-07-29 |
+| 9 | Sessions and Trainer Links | Phase 8; time/token/attendance rules | Completed on 2026-07-29 |
+| 10 | Attendance Approval and Corrections | Phase 9; actor/value rules | Completed on 2026-07-29 |
+| 11 | Notifications and Background Jobs | Relevant event-producing phases; preference rules | Completed on 2026-07-29 |
+| 12 | Dashboards, Search, and Operational Views | Core domains and approved permissions | Completed on 2026-07-29 |
+| 13 | Reports and Exports | Central progress services and report permissions | Completed on 2026-07-30 |
+| 14 | Administration, Audit, and Operational Safety | Prior audit/archive behavior; retention policy | Completed on 2026-08-02 |
 
 Independent preparatory research may occur, but implementation may not skip
 dependencies or start a later phase without explicit approval.
@@ -47,28 +47,28 @@ requirements.
 | BR-06 | Milestone/project progress formula | Question 6 | Project approved; milestone deferred to Phase 7 |
 | BR-07 | Whether progress may exceed 100 percent | Question 7 | Approved |
 | BR-08 | Project/course status transitions | Question 8 | Project and course slices approved |
-| BR-09 | Milestone/project completion approval steps | Question 9 | 7 |
-| BR-10 | Reject/reopen/correct/override actors | Question 10 | 7 |
-| BR-11 | Trainee/import duplicate identity | Question 11 | 8 |
-| BR-12 | Allowed attendance values | Question 12 | 9 |
-| BR-13 | Expiry during trainer data entry | Question 13 | 9 |
-| BR-14 | Date/time storage, display, and overdue semantics | Question 14 | Phase 3-5 date/schedule slices approved; overdue remains open |
+| BR-09 | Milestone/project completion approval steps | Question 9 | Approved for Phase 7 |
+| BR-10 | Reject/reopen/correct/override actors | Question 10 | Approved through Phase 10 |
+| BR-11 | Trainee/import duplicate identity | Question 11 | Approved |
+| BR-12 | Allowed attendance values | Question 12 | Approved |
+| BR-13 | Expiry during trainer data entry | Question 13 | Approved |
+| BR-14 | Date/time storage, display, and overdue semantics | Question 14 | Approved through Phase 11 |
 | BR-15 | Supported currencies and rounding | Question 15 | Phase 3 SAR budget slice approved |
-| BR-16 | Hard-deletable records | Question 16 | Through Phase 5 approved; later records open |
-| BR-17 | User-disableable notification categories | Question 17 | 11 |
-| BR-18 | File/audit/archive retention periods | Question 18 | 14 |
-| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Through Phase 6 approved |
-| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Through Phase 6 approved |
+| BR-16 | Hard-deletable records | Question 16 | Approved through Phase 14 |
+| BR-17 | User-disableable notification categories | Question 17 | Approved for Phase 11 |
+| BR-18 | File/audit/archive retention periods | Question 18 | Approved in decision 0019 |
+| RBAC-01 | Phase-specific action-by-role permission matrix | `USER_ROLES.md` | Approved through Phase 14 |
+| RBAC-02 | Assigned/department/all-record visibility | Object access question 1 | Approved through Phase 14 |
 | RBAC-03 | Project-manager cross-project access | Question 2 | Approved |
-| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 6 approved |
+| RBAC-04 | Supervisor cross-team/department access | Question 3 | Through Phase 8 approved |
 | RBAC-05 | Employee/contractor budget visibility | Question 4 | Approved |
-| RBAC-06 | Personal attendance visibility | Question 5 | 10 |
-| RBAC-07 | Personal-data report export rights | Question 6 | 13 |
-| RBAC-08 | Archive/restore authority | Question 7 | Through Phase 5 approved |
-| RBAC-09 | Audit/health visibility | Question 8 | 14 |
+| RBAC-06 | Personal attendance visibility | Question 5 | Approved for Phase 10 |
+| RBAC-07 | Personal-data report export rights | Question 6 | Approved through Phase 14; personal export excluded |
+| RBAC-08 | Archive/restore authority | Question 7 | Approved through Phase 14 |
+| RBAC-09 | Audit/health visibility | Question 8 | Approved in decision 0019 |
 | L10N-01 | Default language and preference persistence | `BUSINESS_RULES.md` question 19 | Approved |
 | L10N-02 | Official Arabic terminology approver | Question 20 | Approved |
-| L10N-03 | Calendar and digit display policy | Question 21 | Phase 3-5 date/schedule slices approved |
+| L10N-03 | Calendar and digit display policy | Question 21 | Approved through Phase 14 |
 | L10N-04 | Arabic normalization for identity/search/duplicates | Question 22 | Account, project, course, trainer, task, and tag slices approved |
 
 Phase owners must update the source documents when decisions are approved and

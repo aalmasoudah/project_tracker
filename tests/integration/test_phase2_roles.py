@@ -22,7 +22,9 @@ EXPECTED_PERMISSIONS = {
         "accounts.manage_accounts",
         "accounts.view_all_directory",
         "accounts.view_user",
+        "audit.export_security_audit",
         "audit.view_auditevent",
+        "audit.view_security_audit",
         "organizations.add_department",
         "organizations.archive_department",
         "organizations.change_department",
@@ -33,6 +35,8 @@ EXPECTED_PERMISSIONS = {
     "ceo": {
         "accounts.view_all_directory",
         "accounts.view_user",
+        "audit.export_business_audit",
+        "audit.view_business_audit",
         "organizations.view_all_departments",
         "organizations.view_department",
         "projects.view_all_projects",
@@ -45,6 +49,8 @@ EXPECTED_PERMISSIONS = {
     "executive_manager": {
         "accounts.view_all_directory",
         "accounts.view_user",
+        "audit.export_business_audit",
+        "audit.view_business_audit",
         "organizations.view_all_departments",
         "organizations.view_department",
         "projects.add_category",
@@ -262,8 +268,8 @@ def test_cross_department_detail_is_indistinguishable_from_missing(
     ("role", "accounts_link", "audit_link"),
     [
         ("technical_admin", True, True),
-        ("ceo", True, False),
-        ("executive_manager", True, False),
+        ("ceo", True, True),
+        ("executive_manager", True, True),
         ("project_manager", True, False),
         ("supervisor", True, False),
         ("employee", False, False),

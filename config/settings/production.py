@@ -1,13 +1,20 @@
 """Production settings that fail closed on unsafe configuration."""
 
-from django.core.exceptions import ImproperlyConfigured
+from urllib.parse import urlsplit
+
+from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.validators import validate_email
 
 from config.settings.database import postgres_database_from_url
-from config.settings.environment import env_int, env_list, env_string
+from config.settings.environment import env_bool, env_int, env_list, env_string
 
 from .base import *
 
 DEBUG = False
+if DEPLOYMENT_ENVIRONMENT != "production":
+    raise ImproperlyConfigured(
+        "Production settings require DEPLOYMENT_ENVIRONMENT=production."
+    )
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 SECRET_KEY = env_string("SECRET_KEY")
 if not SECRET_KEY or SECRET_KEY.startswith("django-insecure-"):
@@ -18,6 +25,52 @@ if not ALLOWED_HOSTS:
     raise ImproperlyConfigured("Production ALLOWED_HOSTS is required.")
 
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+APP_BASE_URL = env_string("APP_BASE_URL")
+app_base_parts = urlsplit(APP_BASE_URL)
+if (
+    app_base_parts.scheme != "https"
+    or not app_base_parts.netloc
+    or app_base_parts.path not in ("", "/")
+    or app_base_parts.query
+    or app_base_parts.fragment
+    or app_base_parts.username
+    or app_base_parts.password
+):
+    raise ImproperlyConfigured("Production APP_BASE_URL must be an HTTPS origin.")
+
+CELERY_BROKER_URL = env_string("CELERY_BROKER_URL")
+if not CELERY_BROKER_URL.startswith(("redis://", "rediss://")):
+    raise ImproperlyConfigured("Production CELERY_BROKER_URL must use Redis.")
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env_string("EMAIL_HOST")
+EMAIL_PORT = env_int("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = env_string("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env_string("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", default=True)
+DEFAULT_FROM_EMAIL = env_string("DEFAULT_FROM_EMAIL")
+if not all(
+    (
+        EMAIL_HOST,
+        EMAIL_PORT,
+        EMAIL_HOST_USER,
+        EMAIL_HOST_PASSWORD,
+        DEFAULT_FROM_EMAIL,
+    )
+):
+    raise ImproperlyConfigured(
+        "Production SMTP configuration is required: EMAIL_HOST, EMAIL_PORT, "
+        "EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, and DEFAULT_FROM_EMAIL."
+    )
+if not EMAIL_USE_TLS:
+    raise ImproperlyConfigured("Production SMTP must enable EMAIL_USE_TLS.")
+try:
+    validate_email(DEFAULT_FROM_EMAIL)
+except ValidationError as error:
+    raise ImproperlyConfigured(
+        "Production DEFAULT_FROM_EMAIL must be a valid email address."
+    ) from error
+
 DATABASES = {
     "default": postgres_database_from_url(
         env_string("DATABASE_URL"),

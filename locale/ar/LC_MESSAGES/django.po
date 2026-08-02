@@ -44,7 +44,7 @@ msgid ""
 "A department can be archived only after all active users move or are "
 "deactivated."
 msgstr ""
-"لا يمكن أرشفة القسم حتى يُنقل جميع المستخدمين النشطين أو تُعطّل حساباتهم."
+"لا يمكن أرشفة الإدارة إلا بعد نقل جميع المستخدمين النشطين أو إلغاء تنشيطهم."
 
 msgid "A department is required for this role."
 msgstr "القسم مطلوب لهذا الدور."
@@ -105,9 +105,6 @@ msgstr "سيتم إنهاء جميع الجلسات النشطة."
 
 msgid "An account with this email already exists."
 msgstr "يوجد حساب بهذا البريد الإلكتروني مسبقًا."
-
-msgid "Append-only Phase 2 account and department events."
-msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."
 
 msgid "Approved profile"
 msgstr "الملف المعتمد"
@@ -238,9 +235,6 @@ msgstr "الاسم بالإنجليزية مطلوب."
 msgid "Executive Manager"
 msgstr "المدير التنفيذي"
 
-msgid "Home"
-msgstr "الرئيسية"
-
 msgid "IP address"
 msgstr "عنوان IP"
 
@@ -279,9 +273,6 @@ msgstr "لم يتم العثور على حسابات."
 
 msgid "No assigned role"
 msgstr "لا يوجد دور معيّن"
-
-msgid "No audit events found."
-msgstr "لم يتم العثور على أحداث تدقيق."
 
 msgid "No departments found."
 msgstr "لم يتم العثور على أقسام."
@@ -367,9 +358,6 @@ msgstr "البحث في الأقسام"
 msgid "Secure bilingual account and department administration."
 msgstr "إدارة آمنة وثنائية اللغة للحسابات والأقسام."
 
-msgid "Security audit"
-msgstr "سجل التدقيق الأمني"
-
 msgid "Set a temporary password for"
 msgstr "تعيين كلمة مرور مؤقتة لـ"
 
@@ -429,7 +417,8 @@ msgid ""
 "Unable to sign in with the provided credentials. Try again later or contact "
 "an administrator."
 msgstr ""
-"تعذّر تسجيل الدخول بالبيانات المقدمة. حاول لاحقًا أو تواصل مع المسؤول."
+"تعذّر تسجيل الدخول بالبيانات المقدمة. حاول مرة أخرى لاحقًا أو تواصل مع "
+"مسؤول."
 
 msgid "Unknown role"
 msgstr "دور غير معروف"
@@ -438,15 +427,14 @@ msgid ""
 "Use 2-20 uppercase English letters, numbers, underscores, or hyphens, "
 "starting with a letter."
 msgstr ""
-"استخدم من حرفين إلى 20 من الأحرف الإنجليزية الكبيرة أو الأرقام أو الشرطة "
-"السفلية أو الواصلة، على أن يبدأ الرمز بحرف."
+"استخدم من 2 إلى 20 حرفًا إنجليزيًا كبيرًا أو رقمًا أو شرطة سفلية أو واصلة، "
+"على أن يبدأ بحرف."
 
 msgid "Use the internal account created for you by an administrator."
 msgstr "استخدم الحساب الداخلي الذي أنشأه لك المسؤول."
 
 msgid "Use uppercase English letters, numbers, underscores, or hyphens."
-msgstr ""
-"استخدم الأحرف الإنجليزية الكبيرة أو الأرقام أو الشرطة السفلية أو الواصلة."
+msgstr "استخدم أحرفًا إنجليزية كبيرة وأرقامًا وشرطات سفلية أو واصلات."
 
 msgid "Username"
 msgstr "اسم المستخدم"
@@ -867,7 +855,7 @@ msgid ""
 "starting with a letter."
 msgstr ""
 "استخدم من 2 إلى 30 حرفًا إنجليزيًا كبيرًا أو رقمًا أو شرطة سفلية أو واصلة، "
-"على أن يبدأ الرمز بحرف."
+"على أن يبدأ بحرف."
 
 msgid "archived by"
 msgstr "أرشفه"
@@ -1529,6 +1517,1586 @@ msgstr "لا ينطبق"
 
 msgid "Progress"
 msgstr "التقدم"
+
+msgid "A completion approval is already pending."
+msgstr "يوجد طلب موافقة على الإكمال قيد الانتظار بالفعل."
+
+msgid "A milestone with this code already exists."
+msgstr "توجد مرحلة رئيسية بهذا الرمز بالفعل."
+
+msgid "A rejection reason is required."
+msgstr "سبب الرفض مطلوب."
+
+msgid "All"
+msgstr "الكل"
+
+msgid "Approval history"
+msgstr "سجل الموافقات"
+
+msgid "Approval recorded."
+msgstr "تم تسجيل الموافقة."
+
+msgid "Approval request"
+msgstr "طلب الموافقة"
+
+msgid "Approval steps"
+msgstr "خطوات الموافقة"
+
+msgid "Approvals"
+msgstr "الموافقات"
+
+msgid "Approve"
+msgstr "موافقة"
+
+msgid "Approved"
+msgstr "تمت الموافقة"
+
+msgid "Archived projects cannot own milestones."
+msgstr "لا يمكن للمشاريع المؤرشفة أن تتضمن مراحل رئيسية."
+
+msgid "Archived records cannot be submitted."
+msgstr "لا يمكن إرسال السجلات المؤرشفة."
+
+msgid "Assign a project Supervisor before submission."
+msgstr "عيّن مشرفًا للمشروع قبل الإرسال."
+
+msgid "Attempt"
+msgstr "المحاولة"
+
+msgid "Both approvers must be active."
+msgstr "يجب أن يكون كلا المعتمدين نشطين."
+
+msgid "Completion approval queue and immutable history."
+msgstr "قائمة انتظار موافقات الإكمال والسجل غير القابل للتغيير."
+
+msgid "Completion submission permission is required."
+msgstr "يلزم إذن إرسال الإكمال للموافقة."
+
+msgid "Completion submission requires 100 percent progress."
+msgstr "يتطلب إرسال الإكمال تقدمًا بنسبة 100 بالمئة."
+
+msgid "Completion submitted for approval."
+msgstr "تم إرسال الإكمال للموافقة."
+
+msgid "Confirm submission"
+msgstr "تأكيد الإرسال"
+
+msgid "Create milestone"
+msgstr "إنشاء مرحلة رئيسية"
+
+msgid "Edit milestone"
+msgstr "تعديل المرحلة الرئيسية"
+
+msgid "Milestone"
+msgstr "مرحلة رئيسية"
+
+msgid "Milestone archive permission is required."
+msgstr "يلزم إذن أرشفة المراحل الرئيسية."
+
+msgid "Milestone archived."
+msgstr "تمت أرشفة المرحلة الرئيسية."
+
+msgid "Milestone code and project cannot be changed."
+msgstr "لا يمكن تغيير رمز المرحلة الرئيسية أو مشروعها."
+
+msgid "Milestone created."
+msgstr "تم إنشاء المرحلة الرئيسية."
+
+msgid "Milestone creation permission is required."
+msgstr "يلزم إذن إنشاء المراحل الرئيسية."
+
+msgid "Milestone dates must be inside project dates."
+msgstr "يجب أن تكون تواريخ المرحلة الرئيسية ضمن تواريخ المشروع."
+
+msgid "Milestone restore permission is required."
+msgstr "يلزم إذن استعادة المراحل الرئيسية."
+
+msgid "Milestone restored."
+msgstr "تمت استعادة المرحلة الرئيسية."
+
+msgid "Milestone update permission is required."
+msgstr "يلزم إذن تحديث المراحل الرئيسية."
+
+msgid "Milestone updated."
+msgstr "تم تحديث المرحلة الرئيسية."
+
+msgid "Milestones"
+msgstr "المراحل الرئيسية"
+
+msgid "Milestones and approvals"
+msgstr "المراحل الرئيسية والموافقات"
+
+msgid "Milestones may be created only in managed projects."
+msgstr "لا يمكن إنشاء المراحل الرئيسية إلا في المشاريع المُدارة."
+
+msgid "New milestones must start as Draft."
+msgstr "يجب أن تبدأ المراحل الرئيسية الجديدة بحالة مسودة."
+
+msgid "No approval attempts."
+msgstr "لا توجد محاولات موافقة."
+
+msgid "No approval requests found."
+msgstr "لم يتم العثور على طلبات موافقة."
+
+msgid "No milestones found."
+msgstr "لم يتم العثور على مراحل رئيسية."
+
+msgid "Only an In Progress milestone can be submitted."
+msgstr "لا يمكن إرسال إلا مرحلة رئيسية قيد التنفيذ."
+
+msgid "Only the current pending step can be decided."
+msgstr "لا يمكن اتخاذ قرار إلا بشأن الخطوة الحالية قيد الانتظار."
+
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+msgid "Pending Project Manager"
+msgstr "بانتظار مدير المشروع"
+
+msgid "Pending Supervisor"
+msgstr "بانتظار المشرف"
+
+msgid "Pending approval"
+msgstr "بانتظار الموافقة"
+
+msgid "Pending approval prevents course archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة الدورة."
+
+msgid "Pending approval prevents course changes."
+msgstr "تمنع الموافقة المعلقة تعديل الدورة."
+
+msgid "Pending approval prevents milestone archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة المرحلة الرئيسية."
+
+msgid "Pending approval prevents milestone changes."
+msgstr "تمنع الموافقة المعلقة تعديل المرحلة الرئيسية."
+
+msgid "Pending approval prevents project archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة المشروع."
+
+msgid "Pending approval prevents project changes."
+msgstr "تمنع الموافقة المعلقة تعديل المشروع."
+
+msgid "Pending approval prevents task archiving."
+msgstr "تمنع الموافقة المعلقة أرشفة المهمة."
+
+msgid "Pending approval prevents task changes."
+msgstr "تمنع الموافقة المعلقة تعديل المهمة."
+
+msgid "Project milestone delivery and completion status."
+msgstr "حالة إنجاز المراحل الرئيسية للمشروع وإكمالها."
+
+msgid "Reject"
+msgstr "رفض"
+
+msgid "Reject approval"
+msgstr "رفض الموافقة"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "Rejection reason"
+msgstr "سبب الرفض"
+
+msgid "Rejection recorded."
+msgstr "تم تسجيل الرفض."
+
+msgid "Search milestones"
+msgstr "البحث في المراحل الرئيسية"
+
+msgid "Submit completion to the Supervisor and then the Project Manager."
+msgstr "أرسل الإكمال إلى المشرف ثم إلى مدير المشروع."
+
+msgid "Submit for approval"
+msgstr "إرسال للموافقة"
+
+msgid "Submitted at"
+msgstr "وقت الإرسال"
+
+msgid "Submitted by"
+msgstr "مُرسل بواسطة"
+
+msgid "The completed task state changed during approval."
+msgstr "تغيرت حالة المهمة المكتملة أثناء الموافقة."
+
+msgid "The target project is not eligible for approval."
+msgstr "المشروع المستهدف غير مؤهل للموافقة."
+
+msgid "This approval request is already resolved."
+msgstr "تمت معالجة طلب الموافقة هذا بالفعل."
+
+msgid "This milestone status transition is not allowed."
+msgstr "الانتقال إلى حالة المرحلة الرئيسية هذه غير مسموح."
+
+msgid "This project cannot contain editable milestones."
+msgstr "لا يمكن لهذا المشروع أن يتضمن مراحل رئيسية قابلة للتعديل."
+
+msgid "Type"
+msgstr "النوع"
+
+msgid "Waiting"
+msgstr "منتظر"
+
+msgid "You are not the assigned approver for this step."
+msgstr "لست المعتمد المعيّن لهذه الخطوة."
+
+msgid "attempt"
+msgstr "المحاولة"
+
+msgid "outcome"
+msgstr "النتيجة"
+
+msgid "reason"
+msgstr "السبب"
+
+msgid "role"
+msgstr "الدور"
+
+msgid "sequence"
+msgstr "التسلسل"
+
+msgid "Back"
+msgstr "رجوع"
+
+msgid "CSV files must use UTF-8 encoding."
+msgstr "يجب أن تستخدم ملفات CSV ترميز UTF-8."
+
+msgid "CSV or XLSX file"
+msgstr "ملف CSV أو XLSX"
+
+msgid "Cancel import"
+msgstr "إلغاء الاستيراد"
+
+msgid "Choose Skip or Update for every duplicate."
+msgstr "اختر تخطي أو تحديث لكل سجل مكرر."
+
+msgid "Confirm import"
+msgstr "تأكيد الاستيراد"
+
+msgid "Confirmed"
+msgstr "مؤكد"
+
+msgid "Course capacity would be exceeded."
+msgstr "سيتم تجاوز سعة الدورة."
+
+msgid "Create preview"
+msgstr "إنشاء معاينة"
+
+msgid "Download sample CSV"
+msgstr "تنزيل نموذج CSV"
+
+msgid "Duplicate"
+msgstr "مكرر"
+
+msgid "Duplicates"
+msgstr "السجلات المكررة"
+
+msgid "Duplicates inside the same file can only be skipped."
+msgstr "لا يمكن إلا تخطي السجلات المكررة داخل الملف نفسه."
+
+msgid "Edit trainee"
+msgstr "تعديل المتدرب"
+
+msgid "Enroll trainee"
+msgstr "تسجيل متدرب"
+
+msgid "Enter a valid phone number."
+msgstr "أدخل رقم هاتف صالحًا."
+
+msgid "Error"
+msgstr "خطأ"
+
+msgid "Errors"
+msgstr "الأخطاء"
+
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+msgid "Full name is required."
+msgstr "الاسم الكامل مطلوب."
+
+msgid "Import cancelled."
+msgstr "تم إلغاء الاستيراد."
+
+msgid "Import confirmed successfully."
+msgstr "تم تأكيد الاستيراد بنجاح."
+
+msgid "Import files must be 5 MB or smaller."
+msgstr "يجب ألا يتجاوز حجم ملف الاستيراد 5 ميجابايت."
+
+msgid "Import history"
+msgstr "سجل الاستيراد"
+
+msgid "Import preview"
+msgstr "معاينة الاستيراد"
+
+msgid "Import preview created. No trainees were saved."
+msgstr "تم إنشاء معاينة الاستيراد. لم يتم حفظ أي متدربين."
+
+msgid "Import trainees"
+msgstr "استيراد المتدربين"
+
+msgid "Macros and external workbook links are not allowed."
+msgstr "وحدات الماكرو وروابط المصنفات الخارجية غير مسموح بها."
+
+msgid "New import"
+msgstr "استيراد جديد"
+
+msgid "No imports found."
+msgstr "لم يتم العثور على عمليات استيراد."
+
+msgid "No trainees found."
+msgstr "لم يتم العثور على متدربين."
+
+msgid "Number"
+msgstr "الرقم"
+
+msgid "Only CSV and XLSX files are allowed."
+msgstr "يسمح فقط بملفات CSV وXLSX."
+
+msgid "Preview"
+msgstr "معاينة"
+
+msgid ""
+"Preview does not save trainees. Use UTF-8 CSV or XLSX with full_name and "
+"phone headers; email is optional."
+msgstr ""
+"لا تحفظ المعاينة المتدربين. استخدم ملف CSV بترميز UTF-8 أو XLSX بعناوين "
+"full_name وphone؛ والبريد الإلكتروني اختياري."
+
+msgid "Resolve all import errors before confirmation."
+msgstr "عالج جميع أخطاء الاستيراد قبل التأكيد."
+
+msgid "Result"
+msgstr "النتيجة"
+
+msgid "Row"
+msgstr "الصف"
+
+msgid "Row %(row)s"
+msgstr "الصف %(row)s"
+
+msgid "Rows"
+msgstr "الصفوف"
+
+msgid "Search trainees"
+msgstr "البحث عن المتدربين"
+
+msgid "Skip"
+msgstr "تخطي"
+
+msgid "Spreadsheet formulas are not allowed."
+msgstr "صيغ جداول البيانات غير مسموح بها."
+
+msgid "The CSV file is malformed."
+msgstr "ملف CSV غير صالح."
+
+msgid "The Excel file is malformed."
+msgstr "ملف Excel غير صالح."
+
+msgid "The Excel workbook is too large to process."
+msgstr "مصنف Excel كبير جدًا ولا يمكن معالجته."
+
+msgid "The duplicate record changed after preview."
+msgstr "تغير السجل المكرر بعد المعاينة."
+
+msgid "The file content type does not match its extension."
+msgstr "نوع محتوى الملف لا يطابق امتداده."
+
+msgid "The import contains an unsupported header."
+msgstr "يحتوي ملف الاستيراد على عنوان غير مدعوم."
+
+msgid "The import contains duplicate headers."
+msgstr "يحتوي ملف الاستيراد على عناوين مكررة."
+
+msgid "The import contains no trainee rows."
+msgstr "لا يحتوي ملف الاستيراد على صفوف متدربين."
+
+msgid "The import file is empty."
+msgstr "ملف الاستيراد فارغ."
+
+msgid "The import is missing required headers."
+msgstr "يفتقد ملف الاستيراد العناوين المطلوبة."
+
+msgid "The import may contain at most 5000 rows."
+msgstr "يمكن أن يحتوي ملف الاستيراد على 5000 صف كحد أقصى."
+
+msgid "The uploaded file could not be read safely."
+msgstr "تعذرت قراءة الملف المرفوع بأمان."
+
+msgid "The workbook must contain exactly one sheet."
+msgstr "يجب أن يحتوي المصنف على ورقة واحدة فقط."
+
+msgid "This import is no longer awaiting confirmation."
+msgstr "لم تعد عملية الاستيراد هذه بانتظار التأكيد."
+
+msgid "This trainee already exists in this course."
+msgstr "هذا المتدرب موجود بالفعل في هذه الدورة."
+
+msgid "Trainee archive permission is required."
+msgstr "يلزم إذن أرشفة المتدربين."
+
+msgid "Trainee archived successfully."
+msgstr "تمت أرشفة المتدرب بنجاح."
+
+msgid "Trainee data changed after preview; preview again."
+msgstr "تغيرت بيانات المتدرب بعد المعاينة؛ أنشئ معاينة جديدة."
+
+msgid "Trainee enrolled successfully."
+msgstr "تم تسجيل المتدرب بنجاح."
+
+msgid "Trainee management permission is required."
+msgstr "يلزم إذن إدارة المتدربين."
+
+msgid "Trainee number"
+msgstr "رقم المتدرب"
+
+msgid "Trainee restored successfully."
+msgstr "تمت استعادة المتدرب بنجاح."
+
+msgid "Trainee updated successfully."
+msgstr "تم تحديث المتدرب بنجاح."
+
+msgid "Trainees"
+msgstr "المتدربون"
+
+msgid "Update"
+msgstr "تحديث"
+
+msgid "Valid"
+msgstr "صالح"
+
+msgid "Warning"
+msgstr "تحذير"
+
+msgid "Warnings"
+msgstr "التحذيرات"
+
+msgid "course"
+msgstr "الدورة"
+
+msgid "full name"
+msgstr "الاسم الكامل"
+
+msgid "trainee number"
+msgstr "رقم المتدرب"
+
+msgid "Course capacity cannot be below active trainee enrollment."
+msgstr "لا يمكن أن تقل سعة الدورة عن عدد المتدربين النشطين."
+
+msgid "The row does not match the number of headers."
+msgstr "عدد قيم الصف لا يطابق عدد العناوين."
+
+msgid "A session already exists at this start time."
+msgstr "توجد جلسة بالفعل في وقت البدء هذا."
+
+msgid "Absent"
+msgstr "غائب"
+
+msgid "Arabic title"
+msgstr "العنوان العربي"
+
+msgid "Archived courses cannot contain sessions."
+msgstr "لا يمكن أن تحتوي الدورات المؤرشفة على جلسات."
+
+msgid "At most five evidence files may be uploaded."
+msgstr "يمكن رفع خمسة ملفات إثبات كحد أقصى."
+
+msgid "Attendance"
+msgstr "الحضور"
+
+msgid "Attendance has already been submitted."
+msgstr "تم إرسال الحضور بالفعل."
+
+msgid "Attendance is required for every session trainee."
+msgstr "يجب تسجيل الحضور لكل متدرب في الجلسة."
+
+msgid "Attendance submitted"
+msgstr "تم إرسال الحضور"
+
+msgid "Completed courses cannot contain sessions."
+msgstr "لا يمكن أن تحتوي الدورات المكتملة على جلسات."
+
+msgid "Copy this link now. It will not be shown again."
+msgstr "انسخ هذا الرابط الآن. لن يظهر مرة أخرى."
+
+msgid "Create session"
+msgstr "إنشاء جلسة"
+
+msgid "Created %(count)s session(s)."
+msgstr "تم إنشاء %(count)s جلسة."
+
+msgid "Daily"
+msgstr "يومي"
+
+msgid "Does not repeat"
+msgstr "لا يتكرر"
+
+msgid "Ends at"
+msgstr "ينتهي في"
+
+msgid "English title"
+msgstr "العنوان الإنجليزي"
+
+msgid "Evidence files"
+msgstr "ملفات الإثبات"
+
+msgid "Evidence files must be 10 MB or smaller."
+msgstr "يجب ألا يتجاوز حجم ملف الإثبات 10 ميجابايت."
+
+msgid "Excused"
+msgstr "غائب بعذر"
+
+msgid "Expires at"
+msgstr "ينتهي في"
+
+msgid "Invalid recurrence choice."
+msgstr "خيار التكرار غير صالح."
+
+msgid "Issue trainer link"
+msgstr "إصدار رابط المدرب"
+
+msgid "Late"
+msgstr "متأخر"
+
+msgid "Link lifetime in hours"
+msgstr "مدة الرابط بالساعات"
+
+msgid "Link lifetime must be between 1 hour and 14 days."
+msgstr "يجب أن تكون مدة الرابط بين ساعة واحدة و14 يومًا."
+
+msgid "Link unavailable"
+msgstr "الرابط غير متاح"
+
+msgid "Locked roster"
+msgstr "قائمة المتدربين المقفلة"
+
+msgid "No sessions found."
+msgstr "لم يتم العثور على جلسات."
+
+msgid "Occurrences"
+msgstr "عدد مرات التكرار"
+
+msgid "Only PDF, PNG, and JPEG evidence is allowed."
+msgstr "يسمح فقط بملفات إثبات PDF وPNG وJPEG."
+
+msgid "Pending supervisor review"
+msgstr "بانتظار مراجعة المشرف"
+
+msgid "Present"
+msgstr "حاضر"
+
+msgid "Record attendance"
+msgstr "تسجيل الحضور"
+
+msgid "Recurrence"
+msgstr "التكرار"
+
+msgid "Recurrence count must be between 1 and 52."
+msgstr "يجب أن يكون عدد مرات التكرار بين 1 و52."
+
+msgid "Revoked"
+msgstr "ملغى"
+
+msgid "Roster locks when a link is issued."
+msgstr "تُقفل قائمة المتدربين عند إصدار الرابط."
+
+msgid "Scheduled"
+msgstr "مجدولة"
+
+msgid "Select a valid attendance value."
+msgstr "اختر قيمة حضور صالحة."
+
+msgid "Select an active trainer assigned to this course."
+msgstr "اختر مدربًا نشطًا معيّنًا لهذه الدورة."
+
+msgid "Session"
+msgstr "الجلسة"
+
+msgid "Session archive permission is required."
+msgstr "يلزم إذن أرشفة الجلسات."
+
+msgid "Session archived."
+msgstr "تمت أرشفة الجلسة."
+
+msgid "Session end must be after its start."
+msgstr "يجب أن يكون انتهاء الجلسة بعد بدايتها."
+
+msgid "Session management permission is required."
+msgstr "يلزم إذن إدارة الجلسات."
+
+msgid "Session time must be inside the course schedule."
+msgstr "يجب أن يكون وقت الجلسة ضمن جدول الدورة."
+
+msgid "Sessions"
+msgstr "الجلسات"
+
+msgid "Sessions may be created only in managed courses."
+msgstr "لا يمكن إنشاء الجلسات إلا في الدورات التي تديرها."
+
+msgid "Starts at"
+msgstr "يبدأ في"
+
+msgid "Submit attendance"
+msgstr "إرسال الحضور"
+
+msgid "Submitted"
+msgstr "مُرسل"
+
+msgid "Submitted sessions cannot be archived."
+msgstr "لا يمكن أرشفة الجلسات المرسلة."
+
+msgid "The JPEG evidence is malformed."
+msgstr "ملف إثبات JPEG غير صالح."
+
+msgid "The PDF evidence is malformed."
+msgstr "ملف إثبات PDF غير صالح."
+
+msgid "The PNG evidence is malformed."
+msgstr "ملف إثبات PNG غير صالح."
+
+msgid "The evidence file could not be read safely."
+msgstr "تعذرت قراءة ملف الإثبات بأمان."
+
+msgid "The evidence type does not match its extension."
+msgstr "نوع ملف الإثبات لا يطابق امتداده."
+
+msgid "The session has no active trainees."
+msgstr "لا تحتوي الجلسة على متدربين نشطين."
+
+msgid "The session roster is already locked."
+msgstr "قائمة متدربي الجلسة مقفلة بالفعل."
+
+msgid ""
+"The submission is pending Supervisor review and can no longer be edited "
+"through this link."
+msgstr "الإرسال بانتظار مراجعة المشرف ولا يمكن تعديله عبر هذا الرابط."
+
+msgid "This trainer link is invalid or expired."
+msgstr "رابط المدرب هذا غير صالح أو منتهي."
+
+msgid "This trainer link is invalid, expired, revoked, or already used."
+msgstr "رابط المدرب غير صالح أو منتهي أو ملغى أو مستخدم بالفعل."
+
+msgid "Trainer link"
+msgstr "رابط المدرب"
+
+msgid "Trainer link issue permission is required."
+msgstr "يلزم إذن إصدار رابط المدرب."
+
+msgid "Trainer link issued"
+msgstr "تم إصدار رابط المدرب"
+
+msgid "Trainer notes"
+msgstr "ملاحظات المدرب"
+
+msgid "Weekly"
+msgstr "أسبوعي"
+
+msgid "attendance"
+msgstr "الحضور"
+
+msgid "expires at"
+msgstr "ينتهي في"
+
+msgid "state"
+msgstr "الحالة"
+
+msgid "trainer notes"
+msgstr "ملاحظات المدرب"
+
+msgid "Pending attendance reviews"
+msgstr "مراجعات الحضور المعلقة"
+
+msgid "No pending attendance reviews."
+msgstr "لا توجد مراجعات حضور معلقة."
+
+msgid "Attendance review"
+msgstr "مراجعة الحضور"
+
+msgid "Correct attendance"
+msgstr "تصحيح الحضور"
+
+msgid "Approve attendance"
+msgstr "اعتماد الحضور"
+
+msgid "Reject and reopen link"
+msgstr "رفض وإعادة فتح الرابط"
+
+msgid "Review history"
+msgstr "سجل المراجعات"
+
+msgid "No review decisions yet."
+msgstr "لا توجد قرارات مراجعة حتى الآن."
+
+msgid "Correction history"
+msgstr "سجل التصحيحات"
+
+msgid "No corrections."
+msgstr "لا توجد تصحيحات."
+
+msgid "Before"
+msgstr "قبل"
+
+msgid "After"
+msgstr "بعد"
+
+msgid "Approved attendance remains approved after this correction."
+msgstr "يبقى الحضور معتمدًا بعد هذا التصحيح."
+
+msgid "Save correction"
+msgstr "حفظ التصحيح"
+
+msgid "Approved attendance"
+msgstr "الحضور المعتمد"
+
+msgid "This attendance is approved and read-only."
+msgstr "تم اعتماد هذا الحضور وهو للقراءة فقط."
+
+msgid "Correct the attendance and submit it again before the new expiration."
+msgstr "صحح الحضور وأعد إرساله قبل انتهاء الصلاحية الجديدة."
+
+msgid "Attendance reviews"
+msgstr "مراجعات الحضور"
+
+msgid "decision"
+msgstr "القرار"
+
+msgid "correction reason"
+msgstr "سبب التصحيح"
+
+msgid "Ensure attendance notes have at most 500 characters."
+msgstr "تأكد من ألا تتجاوز ملاحظات الحضور 500 حرف."
+
+msgid "The attendance roster changed unexpectedly."
+msgstr "تغيرت قائمة الحضور بشكل غير متوقع."
+
+msgid "A correction reason is required."
+msgstr "سبب التصحيح مطلوب."
+
+msgid "Ensure the reason has at most 1000 characters."
+msgstr "تأكد من ألا يتجاوز السبب 1000 حرف."
+
+msgid "You are not the assigned attendance reviewer."
+msgstr "أنت لست مراجع الحضور المعيّن."
+
+msgid "Only pending attendance may be reviewed."
+msgstr "يمكن مراجعة الحضور المعلق فقط."
+
+msgid "Select a valid attendance decision."
+msgstr "اختر قرار حضور صالحًا."
+
+msgid "Attendance correction permission is required."
+msgstr "يلزم إذن تصحيح الحضور."
+
+msgid "Only approved attendance may be corrected."
+msgstr "يمكن تصحيح الحضور المعتمد فقط."
+
+msgid "Change at least one attendance entry."
+msgstr "غيّر سجل حضور واحدًا على الأقل."
+
+msgid "Unknown participant"
+msgstr "مشارك غير معروف"
+
+msgid "Attendance approved."
+msgstr "تم اعتماد الحضور."
+
+msgid "Attendance rejected and the trainer link reopened."
+msgstr "رُفض الحضور وأُعيد فتح رابط المدرب."
+
+msgid "Attendance corrected without reapproval."
+msgstr "تم تصحيح الحضور دون إعادة الاعتماد."
+
+msgid "View attendance"
+msgstr "عرض الحضور"
+
+msgid "Correction reason"
+msgstr "سبب التصحيح"
+
+msgid "Review"
+msgstr "مراجعة"
+
+msgid "Trainee"
+msgstr "متدرب"
+
+msgid "An active account is required."
+msgstr "يلزم حساب نشط."
+
+msgid "Approval email notifications"
+msgstr "إشعارات الموافقات عبر البريد الإلكتروني"
+
+msgid "Approval in-app notifications"
+msgstr "إشعارات الموافقات داخل النظام"
+
+msgid "Approval in-app notifications are mandatory."
+msgstr "إشعارات الموافقات داخل النظام إلزامية."
+
+msgid "Attempts"
+msgstr "المحاولات"
+
+msgid ""
+"Choose which optional categories appear in the application or arrive by "
+"email."
+msgstr ""
+"اختر الفئات الاختيارية التي تظهر في التطبيق أو تصل عبر البريد الإلكتروني."
+
+msgid "Deadline and overdue email notifications"
+msgstr "إشعارات المواعيد النهائية والتأخير عبر البريد الإلكتروني"
+
+msgid "Deadline and overdue in-app notifications"
+msgstr "إشعارات المواعيد النهائية والتأخير داخل النظام"
+
+msgid "Deadlines and overdue"
+msgstr "المواعيد النهائية والمهام المتأخرة"
+
+msgid "Email notifications"
+msgstr "إشعارات البريد الإلكتروني"
+
+msgid "Failed"
+msgstr "فشل"
+
+msgid "In-app notifications"
+msgstr "الإشعارات داخل النظام"
+
+msgid "Mark all as read"
+msgstr "تحديد الكل كمقروء"
+
+msgid "Mark as read"
+msgstr "تحديد كمقروء"
+
+msgid "Mention email notifications"
+msgstr "إشعارات الإشارات عبر البريد الإلكتروني"
+
+msgid "Mention in-app notifications"
+msgstr "إشعارات الإشارات داخل النظام"
+
+msgid "Mentions"
+msgstr "الإشارات"
+
+msgid "No delivery records found."
+msgstr "لا توجد سجلات تسليم."
+
+msgid "No notifications found."
+msgstr "لا توجد إشعارات."
+
+msgid "Notification delivery status"
+msgstr "حالة تسليم الإشعارات"
+
+msgid "Notification links must stay inside the application."
+msgstr "يجب أن تبقى روابط الإشعارات داخل النظام."
+
+msgid "Notification preferences"
+msgstr "تفضيلات الإشعارات"
+
+msgid "Notification preferences saved."
+msgstr "تم حفظ تفضيلات الإشعارات."
+
+msgid "Notifications"
+msgstr "الإشعارات"
+
+msgid "Open"
+msgstr "فتح"
+
+msgid "Preferences"
+msgstr "التفضيلات"
+
+msgid "Processing"
+msgstr "قيد المعالجة"
+
+msgid "Recipient"
+msgstr "المستلم"
+
+msgid "Retry scheduled"
+msgstr "تمت جدولة إعادة المحاولة"
+
+msgid "Save preferences"
+msgstr "حفظ التفضيلات"
+
+msgid "Select a valid notification message."
+msgstr "اختر رسالة إشعار صالحة."
+
+msgid "Select valid notification categories."
+msgstr "اختر فئات إشعارات صالحة."
+
+msgid "Sent"
+msgstr "تم الإرسال"
+
+msgid "Task assignment email notifications"
+msgstr "إشعارات إسناد المهام عبر البريد الإلكتروني"
+
+msgid "Task assignment in-app notifications"
+msgstr "إشعارات إسناد المهام داخل النظام"
+
+msgid "Task assignments"
+msgstr "إسناد المهام"
+
+msgid "This notification is not available."
+msgstr "هذا الإشعار غير متاح."
+
+msgid "Unread"
+msgstr "غير المقروءة"
+
+msgid "Updated at"
+msgstr "آخر تحديث"
+
+msgid "read"
+msgstr "مقروء"
+
+msgid "Delivery pagination"
+msgstr "ترقيم صفحات التسليم"
+
+msgid "Delivery status"
+msgstr "حالة التسليم"
+
+msgid "Notification pagination"
+msgstr "ترقيم صفحات الإشعارات"
+
+msgid "Marked %(count)s notification as read."
+msgid_plural "Marked %(count)s notifications as read."
+msgstr[0] "لم يتم تحديد أي إشعار كمقروء."
+msgstr[1] "تم تحديد إشعار واحد كمقروء."
+msgstr[2] "تم تحديد إشعارين كمقروءين."
+msgstr[3] "تم تحديد %(count)s إشعارات كمقروءة."
+msgstr[4] "تم تحديد %(count)s إشعارًا كمقروء."
+msgstr[5] "تم تحديد %(count)s إشعار كمقروء."
+
+msgid "A saved filter with this name already exists."
+msgstr "يوجد مرشح محفوظ بهذا الاسم بالفعل."
+
+msgid "Apply filters"
+msgstr "تطبيق المرشحات"
+
+msgid "Calendar"
+msgstr "التقويم"
+
+msgid "Current tasks"
+msgstr "المهام الحالية"
+
+msgid "Dashboard"
+msgstr "لوحة المعلومات"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "End"
+msgstr "النهاية"
+
+msgid "Enter at least two characters to search."
+msgstr "أدخل حرفين على الأقل للبحث."
+
+msgid "Enter at least two characters."
+msgstr "أدخل حرفين على الأقل."
+
+msgid "Filter name"
+msgstr "اسم المرشح"
+
+msgid "Filter saved."
+msgstr "تم حفظ المرشح."
+
+msgid "From date"
+msgstr "من تاريخ"
+
+msgid "Gantt"
+msgstr "جانت"
+
+msgid "Global search"
+msgstr "البحث الشامل"
+
+msgid "Item"
+msgstr "العنصر"
+
+msgid "Kanban"
+msgstr "كانبان"
+
+msgid "No calendar items in this range."
+msgstr "لا توجد عناصر تقويم ضمن هذا النطاق."
+
+msgid "No dashboard metrics are available for your current permissions."
+msgstr "لا تتوفر مؤشرات لوحة معلومات لصلاحياتك الحالية."
+
+msgid "No planning items in this range."
+msgstr "لا توجد عناصر تخطيط ضمن هذا النطاق."
+
+msgid "No results."
+msgstr "لا توجد نتائج."
+
+msgid "No tasks."
+msgstr "لا توجد مهام."
+
+msgid "No visible tasks."
+msgstr "لا توجد مهام متاحة للعرض."
+
+msgid "Operational views"
+msgstr "العروض التشغيلية"
+
+msgid "Pending approvals"
+msgstr "الموافقات المعلقة"
+
+msgid "Permission-scoped planning dates."
+msgstr "تواريخ التخطيط ضمن نطاق الصلاحيات."
+
+msgid "Project progress"
+msgstr "تقدم المشاريع"
+
+msgid "Project progress is unavailable for this scope."
+msgstr "تقدم المشاريع غير متاح لهذا النطاق."
+
+msgid ""
+"Projects, courses, tasks, milestones, and sessions in the selected range."
+msgstr "المشاريع والدورات والمهام والمعالم والجلسات ضمن النطاق المحدد."
+
+msgid "Read only"
+msgstr "للقراءة فقط"
+
+msgid "Read-only task board grouped by approved status."
+msgstr "لوحة مهام للقراءة فقط مجمعة حسب الحالات المعتمدة."
+
+msgid "Save current filter"
+msgstr "حفظ المرشح الحالي"
+
+msgid "Saved filter deleted."
+msgstr "تم حذف المرشح المحفوظ."
+
+msgid "Saved filters"
+msgstr "المرشحات المحفوظة"
+
+msgid "Search only records you are allowed to view."
+msgstr "ابحث فقط في السجلات المسموح لك بعرضها."
+
+msgid "Search workspace"
+msgstr "البحث في مساحة العمل"
+
+msgid "Select a date range of %(days)s days or fewer."
+msgstr "حدد نطاقًا زمنيًا لا يتجاوز %(days)s يومًا."
+
+msgid "Start"
+msgstr "البداية"
+
+msgid "Summary"
+msgstr "الملخص"
+
+msgid "Task status board"
+msgstr "لوحة حالات المهام"
+
+msgid "The end date cannot precede the start date."
+msgstr "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية."
+
+msgid "The filter could not be saved."
+msgstr "تعذر حفظ المرشح."
+
+msgid "The saved date range is invalid."
+msgstr "نطاق التاريخ المحفوظ غير صالح."
+
+msgid "Timeline"
+msgstr "الخط الزمني"
+
+msgid "To date"
+msgstr "إلى تاريخ"
+
+msgid "View"
+msgstr "العرض"
+
+msgid "Workspace"
+msgstr "مساحة العمل"
+
+msgid "You have no saved filters."
+msgstr "ليس لديك مرشحات محفوظة."
+
+msgid "Your private shortcuts to approved workspace views."
+msgstr "اختصاراتك الخاصة إلى عروض مساحة العمل المعتمدة."
+
+msgid "Your workspace"
+msgstr "مساحة عملك"
+
+msgid "criteria"
+msgstr "المعايير"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "view"
+msgstr "العرض"
+
+msgid "Role view"
+msgstr "عرض الدور"
+
+msgid "results"
+msgstr "نتائج"
+
+msgid "All permitted projects"
+msgstr "جميع المشاريع المصرح بها"
+
+msgid "Attendance reports contain aggregate totals only."
+msgstr "تتضمن تقارير الحضور إجماليات مجمعة فقط."
+
+msgid "Course attendance"
+msgstr "حضور الدورة"
+
+msgid "Course attendance summary"
+msgstr "ملخص حضور الدورة"
+
+msgid "Create report"
+msgstr "إنشاء تقرير"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Dates include Gregorian and Hijri values using Western digits."
+msgstr "تتضمن التواريخ القيم الميلادية والهجرية بالأرقام الغربية."
+
+msgid "Days overdue"
+msgstr "أيام التأخير"
+
+msgid "Excel"
+msgstr "إكسل"
+
+msgid "Export safeguards"
+msgstr "ضوابط التصدير"
+
+msgid "Format"
+msgstr "التنسيق"
+
+msgid "Generate a permission-scoped PDF or Excel report in Arabic or English."
+msgstr "أنشئ تقرير PDF أو إكسل ضمن نطاق صلاحياتك بالعربية أو الإنجليزية."
+
+msgid "Generate and download"
+msgstr "إنشاء وتنزيل"
+
+msgid "Generated files are not retained by the application."
+msgstr "لا يحتفظ النظام بالملفات المُنشأة."
+
+msgid "Maximum 5,000 rows per report."
+msgstr "الحد الأقصى 5,000 صف لكل تقرير."
+
+msgid "Overdue task report"
+msgstr "تقرير المهام المتأخرة"
+
+msgid "Overdue tasks"
+msgstr "المهام المتأخرة"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "Project Insight"
+msgstr "بروجكت إنسايت"
+
+msgid "Project attendance"
+msgstr "حضور المشروع"
+
+msgid "Project attendance summary"
+msgstr "ملخص حضور المشروع"
+
+msgid "Project progress report"
+msgstr "تقرير تقدم المشاريع"
+
+msgid "Report"
+msgstr "التقرير"
+
+msgid "Report language"
+msgstr "لغة التقرير"
+
+msgid "Reports"
+msgstr "التقارير"
+
+msgid "Reports and exports"
+msgstr "التقارير والتصدير"
+
+msgid "Select a course"
+msgstr "اختر دورة"
+
+msgid "Select a course."
+msgstr "اختر دورة."
+
+msgid "Select a project."
+msgstr "اختر مشروعًا."
+
+msgid "Select a report you are allowed to export."
+msgstr "اختر تقريرًا مسموحًا لك بتصديره."
+
+msgid "The report exceeds the maximum of %(rows)s rows."
+msgstr "يتجاوز التقرير الحد الأقصى البالغ %(rows)s صفًا."
+
+msgid "This format is not available for the selected report."
+msgstr "هذا التنسيق غير متاح للتقرير المحدد."
+
+msgid "Total"
+msgstr "الإجمالي"
+
+msgid "Unavailable"
+msgstr "غير متاح"
+
+msgid "Action code"
+msgstr "رمز الإجراء"
+
+msgid "All actions"
+msgstr "كل الإجراءات"
+
+msgid "All permitted scopes"
+msgstr "كل النطاقات المسموح بها"
+
+msgid "All target types"
+msgstr "كل أنواع الأهداف"
+
+msgid "Application"
+msgstr "التطبيق"
+
+msgid ""
+"Application records, files, audit evidence, notifications, and archives are "
+"retained indefinitely for the initial release."
+msgstr ""
+"يتم الاحتفاظ بسجلات التطبيق وملفاته وأدلة التدقيق وإشعاراته وأرشيفاته إلى "
+"أجل غير محدد في الإصدار الأولي."
+
+msgid "Approval"
+msgstr "الموافقة"
+
+msgid "Approval approved"
+msgstr "تم اعتماد الموافقة"
+
+msgid "Approval rejected"
+msgstr "تم رفض الموافقة"
+
+msgid "Approval submitted"
+msgstr "تم إرسال طلب الموافقة"
+
+msgid "Archive management"
+msgstr "إدارة الأرشيف"
+
+msgid "Archive pagination"
+msgstr "ترقيم صفحات الأرشيف"
+
+msgid "Archived at"
+msgstr "تاريخ الأرشفة"
+
+msgid "Archives"
+msgstr "الأرشيف"
+
+msgid "Attendance approved"
+msgstr "تم اعتماد الحضور"
+
+msgid "Attendance corrected"
+msgstr "تم تصحيح الحضور"
+
+msgid "Attendance rejected"
+msgstr "تم رفض الحضور"
+
+msgid "Attendance resubmitted"
+msgstr "تمت إعادة إرسال الحضور"
+
+msgid "Audit event details"
+msgstr "تفاصيل حدث التدقيق"
+
+msgid "Audit export"
+msgstr "تصدير سجل التدقيق"
+
+msgid "Audit exported"
+msgstr "تم تصدير سجل التدقيق"
+
+msgid "Audit log"
+msgstr "سجل التدقيق"
+
+msgid "Authentication"
+msgstr "المصادقة"
+
+msgid "Available"
+msgstr "متاح"
+
+msgid "Back to audit log"
+msgstr "العودة إلى سجل التدقيق"
+
+msgid "Backup"
+msgstr "النسخة الاحتياطية"
+
+msgid "Backup status"
+msgstr "حالة النسخ الاحتياطي"
+
+msgid "Backup status recorded"
+msgstr "تم تسجيل حالة النسخ الاحتياطي"
+
+msgid "Completed at"
+msgstr "اكتمل في"
+
+msgid "Course archived"
+msgstr "تمت أرشفة الدورة"
+
+msgid "Course created"
+msgstr "تم إنشاء الدورة"
+
+msgid "Course file uploaded"
+msgstr "تم رفع ملف الدورة"
+
+msgid "Course restored"
+msgstr "تمت استعادة الدورة"
+
+msgid "Course status changed"
+msgstr "تم تغيير حالة الدورة"
+
+msgid "Course trainers updated"
+msgstr "تم تحديث مدربي الدورة"
+
+msgid "Course updated"
+msgstr "تم تحديث الدورة"
+
+msgid "Current"
+msgstr "حديثة"
+
+msgid "Database"
+msgstr "قاعدة البيانات"
+
+msgid ""
+"Database backup restoration is an authorized infrastructure procedure and is"
+" never available from this page."
+msgstr ""
+"استعادة النسخة الاحتياطية لقاعدة البيانات إجراء بنية تحتية مخول، ولا تتوفر "
+"مطلقًا من هذه الصفحة."
+
+msgid "Details"
+msgstr "التفاصيل"
+
+msgid "Encrypted backup retention"
+msgstr "مدة الاحتفاظ بالنسخ الاحتياطية المشفرة"
+
+msgid "Environment"
+msgstr "البيئة"
+
+msgid "Export sanitized CSV"
+msgstr "تصدير CSV منقح"
+
+msgid ""
+"Find archived application records within your existing restore permissions."
+msgstr "ابحث عن سجلات التطبيق المؤرشفة ضمن صلاحيات الاستعادة الحالية لديك."
+
+msgid "Import batch"
+msgstr "دفعة الاستيراد"
+
+msgid "Invalid record"
+msgstr "سجل غير صالح"
+
+msgid "Milestone archived"
+msgstr "تمت أرشفة المرحلة الرئيسية"
+
+msgid "Milestone created"
+msgstr "تم إنشاء المرحلة الرئيسية"
+
+msgid "Milestone restored"
+msgstr "تمت استعادة المرحلة الرئيسية"
+
+msgid "Milestone updated"
+msgstr "تم تحديث المرحلة الرئيسية"
+
+msgid "Narrow the filters to %(rows)s audit rows or fewer."
+msgstr "ضيّق عوامل التصفية إلى %(rows)s صف تدقيق أو أقل."
+
+msgid "No archived records match these filters."
+msgstr "لا توجد سجلات مؤرشفة تطابق عوامل التصفية هذه."
+
+msgid "No audit events match these filters."
+msgstr "لا توجد أحداث تدقيق تطابق عوامل التصفية هذه."
+
+msgid "No automated purge or hard-delete action is approved."
+msgstr "لم تتم الموافقة على أي إجراء مسح آلي أو حذف نهائي."
+
+msgid "No display-safe metadata is available."
+msgstr "لا تتوفر بيانات وصفية آمنة للعرض."
+
+msgid "Not recorded"
+msgstr "غير مسجلة"
+
+msgid "Notification preferences updated"
+msgstr "تم تحديث تفضيلات الإشعارات"
+
+msgid "Only explicitly approved safe metadata is displayed."
+msgstr "تُعرض فقط البيانات الوصفية الآمنة المعتمدة صراحةً."
+
+msgid "Operations"
+msgstr "العمليات"
+
+msgid "Permission-scoped, append-only security and business history."
+msgstr "سجل أمني وتجاري محدد الصلاحيات وقابل للإضافة فقط."
+
+msgid "Quarterly"
+msgstr "كل ثلاثة أشهر"
+
+msgid "Record type"
+msgstr "نوع السجل"
+
+msgid "Recovery point objective"
+msgstr "هدف نقطة الاستعادة"
+
+msgid "Recovery targets"
+msgstr "أهداف الاستعادة"
+
+msgid "Recovery time objective"
+msgstr "هدف زمن الاستعادة"
+
+msgid "Reset"
+msgstr "إعادة تعيين"
+
+msgid "Restoration test"
+msgstr "اختبار الاستعادة"
+
+msgid "Restoration test cadence"
+msgstr "وتيرة اختبار الاستعادة"
+
+msgid "Restore test"
+msgstr "اختبار الاستعادة"
+
+msgid "Restore test status recorded"
+msgstr "تم تسجيل حالة اختبار الاستعادة"
+
+msgid "Retention inventory"
+msgstr "جرد الاحتفاظ"
+
+msgid "Retention inventory recorded"
+msgstr "تم تسجيل جرد الاحتفاظ"
+
+msgid "Retention policy"
+msgstr "سياسة الاحتفاظ"
+
+msgid "Review restore"
+msgstr "مراجعة الاستعادة"
+
+msgid "Safe application status and approved recovery policy."
+msgstr "حالة آمنة للتطبيق وسياسة الاستعادة المعتمدة."
+
+msgid "Safe metadata"
+msgstr "البيانات الوصفية الآمنة"
+
+msgid "Scope"
+msgstr "النطاق"
+
+msgid "Search actor or target"
+msgstr "البحث عن المنفذ أو الهدف"
+
+msgid "Search archived records"
+msgstr "البحث في السجلات المؤرشفة"
+
+msgid "Session archived"
+msgstr "تمت أرشفة الجلسة"
+
+msgid "Session created"
+msgstr "تم إنشاء الجلسة"
+
+msgid "Stale"
+msgstr "قديمة"
+
+msgid "System health"
+msgstr "سلامة النظام"
+
+msgid "Tag archived"
+msgstr "تمت أرشفة العلامة"
+
+msgid "Tag created"
+msgstr "تم إنشاء العلامة"
+
+msgid "Tag restored"
+msgstr "تمت استعادة العلامة"
+
+msgid "Tag updated"
+msgstr "تم تحديث العلامة"
+
+msgid "Target ID"
+msgstr "معرف الهدف"
+
+msgid "Target type"
+msgstr "نوع الهدف"
+
+msgid "Task archived"
+msgstr "تمت أرشفة المهمة"
+
+msgid "Task assignments updated"
+msgstr "تم تحديث إسنادات المهمة"
+
+msgid "Task comment added"
+msgstr "تمت إضافة تعليق على المهمة"
+
+msgid "Task created"
+msgstr "تم إنشاء المهمة"
+
+msgid "Task file uploaded"
+msgstr "تم رفع ملف المهمة"
+
+msgid "Task restored"
+msgstr "تمت استعادة المهمة"
+
+msgid "Task status changed"
+msgstr "تم تغيير حالة المهمة"
+
+msgid "Task tags updated"
+msgstr "تم تحديث علامات المهمة"
+
+msgid "Task updated"
+msgstr "تم تحديث المهمة"
+
+msgid "The target type is not available in the selected scope."
+msgstr "نوع الهدف غير متاح في النطاق المحدد."
+
+msgid ""
+"This center does not grant additional access and cannot restore database "
+"backups."
+msgstr ""
+"لا يمنح هذا المركز صلاحيات إضافية ولا يمكنه استعادة النسخ الاحتياطية لقاعدة "
+"البيانات."
+
+msgid "Trainee archived"
+msgstr "تمت أرشفة المتدرب"
+
+msgid "Trainee enrolled"
+msgstr "تم تسجيل المتدرب"
+
+msgid "Trainee enrollment"
+msgstr "تسجيل المتدرب"
+
+msgid "Trainee enrollments"
+msgstr "تسجيلات المتدربين"
+
+msgid "Trainee import cancelled"
+msgstr "تم إلغاء استيراد المتدربين"
+
+msgid "Trainee import confirmed"
+msgstr "تم تأكيد استيراد المتدربين"
+
+msgid "Trainee import previewed"
+msgstr "تمت معاينة استيراد المتدربين"
+
+msgid "Trainee restored"
+msgstr "تمت استعادة المتدرب"
+
+msgid "Trainee updated"
+msgstr "تم تحديث المتدرب"
+
+msgid "Trainer archived"
+msgstr "تمت أرشفة المدرب"
+
+msgid "Trainer created"
+msgstr "تم إنشاء المدرب"
+
+msgid "Trainer restored"
+msgstr "تمت استعادة المدرب"
+
+msgid "Trainer updated"
+msgstr "تم تحديث المدرب"
+
+msgid "days"
+msgstr "يومًا"
+
+msgid "hours"
+msgstr "ساعة"
+
+#~ msgid "Append-only Phase 2 account and department events."
+#~ msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."
+
+#~ msgid "No audit events found."
+#~ msgstr "لم يتم العثور على أحداث تدقيق."
+
+#~ msgid "Security audit"
+#~ msgstr "سجل التدقيق الأمني"
+
+#~ msgid "Home"
+#~ msgstr "الرئيسية"
+
+#~ msgid "Marked %(count)s notification(s) as read."
+#~ msgstr "تم تحديد %(count)s من الإشعارات كمقروءة."
 
 #~ msgid "Engineering foundation"
 #~ msgstr "الأساس الهندسي"

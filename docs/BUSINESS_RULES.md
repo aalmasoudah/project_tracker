@@ -78,6 +78,54 @@ must be approved before their implementation phase.
 - Progress uses unrounded `Decimal` calculations and public two-decimal
   `ROUND_HALF_UP` results bounded from 0 through 100. Task hours do not affect
   progress.
+- Phase 7 completion approval is sequential: the owning project Supervisor,
+  then Project Manager. Rejection requires a reason and resubmission creates a
+  new immutable attempt.
+- Completed milestones are 100 percent; other countable milestone statuses
+  are 0 percent. Cancelled/archived milestones are excluded, and milestones
+  form an equal available category in project progress.
+- Tasks, courses, and projects require 100-percent progress before completion
+  submission. Milestones may submit from In Progress because approval changes
+  them to Completed.
+- Approved course and project completion adds a Completed status reachable
+  only through the approval service. Phase 7 provides no override.
+- Phase 8 trainee identity requires full name and phone. A duplicate exists
+  only when their approved derived keys repeat in the same course.
+- Enrollment numbers are positive, course-specific, allocated in source order,
+  immutable, and never reused. Active enrollments cannot exceed capacity.
+- Phase 8 imports are previewed without trainee writes. Errors block
+  confirmation; duplicates use explicit Skip/Update resolution; confirmation
+  is atomic and audited.
+- Phase 9 attendance values are Present, Absent, Late, and Excused. Session
+  submissions require every locked roster row and enter pending review.
+- Trainer tokens contain 256 random bits, are stored only as SHA-256 hashes,
+  expire at submission time, and are limited to one session.
+- Phase 10 attendance is reviewed only by the active owning project's assigned
+  Supervisor. Rejection preserves a decision snapshot and reopens the same
+  hash-only token for 72 hours.
+- Executive Managers may correct any approved attendance and the owning
+  Project Manager may correct managed-course attendance. Corrections require
+  a reason and immutable before/after evidence, remain approved, and do not
+  return to review.
+- Phase 11 notification categories are task assignment, approval,
+  deadline/overdue, and mention. Approval is mandatory in-app; users may
+  configure the other in-app channels and every email channel.
+- Task reminders run at 08:00 Asia/Riyadh on the day before the due date and
+  daily while overdue. Only active assignees receive them; completed,
+  cancelled, archived, and cancelled-owner-context tasks are excluded.
+- Notification content is fixed, generic, bilingual, and permission-safe.
+  Notification, preference, and delivery records are protected from normal
+  hard deletion. Celery email jobs are bounded, deduplicated, and retry-safe.
+- Phase 14 retains application business records, uploaded files,
+  notifications, delivery evidence, audit records, and archived data
+  indefinitely for the initial release. It provides no automated purge or
+  hard-delete path.
+- Phase 14 administrative export is limited to sanitized, permission-scoped
+  audit CSV. Personal-data, individual-attendance, uploaded-file, and raw
+  metadata exports remain excluded.
+- Database backup and restoration remain infrastructure operations. Initial
+  recovery targets are a 24-hour RPO, an 8-hour RTO, 35-day encrypted backup
+  retention, and quarterly isolated restoration testing.
 
 ## Decisions Required Before Planning
 
@@ -97,35 +145,47 @@ The project owner must approve answers to these questions:
 7. [Approved for Phase 6] Progress is bounded from 0 through 100 percent.
 8. [Approved for Phase 3 projects and Phase 4 courses] What are the project
    and course status transitions?
-9. Which approval steps are required for milestone and project completion?
-10. Who may reject, reopen, correct, or override each workflow?
-11. What makes two trainees or imports duplicates?
-12. What attendance values are allowed?
-13. What happens when a trainer link expires during data entry?
-14. [Approved for Phase 3 date-only project fields, Phase 4 Riyadh course
-    schedules, and Phase 5 date-only task fields] Which dates and times are
-    stored, displayed, and considered overdue? Task overdue rules remain open.
+9. [Approved for Phase 7] Completion approval requires Supervisor then Project
+   Manager as defined in decision 0012.
+10. [Approved through Phase 10] Phase 7 completion approvers and Phase 10
+    attendance reviewers/correctors are defined in decisions 0012 and 0015.
+11. [Approved for Phase 8] A duplicate is normalized full name plus phone
+    inside the same course, as defined in decision 0013.
+12. [Approved for Phase 9] Present, Absent, Late, and Excused.
+13. [Approved for Phase 9] Expiry is rechecked at submission and commits
+    nothing; an authorized actor must issue a new link.
+14. [Approved through Phase 11] Project/task date fields, Riyadh course
+    schedules, and task reminder/overdue timing are defined in decisions 0008,
+    0009, 0010, and 0016.
 15. [Approved for Phase 3 project budgets] Which currencies are supported,
     and how are monetary values rounded? Later monetary outputs remain open.
-16. [Approved through Phase 5] Accounts, departments, audit events, projects,
+16. [Approved through Phase 14] Accounts, departments, audit events, projects,
     clients, categories, courses, trainers, tasks, tags, comments, and files
     are not hard-deleted; memberships and assignment/tag relationships are
-    end-dated. Expired throttle counters may be deleted. Later-domain
-    exceptions remain open.
-17. Which notification categories may users disable?
-18. What retention periods apply to files, audit records, and archived data?
+    end-dated. Trainees, enrollments, import batches/rows, and approval history
+    are also protected. Attendance sessions, locked rosters, links,
+    submissions, entries, evidence, reviews, corrections, notifications,
+    preferences, and delivery attempts are protected. Expired throttle
+    counters may be deleted. Phase 14 operation evidence is protected and no
+    new hard-delete exception is approved.
+17. [Approved for Phase 11] Optional category channels and mandatory approval
+    in-app behavior are defined in decision 0016.
+18. [Approved for Phase 14] Files, audit records, and archived application
+    data are retained indefinitely for the initial release. Encrypted
+    infrastructure backups are retained for 35 days.
 19. [Approved] Arabic is the default language, and each internal user may
     persist Arabic or English.
 20. [Approved] The project owner approves official Arabic terminology.
-21. [Approved for Phase 3 through Phase 5 screens] Should Arabic display use
+21. [Approved for Phase 3 through Phase 10 screens] Should Arabic display use
     Gregorian or Hijri dates and Arabic-Indic or Western digits in each output
     type? Later outputs remain open.
-22. [Approved through Phase 5 search/identity slices] Preserve account
+22. [Approved through Phase 8 search/identity slices] Preserve account
     identity text; apply NFKC to
     usernames and case-insensitive username/email comparison. Derived account
     search may ignore diacritics/tatweel and normalize Alef and Persian
     keyboard variants without merging `ة/ه` or `ى/ي`. Later duplicate policies
-    remain open.
+    remain open. Phase 8 trainee duplicate normalization is defined in decision
+    0013.
 
 ## Rule Approval
 
@@ -133,5 +193,7 @@ Status: Phase 2 decisions were approved on 2026-07-25. Phase 3 decisions were
 approved on 2026-07-26 in decision 0008. Phase 4 course portions were approved
 on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
-2026-07-28 in decision 0011. Remaining decisions still block their listed
-phases.
+2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
+in decision 0013. Phase 9 was approved in decision 0014, Phase 10 in decision
+0015, Phase 11 in decision 0016, and Phase 14 in decision 0019. Remaining
+decisions still block only separately approved extensions.

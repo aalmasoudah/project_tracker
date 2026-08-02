@@ -18,3 +18,7 @@ DATABASES = {
 
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 MEDIA_ROOT = BASE_DIR / "tmp" / "test-media"
+CELERY_BROKER_URL = "memory://"
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_EAGER_PROPAGATES = True
+DEPLOYMENT_ENVIRONMENT = "test"

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load audit_tags i18n %}
+
+{% block title %}{% translate "Audit event details" %}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <div>
+      <h1 class="h2 mb-1">{% translate "Audit event details" %}</h1>
+      <p class="text-body-secondary mb-0">
+        {% translate "Only explicitly approved safe metadata is displayed." %}
+      </p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'audit:list' %}">{% translate "Back to audit log" %}</a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-xl-7">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">{% translate "Time" %}</dt>
+            <dd class="col-sm-8">{{ event.created_at|dual_datetime }}</dd>
+            <dt class="col-sm-4">{% translate "Scope" %}</dt>
+            <dd class="col-sm-8">{{ event.scope|audit_scope_label }} <code><bdi>{{ event.scope }}</bdi></code></dd>
+            <dt class="col-sm-4">{% translate "Action" %}</dt>
+            <dd class="col-sm-8">{{ event.action|audit_action_label }} <code><bdi>{{ event.action }}</bdi></code></dd>
+            <dt class="col-sm-4">{% translate "Actor" %}</dt>
+            <dd class="col-sm-8"><bdi>{{ event.actor.display_name|default:"—" }}</bdi></dd>
+            <dt class="col-sm-4">{% translate "Target type" %}</dt>
+            <dd class="col-sm-8">{{ event.target_type|audit_target_type_label }} <code><bdi>{{ event.target_type }}</bdi></code></dd>
+            <dt class="col-sm-4">{% translate "Target" %}</dt>
+            <dd class="col-sm-8"><bdi>{{ event.target_label|default:"—" }}</bdi></dd>
+            <dt class="col-sm-4">{% translate "Target ID" %}</dt>
+            <dd class="col-sm-8"><code><bdi>{{ event.target_id|default:"—" }}</bdi></code></dd>
+            <dt class="col-sm-4">{% translate "Correlation ID" %}</dt>
+            <dd class="col-sm-8"><code><bdi>{{ event.correlation_id }}</bdi></code></dd>
+            {% if show_ip %}
+              <dt class="col-sm-4">{% translate "IP address" %}</dt>
+              <dd class="col-sm-8"><code><bdi>{{ event.ip_address|default:"—" }}</bdi></code></dd>
+            {% endif %}
+          </dl>
+        </div>
+      </section>
+    </div>
+    <div class="col-12 col-xl-5">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5">{% translate "Safe metadata" %}</h2>
+          {% if metadata %}
+            <dl class="mb-0">
+              {% for key, value in metadata.items %}
+                <dt><code><bdi>{{ key }}</bdi></code></dt>
+                <dd class="text-break"><bdi>{{ value }}</bdi></dd>
+              {% endfor %}
+            </dl>
+          {% else %}
+            <p class="text-body-secondary mb-0">{% translate "No display-safe metadata is available." %}</p>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}

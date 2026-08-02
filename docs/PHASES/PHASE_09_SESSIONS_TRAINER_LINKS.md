@@ -1,7 +1,6 @@
 # Phase 9: Sessions and Trainer Links
 
-Status: Draft; blocked by attendance values, time, expiry, recurrence, and
-permission decisions.
+Status: Completed and verified on 2026-07-29.
 
 ## 1. Goal
 
@@ -74,8 +73,8 @@ is limited to token-bound session data and cannot navigate internal pages.
 
 - Attendance submission always enters supervisor review.
 - Secure links are random and expiring; hashes are stored where practical.
-- Resolve `BR-12`, `BR-13`, `BR-14`, recurrence/capacity, actor, archive, and
-  permission decisions before approval.
+- Decision 0014 resolves `BR-12`, `BR-13`, time, recurrence/capacity, actor,
+  archive, evidence, token, and permission behavior.
 
 ## 10. Expected Migrations
 

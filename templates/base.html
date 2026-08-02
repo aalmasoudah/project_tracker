@@ -6,8 +6,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="data:,">
-    <title>{% block title %}{% translate "Company Project Tracker" %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/project-insight-mark.png' %}">
+    <title>{% block title %}{% translate "Project Insight" %}{% endblock %}</title>
     {% if LANGUAGE_BIDI %}
       <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.rtl.min.css' %}">
     {% else %}
@@ -22,13 +22,20 @@
       {% translate "Skip to main content" %}
     </a>
 
-    <header class="border-bottom bg-body-tertiary sticky-top">
+    <header class="app-header border-bottom sticky-top">
       <nav
         class="navbar navbar-expand-lg container"
         aria-label="{% translate 'Primary navigation' %}"
       >
-        <a class="navbar-brand fw-semibold" href="{% url 'home' %}">
-          {% translate "Company Project Tracker" %}
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="{% url 'home' %}">
+          <img
+            alt=""
+            class="navbar-brand-mark"
+            height="34"
+            src="{% static 'img/project-insight-mark.png' %}"
+            width="34"
+          >
+          <span>{% translate "Project Insight" %}</span>
         </a>
 
         <button
@@ -47,7 +54,26 @@
           {% if request.user.is_authenticated %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">{% translate "Home" %}</a>
+                <a class="nav-link" href="{% url 'home' %}">{% translate "Dashboard" %}</a>
+              </li>
+              <li class="nav-item dropdown">
+                <button
+                  class="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  type="button"
+                  aria-expanded="false"
+                >
+                  {% translate "Workspace" %}
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'workspace:search' %}">{% translate "Global search" %}</a></li>
+                  <li><a class="dropdown-item" href="{% url 'workspace:kanban' %}">{% translate "Kanban" %}</a></li>
+                  <li><a class="dropdown-item" href="{% url 'workspace:calendar' %}">{% translate "Calendar" %}</a></li>
+                  <li><a class="dropdown-item" href="{% url 'workspace:timeline' %}">{% translate "Timeline" %}</a></li>
+                  <li><a class="dropdown-item" href="{% url 'workspace:gantt' %}">{% translate "Gantt" %}</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'workspace:filters' %}">{% translate "Saved filters" %}</a></li>
+                </ul>
               </li>
               {% if perms.accounts.manage_accounts or perms.accounts.view_all_directory or perms.accounts.view_department_directory %}
                 <li class="nav-item">
@@ -74,9 +100,57 @@
                   <a class="nav-link" href="{% url 'tasks:list' %}">{% translate "Tasks" %}</a>
                 </li>
               {% endif %}
-              {% if perms.audit.view_auditevent %}
+              {% if perms.approvals.view_milestone %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'approvals:milestone_list' %}">{% translate "Milestones" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.approvals.view_approvalrequest %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'approvals:queue' %}">{% translate "Approvals" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.trainees.view_courseenrollment %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'trainees:list' %}">{% translate "Trainees" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.attendance.view_session %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'attendance:list' %}">{% translate "Sessions" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.attendance.review_attendance %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'attendance:review-queue' %}">{% translate "Attendance reviews" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.reports.export_project_progress or perms.reports.export_overdue_tasks or perms.reports.export_course_attendance or perms.reports.export_project_attendance %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'reports:index' %}">{% translate "Reports" %}</a>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'notifications:list' %}">
+                  {% translate "Notifications" %}
+                  {% if unread_notification_count %}
+                    <span class="badge text-bg-primary"><bdi>{{ unread_notification_count }}</bdi></span>
+                  {% endif %}
+                </a>
+              </li>
+              {% if perms.audit.view_security_audit or perms.audit.view_business_audit %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'audit:list' %}">{% translate "Audit" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.operations.view_archive_center %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'operations:archives' %}">{% translate "Archives" %}</a>
+                </li>
+              {% endif %}
+              {% if perms.operations.view_operations_status %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'operations:status' %}">{% translate "Operations" %}</a>
                 </li>
               {% endif %}
             </ul>
@@ -86,6 +160,18 @@
 
           <div class="navigation-actions d-flex flex-column flex-lg-row align-items-lg-center gap-2">
             {% if request.user.is_authenticated %}
+              <form class="d-flex" action="{% url 'workspace:search' %}" method="get" role="search">
+                <label class="visually-hidden" for="global-search">{% translate "Global search" %}</label>
+                <input
+                  class="form-control form-control-sm"
+                  id="global-search"
+                  maxlength="100"
+                  minlength="2"
+                  name="q"
+                  placeholder="{% translate 'Search' %}"
+                  type="search"
+                >
+              </form>
               <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:profile' %}">
                 <bdi>{{ request.user.display_name }}</bdi>
                 <small>({{ request.user|user_role_label }})</small>

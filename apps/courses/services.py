@@ -103,6 +103,10 @@ def update_course(
     course = (
         Course.objects.select_for_update().select_related("project").get(pk=course.pk)
     )
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(course):
+        raise ValidationError(_("Pending approval prevents course changes."))
     if not can_manage_course(actor, course):
         raise PermissionDenied(_("Course update permission is required."))
     previous_status = course.status
@@ -110,6 +114,15 @@ def update_course(
         raise ValidationError(_("Course code and project cannot be changed."))
     for field_name, value in data.items():
         setattr(course, field_name, value)
+    from apps.trainees.models import CourseEnrollment
+
+    if (
+        CourseEnrollment.objects.filter(course=course, is_archived=False).count()
+        > course.capacity
+    ):
+        raise ValidationError(
+            _("Course capacity cannot be below active trainee enrollment.")
+        )
     if (
         course.status != previous_status
         and course.status not in COURSE_STATUS_TRANSITIONS[previous_status]
@@ -140,6 +153,10 @@ def archive_course(
     from apps.tasks.models import Task
 
     course = Course.objects.select_for_update().get(pk=course.pk)
+    from apps.approvals.services import has_pending_approval
+
+    if has_pending_approval(course):
+        raise ValidationError(_("Pending approval prevents course archiving."))
     if not can_archive_course(actor, course):
         raise PermissionDenied(_("Course archive permission is required."))
     if course.is_archived:

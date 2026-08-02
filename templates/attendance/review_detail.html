@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Attendance review" %}{% endblock %}
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+    <div>
+      <h1 class="h3">{% translate "Attendance review" %}</h1>
+      <p class="mb-1">{{ session_title }} — <bdi>{{ submission.session.course.code }}</bdi></p>
+      <p class="mb-0">{% translate "Status" %}: {{ submission.get_state_display }}</p>
+    </div>
+    {% if can_correct and submission.state == "approved" %}
+      <a class="btn btn-outline-primary" href="{% url 'attendance:submission-correct' submission.pk %}">{% translate "Correct attendance" %}</a>
+    {% endif %}
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>{% translate "Trainee number" %}</th><th>{% translate "Trainee" %}</th><th>{% translate "Attendance" %}</th><th>{% translate "Notes" %}</th></tr></thead>
+      <tbody>
+        {% for entry in entries %}
+          <tr>
+            <td><bdi>{{ entry.participant.enrollment.trainee_number }}</bdi></td>
+            <td>{{ entry.participant.enrollment.trainee.full_name }}</td>
+            <td>{{ entry.get_value_display }}</td>
+            <td>{{ entry.notes|default:"—" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if can_review and submission.state == "pending_review" %}
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-lg-4">
+        <form method="post" action="{% url 'attendance:submission-approve' submission.pk %}" class="card card-body">
+          {% csrf_token %}
+          <button class="btn btn-success">{% translate "Approve attendance" %}</button>
+        </form>
+      </div>
+      <div class="col-12 col-lg-8">
+        <form method="post" action="{% url 'attendance:submission-reject' submission.pk %}" class="card card-body">
+          {% csrf_token %}
+          {% include "includes/form_errors.html" with form=rejection_form %}
+          {% include "includes/form_fields.html" with form=rejection_form %}
+          <div><button class="btn btn-danger">{% translate "Reject and reopen link" %}</button></div>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  <h2 class="h5">{% translate "Review history" %}</h2>
+  {% for review, snapshot in review_history %}
+    <section class="card card-body mb-2">
+      <p class="mb-1"><strong>{{ review.get_decision_display }}</strong> — {{ review.reviewer.display_name }} — <bdi>{{ review.decided_at|date:"Y-m-d H:i" }}</bdi></p>
+      {% if review.reason %}<p>{{ review.reason }}</p>{% endif %}
+      <ul class="mb-0">
+        {% for item in snapshot %}
+          <li>{{ item.participant_name }}: {{ item.value }}{% if item.notes %} — {{ item.notes }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% empty %}
+    <p>{% translate "No review decisions yet." %}</p>
+  {% endfor %}
+
+  <h2 class="h5 mt-4">{% translate "Correction history" %}</h2>
+  {% for correction, before, after in correction_history %}
+    <section class="card card-body mb-2">
+      <p class="mb-1">{{ correction.corrected_by.display_name }} — <bdi>{{ correction.corrected_at|date:"Y-m-d H:i" }}</bdi></p>
+      <p>{{ correction.reason }}</p>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>{% translate "Trainee" %}</th><th>{% translate "Before" %}</th><th>{% translate "After" %}</th></tr></thead>
+          <tbody>
+            {% for before_item in before %}
+              {% for after_item in after %}
+                {% if before_item.participant_id == after_item.participant_id and before_item.value != after_item.value or before_item.participant_id == after_item.participant_id and before_item.notes != after_item.notes %}
+                  <tr><td>{{ before_item.participant_name }}</td><td>{{ before_item.value }}{% if before_item.notes %} — {{ before_item.notes }}{% endif %}</td><td>{{ after_item.value }}{% if after_item.notes %} — {{ after_item.notes }}{% endif %}</td></tr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% empty %}
+    <p>{% translate "No corrections." %}</p>
+  {% endfor %}
+{% endblock %}

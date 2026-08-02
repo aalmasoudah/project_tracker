@@ -18,6 +18,20 @@ services:
     volumes:
       - ./scripts/init-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-database.sql:ro
       - tracker_postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - tracker_redis_data:/data
 
 volumes:
   tracker_postgres_data:
+  tracker_redis_data:

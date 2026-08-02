@@ -95,12 +95,13 @@ and block their user-facing phases.
 - Bind each token to one approved session/workflow.
 - Enforce expiry and state on every read and write.
 - Do not reveal whether guessed tokens were close or previously valid.
-- Rotate expiry on rejection while reopening the same logical link as required.
+- Reopen the same logical link for 72 hours after a reasoned rejection.
 - Make approved attendance read-only through the external link.
 - Record issue, submission, rejection, approval, expiry, and correction events
   without recording the raw token.
 
-The exact expiry duration and expiry-during-entry behavior require approval.
+Decision 0014 requires expiry to be rechecked at submission; decision 0015
+defines the 72-hour rejection expiry.
 
 ## Secrets and Configuration
 

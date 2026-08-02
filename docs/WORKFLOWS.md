@@ -46,7 +46,7 @@ Phase 4 course lifecycle:
 6. Course, trainer, assignment, file, status, archive, and restore actions are
    audited.
 
-Project and course completion approval remain deferred to Phase 7.
+Project and course completion use the Phase 7 approval workflow below.
 
 ## Task Lifecycle
 
@@ -88,23 +88,40 @@ Phase 6 progress is calculated on demand through one service:
 Milestones, approvals, attendance components, dashboards, and reports extend
 the same service only in their approved later phases.
 
+## Milestone and Completion Approval
+
+1. Executive Manager or the owning Project Manager maintains milestones.
+2. An eligible task, course, milestone, or project completion is submitted.
+3. The project Supervisor decides first.
+4. Approval advances the request to the Project Manager; rejection requires a
+   reason and returns the target to active work.
+5. Project Manager approval completes the request and its target.
+6. A rejected target may be resubmitted as a new attempt; prior attempts and
+   decisions remain immutable.
+7. Pending targets cannot be normally edited or archived. Phase 7 has no
+   override.
+
 ## Trainee Import
 
 1. An authorized user uploads a CSV or Excel file.
 2. The system validates format and content without committing data.
 3. The user reviews a preview containing valid rows, warnings, duplicates,
    and errors.
-4. The user confirms the import.
-5. The system writes valid records in a transaction and records an audit
-   entry.
-
-Duplicate identity rules and partial-import behavior require approval.
+4. Existing-course duplicates are explicitly skipped or updated. A duplicate
+   repeated inside the same file can only be skipped.
+5. Errors block confirmation. The system locks the course, rechecks duplicate
+   and capacity state, and writes every valid resolution atomically.
+6. The system allocates new course-specific trainee numbers in original file
+   order and records an audit entry.
+7. Cancellation retains protected preview evidence but writes no trainees.
 
 ## Trainer Attendance
 
 1. An authorized user creates a scheduled session.
 2. The system generates a random, expiring trainer link.
 3. The external trainer opens the link and submits attendance.
+   The link is token-bound to one session, expiry is rechecked on submit, and
+   every locked trainee requires Present, Absent, Late, or Excused.
 4. The submission enters supervisor review.
 5. The supervisor approves or rejects it.
 6. Rejection requires a reason, reopens the same link, and assigns a new
@@ -115,9 +132,16 @@ Duplicate identity rules and partial-import behavior require approval.
 
 ## Notifications
 
-Business events create in-app notifications. Approved categories may also
-send email through a background job. Jobs are idempotent and retry-safe.
-Category rules, timing, recipients, and escalation require approval.
+Task assignment, approval, deadline/overdue, and mention events create
+permission-safe in-app notifications. Approval alerts are mandatory in-app;
+users configure the other in-app channels and all email channels. Email is
+queued after the domain transaction commits.
+
+At 08:00 Asia/Riyadh, scheduled work creates one active-assignee reminder for
+tasks due tomorrow and one reminder for each overdue day. Completed,
+cancelled, archived, and cancelled-owner-context tasks are excluded. Stable
+recipient/event keys deduplicate notification creation, and bounded Celery
+jobs record retry-safe delivery state. Phase 11 has no escalation chain.
 
 ## Archive and Recovery
 
@@ -127,6 +151,6 @@ restoration is handled through a documented operational procedure.
 
 ## Workflow Approval
 
-Status: Account lifecycle and Phase 3 through Phase 5 domain lifecycles are
+Status: Account lifecycle and Phase 3 through Phase 10 domain lifecycles are
 approved. Other phase-specific transitions and permissions require later
 approval.

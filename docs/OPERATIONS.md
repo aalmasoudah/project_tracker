@@ -2,7 +2,8 @@
 
 ## Status and Purpose
 
-Status: Planning baseline.
+Status: Phase 14 application and recovery policy approved. Provider details,
+named contacts, and production routing remain production-readiness inputs.
 
 This plan defines the operational capabilities required before company data is
 placed in production. Named owners, escalation contacts, retention periods,
@@ -25,6 +26,15 @@ Before staging, assign owners for:
 
 Production credentials must be role-limited and unavailable to ordinary
 application users.
+
+Approved responsibility separation:
+
+- The project owner owns business-data, privacy, retention, and audit policy.
+- Technical Admin owns application access administration and safe in-app
+  health/backup-status review.
+- A separately authorized infrastructure operator owns releases, database and
+  storage access, backup execution, and isolated restoration. Application
+  roles do not grant shell or provider access.
 
 ## Monitoring
 
@@ -71,9 +81,16 @@ machine-readable response. It must:
 - Record restoration evidence, elapsed time, owner, and outcome.
 - Securely remove temporary restoration resources.
 
-Retention duration, recovery point objective, recovery time objective, and
-restoration cadence require owner approval. The application must not expose an
-unrestricted database-restore web page.
+The approved initial targets are:
+
+- Recovery point objective: 24 hours.
+- Recovery time objective: 8 hours.
+- Encrypted backup retention: 35 days.
+- Isolated restoration test: quarterly.
+- Application records/files/audit/archive retention: indefinite for the
+  initial release, with no automated purge.
+
+The application must not expose an unrestricted database-restore web page.
 
 ## Incident Response
 
@@ -117,7 +134,30 @@ privileged users must:
 
 These commands are added only in the phase that owns their behavior.
 
+## Notification Worker Runbook
+
+- Run one or more Celery workers with `celery -A config worker`; Windows local
+  development uses `--pool=solo`.
+- Run exactly one Celery Beat scheduler with `celery -A config beat`.
+- Monitor pending/retry/failed delivery records and Redis queue depth. Only
+  Technical Admin has application access to delivery status.
+- A dispatcher retries due pending records every minute and recovers
+  processing records left stale for 15 minutes.
+- Delivery is attempted at most four times with bounded backoff. Stored errors
+  contain only an exception class, never provider responses, addresses, or
+  message content.
+- After an outage, restore Redis/worker availability and let the dispatcher
+  resume due records. Do not reset sent records or manually replay business
+  events.
+- Development uses console email and tests use in-memory email. Production
+  requires the HTTPS application origin, Redis URL, authenticated SMTP
+  credentials, and an approved sender address.
+
 ## Required Runbooks Before Launch
+
+The Phase 14 application command, retention, audit-export, archive, backup
+verification, and isolated restoration procedure is documented in
+`docs/RUNBOOKS/PHASE_14_OPERATIONS.md`.
 
 - Deploy and rollback.
 - Create/revoke privileged access.
@@ -134,8 +174,10 @@ These commands are added only in the phase that owns their behavior.
 
 - Named owners, support contact, and escalation path.
 - Production region, provider plans, and contractual requirements.
-- RPO, RTO, backup/retention periods, and restoration cadence.
-- Data/file/audit retention and approved hard-delete exceptions.
+- Provider implementation of the approved RPO, RTO, backup retention, and
+  quarterly restoration cadence.
+- Any future change from indefinite application-data retention or any
+  hard-delete exception.
 - Monitoring thresholds and notification routes.
 - Maintenance windows and release approval authority.
 - Staging and production domain names.

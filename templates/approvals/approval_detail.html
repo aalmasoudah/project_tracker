@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Approval request" %}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><p class="text-primary fw-semibold mb-1">{{ approval_request.get_target_type_display }}</p><h1>{% translate "Approval request" %}: <bdi>{{ approval_request.target_code }}</bdi></h1></div>{% if can_decide %}<div class="d-flex gap-2"><form method="post" action="{% url 'approvals:approve' approval_request.pk %}">{% csrf_token %}<button class="btn btn-success" type="submit">{% translate "Approve" %}</button></form><a class="btn btn-outline-danger" href="{% url 'approvals:reject' approval_request.pk %}">{% translate "Reject" %}</a></div>{% endif %}</div>
+<dl class="detail-grid"><div><dt>{% translate "Attempt" %}</dt><dd><bdi>{{ approval_request.attempt }}</bdi></dd></div><div><dt>{% translate "Status" %}</dt><dd>{{ approval_request.get_status_display }}</dd></div><div><dt>{% translate "Submitted by" %}</dt><dd>{{ approval_request.submitted_by.display_name }}</dd></div><div><dt>{% translate "Submitted at" %}</dt><dd><bdi>{{ approval_request.submitted_at|date:"Y-m-d H:i" }}</bdi></dd></div></dl>
+<section class="mt-5"><h2 class="h4">{% translate "Approval steps" %}</h2><ol>{% for step in approval_request.steps.all %}<li class="mb-3"><strong>{{ step.get_role_display }}</strong> – {{ step.get_status_display }}<br><span>{{ step.approver.display_name }}</span>{% if step.decision %}<div class="mt-1">{{ step.decision.get_outcome_display }} · <bdi>{{ step.decision.created_at|date:"Y-m-d H:i" }}</bdi>{% if step.decision.reason %}<div class="preserve-lines mt-1">{{ step.decision.reason }}</div>{% endif %}</div>{% endif %}</li>{% endfor %}</ol></section>
+{% endblock %}

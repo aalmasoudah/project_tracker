@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load audit_tags i18n %}
+
+{% block title %}{% translate "Archive management" %}{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <h1 class="h2 mb-1">{% translate "Archive management" %}</h1>
+    <p class="text-body-secondary mb-0">
+      {% translate "Find archived application records within your existing restore permissions." %}
+    </p>
+  </div>
+
+  <div class="alert alert-info" role="status">
+    {% translate "This center does not grant additional access and cannot restore database backups." %}
+  </div>
+
+  <form class="card border-0 shadow-sm mb-4" method="get">
+    <div class="card-body">
+      {% include "includes/form_errors.html" with form=form %}
+      <div class="row g-3 align-items-end">
+        {% for field in form %}
+          <div class="col-12 col-md-5">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <div class="col-12 col-md-2">
+          <button class="btn btn-primary w-100" type="submit">{% translate "Search" %}</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {% if page %}
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">{% translate "Record type" %}</th>
+              <th scope="col">{% translate "Code" %}</th>
+              <th scope="col">{% translate "Name" %}</th>
+              <th scope="col">{% translate "Archived at" %}</th>
+              <th scope="col"><span class="visually-hidden">{% translate "Actions" %}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+              <tr>
+                <td>{{ entry.type_label }}</td>
+                <td><code><bdi>{{ entry.code }}</bdi></code></td>
+                <td><bdi>{{ entry.label }}</bdi></td>
+                <td class="text-nowrap">{{ entry.archived_at|dual_datetime }}</td>
+                <td>
+                  <a class="btn btn-sm btn-outline-primary" href="{{ entry.restore_url }}">
+                    {% translate "Review restore" %}
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td class="text-center py-5" colspan="5">{% translate "No archived records match these filters." %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% if page.has_other_pages %}
+      <nav class="mt-4" aria-label="{% translate 'Archive pagination' %}">
+        <ul class="pagination">
+          {% if page.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page.previous_page_number }}">{% translate "Previous" %}</a>
+            </li>
+          {% endif %}
+          <li class="page-item active">
+            <span class="page-link"><bdi>{{ page.number }} / {{ page.paginator.num_pages }}</bdi></span>
+          </li>
+          {% if page.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page.next_page_number }}">{% translate "Next" %}</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  {% endif %}
+{% endblock %}

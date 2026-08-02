@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Reject approval" %}{% endblock %}
+{% block content %}
+<h1>{% translate "Reject approval" %}</h1><p><bdi>{{ approval_request.target_code }}</bdi></p><form method="post" class="card card-body" novalidate>{% csrf_token %}{% include "includes/form_errors.html" with form=form %}<label class="form-label" for="{{ form.reason.id_for_label }}">{{ form.reason.label }}</label>{{ form.reason }}{% for error in form.reason.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}<div class="mt-4"><button class="btn btn-danger" type="submit">{% translate "Reject" %}</button></div></form>
+{% endblock %}

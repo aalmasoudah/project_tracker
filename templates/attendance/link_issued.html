@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Trainer link issued" %}{% endblock %}
+{% block content %}<h1 class="h3">{% translate "Trainer link issued" %}</h1><div class="alert alert-warning">{% translate "Copy this link now. It will not be shown again." %}</div><label class="form-label" for="trainer-url">{% translate "Trainer link" %}</label><input id="trainer-url" class="form-control" dir="ltr" readonly value="{{ trainer_url }}"><p class="mt-2">{% translate "Expires at" %}: <bdi>{{ link.expires_at|date:"Y-m-d H:i" }}</bdi></p>{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load approval_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block title %}{% translate "Milestones" %}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><h1>{% translate "Milestones" %}</h1><p class="text-body-secondary">{% translate "Project milestone delivery and completion status." %}</p></div>{% if perms.approvals.add_milestone %}<a class="btn btn-primary align-self-start" href="{% url 'approvals:milestone_create' %}">{% translate "Create milestone" %}</a>{% endif %}</div>
+<form class="row g-2 mb-4" method="get"><div class="col-12 col-md-7"><label class="visually-hidden" for="milestone-search">{% translate "Search" %}</label><input class="form-control" id="milestone-search" name="q" value="{{ search }}" placeholder="{% translate 'Search milestones' %}"></div><div class="col-auto"><button class="btn btn-outline-primary" type="submit">{% translate "Search" %}</button></div></form>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% translate "Code" %}</th><th>{% translate "Milestone" %}</th><th>{% translate "Project" %}</th><th>{% translate "Due date" %}</th><th>{% translate "Status" %}</th></tr></thead><tbody>{% for milestone in page %}<tr><td><a href="{% url 'approvals:milestone_detail' milestone.pk %}"><bdi>{{ milestone.code }}</bdi></a></td><td>{{ milestone|localized_milestone_name:LANGUAGE_CODE }}</td><td><bdi>{{ milestone.project.code }}</bdi></td><td><bdi>{{ milestone.due_date|date:"Y-m-d" }}</bdi></td><td>{{ milestone.get_status_display }}</td></tr>{% empty %}<tr><td colspan="5">{% translate "No milestones found." %}</td></tr>{% endfor %}</tbody></table></div>
+{% include "includes/pagination.html" with page=page %}
+{% endblock %}

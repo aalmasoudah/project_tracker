@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% load i18n workspace_tags %}
+{% block title %}{% translate "Global search" %}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><div><h1>{% translate "Global search" %}</h1><p class="text-body-secondary">{% translate "Search only records you are allowed to view." %}</p></div><a class="btn btn-outline-secondary align-self-start" href="{% url 'workspace:filters' %}">{% translate "Saved filters" %}</a></div>
+{% include "workspace/_filter_form.html" %}
+{% include "workspace/_save_filter.html" %}
+{% if request.GET.q and not form.errors %}
+  {% for section in sections %}
+    <section class="card mb-3" aria-labelledby="section-{{ forloop.counter }}">
+      <div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0" id="section-{{ forloop.counter }}">{{ section.label }}</h2><span><bdi>{{ section.total }}</bdi> {% translate "results" %}</span></div>
+      <div class="list-group list-group-flush">
+        {% for item in section.items %}
+          <a class="list-group-item list-group-item-action" href="{% url section.detail_url_name item.pk %}"><bdi class="text-body-secondary">{{ item.code }}</bdi> {{ item|localized_name }}</a>
+        {% empty %}
+          <p class="list-group-item text-body-secondary mb-0">{% translate "No results." %}</p>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+{% else %}
+  <p class="alert alert-info">{% translate "Enter at least two characters to search." %}</p>
+{% endif %}
+{% endblock %}
