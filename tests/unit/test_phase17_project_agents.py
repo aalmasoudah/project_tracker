@@ -116,6 +116,8 @@ def test_prompt_labels_injection_as_untrusted_and_exposes_no_forbidden_tool() ->
     )
     assert "untrusted" in SYSTEM_PROMPT
     assert "Never execute an action" in SYSTEM_PROMPT
+    assert "never return plan again" in prompt
+    assert "at least two distinct tool observations" in prompt
     assert injection in prompt
     assert "GROQ_API_KEY" not in SYSTEM_PROMPT
 
@@ -195,6 +197,7 @@ def test_groq_agent_uses_strict_schema_and_approved_model(
     assert body["model"] == "openai/gpt-oss-120b"
     assert body["response_format"]["json_schema"]["strict"] is True
     assert "tools" not in body
+    assert request.get_header("User-agent") == "InsightProjects/1.0"
     assert result.cached_input_tokens == 40
     assert captured["timeout"] == 15
 

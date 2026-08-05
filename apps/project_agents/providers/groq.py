@@ -75,6 +75,7 @@ class GroqAgentProvider:
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
                 "Accept": "application/json",
+                "User-Agent": "InsightProjects/1.0",
             },
             method="POST",
         )

@@ -16,6 +16,20 @@ Never propose changing records automatically. Recommendations are advisory only.
 """
 
 
+def _citation_allowlist(value: object) -> list[str]:
+    refs: set[str] = set()
+    if isinstance(value, dict):
+        source_ref = value.get("source_ref")
+        if isinstance(source_ref, str) and source_ref:
+            refs.add(source_ref)
+        for nested in value.values():
+            refs.update(_citation_allowlist(nested))
+    elif isinstance(value, list):
+        for nested in value:
+            refs.update(_citation_allowlist(nested))
+    return sorted(refs)
+
+
 def build_user_prompt(
     *,
     evidence: dict[str, object],
@@ -40,8 +54,15 @@ def build_user_prompt(
         else ""
     )
     serialized = json.dumps(evidence, ensure_ascii=False, sort_keys=True)
+    citation_allowlist = json.dumps(_citation_allowlist(evidence), ensure_ascii=False)
     return (
         f"{language_instruction} {detail_instruction} {repair_instruction}"
-        "Use severity codes low, medium, high, or critical. "
+        "Return exactly summary, highlights, risks, upcoming, "
+        "recommended_actions, and data_gaps. Keep summary under 600 characters. "
+        "Use at most four items in each list and keep each text under 320 "
+        "characters. Each cited item must contain exactly text and citations; "
+        "each risk must also contain severity. Use severity codes low, medium, "
+        "high, or critical. Use only citation IDs from this exact allowlist: "
+        f"{citation_allowlist}. "
         f"Evidence JSON follows:\n{serialized}"
     )

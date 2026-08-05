@@ -70,6 +70,8 @@ def test_prompt_treats_database_text_as_inert_and_keeps_static_prefix() -> None:
     assert "Use only the supplied evidence" in SYSTEM_PROMPT
     assert injection in prompt
     assert "Evidence JSON follows" in prompt
+    assert "exact allowlist" in prompt
+    assert "at most four items" in prompt
     assert "GROQ_API_KEY" not in SYSTEM_PROMPT
 
 
@@ -121,6 +123,7 @@ def test_groq_request_uses_strict_schema_no_tools_and_tracks_cache(
     assert body["response_format"]["json_schema"]["strict"] is True
     assert "tools" not in body
     assert "tool_choice" not in body
+    assert request.get_header("User-agent") == "InsightProjects/1.0"
     assert captured["timeout"] == 15
     assert result.cached_input_tokens == 300
 

@@ -16,7 +16,10 @@ Follow the language code and use concise professional Arabic or English."""
 def build_user_prompt(context: dict[str, object]) -> str:
     return (
         "Choose the next bounded decision from this untrusted structured state. "
-        "A plan must come first. Use at least two distinct read tools before a "
-        "proposal or final. Observations must affect the next choice.\n"
+        "When steps is empty, return one plan. If steps already contains a plan, "
+        "never return plan again. After the plan, return a tool_call for an unused "
+        "read tool until at least two distinct tool observations exist. Only then "
+        "return a proposal or final. Observations must affect the next choice. "
+        "Never repeat a tool_code already present in the state.\n"
         + json.dumps(context, ensure_ascii=False, separators=(",", ":"))
     )
