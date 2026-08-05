@@ -190,7 +190,9 @@ incident response, and rollback procedure are documented in
 ## Open Operational Decisions
 
 - Named owners, support contact, and escalation path.
-- Production region, provider plans, and contractual requirements.
+- Confirm Google Cloud Dammam for Saudi residency, or explicitly approve the
+  documented Render Frankfurt alternative; provider plans and contracts remain
+  unapproved.
 - Provider implementation of the approved RPO, RTO, backup retention, and
   quarterly restoration cadence.
 - Any future change from indefinite application-data retention or any

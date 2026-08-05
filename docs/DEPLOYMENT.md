@@ -2,13 +2,16 @@
 
 ## Status and Target
 
-Status: Planning baseline.
+Status: Provider-neutral runtime implementation in Phase 18.
 
 The first production architecture is a Dockerized Django monolith served by
 Gunicorn, backed by managed PostgreSQL, with private S3-compatible storage.
-Render is the planned first hosting target from the approved playbook; final
-provider account, region, plans, domain, and data-residency requirements must
-be confirmed before infrastructure purchase.
+The current technical recommendation is Google Cloud Dammam when Saudi data
+residency is required or unresolved. Render Frankfurt remains the simpler
+alternative only after non-Saudi processing is explicitly approved. Final
+provider account, plans, domain, budget, and data-residency requirements must
+be confirmed before infrastructure purchase. See
+`docs/DEPLOYMENT_PROVIDER_EVALUATION.md`.
 
 ## Environments
 
@@ -73,6 +76,10 @@ Expected variable categories include:
 - Redis URL after Phase 11.
 - Email provider settings after Phase 11.
 - Monitoring DSN and environment identifier.
+- A settings module and matching environment label: `config.settings.staging`
+  with `staging`, or `config.settings.production` with `production`.
+- Explicit `TRUST_X_FORWARDED_PROTO=true` only when the selected HTTPS proxy
+  strips or overwrites the client-supplied forwarding header.
 - Phase 15 AI feature flag, approved Groq model, reasoning effort, bounded
   timeout/output/evidence/quota values, and secret-manager `GROQ_API_KEY`.
 - Phase 16 feature flag, fixed CEO username/private chat ID, signing/download

@@ -5,7 +5,8 @@ system.
 
 ## Current Status
 
-Phases 1 through 17 are implemented and verified locally. Phase 17 adds a
+Phases 1 through 18 are implemented and verified locally. Phase 18 adds the
+provider-neutral, non-root container and secure staging contract. Phase 17 adds a
 permission-scoped project-recovery agent with dynamic allowlisted reads,
 reviewed memory, cited proposals, mandatory human approval, transactional
 idempotent execution, and final verification. Phase 16 remains the fixed,
@@ -65,6 +66,11 @@ requires the Groq provider and defaults to `openai/gpt-oss-120b`; the 20B
 model is an explicit lower-cost choice. The optional reviewed-event n8n
 workflow remains disabled until its matching HMAC secrets and staging human
 checkpoint are verified. See `docs/RUNBOOKS/PHASE_17_PROJECT_AGENT.md`.
+
+For staging, build the repository `Dockerfile`, store the variables listed in
+`deploy/staging/staging.env.example` in the selected platform secret manager,
+and follow `docs/RUNBOOKS/PHASE_18_STAGING_DEPLOYMENT.md`. The repository does
+not contain or load staging credentials.
 
 The PostgreSQL initialization script creates both `tracker` and
 `tracker_test` on a fresh Docker volume. If the volume existed before Phase 1,

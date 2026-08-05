@@ -1,7 +1,14 @@
 .git
 .github
+.agents
+.codex
+.tools
+.docker-codex-temp
+.docker-build-context-temp
 .venv*
 .env
+.env.*
+!*.env.example
 .uv-cache-temp
 .uv-python-temp
 __pycache__
@@ -13,4 +20,6 @@ media
 staticfiles
 playwright-report
 test-results
+celerybeat-schedule*
 tmp
+output

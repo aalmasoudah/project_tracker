@@ -1,0 +1,63 @@
+name: insight-projects-staging
+
+x-app: &app
+  image: ${INSIGHT_IMAGE:?Set INSIGHT_IMAGE to one immutable image tag or digest}
+  env_file:
+    - ${INSIGHT_ENV_FILE:?Set INSIGHT_ENV_FILE to the protected staging environment file}
+  restart: unless-stopped
+  init: true
+
+services:
+  web:
+    <<: *app
+    environment:
+      DEPLOYMENT_PROCESS_ROLE: web
+    command:
+      - gunicorn
+      - config.wsgi:application
+      - --bind=0.0.0.0:8000
+      - --workers=2
+      - --timeout=60
+      - --access-logfile=-
+      - --error-logfile=-
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/', timeout=3).read()"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  worker:
+    <<: *app
+    env_file:
+      - ${INSIGHT_ENV_FILE:?Set INSIGHT_ENV_FILE to the protected staging environment file}
+      - ${INSIGHT_WORKER_ENV_FILE:?Set INSIGHT_WORKER_ENV_FILE to the protected worker-only secret file}
+    environment:
+      DEPLOYMENT_PROCESS_ROLE: worker
+    command: ["celery", "-A", "config", "worker", "--loglevel=INFO"]
+    healthcheck:
+      disable: true
+
+  scheduler:
+    <<: *app
+    environment:
+      DEPLOYMENT_PROCESS_ROLE: scheduler
+    command:
+      - celery
+      - -A
+      - config
+      - beat
+      - --loglevel=INFO
+      - --schedule=/tmp/celerybeat-schedule
+    healthcheck:
+      disable: true
+
+# PostgreSQL, Redis, object storage, SMTP, TLS termination, monitoring, and n8n
+# are deliberately external. Staging and production must use isolated services.
+# Run migrations as a one-off release command before updating these services.

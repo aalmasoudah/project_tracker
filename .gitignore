@@ -7,6 +7,9 @@ __pycache__/
 
 # Django
 .env
+.env.*
+!.env.example
+!*.env.example
 db.sqlite3
 media/
 staticfiles/
@@ -22,6 +25,7 @@ test-results/
 tmp/
 
 # Local tool caches
+.tools/
 .docker-codex-temp/
 .uv-cache-temp/
 .uv-python-temp/

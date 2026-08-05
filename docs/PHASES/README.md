@@ -47,6 +47,7 @@ project owner resolves the open decisions in the core documents.
 | 15 | `PHASE_15_AI_PROJECT_BRIEFINGS.md` | Completed and verified on 2026-08-04 |
 | 16 | `PHASE_16_CEO_TELEGRAM_N8N.md` | Completed and verified locally on 2026-08-04 |
 | 17 | `PHASE_17_AGENTIC_PROJECT_RECOVERY.md` | Completed and verified locally on 2026-08-04 |
+| 18 | `PHASE_18_DEPLOYMENT_READINESS.md` | Completed and verified locally on 2026-08-05 |
 
 An approved phase must have its `Status` changed explicitly by the project
 owner. Approval of `docs/SCOPE.md` or this planning pass does not implicitly

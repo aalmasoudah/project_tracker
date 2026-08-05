@@ -47,6 +47,8 @@ def run_production_settings(
         "'debug': s.DEBUG, "
         "'secure_cookie': s.SESSION_COOKIE_SECURE, "
         "'ssl_redirect': s.SECURE_SSL_REDIRECT, "
+        "'proxy_header': getattr(s, 'SECURE_PROXY_SSL_HEADER', None), "
+        "'redirect_exempt': s.SECURE_REDIRECT_EXEMPT, "
         "'language': s.LANGUAGE_CODE"
         "}))"
     )
@@ -69,9 +71,73 @@ def test_production_settings_are_secure_and_localized() -> None:
     assert payload == {
         "debug": False,
         "language": "ar",
+        "proxy_header": None,
+        "redirect_exempt": ["^health/$"],
         "secure_cookie": True,
         "ssl_redirect": True,
     }
+
+
+@pytest.mark.unit
+@pytest.mark.security
+def test_production_proxy_header_requires_explicit_trust() -> None:
+    environment = production_environment()
+    environment["TRUST_X_FORWARDED_PROTO"] = "true"
+
+    result = run_production_settings(environment)
+
+    assert result.returncode == 0, result.stderr
+    payload = json.loads(result.stdout)
+    assert payload["proxy_header"] == ["HTTP_X_FORWARDED_PROTO", "https"]
+
+
+@pytest.mark.unit
+@pytest.mark.security
+def test_production_worker_requires_groq_key_when_ai_is_enabled() -> None:
+    environment = production_environment()
+    environment.update(
+        {
+            "AI_BRIEFING_ENABLED": "true",
+            "AI_BRIEFING_PROVIDER": "groq",
+            "DEPLOYMENT_PROCESS_ROLE": "worker",
+        }
+    )
+    environment.pop("GROQ_API_KEY", None)
+
+    result = run_production_settings(environment)
+
+    assert result.returncode != 0
+    assert "worker requires GROQ_API_KEY" in result.stderr
+
+
+@pytest.mark.unit
+@pytest.mark.security
+def test_production_web_does_not_require_worker_groq_key() -> None:
+    environment = production_environment()
+    environment.update(
+        {
+            "AI_BRIEFING_ENABLED": "true",
+            "AI_BRIEFING_PROVIDER": "groq",
+            "DEPLOYMENT_PROCESS_ROLE": "web",
+        }
+    )
+    environment.pop("GROQ_API_KEY", None)
+
+    result = run_production_settings(environment)
+
+    assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.unit
+@pytest.mark.security
+def test_production_rejects_unknown_process_role() -> None:
+    environment = production_environment()
+    environment["DEPLOYMENT_PROCESS_ROLE"] = "unknown"
+
+    result = run_production_settings(environment)
+
+    assert result.returncode != 0
+    assert "DEPLOYMENT_PROCESS_ROLE" in result.stderr
 
 
 @pytest.mark.unit

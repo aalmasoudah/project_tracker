@@ -13,6 +13,7 @@ Initial records created during the planning pass:
 - `0020-phase-15-ai-project-briefings.md`
 - `0021-phase-16-ceo-telegram-n8n.md`
 - `0022-phase-17-agentic-project-recovery.md`
+- `0023-provider-neutral-deployment-runtime.md`
 
 Business decisions remain in the requirements documents and phase
 specifications. Architecture decision records must not be used to silently
