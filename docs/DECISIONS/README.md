@@ -10,6 +10,9 @@ Initial records created during the planning pass:
 - `0004-object-storage.md`
 - `0005-celery-and-redis.md`
 - `0006-arabic-english-localization.md`
+- `0020-phase-15-ai-project-briefings.md`
+- `0021-phase-16-ceo-telegram-n8n.md`
+- `0022-phase-17-agentic-project-recovery.md`
 
 Business decisions remain in the requirements documents and phase
 specifications. Architecture decision records must not be used to silently

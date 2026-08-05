@@ -23,6 +23,16 @@ CATEGORY_POLICIES: Final[dict[str, CategoryPolicy]] = {
     "approval": CategoryPolicy(mandatory_in_app=True),
     "deadline": CategoryPolicy(mandatory_in_app=False),
     "mention": CategoryPolicy(mandatory_in_app=False),
+    "ai_briefing": CategoryPolicy(
+        mandatory_in_app=False,
+        default_in_app=True,
+        default_email=False,
+    ),
+    "project_agent": CategoryPolicy(
+        mandatory_in_app=True,
+        default_in_app=True,
+        default_email=False,
+    ),
 }
 
 MESSAGE_CONTENT: Final[dict[str, NotificationContent]] = {
@@ -62,6 +72,20 @@ MESSAGE_CONTENT: Final[dict[str, NotificationContent]] = {
         body_ar="تمت الإشارة إليك في تعليق على مهمة يمكنك الوصول إليها.",
         body_en="You were mentioned in a comment on a task you can access.",
     ),
+    "ai_briefing_ready": NotificationContent(
+        title_ar="اكتمل موجز المشروع الذكي",
+        title_en="AI project briefing ready",
+        body_ar="اكتمل إنشاء موجز المشروع الذكي وأصبح جاهزًا للمراجعة.",
+        body_en="Your AI project briefing is ready for review.",
+    ),
+    "agent_recovery_follow_up": NotificationContent(
+        title_ar="متابعة خطة تعافي المشروع",
+        title_en="Project recovery follow-up",
+        body_ar=(
+            "يوجد إجراء متابعة معتمد لخطة تعافي مشروع يمكنك الوصول إليه داخل النظام."
+        ),
+        body_en="An approved project-recovery follow-up is available in the system.",
+    ),
 }
 
 MESSAGE_CATEGORIES: Final[dict[str, str]] = {
@@ -71,6 +95,8 @@ MESSAGE_CATEGORIES: Final[dict[str, str]] = {
     "task_due": "deadline",
     "task_overdue": "deadline",
     "mentioned": "mention",
+    "ai_briefing_ready": "ai_briefing",
+    "agent_recovery_follow_up": "project_agent",
 }
 
 MAX_DELIVERY_ATTEMPTS: Final = 4

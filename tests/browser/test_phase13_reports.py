@@ -30,9 +30,9 @@ def test_mobile_bilingual_report_page_and_download(live_server: LiveServer) -> N
         password=PASSWORD,
     )
     user.user_permissions.add(
-        Permission.objects.get(
+        *Permission.objects.filter(
             content_type__app_label="reports",
-            codename="export_project_progress",
+            codename__in=("export_project_progress", "export_overdue_tasks"),
         )
     )
 
@@ -57,9 +57,38 @@ def test_mobile_bilingual_report_page_and_download(live_server: LiveServer) -> N
 
         assert page.locator("html").get_attribute("dir") == "rtl"
         assert page.locator(".report-logo").is_visible()
+        assert page.get_by_role("link", name="إنسايت بروجكتس").is_visible()
+        assert page.locator(".report-logo").get_attribute("alt") == "إنسايت بروجكتس"
+        logo_ratio = page.locator(".report-logo").evaluate(
+            "(logo) => ({ rendered: logo.clientWidth / logo.clientHeight, "
+            "natural: logo.naturalWidth / logo.naturalHeight })"
+        )
+        assert logo_ratio["rendered"] == pytest.approx(
+            logo_ratio["natural"],
+            rel=0.01,
+        )
         assert page.locator("body").evaluate(
             "(node) => node.scrollWidth <= node.clientWidth"
         )
+        page.locator('select[name="report_type"]').select_option("overdue_tasks")
+        assert not page.locator(
+            'select[name="output_format"] option[value="pdf"]'
+        ).is_disabled()
+        page.locator('select[name="output_format"]').select_option("pdf")
+        with page.expect_download() as overdue_pdf_download_info:
+            page.locator('form[action$="/reports/generate/"] button').click()
+        assert overdue_pdf_download_info.value.suggested_filename == (
+            "overdue-tasks-ar.pdf"
+        )
+
+        page.locator('select[name="output_format"]').select_option("xlsx")
+        with page.expect_download() as overdue_download_info:
+            page.locator('form[action$="/reports/generate/"] button').click()
+        assert overdue_download_info.value.suggested_filename == (
+            "overdue-tasks-ar.xlsx"
+        )
+
+        page.goto(f"{live_server.url}/reports/")
         page.locator('select[name="report_type"]').select_option("project_progress")
         page.locator('select[name="output_format"]').select_option("xlsx")
         page.locator('select[name="locale"]').select_option("ar")
@@ -73,5 +102,6 @@ def test_mobile_bilingual_report_page_and_download(live_server: LiveServer) -> N
         page.locator('form[action$="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")
         assert page.locator("html").get_attribute("dir") == "ltr"
+        assert page.get_by_role("link", name="Insight Projects").is_visible()
         assert page.get_by_role("heading", name="Reports and exports").is_visible()
         browser.close()

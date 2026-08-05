@@ -3,7 +3,7 @@
 ## Status and Objective
 
 Status: Approved scope requirement. User-visible localization slices are
-approved through Phase 14.
+approved through Phase 16.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -130,6 +130,35 @@ status `حالة النسخ الاحتياطي`, Retention policy `سياسة ا
 plus Umm al-Qura Hijri dates with Western digits. Stable audit, environment,
 status, and command codes remain machine-readable and are translated only for
 presentation.
+
+Phase 15 terminology includes AI Project Briefing `موجز المشروع الذكي`,
+Generate AI Briefing `إنشاء موجز ذكي`, Executive detail `تفاصيل تنفيذية`,
+Operational detail `تفاصيل تشغيلية`, Evidence `الأدلة`, Risk `مخاطرة`,
+Recommended action `إجراء موصى به`, Data gap `فجوة في البيانات`, and
+AI-generated draft `مسودة مولدة بالذكاء الاصطناعي`. Briefings use the selected
+Arabic RTL or English LTR language while internal codes, Groq model identifiers,
+citations, Gregorian dates, and Western digits remain direction-isolated.
+
+Phase 16 terminology includes Telegram Executive Briefing
+`الموجز التنفيذي عبر تيليجرام`, Current Tasks `المهام الحالية`, Overdue Tasks
+`المهام المتأخرة`, Trainee Attendance `حضور المتدربين`, Critical Task Alert
+`تنبيه مهمة حرجة`, Download Report `تنزيل التقرير`, and Report Expired
+`انتهت صلاحية التقرير`. Telegram messages and PDFs are Arabic RTL. Dates use
+Western digits and display Gregorian plus Umm al-Qura Hijri values. Stable
+command names, request IDs, task codes, and signature fields remain
+direction-isolated.
+
+Phase 17 terminology includes Project Recovery Agent `وكيل تعافي المشروع`,
+Start Project Agent `بدء وكيل المشروع`, Recovery Plan `خطة التعافي`, Agent Run
+`تشغيل الوكيل`, Plan `خطة`, Tool `أداة`, Observation `ملاحظة`, Proposal
+`مقترح`, Awaiting Approval `بانتظار الموافقة`, Before State `الحالة السابقة`,
+After State `الحالة اللاحقة`, Verification `التحقق`, Reviewed Memory
+`ذاكرة مراجعة`, Stale `قديم بسبب تغير البيانات`, Approve Proposal `الموافقة
+على المقترح`, and Reject Proposal `رفض المقترح`. Arabic pages use RTL and
+English pages use LTR; internal model names, tool/action codes, UUIDs,
+citations, Gregorian dates, and Western digits remain direction-isolated.
+User-visible provider failures use reviewed safe translations and never expose
+raw provider text.
 
 Separately approved extensions must resolve:
 

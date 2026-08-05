@@ -1,0 +1,171 @@
+{
+  "name": "Insight Projects - Reviewed Project Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "0af450f7-e2d4-47ac-9e3e-27fc2c96d168",
+      "name": "Poll Reviewed Events",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-900, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst secret = String($env.INSIGHT_PROJECT_AGENT_N8N_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (secret.length < 32 || !baseUrl) throw new Error('Missing project-agent integration configuration');\nconst path = '/integrations/n8n/project-agent/events/claim/';\nconst body = '{}';\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { url: baseUrl + path, body, timestamp, nonce, signature } }];"
+      },
+      "id": "1d335987-53cc-4cb5-986f-6e21323e8504",
+      "name": "Sign Event Claim",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-680, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "X-Insight-Timestamp", "value": "={{ $json.timestamp }}"},
+            {"name": "X-Insight-Nonce", "value": "={{ $json.nonce }}"},
+            {"name": "X-Insight-Signature", "value": "={{ $json.signature }}"}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {"response": {"response": {"responseFormat": "json"}}}
+      },
+      "id": "e2042d98-5bd3-40cc-b41e-701715189bd2",
+      "name": "Claim Reviewed Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-450, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst item = $input.first().json;\nif (!item.event_id) return [{ json: { has_event: false } }];\nconst secret = String($env.INSIGHT_PROJECT_AGENT_N8N_SECRET || '');\nconst sortValue = value => Array.isArray(value) ? value.map(sortValue) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, sortValue(value[key])])) : value;\nconst canonicalPayload = JSON.stringify(sortValue(item.payload));\nconst expected = crypto.createHmac('sha256', secret).update(canonicalPayload, 'utf8').digest('hex');\nconst supplied = String(item.event_signature || '');\nif (expected.length !== supplied.length || !crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(supplied))) throw new Error('Invalid reviewed-event signature');\nif (item.payload?.event !== 'agent_run.reviewed') throw new Error('Unexpected reviewed-event type');\nreturn [{ json: { ...item, has_event: true } }];"
+      },
+      "id": "681ba12d-37f7-4e2e-b294-d8b8bb25e973",
+      "name": "Validate Reviewed Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-220, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "typeValidation": "strict", "version": 2},
+          "conditions": [
+            {
+              "id": "89c63fb6-b9dc-4c5a-9fa7-6784554fd7b8",
+              "leftValue": "={{ $json.has_event }}",
+              "rightValue": true,
+              "operator": {"type": "boolean", "operation": "true", "singleValue": true}
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4144d3f9-6dc1-4981-b97c-d387523534d3",
+      "name": "Event Available?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [10, 0]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "options": {}
+      },
+      "id": "e30df54e-379e-4084-a685-07b011fbdf32",
+      "name": "Human Review Checkpoint",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [240, -80],
+      "webhookId": "ce27718c-a261-4c61-b5b1-b403037fc03c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst reviewed = $('Validate Reviewed Event').first().json;\nconst requestedOutcome = String($json.body?.outcome || 'rejected');\nconst outcome = ['notified', 'archived', 'rejected', 'failed'].includes(requestedOutcome) ? requestedOutcome : 'rejected';\nconst secret = String($env.INSIGHT_PROJECT_AGENT_N8N_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nconst path = '/integrations/n8n/project-agent/events/callback/';\nconst body = JSON.stringify({ event_id: reviewed.event_id, lease_token: reviewed.lease_token, outcome });\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { url: baseUrl + path, body, timestamp, nonce, signature, safe_archive: { event_id: reviewed.event_id, project_code: reviewed.payload.project_code, outcome } } }];"
+      },
+      "id": "18961ca8-ce4e-4707-b84c-d6ca6c72a5ae",
+      "name": "Sign Human Callback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [470, -80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "X-Insight-Timestamp", "value": "={{ $json.timestamp }}"},
+            {"name": "X-Insight-Nonce", "value": "={{ $json.nonce }}"},
+            {"name": "X-Insight-Signature", "value": "={{ $json.signature }}"}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {"response": {"response": {"responseFormat": "json"}}}
+      },
+      "id": "114f3b94-1151-4bc8-a21d-a671336e7489",
+      "name": "Acknowledge Reviewed Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, -80]
+    },
+    {
+      "parameters": {},
+      "id": "53ccff79-3102-4e95-a6b1-188817540fa7",
+      "name": "Safe Notification or Archive Complete",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [930, -80]
+    }
+  ],
+  "connections": {
+    "Poll Reviewed Events": {"main": [[{"node": "Sign Event Claim", "type": "main", "index": 0}]]},
+    "Sign Event Claim": {"main": [[{"node": "Claim Reviewed Event", "type": "main", "index": 0}]]},
+    "Claim Reviewed Event": {"main": [[{"node": "Validate Reviewed Event", "type": "main", "index": 0}]]},
+    "Validate Reviewed Event": {"main": [[{"node": "Event Available?", "type": "main", "index": 0}]]},
+    "Event Available?": {"main": [[{"node": "Human Review Checkpoint", "type": "main", "index": 0}], []]},
+    "Human Review Checkpoint": {"main": [[{"node": "Sign Human Callback", "type": "main", "index": 0}]]},
+    "Sign Human Callback": {"main": [[{"node": "Acknowledge Reviewed Event", "type": "main", "index": 0}]]},
+    "Acknowledge Reviewed Event": {"main": [[{"node": "Safe Notification or Archive Complete", "type": "main", "index": 0}]]}
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false,
+    "executionTimeout": 300,
+    "timezone": "Asia/Riyadh"
+  },
+  "versionId": "306794f8-fc3f-468f-8dd6-d089232b3ba2",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "tags": []
+}

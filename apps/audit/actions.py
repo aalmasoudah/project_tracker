@@ -80,6 +80,30 @@ AUDIT_EXPORTED = "audit.exported"
 BACKUP_STATUS_RECORDED = "backup.status_recorded"
 RESTORE_TEST_STATUS_RECORDED = "backup.restore_test_status_recorded"
 RETENTION_INVENTORY_RECORDED = "retention.inventory_recorded"
+AI_BRIEFING_REQUESTED = "ai_briefing.requested"
+AI_BRIEFING_COMPLETED = "ai_briefing.completed"
+AI_BRIEFING_FAILED = "ai_briefing.failed"
+AI_BRIEFING_REVIEWED = "ai_briefing.reviewed"
+EXECUTIVE_REPORT_REQUESTED = "executive_report.requested"
+EXECUTIVE_REPORT_COMPLETED = "executive_report.completed"
+EXECUTIVE_REPORT_FAILED = "executive_report.failed"
+EXECUTIVE_REPORT_DOWNLOADED = "executive_report.downloaded"
+CRITICAL_ALERT_DELIVERED = "critical_alert.delivered"
+AGENT_RUN_REQUESTED = "project_agent.run_requested"
+AGENT_RUN_AWAITING_APPROVAL = "project_agent.awaiting_approval"
+AGENT_RUN_COMPLETED = "project_agent.run_completed"
+AGENT_RUN_FAILED = "project_agent.run_failed"
+AGENT_RUN_CANCELLED = "project_agent.run_cancelled"
+AGENT_RUN_REVIEWED = "project_agent.run_reviewed"
+AGENT_TOOL_COMPLETED = "project_agent.tool_completed"
+AGENT_TOOL_FAILED = "project_agent.tool_failed"
+AGENT_PROPOSAL_CREATED = "project_agent.proposal_created"
+AGENT_PROPOSAL_APPROVED = "project_agent.proposal_approved"
+AGENT_PROPOSAL_REJECTED = "project_agent.proposal_rejected"
+AGENT_PROPOSAL_EXECUTED = "project_agent.proposal_executed"
+AGENT_PROPOSAL_STALE = "project_agent.proposal_stale"
+AGENT_PROPOSAL_FAILED = "project_agent.proposal_failed"
+AGENT_PROPOSAL_EXPIRED = "project_agent.proposal_expired"
 
 ALL_ACTION_CODES = (
     LOGIN_SUCCEEDED,
@@ -162,4 +186,28 @@ ALL_ACTION_CODES = (
     BACKUP_STATUS_RECORDED,
     RESTORE_TEST_STATUS_RECORDED,
     RETENTION_INVENTORY_RECORDED,
+    AI_BRIEFING_REQUESTED,
+    AI_BRIEFING_COMPLETED,
+    AI_BRIEFING_FAILED,
+    AI_BRIEFING_REVIEWED,
+    EXECUTIVE_REPORT_REQUESTED,
+    EXECUTIVE_REPORT_COMPLETED,
+    EXECUTIVE_REPORT_FAILED,
+    EXECUTIVE_REPORT_DOWNLOADED,
+    CRITICAL_ALERT_DELIVERED,
+    AGENT_RUN_REQUESTED,
+    AGENT_RUN_AWAITING_APPROVAL,
+    AGENT_RUN_COMPLETED,
+    AGENT_RUN_FAILED,
+    AGENT_RUN_CANCELLED,
+    AGENT_RUN_REVIEWED,
+    AGENT_TOOL_COMPLETED,
+    AGENT_TOOL_FAILED,
+    AGENT_PROPOSAL_CREATED,
+    AGENT_PROPOSAL_APPROVED,
+    AGENT_PROPOSAL_REJECTED,
+    AGENT_PROPOSAL_EXECUTED,
+    AGENT_PROPOSAL_STALE,
+    AGENT_PROPOSAL_FAILED,
+    AGENT_PROPOSAL_EXPIRED,
 )

@@ -116,7 +116,10 @@ code bdi {
 }
 
 .navbar-brand-mark {
+  flex: 0 0 auto;
+  height: 2.125rem;
   object-fit: contain;
+  width: auto;
 }
 
 .btn-primary {
@@ -150,8 +153,11 @@ code bdi {
 .report-logo {
   background: #fff;
   border-radius: 0.5rem;
-  max-width: 13rem;
-  padding: 0.4rem 0.7rem;
+  display: block;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  width: 8.5rem;
 }
 
 .report-policy-note {

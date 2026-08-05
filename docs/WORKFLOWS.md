@@ -149,8 +149,79 @@ Authorized users archive important records. Restoration means restoring an
 archived application record, not restoring a database backup. Database backup
 restoration is handled through a documented operational procedure.
 
+## AI Project Briefing
+
+1. An authorized user selects a visible, non-archived project, Arabic or
+   English, a 7/14/30-day evidence window, and executive or operational detail.
+2. The system applies the daily quota, creates a queued request, records an
+   audit event, and schedules background generation after commit.
+3. The worker rechecks the requester's active account, permission, and current
+   project visibility before collecting allowlisted project evidence.
+4. The system sends only the approved evidence JSON to Groq. The request uses
+   strict JSON Schema mode and provides no tools, browsing, or actions.
+5. The system validates structure and citations against the evidence allowlist
+   before saving a completed briefing and its source references.
+6. Invalid or temporarily unavailable responses retry within bounded limits;
+   terminal failure stores only a safe error code.
+7. The requester receives an in-app completion notification. Any currently
+   authorized briefing user may read the draft and follow its internal source
+   links; an authorized reviewer may mark it reviewed.
+8. AI output never mutates projects, tasks, approvals, attendance, or any other
+   business record.
+
+## CEO Telegram and n8n Executive Reports
+
+1. The CEO sends `/tasks`, `/overdue`, `/attendance`, or `/help` to the
+   dedicated Telegram bot in the configured private chat.
+2. n8n rejects every other chat and maps the fixed command to a bounded request.
+3. n8n signs the canonical HTTPS request with a timestamp and unique nonce.
+4. Django verifies feature/configuration state, HMAC, freshness, nonce replay,
+   exact chat binding, active configured CEO identity, and CEO permission.
+5. For a report, Django queues an idempotent Celery job and returns an opaque
+   request identifier. n8n polls the signed status endpoint.
+6. Django gathers permission-scoped source data. Groq receives only compact
+   aggregate evidence and returns a strict Arabic executive summary. Named
+   attendance rows remain local and are added deterministically to the PDF.
+7. When complete, n8n obtains a ten-minute one-time download URL, downloads
+   the in-memory branded Arabic PDF, and sends it as a Telegram document.
+8. A scheduled n8n branch asks Django to claim qualifying critical alerts.
+   Django leases pending outbox rows; n8n sends the Arabic messages and then
+   acknowledges the lease. Expired unacknowledged leases are retried.
+9. Django audits safe lifecycle codes and counts only. No business source is
+   changed and no name, chat ID, token, report content, or secret is audited.
+
+## Agentic Project Recovery and Planning
+
+1. An authorized user selects a visible non-archived project, a predefined
+   recovery goal, Arabic or English, the approved Groq model, and optional
+   bounded context.
+2. The system applies the daily and run budgets, creates a queued run, records
+   a safe audit event, and schedules the agent loop after commit.
+3. The worker rechecks the requester and project, stores a strict plan, then
+   asks for one allowlisted read tool at a time. Each tool rechecks current
+   permission and scope and returns bounded, cited structured observations.
+4. At least two distinct successful read tools are required. A stored
+   observation is supplied to the next planning turn and must affect the next
+   step. Only explicitly reviewed same-project memory is recallable.
+5. A write-capable intention creates a pending proposal with server-validated
+   arguments, citations, risk, and a before-state fingerprint. The run enters
+   `awaiting_approval`; no business record changes.
+6. An authorized user approves or rejects one proposal with a reason. Rejected
+   proposals never execute. Approval does not preserve old authority.
+7. Celery locks an approved proposal and its target, rechecks the approver's
+   current Phase 17 and domain permissions, object scope, lifecycle, and
+   before-state fingerprint, then calls the existing domain service exactly
+   once using its idempotency key.
+8. The worker reads the actual result under current scope and stores a cited
+   verification step. Stale or revoked state fails closed without a partial
+   write. A completed verified run may be explicitly reviewed into project
+   memory.
+9. The optional n8n branch claims a safe reviewed-event envelope through a
+   signed, replay-protected endpoint, pauses at its own human checkpoint, then
+   sends a signed idempotent callback for safe notification/archive handling.
+
 ## Workflow Approval
 
-Status: Account lifecycle and Phase 3 through Phase 10 domain lifecycles are
-approved. Other phase-specific transitions and permissions require later
-approval.
+Status: Account lifecycle and Phase 3 through Phase 17 approved domain
+lifecycles are approved. Other phase-specific transitions and permissions
+require later approval.

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+
+{% block title %}{% translate "AI Project Briefing" %} · {{ briefing.project|localized_project_name }}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+    <div>
+      <p class="text-primary fw-semibold mb-1"><bdi>{{ briefing.project.code }}</bdi></p>
+      <h1 class="h2">{% translate "AI Project Briefing" %}</h1>
+      <p class="text-muted mb-0">{{ briefing.project|localized_project_name }}</p>
+    </div>
+    <a class="btn btn-outline-secondary align-self-start" href="{% url 'projects:detail' briefing.project.pk %}">{% translate "Back to project" %}</a>
+  </div>
+
+  {% include "ai_briefings/_status.html" %}
+{% endblock %}

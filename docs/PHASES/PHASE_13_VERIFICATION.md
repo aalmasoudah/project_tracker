@@ -1,6 +1,7 @@
 # Phase 13 Verification
 
-Verified on 2026-07-30.
+Verified on 2026-07-30. The approved overdue-task PDF extension was verified
+on 2026-08-03.
 
 ## Acceptance Criteria
 
@@ -20,6 +21,9 @@ Verified on 2026-07-30.
   formula-safe, and branded. English remains LTR.
 - The application theme uses the owner-supplied logo and its deep-green,
   sage, and warm-stone palette across desktop and mobile.
+- The approved company name is Insight Projects / إنسايت بروجكتس throughout
+  the interface and generated reports, and every logo placement preserves the
+  supplied artwork's intrinsic aspect ratio.
 
 ## Migrations
 
@@ -111,3 +115,44 @@ direction switching.
 Recommended commit message:
 
 `feat: complete phase 13 branded bilingual reports`
+
+## Overdue-Task PDF Extension - 2026-08-03
+
+- The project owner approved adding PDF to the existing overdue-task report.
+- PDF and Excel use the same permission-scoped, bounded overdue-task dataset.
+- Server-side format allowlisting now permits both formats without changing
+  report permissions, filters, fields, retention, or privacy controls.
+- Focused Phase 13 unit/integration verification passed with 15 tests.
+- The Phase 13 browser test downloaded both `overdue-tasks-ar.pdf` and
+  `overdue-tasks-ar.xlsx` successfully.
+- The full non-browser regression suite passed with 158 tests.
+- Ruff formatting/linting, mypy, Django checks, and migration drift checks
+  passed; no migration is required.
+- The Arabic demo PDF was reopened with Poppler and rendered as one valid A4
+  landscape page. It contained the three KAU, KSU, and KKU overdue examples,
+  correctly shaped RTL text, dual Gregorian/Hijri dates, logo branding,
+  table headers, and a page footer without clipping or overlap.
+
+Recommended extension commit message:
+
+`feat: add PDF output for overdue-task reports`
+
+## Company-Name and Logo Correction - 2026-08-03
+
+- The project owner confirmed the company name as Insight Projects in English
+  and إنسايت بروجكتس in Arabic.
+- Navigation, accessibility text, page titles, report metadata, Excel footers,
+  PDF footers, documentation, and translation catalogs use the confirmed name.
+- Browser, PDF, and Excel logo placements preserve the supplied artwork's
+  intrinsic proportions; the prior square/wide forced dimensions were removed.
+- The Arabic and English live report page was verified in the browser. The PDF
+  was rendered through Poppler and inspected without clipping or distortion.
+  The Excel workbook was reopened and rendered with its image drawing measured
+  at a proportional 89 by 95 pixels and no formula errors.
+- `pytest -q -m "not browser"` passed 159 tests and the complete browser suite
+  passed 14 tests. Ruff, mypy, Django checks, migration drift, and translation
+  extraction/compilation passed. No migration is required.
+
+Recommended correction commit message:
+
+`fix: standardize Insight Projects branding`

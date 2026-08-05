@@ -14,9 +14,11 @@
       </div>
       <div class="col-lg-auto">
         <img
-          alt="{% translate 'Project Insight' %}"
+          alt="{% translate 'Insight Projects' %}"
           class="report-logo img-fluid"
+          height="2649"
           src="{% static 'img/project-insight-logo.png' %}"
+          width="2472"
         >
       </div>
     </div>
@@ -65,4 +67,32 @@
       </div>
     </aside>
   </div>
+
+  {{ report_formats|json_script:"report-format-policy" }}
+  <script>
+    (function () {
+      const reportSelect = document.querySelector('select[name="report_type"]');
+      const formatSelect = document.querySelector('select[name="output_format"]');
+      const policyElement = document.getElementById("report-format-policy");
+      if (!reportSelect || !formatSelect || !policyElement) {
+        return;
+      }
+      const formatsByReport = JSON.parse(policyElement.textContent);
+
+      function synchronizeFormats() {
+        const allowedFormats = formatsByReport[reportSelect.value] || [];
+        for (const option of formatSelect.options) {
+          const isAllowed = allowedFormats.includes(option.value);
+          option.disabled = !isAllowed;
+          option.hidden = !isAllowed;
+        }
+        if (!allowedFormats.includes(formatSelect.value) && allowedFormats.length) {
+          formatSelect.value = allowedFormats[0];
+        }
+      }
+
+      reportSelect.addEventListener("change", synchronizeFormats);
+      synchronizeFormats();
+    }());
+  </script>
 {% endblock %}

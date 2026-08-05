@@ -44,6 +44,32 @@ TEXT: Final = "243127"
 FORMULA_PREFIXES: Final = ("=", "+", "-", "@")
 ARABIC_PATTERN: Final = re.compile(r"[\u0600-\u06ff]")
 PDF_FONT_NAME: Final = "NotoSansArabic"
+BRAND_NAME_EN: Final = "Insight Projects"
+BRAND_NAME_AR: Final = "إنسايت بروجكتس"
+
+
+def brand_name(language_code: str) -> str:
+    """Return the approved company name for the requested report language."""
+    return BRAND_NAME_AR if language_code.startswith("ar") else BRAND_NAME_EN
+
+
+def fit_dimensions(
+    source_width: float,
+    source_height: float,
+    *,
+    max_width: float,
+    max_height: float,
+) -> tuple[float, float]:
+    """Fit an image inside a box without changing its source aspect ratio."""
+    if min(source_width, source_height, max_width, max_height) <= 0:
+        raise ValueError("Logo dimensions must be positive.")
+    scale = min(max_width / source_width, max_height / source_height)
+    return source_width * scale, source_height * scale
+
+
+def empty_report_message(language_code: str) -> str:
+    """Return the reviewed localized empty-report message."""
+    return "لا توجد بيانات مطابقة." if language_code == "ar" else "No matching data."
 
 
 def safe_spreadsheet_value(value: str) -> str:
@@ -58,6 +84,11 @@ def _asset_path(relative: str) -> Path:
 def render_xlsx(document: ReportDocument, *, language_code: str) -> bytes:
     """Render a bounded report to a styled, in-memory workbook."""
     workbook = Workbook()
+    localized_brand_name = brand_name(language_code)
+    workbook.properties.creator = localized_brand_name
+    workbook.properties.lastModifiedBy = localized_brand_name
+    workbook.properties.title = document.title
+    workbook.properties.subject = document.subtitle
     sheet = cast(Worksheet, workbook.active)
     sheet.title = document.sheet_name or "Report"
     sheet.sheet_view.rightToLeft = language_code == "ar"
@@ -65,10 +96,16 @@ def render_xlsx(document: ReportDocument, *, language_code: str) -> bytes:
     sheet.freeze_panes = "A6"
 
     logo = SpreadsheetImage(_asset_path("img/project-insight-logo.png"))
-    logo.width = 190
-    logo.height = 55
+    logo_width, logo_height = fit_dimensions(
+        float(logo.width),
+        float(logo.height),
+        max_width=170,
+        max_height=95,
+    )
+    logo.width = cast(Any, logo_width)
+    logo.height = cast(Any, logo_height)
     sheet.add_image(logo, "A1")
-    sheet.row_dimensions[1].height = 45
+    sheet.row_dimensions[1].height = 76
 
     column_count = max(len(document.headers), 1)
     sheet.merge_cells(start_row=2, start_column=1, end_row=2, end_column=column_count)
@@ -108,6 +145,27 @@ def render_xlsx(document: ReportDocument, *, language_code: str) -> bytes:
             if row_number % 2 == 0:
                 cell.fill = PatternFill("solid", fgColor=SOFT_STONE)
 
+    if not document.rows:
+        empty_row = header_row + 1
+        sheet.merge_cells(
+            start_row=empty_row,
+            start_column=1,
+            end_row=empty_row,
+            end_column=column_count,
+        )
+        empty_cell = sheet.cell(
+            empty_row,
+            1,
+            safe_spreadsheet_value(empty_report_message(language_code)),
+        )
+        empty_cell.fill = PatternFill("solid", fgColor=SOFT_STONE)
+        empty_cell.font = Font(color=TEXT, italic=True)
+        empty_cell.alignment = Alignment(
+            horizontal="right" if language_code == "ar" else "left",
+            vertical="center",
+        )
+        sheet.row_dimensions[empty_row].height = 26
+
     last_row = max(header_row, header_row + len(document.rows))
     last_column = get_column_letter(column_count)
     sheet.auto_filter.ref = f"A{header_row}:{last_column}{last_row}"
@@ -118,7 +176,7 @@ def render_xlsx(document: ReportDocument, *, language_code: str) -> bytes:
     assert sheet.oddFooter is not None
     assert sheet.oddFooter.center is not None
     assert sheet.oddFooter.right is not None
-    sheet.oddFooter.center.text = "Project Insight"
+    sheet.oddFooter.center.text = localized_brand_name
     sheet.oddFooter.right.text = "Page &P of &N"
 
     for column, header in enumerate(document.headers, start=1):
@@ -163,6 +221,7 @@ def _paragraph(
 def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
     """Render a branded, embedded-font PDF entirely in memory."""
     _register_pdf_font()
+    localized_brand_name = brand_name(language_code)
     buffer = BytesIO()
     page_size = landscape(A4)
     report = SimpleDocTemplate(
@@ -173,7 +232,7 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         topMargin=12 * mm,
         bottomMargin=15 * mm,
         title=document.title,
-        author="Project Insight",
+        author=localized_brand_name,
         subject=document.subtitle,
     )
     alignment: Literal[0, 2] = 2 if language_code == "ar" else 0
@@ -200,6 +259,24 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         leading=12,
         textColor=colors.HexColor(f"#{TEXT}"),
     )
+    section_heading = ParagraphStyle(
+        "ReportSectionHeading",
+        parent=normal,
+        fontSize=11,
+        leading=15,
+        spaceBefore=4,
+        spaceAfter=3,
+        textColor=colors.HexColor(f"#{PRIMARY_DARK}"),
+    )
+    section_item = ParagraphStyle(
+        "ReportSectionItem",
+        parent=normal,
+        fontSize=9,
+        leading=13,
+        leftIndent=4 * mm,
+        rightIndent=4 * mm,
+        spaceAfter=2,
+    )
     header = ParagraphStyle(
         "ReportHeader",
         parent=normal,
@@ -215,10 +292,12 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         textColor=colors.HexColor(f"#{TEXT}"),
     )
 
-    logo = Image(
-        str(_asset_path("img/project-insight-logo.png")),
-        width=47 * mm,
-        height=13.5 * mm,
+    logo = Image(str(_asset_path("img/project-insight-logo.png")))
+    logo.drawWidth, logo.drawHeight = fit_dimensions(
+        float(logo.imageWidth),
+        float(logo.imageHeight),
+        max_width=30 * mm,
+        max_height=32 * mm,
     )
     title_block = [
         _paragraph(document.title, language_code=language_code, style=heading),
@@ -226,10 +305,10 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
     ]
     if language_code == "ar":
         title_row = [logo, title_block]
-        title_widths = [52 * mm, report.width - 52 * mm]
+        title_widths = [36 * mm, report.width - 36 * mm]
     else:
         title_row = [title_block, logo]
-        title_widths = [report.width - 52 * mm, 52 * mm]
+        title_widths = [report.width - 36 * mm, 36 * mm]
     title_table = Table([title_row], colWidths=title_widths)
     title_table.setStyle(
         TableStyle(
@@ -246,6 +325,24 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         )
     )
     story: list[Flowable] = [KeepTogether(title_table), Spacer(1, 4 * mm)]
+
+    for section_title, section_values in document.sections:
+        story.append(
+            _paragraph(
+                section_title,
+                language_code=language_code,
+                style=section_heading,
+            )
+        )
+        for section_value in section_values:
+            story.append(
+                _paragraph(
+                    f"• {section_value}",
+                    language_code=language_code,
+                    style=section_item,
+                )
+            )
+        story.append(Spacer(1, 2 * mm))
 
     if document.rows:
         displayed_headers = (
@@ -304,9 +401,7 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         )
         story.append(table)
     else:
-        no_data = (
-            "لا توجد بيانات مطابقة." if language_code == "ar" else "No matching data."
-        )
+        no_data = empty_report_message(language_code)
         empty_table = Table(
             [[_paragraph(no_data, language_code=language_code, style=empty)]],
             colWidths=[report.width],
@@ -330,7 +425,11 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         pdf_canvas.line(12 * mm, 10 * mm, page_size[0] - 12 * mm, 10 * mm)
         pdf_canvas.setFont(PDF_FONT_NAME, 7)
         pdf_canvas.setFillColor(colors.HexColor(f"#{TEXT}"))
-        footer = f"Project Insight  |  {pdf_canvas.getPageNumber()}"
+        displayed_brand_name = _display_text(
+            localized_brand_name,
+            language_code=language_code,
+        )
+        footer = f"{displayed_brand_name}  |  {pdf_canvas.getPageNumber()}"
         pdf_canvas.drawCentredString(page_size[0] / 2, 6 * mm, footer)
         pdf_canvas.restoreState()
 

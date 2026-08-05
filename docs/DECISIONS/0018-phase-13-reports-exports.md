@@ -22,7 +22,8 @@ Status: Approved on 2026-07-30.
   Gregorian and Umm al-Qura Hijri values using Western digits. Arabic Excel
   worksheets are RTL; Arabic PDFs use embedded Noto Sans Arabic with explicit
   shaping and bidi processing.
-- Project Insight branding is fixed from the owner-supplied logo. Deep green
+- Insight Projects / إنسايت بروجكتس branding is fixed from the owner-supplied
+  logo. Deep green
   `#0A400C` is primary, sage `#819067` is secondary, and warm stone `#B1AB86`
   is limited to soft highlights.
 - Excel cells beginning with `=`, `+`, `-`, or `@` are neutralized. Download

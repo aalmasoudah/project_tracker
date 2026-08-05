@@ -204,6 +204,59 @@ Shell-level backup, restoration, deployment, and protected-command authority
 is an infrastructure responsibility and is not granted by an application
 role.
 
+## Phase 15 AI Project Briefing Matrix
+
+| Role | Generate/view briefing | Mark reviewed |
+| --- | --- | --- |
+| Technical Admin | None | None |
+| CEO | Every visible project | Every visible project |
+| Executive Manager | Every visible project | Every visible project |
+| Project Manager | Managed projects | Managed projects |
+| Supervisor | Active supervised projects | Active supervised projects |
+| Employee | None | None |
+| Contractor | None | None |
+
+Every request and read rechecks current project visibility. Losing project
+access also removes access to earlier briefings. Technical administration does
+not grant business-data or AI-briefing access.
+
+## Phase 16 CEO Telegram/n8n Matrix
+
+| Role | Request Telegram reports | Named attendance PDF | Critical alerts |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | Configured active CEO/chat only | All approved attendance names/statuses | All qualifying critical tasks |
+| Executive Manager | None | None | None |
+| Project Manager | None | None | None |
+| Supervisor | None | None | None |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+The Phase 16 permission alone is insufficient. Django also requires the exact
+configured active CEO username and constant-time matching configured Telegram
+chat ID on every signed integration request. n8n rejects every other chat
+before calling Django.
+
+## Phase 17 Agentic Project-Recovery Matrix
+
+| Role | Start/view/review | Approve proposal | Execute approved proposal |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | Every visible project | None | None |
+| Executive Manager | Every visible project | Actions already permitted in the target domain | Actions already permitted in the target domain |
+| Project Manager | Managed projects | Actions already permitted in managed projects | Actions already permitted in managed projects |
+| Supervisor | Active supervised projects | Assigned-task update/comment only | Assigned-task update/comment only |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+Every request, tool read, proposal decision, execution, and verification
+rechecks current object scope. A Phase 17 permission never grants a business
+permission. The approving user becomes the execution actor; requester or
+provider identity cannot be substituted. Assignment and deadline proposals
+therefore require an Executive Manager or owning Project Manager with the
+existing task-management authority. Completion and approval decisions are
+never agent-executable.
+
 ## Object-Level Access Questions
 
 1. [Approved through Phase 11] Use the account/department, project, course,
@@ -219,9 +272,11 @@ role.
 5. [Approved for Phase 10] CEO and Executive Manager see all attendance;
    owning Project Managers and assigned Supervisors see their scoped
    attendance. Employees and Contractors have no Phase 10 access.
-6. [Approved through Phase 14] No personal-data report or administrative
-   export is approved. Phase 13 aggregate reports and Phase 14 sanitized audit
-   CSV are the complete approved export catalog.
+6. [Approved through Phase 17] Phase 13 aggregate reports and Phase 14
+   sanitized audit CSV remain the normal export catalog. Decision 0021 adds
+   one exception: the configured CEO chat may receive trainee full names and
+   attendance values in the Phase 16 attendance PDF, with no contact data,
+   notes, files, or arbitrary recipient.
 7. [Approved through Phase 14] Technical Admin may archive/restore departments.
    Executive Manager may archive/restore any project; Project Manager may do
    so only for a managed project. Existing course, task, milestone, enrollment,
@@ -241,5 +296,6 @@ decision 0010. The Phase 6 progress-visibility slice was approved on
 2026-07-28 in decision 0011. The Phase 7 milestone/approval slice was approved
 on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
 on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014, Phase
-10 in decision 0015, Phase 11 in decision 0016, and Phase 14 in decision 0019.
-Separately approved extensions require their own permission decisions.
+10 in decision 0015, Phase 11 in decision 0016, Phase 14 in decision 0019,
+Phase 15 in decision 0020, Phase 16 in decision 0021, and Phase 17 in decision
+0022. Separately approved extensions require their own permission decisions.

@@ -38,7 +38,7 @@ REPORT_DEFINITIONS = (
         OVERDUE_TASKS,
         _("Overdue tasks"),
         "reports.export_overdue_tasks",
-        (XLSX,),
+        (PDF, XLSX),
     ),
     ReportDefinition(
         COURSE_ATTENDANCE,

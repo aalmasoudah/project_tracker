@@ -24,8 +24,11 @@ def test_notification_policy_is_bilingual_bounded_and_complete() -> None:
         "approval",
         "deadline",
         "mention",
+        "ai_briefing",
+        "project_agent",
     }
     assert CATEGORY_POLICIES["approval"].mandatory_in_app is True
+    assert CATEGORY_POLICIES["project_agent"].mandatory_in_app is True
     assert MAX_DELIVERY_ATTEMPTS == 4
     assert DELIVERY_RETRY_SECONDS[:3] == (60, 300, 900)
     assert set(MESSAGE_CATEGORIES) == set(MESSAGE_CONTENT)

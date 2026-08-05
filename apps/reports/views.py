@@ -21,6 +21,17 @@ def _assert_report_access(actor: User) -> None:
         raise PermissionDenied
 
 
+def _report_context(actor: User, form: ReportRequestForm) -> dict[str, object]:
+    definitions = reports_available_to(actor)
+    return {
+        "form": form,
+        "max_rows": 5_000,
+        "report_formats": {
+            definition.code: definition.formats for definition in definitions
+        },
+    }
+
+
 @login_required
 @require_GET
 def report_index(request: HttpRequest) -> HttpResponse:
@@ -31,7 +42,7 @@ def report_index(request: HttpRequest) -> HttpResponse:
     return render(
         request,
         "reports/index.html",
-        {"form": form, "max_rows": 5_000},
+        _report_context(actor, form),
     )
 
 
@@ -45,7 +56,7 @@ def report_generate(request: HttpRequest) -> HttpResponse:
         return render(
             request,
             "reports/index.html",
-            {"form": form, "max_rows": 5_000},
+            _report_context(actor, form),
             status=400,
         )
     cleaned = form.cleaned_data
@@ -64,7 +75,7 @@ def report_generate(request: HttpRequest) -> HttpResponse:
         return render(
             request,
             "reports/index.html",
-            {"form": form, "max_rows": 5_000},
+            _report_context(actor, form),
             status=400,
         )
     output_format = cleaned["output_format"]

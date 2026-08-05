@@ -87,6 +87,30 @@ ACTION_LABELS: Final = {
     actions.BACKUP_STATUS_RECORDED: _("Backup status recorded"),
     actions.RESTORE_TEST_STATUS_RECORDED: _("Restore test status recorded"),
     actions.RETENTION_INVENTORY_RECORDED: _("Retention inventory recorded"),
+    actions.AI_BRIEFING_REQUESTED: _("AI briefing requested"),
+    actions.AI_BRIEFING_COMPLETED: _("AI briefing completed"),
+    actions.AI_BRIEFING_FAILED: _("AI briefing failed"),
+    actions.AI_BRIEFING_REVIEWED: _("AI briefing reviewed"),
+    actions.EXECUTIVE_REPORT_REQUESTED: _("Executive report requested"),
+    actions.EXECUTIVE_REPORT_COMPLETED: _("Executive report completed"),
+    actions.EXECUTIVE_REPORT_FAILED: _("Executive report failed"),
+    actions.EXECUTIVE_REPORT_DOWNLOADED: _("Executive report downloaded"),
+    actions.CRITICAL_ALERT_DELIVERED: _("Critical task alert delivered"),
+    actions.AGENT_RUN_REQUESTED: _("Project-agent run requested"),
+    actions.AGENT_RUN_AWAITING_APPROVAL: _("Project-agent run awaiting approval"),
+    actions.AGENT_RUN_COMPLETED: _("Project-agent run completed"),
+    actions.AGENT_RUN_FAILED: _("Project-agent run failed"),
+    actions.AGENT_RUN_CANCELLED: _("Project-agent run cancelled"),
+    actions.AGENT_RUN_REVIEWED: _("Project-agent run reviewed"),
+    actions.AGENT_TOOL_COMPLETED: _("Project-agent tool completed"),
+    actions.AGENT_TOOL_FAILED: _("Project-agent tool failed safely"),
+    actions.AGENT_PROPOSAL_CREATED: _("Project-agent proposal created"),
+    actions.AGENT_PROPOSAL_APPROVED: _("Project-agent proposal approved"),
+    actions.AGENT_PROPOSAL_REJECTED: _("Project-agent proposal rejected"),
+    actions.AGENT_PROPOSAL_EXECUTED: _("Project-agent proposal executed"),
+    actions.AGENT_PROPOSAL_STALE: _("Project-agent proposal became stale"),
+    actions.AGENT_PROPOSAL_FAILED: _("Project-agent proposal failed safely"),
+    actions.AGENT_PROPOSAL_EXPIRED: _("Project-agent proposal expired"),
 }
 
 TARGET_TYPE_LABELS: Final = {
@@ -110,6 +134,10 @@ TARGET_TYPE_LABELS: Final = {
     "tag": _("Tag"),
     "task": _("Task"),
     "trainer": _("Trainer"),
+    "ai_briefing": _("AI project briefing"),
+    "executive_report": _("CEO Telegram report"),
+    "critical_task_alert": _("Critical task alert"),
+    "agent_run": _("Project-agent run"),
 }
 
 

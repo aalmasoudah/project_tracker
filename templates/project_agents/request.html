@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+
+{% block title %}{% translate "Start Project Agent" %} · {{ project|localized_project_name }}{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <p class="text-primary fw-semibold mb-1"><bdi>{{ project.code }}</bdi></p>
+    <h1 class="h2">{% translate "Start Project Agent" %}</h1>
+    <p class="text-muted mb-0">{{ project|localized_project_name }}</p>
+  </div>
+  <div class="alert alert-warning" role="note">
+    <strong>{% translate "Human approval required" %}:</strong>
+    {% translate "The agent can read only approved project evidence and create proposals. It cannot change data until an authorized person approves one proposal." %}
+  </div>
+  <form method="post" class="card card-body shadow-sm" novalidate>
+    {% csrf_token %}
+    {% include "includes/form_errors.html" with form=form %}
+    {% include "includes/form_fields.html" with form=form %}
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <button class="btn btn-primary" type="submit">{% translate "Start analysis" %}</button>
+      <a class="btn btn-outline-secondary" href="{% url 'projects:detail' project.pk %}">{% translate "Cancel" %}</a>
+    </div>
+  </form>
+{% endblock %}

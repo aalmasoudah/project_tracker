@@ -32,6 +32,7 @@ class ReportDocument:
     rows: tuple[tuple[str, ...], ...]
     filename_stem: str
     sheet_name: str
+    sections: tuple[tuple[str, tuple[str, ...]], ...] = ()
 
 
 def _bounded(queryset: QuerySet[Any]) -> tuple[Any, ...]:

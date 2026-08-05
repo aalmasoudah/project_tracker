@@ -1,0 +1,71 @@
+{% load i18n %}
+<section id="agent-run-status"
+  {% if poll %}hx-get="{% url 'project_agents:status' run.pk %}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
+  <div class="card shadow-sm mb-4"><div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between gap-2">
+      <div><span class="badge text-bg-{% if run.status == 'completed' %}success{% elif run.status == 'failed' or run.status == 'stale' %}danger{% elif run.status == 'awaiting_approval' %}warning{% else %}primary{% endif %}">{{ run.get_status_display }}</span> <span class="ms-2">{{ run.get_goal_code_display }} · {{ run.get_language_display }}</span></div>
+      <small class="text-muted"><bdi>{{ run.created_at|date:"Y-m-d H:i" }}</bdi></small>
+    </div>
+    <dl class="detail-grid mt-3 mb-0">
+      <div><dt>{% translate "Model" %}</dt><dd><bdi>{{ run.model_code }}</bdi></dd></div>
+      <div><dt>{% translate "Steps" %}</dt><dd><bdi>{{ run.current_step }} / {{ run.max_steps }}</bdi></dd></div>
+      <div><dt>{% translate "Input tokens" %}</dt><dd><bdi>{{ run.input_tokens }}</bdi></dd></div>
+      <div><dt>{% translate "Output tokens" %}</dt><dd><bdi>{{ run.output_tokens }}</bdi></dd></div>
+    </dl>
+    {% if poll %}<p class="mt-3 mb-0" role="status">{% translate "The agent is processing a bounded step. You may leave and return later." %}</p>{% endif %}
+    {% if run.status == 'failed' or run.status == 'stale' %}<p class="text-danger mt-3 mb-0" role="alert">{% translate "The run stopped safely. No unverified action was executed." %}</p>{% endif %}
+    {% if can_cancel %}<form method="post" action="{% url 'project_agents:cancel' run.pk %}" class="mt-3">{% csrf_token %}<button class="btn btn-outline-danger" type="submit">{% translate "Cancel run" %}</button></form>{% endif %}
+  </div></div>
+
+  <section class="card card-body shadow-sm mb-4" aria-labelledby="timeline-heading">
+    <h2 id="timeline-heading" class="h4">{% translate "Agent timeline" %}</h2>
+    <ol class="list-group list-group-numbered">
+      {% for step in steps %}
+        <li class="list-group-item d-flex flex-column gap-1">
+          <strong>{{ step.get_step_type_display }}</strong>
+          {% if step.data.summary %}<span>{{ step.data.summary }}</span>{% endif %}
+          {% if step.data.plan_steps %}<ol class="small mb-0">{% for item in step.data.plan_steps %}<li>{{ item }}</li>{% endfor %}</ol>{% endif %}
+          {% if step.data.tool_code %}<bdi class="small text-muted">{{ step.data.tool_code }}</bdi>{% endif %}
+          {% if step.data.action_code %}<bdi class="small text-muted">{{ step.data.action_code }}</bdi>{% endif %}
+          {% if step.step_type == 'observation' and step.data.result %}<details class="small"><summary>{% translate "Observation evidence" %}</summary><pre class="bg-light border rounded p-2 overflow-auto mt-2 mb-0"><bdi>{{ step.data.result }}</bdi></pre></details>{% endif %}
+        </li>
+      {% empty %}<li class="list-group-item text-muted">{% translate "The plan has not started yet." %}</li>{% endfor %}
+    </ol>
+  </section>
+
+  {% if summary %}
+    <section class="card card-body shadow-sm mb-4"><h2 class="h4">{% translate "Recovery plan" %}</h2><p class="preserve-lines mb-0">{{ summary }}</p></section>
+    <div class="row g-4 mb-4">
+      <section class="col-12 col-lg-6"><div class="card card-body h-100"><h2 class="h5">{% translate "Findings" %}</h2>{% include "project_agents/_cited_items.html" with items=findings %}</div></section>
+      <section class="col-12 col-lg-6"><div class="card card-body h-100"><h2 class="h5">{% translate "Recommendations" %}</h2>{% include "project_agents/_cited_items.html" with items=recommendations %}</div></section>
+    </div>
+  {% endif %}
+
+  {% for card in proposal_cards %}
+    {% with proposal=card.proposal %}
+    <section class="card border-warning shadow-sm mb-4"><div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between gap-2"><h2 class="h4">{% translate "Proposal" %}</h2><span class="badge text-bg-warning">{{ proposal.get_status_display }} · {{ proposal.get_risk_display }}</span></div>
+      <p><bdi>{{ proposal.action_code }}</bdi></p>
+      {% if card.citations %}<p class="small"><strong>{% translate "Citations" %}:</strong> {% for source in card.citations %}{% if source.url %}<a href="{{ source.url }}">{{ source.label }}</a>{% else %}{{ source.label }}{% endif %}{% if not forloop.last %}، {% endif %}{% endfor %}</p>{% endif %}
+      <div class="row g-3">
+        <div class="col-12 col-lg-6"><h3 class="h6">{% translate "Before State" %}</h3><pre class="small bg-light border rounded p-3 overflow-auto"><bdi>{{ proposal.before_state }}</bdi></pre></div>
+        <div class="col-12 col-lg-6"><h3 class="h6">{% translate "Proposed change" %}</h3><pre class="small bg-light border rounded p-3 overflow-auto"><bdi>{{ proposal.payload }}</bdi></pre></div>
+      </div>
+      {% if proposal.status == 'pending' and card.can_decide %}
+        <form method="post" class="mt-3" novalidate>
+          {% csrf_token %}
+          <label class="form-label" for="reason-{{ proposal.pk }}">{% translate "Decision reason" %}</label>
+          <textarea class="form-control" id="reason-{{ proposal.pk }}" name="reason" maxlength="500" rows="2" required></textarea>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <button class="btn btn-success" formaction="{% url 'project_agents:approve' proposal.pk %}" type="submit">{% translate "Approve Proposal" %}</button>
+            <button class="btn btn-outline-danger" formaction="{% url 'project_agents:reject' proposal.pk %}" type="submit">{% translate "Reject Proposal" %}</button>
+          </div>
+        </form>
+      {% else %}<p class="mt-3 mb-0"><strong>{% translate "Decision reason" %}:</strong> {{ proposal.decision_reason }}</p>{% endif %}
+    </div></section>
+    {% endwith %}
+  {% endfor %}
+
+  {% if run.verification_data %}<section class="card card-body shadow-sm mb-4"><h2 class="h4">{% translate "Final Verification" %}</h2><p>{{ verification_summary }}</p>{% if verification_results %}<ul class="mb-0">{% for item in verification_results %}<li><bdi>{{ item.action_code }}</bdi> — {{ item.status }}{% if item.source %}: {% if item.source.url %}<a href="{{ item.source.url }}">{{ item.source.label }}</a>{% else %}{{ item.source.label }}{% endif %}{% endif %}</li>{% endfor %}</ul>{% endif %}</section>{% endif %}
+  {% if run.reviewed_at %}<div class="alert alert-success">{% translate "This verified run is available as reviewed project memory." %}</div>{% elif can_review %}<form method="post" action="{% url 'project_agents:review' run.pk %}">{% csrf_token %}<button class="btn btn-success" type="submit">{% translate "Mark reviewed and save memory" %}</button></form>{% endif %}
+</section>

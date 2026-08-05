@@ -55,6 +55,11 @@ full-page and HTMX responses.
 - Production settings and `DEBUG=False` checks.
 - Bidirectional user content cannot visually escape its component or corrupt
   surrounding labels/actions.
+- For Phase 17, verify exact tool/action allowlists, strict schemas/citations,
+  forged-ID rejection, prompt-injection resistance, current-scope rechecks,
+  stale/expired/revoked paths, approval/rejection, transactional rollback,
+  duplicate execution, token/step/result/quota limits, provider retry
+  classification, reviewed memory, and n8n HMAC/replay/idempotency.
 
 ### Localization Tests
 
@@ -67,6 +72,9 @@ full-page and HTMX responses.
   states are covered.
 - Reports are rendered to images and inspected for Arabic shaping, font
   embedding, RTL order, clipping, and pagination.
+- Exercise the Phase 17 request/timeline/proposal/verification/review flow in
+  Arabic RTL mobile and verify English LTR rendering and translated
+  validation/status text.
 
 ## Tooling
 
@@ -143,6 +151,21 @@ Before production, also run deployment checks, dependency/security scans, and
 the approved smoke suite. A failed required check blocks phase completion.
 Flaky tests are defects and may not be ignored or retried into a passing claim.
 
+Phase 15 additionally tests strict JSON/schema and citation validation, prompt
+injection treatment, provider allowlisting, Groq request shape without tools,
+cached-token accounting, evidence exclusions, role/object isolation, request
+quota serialization, protected retention, idempotent processing, stale-worker
+recovery, audit/notification side effects, and Arabic mobile plus English UI
+presentation.
+
+Phase 16 additionally tests HMAC canonicalization, timestamp and nonce replay
+boundaries, exact CEO/chat authorization, bounded strict JSON, one-time PDF
+downloads, named attendance only in the local PDF rows, aggregate-only Groq
+evidence, critical-alert fingerprint/lease/acknowledgement behavior, safe
+audit metadata, and static import/security assertions over the inactive n8n
+workflow. Staging UAT exercises all four Arabic commands and a failed-delivery
+retry using fictional names.
+
 ## Manual Verification
 
 Each phase specification lists reproducible manual checks with:
@@ -162,3 +185,7 @@ Manual verification complements automated tests; it does not replace them.
 At the end of each phase, map every phase acceptance criterion to
 implementation and automated/manual evidence. Before production, create the
 full `docs/REQUIREMENTS_TRACEABILITY.md` requested by the playbook.
+
+Phase 17 evidence is recorded in
+`docs/PHASES/PHASE_17_VERIFICATION.md`; the operator and staging adversarial
+workflow is in `docs/RUNBOOKS/PHASE_17_PROJECT_AGENT.md`.

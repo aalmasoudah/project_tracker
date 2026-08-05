@@ -23,6 +23,8 @@ class Notification(models.Model):
         APPROVAL = "approval", _("Approvals")
         DEADLINE = "deadline", _("Deadlines and overdue")
         MENTION = "mention", _("Mentions")
+        AI_BRIEFING = "ai_briefing", _("AI project briefings")
+        PROJECT_AGENT = "project_agent", _("Project recovery agent")
 
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -55,7 +57,14 @@ class Notification(models.Model):
             ),
             models.CheckConstraint(
                 condition=models.Q(
-                    category__in=("task_assignment", "approval", "deadline", "mention")
+                    category__in=(
+                        "task_assignment",
+                        "approval",
+                        "deadline",
+                        "mention",
+                        "ai_briefing",
+                        "project_agent",
+                    )
                 ),
                 name="notifications_category_valid",
             ),
@@ -132,13 +141,21 @@ class NotificationPreference(models.Model):
             ),
             models.CheckConstraint(
                 condition=models.Q(
-                    category__in=("task_assignment", "approval", "deadline", "mention")
+                    category__in=(
+                        "task_assignment",
+                        "approval",
+                        "deadline",
+                        "mention",
+                        "ai_briefing",
+                        "project_agent",
+                    )
                 ),
                 name="notifications_preference_category_valid",
             ),
             models.CheckConstraint(
                 condition=(
-                    ~models.Q(category="approval") | models.Q(in_app_enabled=True)
+                    ~models.Q(category__in=("approval", "project_agent"))
+                    | models.Q(in_app_enabled=True)
                 ),
                 name="notifications_approval_in_app_required",
             ),

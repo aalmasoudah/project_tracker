@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insight Projects - 15 minute CTO presentation</title>
+  <style>
+    :root {
+      --deep: #0a400c;
+      --forest: #17531b;
+      --sage: #819067;
+      --stone: #b1ab86;
+      --paper: #f3f1e8;
+      --ink: #243127;
+      --muted: #617064;
+      --white: #fff;
+      --line: rgba(36,49,39,.15);
+      --shadow: 0 25px 64px rgba(10,64,12,.16);
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { color: var(--ink); background: #d9ddcf; font-family: "Segoe UI", Tahoma, Arial, sans-serif; }
+    .deck { position: relative; width: 100%; height: 100%; }
+    .slide {
+      position: absolute; inset: 0; display: none; grid-template-rows: auto 1fr auto;
+      width: 100vw; height: 100vh; overflow: hidden;
+      padding: clamp(26px,3.7vw,60px) clamp(34px,5vw,86px) clamp(25px,3vw,48px);
+      background: radial-gradient(circle at 88% 8%, rgba(129,144,103,.17), transparent 29%), linear-gradient(135deg,#fbfaf6,var(--paper));
+    }
+    .slide.active { display: grid; animation: enter .38s ease both; }
+    @keyframes enter { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+    .topline, .footer { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .topline { min-height: 44px; color: var(--deep); font-size: clamp(14px,1.15vw,19px); font-weight: 700; }
+    .brand-mini { display: inline-flex; align-items: center; gap: 10px; }
+    .brand-mini img { width: 36px; height: 29px; object-fit: contain; }
+    .footer { color: #687269; font-size: clamp(12px,.9vw,16px); border-top: 1px solid var(--line); padding-top: 12px; }
+    .slide-body { min-height: 0; display: grid; align-content: center; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--forest); text-transform: uppercase; letter-spacing: .09em; font-weight: 800; font-size: clamp(13px,1vw,17px); }
+    .eyebrow::before { content: ""; width: 28px; height: 3px; background: var(--stone); border-radius: 99px; }
+    h1,h2,h3,p { margin-top: 0; }
+    h1 { margin-bottom: 20px; color: var(--deep); font-size: clamp(52px,6.2vw,96px); line-height: .98; letter-spacing: -.05em; }
+    h2 { margin: 12px 0 clamp(20px,2.6vw,38px); color: var(--deep); font-size: clamp(38px,4.4vw,68px); line-height: 1.03; letter-spacing: -.04em; }
+    h3 { margin-bottom: 8px; color: var(--deep); font-size: clamp(20px,1.8vw,28px); }
+    .lead { max-width: 920px; color: #566158; font-size: clamp(21px,2.2vw,34px); line-height: 1.38; }
+    .small { color: var(--muted); font-size: clamp(15px,1.18vw,19px); line-height: 1.45; }
+    .arabic { direction: rtl; font-family: Tahoma,"Segoe UI",Arial,sans-serif; }
+    .two-col { display: grid; grid-template-columns: minmax(0,.92fr) minmax(0,1.08fr); gap: clamp(28px,4vw,70px); align-items: center; }
+    .two-col.equal { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .three-col { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(15px,2vw,28px); }
+    .four-col { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: clamp(12px,1.5vw,22px); }
+    .cover { color: white; background: linear-gradient(118deg,#062c08 0%,var(--deep) 56%,#526a41 100%); }
+    .cover::before { content:""; position:absolute; width:52vw; height:52vw; right:-17vw; top:-20vw; border:1px solid rgba(255,255,255,.18); border-radius:50%; box-shadow:0 0 0 7vw rgba(255,255,255,.03),0 0 0 14vw rgba(255,255,255,.025); }
+    .cover h1,.cover .topline { color: white; }
+    .cover h1 span { color: #cbd2b6; }
+    .cover .lead { color: rgba(255,255,255,.8); }
+    .cover-grid { position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1fr) 34%; gap:7vw; align-items:center; }
+    .logo-lockup { justify-self:end; width:min(27vw,390px); aspect-ratio:1; display:grid; place-items:center; padding:10%; border-radius:40px; background:rgba(255,255,255,.97); box-shadow:var(--shadow); }
+    .logo-lockup img { width:100%; height:100%; object-fit:contain; }
+    .cover-meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+    .pill { padding:9px 15px; border:1px solid rgba(255,255,255,.25); border-radius:999px; color:rgba(255,255,255,.88); font-size:clamp(13px,1vw,17px); }
+    .screen { position:relative; margin:0; overflow:hidden; border:1px solid rgba(10,64,12,.16); border-radius:22px; background:white; box-shadow:var(--shadow); }
+    .screen::before { content:""; display:block; height:30px; background:linear-gradient(90deg,#f5f4ef,#e7eadf); border-bottom:1px solid var(--line); }
+    .screen::after { content:"●  ●  ●"; position:absolute; top:6px; left:14px; color:var(--stone); font-size:10px; letter-spacing:3px; }
+    .screen img { display:block; width:100%; aspect-ratio:16/8.8; object-fit:cover; object-position:top; background:#eee; }
+    .screen.ai-focus img { object-position:center 30%; }
+    .screen.agent-focus img { object-position:center 34%; }
+    .screen.tall img { aspect-ratio:16/9.5; }
+    .screen figcaption { position:absolute; right:12px; bottom:10px; max-width:78%; padding:7px 10px; border-radius:9px; background:rgba(10,64,12,.91); color:white; font-size:13px; }
+    .screen-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; align-items:center; }
+    .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 28px; }
+    .card { padding:18px 20px; border-top:3px solid var(--sage); background:rgba(255,255,255,.62); }
+    .card p { margin:0; color:#5c675e; font-size:clamp(15px,1.14vw,19px); line-height:1.42; }
+    .feature-list { display:grid; gap:17px; }
+    .feature { display:grid; grid-template-columns:42px 1fr; gap:14px; align-items:start; }
+    .feature b { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; color:white; background:var(--deep); }
+    .feature strong { display:block; color:var(--deep); font-size:clamp(18px,1.45vw,24px); }
+    .feature span { display:block; margin-top:3px; color:#5b665d; font-size:clamp(14px,1.08vw,18px); line-height:1.4; }
+    .model { display:grid; grid-template-columns:1fr 42px 1fr 42px 1fr 42px 1fr; align-items:center; gap:6px; margin-top:20px; }
+    .model-node { min-height:125px; display:grid; place-items:center; align-content:center; gap:8px; padding:16px; text-align:center; border:1px solid var(--line); border-radius:24px; background:rgba(255,255,255,.78); }
+    .model-node strong { color:var(--deep); font-size:clamp(20px,1.7vw,28px); }
+    .model-node span { color:#687169; font-size:clamp(13px,1vw,17px); }
+    .arrow { color:var(--sage); font-size:34px; text-align:center; }
+    .uni-strip { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:24px; }
+    .uni { min-width:112px; padding:10px 20px; text-align:center; border:1px solid rgba(10,64,12,.22); border-radius:999px; color:var(--deep); background:rgba(255,255,255,.72); font-weight:800; }
+    .flow { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; align-items:stretch; }
+    .flow-step { position:relative; min-height:142px; padding:17px 16px; border-radius:20px; background:white; border:1px solid var(--line); }
+    .flow-step:not(:last-child)::after { content:"→"; position:absolute; right:-18px; top:50%; z-index:2; color:var(--sage); font-size:25px; font-weight:800; }
+    .flow-step b { display:block; color:var(--stone); font-size:24px; }
+    .flow-step strong { display:block; margin:4px 0 7px; color:var(--deep); font-size:clamp(16px,1.25vw,21px); }
+    .flow-step span { color:#606b62; font-size:clamp(13px,.96vw,16px); line-height:1.35; }
+    .metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+    .metric { padding:24px 18px; border-radius:22px; background:white; border:1px solid var(--line); box-shadow:0 14px 34px rgba(10,64,12,.08); text-align:center; }
+    .metric b { display:block; color:var(--deep); font-size:clamp(38px,4vw,62px); line-height:1; }
+    .metric span { display:block; margin-top:10px; color:#657067; font-size:clamp(14px,1.05vw,18px); }
+    .quote { padding:26px 30px; border-right:7px solid var(--stone); background:var(--deep); color:white; border-radius:24px; font-size:clamp(20px,1.8vw,29px); line-height:1.42; }
+    .ask { padding:28px; border-radius:28px; color:white; background:linear-gradient(145deg,var(--deep),#365936); box-shadow:var(--shadow); }
+    .ask h3 { color:white; font-size:clamp(27px,2.5vw,40px); }
+    .ask p { color:rgba(255,255,255,.84); font-size:clamp(17px,1.35vw,22px); line-height:1.45; }
+    .slide.compact h2 { margin:7px 0 12px; font-size:clamp(32px,3.3vw,48px); line-height:1; }
+    .slide.compact h3 { font-size:clamp(18px,1.55vw,23px); }
+    .slide.compact .card { padding:10px 17px; }
+    .slide.compact .card p { font-size:clamp(12px,.94vw,16px); line-height:1.3; }
+    .notes { display:none; position:fixed; left:4vw; right:4vw; bottom:5vh; z-index:20; max-height:38vh; overflow:auto; padding:20px 24px; border-radius:18px; color:white; background:rgba(7,31,10,.96); box-shadow:0 16px 50px rgba(0,0,0,.32); font-size:16px; line-height:1.5; }
+    body.notes-on .slide.active .notes { display:block; }
+    .notes strong { color:#d3d9bd; }
+    .notes .sources { margin-top:10px; color:#b9c0ba; font-size:13px; }
+    .controls { position:fixed; right:20px; bottom:18px; z-index:30; display:flex; gap:8px; }
+    .controls button { width:42px; height:42px; border:1px solid rgba(255,255,255,.45); border-radius:50%; color:white; background:rgba(10,64,12,.88); cursor:pointer; font-size:18px; }
+    .progress { position:fixed; left:0; bottom:0; z-index:40; height:4px; background:var(--stone); transition:width .25s ease; }
+    @media (max-width:900px) {
+      .two-col,.two-col.equal,.three-col,.four-col { grid-template-columns:1fr; }
+      .screen-pair { grid-template-columns:1fr 1fr; }
+      .model { grid-template-columns:1fr; }
+      .arrow { display:none; }
+      .model-node { min-height:auto; }
+      .flow { grid-template-columns:repeat(3,1fr); }
+      .metrics { grid-template-columns:repeat(2,1fr); }
+    }
+    @media print { .slide { position:relative; display:grid!important; break-after:page; width:100vw; height:100vh; } .controls,.progress,.notes { display:none!important; } }
+  </style>
+</head>
+<body>
+<main class="deck">
+  <section class="slide cover active" data-title="Insight Projects">
+    <div class="topline"><span>INSIGHT PROJECTS</span><span class="arabic" lang="ar">إنسايت بروجكتس</span></div>
+    <div class="slide-body cover-grid">
+      <div>
+        <div class="eyebrow" style="color:#d8ddc6">15-minute CTO briefing</div>
+        <h1>Control delivery.<br><span>Verify every result.</span></h1>
+        <p class="lead">One Arabic-first platform for programs, projects, teams, training, approvals, reports, and governed AI action.</p>
+        <div class="cover-meta"><span class="pill">Django + PostgreSQL</span><span class="pill">Arabic RTL + English LTR</span><span class="pill">Human-governed AI</span></div>
+      </div>
+      <div class="logo-lockup"><img src="../../static/img/project-insight-logo.png" alt="Insight Projects logo"></div>
+    </div>
+    <div class="footer" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.18)"><span>Product, evidence, and pilot readiness</span><span>01 / 13</span></div>
+    <aside class="notes"><strong>0:00-0:45 - Say:</strong> “Insight Projects is a bilingual operating system for university delivery. It connects programs, projects, tasks, teams, training, approvals, and evidence. The newest layer adds AI, but the AI remains inside the same permissions and human approvals as the rest of the product.”<div class="sources">[Sources] docs/SCOPE.md; docs/LOCALIZATION.md; README.md</div></aside>
+  </section>
+
+  <section class="slide" data-title="Why it matters">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>The operational problem</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">Why this matters</div>
+        <h2>Fragmented updates hide delivery risk.</h2>
+        <div class="feature-list">
+          <div class="feature"><b>1</b><div><strong>Many programs</strong><span>Leadership needs one current view without losing ownership boundaries.</span></div></div>
+          <div class="feature"><b>2</b><div><strong>Many contributors</strong><span>Shared specialists and project-only members need different access.</span></div></div>
+          <div class="feature"><b>3</b><div><strong>Many decisions</strong><span>Approvals, attendance, deadlines, and reports require traceable evidence.</span></div></div>
+        </div>
+      </div>
+      <figure class="screen"><img src="assets/dashboard-ar.png" alt="Arabic executive dashboard"><figcaption class="arabic" lang="ar">لوحة معلومات تنفيذية موحدة</figcaption></figure>
+    </div>
+    <div class="footer"><span>One permission-aware source of operational truth</span><span>02 / 13</span></div>
+    <aside class="notes"><strong>0:45-1:40 - Say:</strong> “The product starts from a practical problem: project data is usually spread across files, messages, and individual follow-ups. Insight Projects gives executives a current dashboard while each user only sees the programs and work they are allowed to access.”<div class="sources">[Sources] docs/WORKFLOWS.md; docs/USER_ROLES.md; local fictional dashboard screenshot</div></aside>
+  </section>
+
+  <section class="slide" data-title="Operating model">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Operating model</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">How delivery is organized</div>
+      <h2>Program → projects → tasks → accountable people</h2>
+      <div class="model">
+        <div class="model-node"><strong>Program</strong><span>University objective and governance</span></div><div class="arrow">→</div>
+        <div class="model-node"><strong>Projects</strong><span>Separate initiatives, dates, owners, and budgets</span></div><div class="arrow">→</div>
+        <div class="model-node"><strong>Tasks</strong><span>Shared patterns plus project-specific work</span></div><div class="arrow">→</div>
+        <div class="model-node"><strong>People</strong><span>Cross-program experts or dedicated members</span></div>
+      </div>
+      <div class="uni-strip"><span class="uni">KAU</span><span class="uni">KSU</span><span class="uni">KKU</span><span class="uni arabic" lang="ar">بيانات تجريبية خيالية</span></div>
+    </div>
+    <div class="footer"><span>Fictional Saudi-university scenarios demonstrate shared and isolated work</span><span>03 / 13</span></div>
+    <aside class="notes"><strong>1:40-2:35 - Say:</strong> “The operating model is simple enough to explain in one line. A program contains multiple projects; each project has milestones and tasks; users may work everywhere or only in one project. Our fictional KAU, KSU, and KKU dataset demonstrates both shared roles and strict project isolation.”<div class="sources">[Sources] docs/SCOPE.md; docs/USER_ROLES.md; fictional local demo dataset</div></aside>
+  </section>
+
+  <section class="slide" data-title="Core delivery">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Core delivery</span></div>
+    <div class="slide-body two-col equal">
+      <div>
+        <div class="eyebrow">Daily team experience</div>
+        <h2>Plan, collaborate, approve.</h2>
+        <div class="cards">
+          <div class="card"><h3>Projects and teams</h3><p>Departments, clients, categories, owners, supervisors, shared members, priorities, budgets, archives, and history.</p></div>
+          <div class="card"><h3>Tasks and evidence</h3><p>Nested tasks, assignments, progress, hours, blockers, comments, attachments, Kanban, calendar, timeline, and Gantt.</p></div>
+          <div class="card"><h3>Progress engine</h3><p>One centralized formula for task, course, project, milestone, and cancelled-item behavior.</p></div>
+          <div class="card"><h3>Two-stage approval</h3><p>Supervisor first, Project Manager second; reasons, retries, and immutable history remain visible.</p></div>
+        </div>
+      </div>
+      <figure class="screen"><img src="assets/project-detail-ar.png" alt="Arabic KAU project page"><figcaption class="arabic" lang="ar">مشروع وفريق وصلاحيات واضحة</figcaption></figure>
+    </div>
+    <div class="footer"><span>Thin views, service-layer workflows, and transactional approvals</span><span>04 / 13</span></div>
+    <aside class="notes"><strong>2:35-3:45 - Say:</strong> “For employees, this is where daily work happens: tasks, comments, evidence, progress, assignments, and blockers. For supervisors and managers, completion is controlled through two independent approval stages. Progress is calculated centrally so dashboards and reports cannot disagree.”<div class="sources">[Sources] docs/BUSINESS_RULES.md; docs/WORKFLOWS.md; local KAU project screenshot</div></aside>
+  </section>
+
+  <section class="slide" data-title="Training and attendance">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Training operations</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">Beyond project tracking</div>
+      <h2>Courses, trainees, sessions, and attendance in one flow.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>01</b><strong>Courses</strong><span>Project-linked courses, trainers, schedules, statuses, and progress.</span></div>
+        <div class="flow-step"><b>02</b><strong>Trainees</strong><span>Validated Arabic/English records and safe CSV/XLSX imports.</span></div>
+        <div class="flow-step"><b>03</b><strong>Sessions</strong><span>Scheduled delivery with expiring trainer access links.</span></div>
+        <div class="flow-step"><b>04</b><strong>Attendance</strong><span>Present, absent, late, excused, notes, and review evidence.</span></div>
+        <div class="flow-step"><b>05</b><strong>Correction</strong><span>Submit, approve, reject, reopen, and preserve the history.</span></div>
+      </div>
+      <div class="quote" style="margin-top:26px">A trainer receives only a random, expiring, session-scoped attendance capability - never broad internal access.</div>
+    </div>
+    <div class="footer"><span>Privacy-aware attendance workflows with controlled correction</span><span>05 / 13</span></div>
+    <aside class="notes"><strong>3:45-4:40 - Say:</strong> “The platform also covers training delivery. Managers maintain courses and trainee rosters, including validated imports. Trainers use a narrow expiring link for one session. Attendance then enters a controlled review and correction workflow instead of becoming an editable spreadsheet with no history.”<div class="sources">[Sources] docs/WORKFLOWS.md; docs/SECURITY.md; docs/PHASES/PHASE_08_TRAINEES_IMPORTS.md through PHASE_10</div></aside>
+  </section>
+
+  <section class="slide compact" data-title="Visibility and governance">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Visibility and governance</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">Leadership evidence</div>
+        <h2>See the work - and prove what changed.</h2>
+        <div class="cards">
+          <div class="card"><h3>Dashboards and workspace</h3><p>Role-scoped KPIs, overdue work, approvals, workload, search, saved operational views, and responsive navigation.</p></div>
+          <div class="card"><h3>Reports and exports</h3><p>Project progress, overdue tasks, and attendance in Arabic/English PDF and XLSX with Hijri and Gregorian dates.</p></div>
+          <div class="card"><h3>Notifications</h3><p>Mandatory in-app events, localized email options, preferences, retries, and background processing.</p></div>
+          <div class="card"><h3>Audit and operations</h3><p>Append-only audit evidence, archive/restore, health checks, retention jobs, and safe operational status.</p></div>
+        </div>
+      </div>
+      <div class="screen-pair">
+        <figure class="screen tall"><img src="assets/reports-ar.png" alt="Arabic report center"><figcaption class="arabic" lang="ar">تقارير PDF وExcel</figcaption></figure>
+        <figure class="screen tall"><img src="assets/audit-ar.png" alt="Arabic audit view"><figcaption class="arabic" lang="ar">سجل تدقيق محمي</figcaption></figure>
+      </div>
+    </div>
+    <div class="footer"><span>Permission-scoped outputs; no public generated-file URLs</span><span>06 / 13</span></div>
+    <aside class="notes"><strong>4:40-5:55 - Say:</strong> “Leadership consumes the same controlled data through dashboards and bounded reports. Overdue-task PDF support was added alongside Excel. Reports are localized and date-aware. Notifications close the loop, while audit and archive workflows preserve evidence without exposing raw sensitive metadata.”<div class="sources">[Sources] docs/PHASES/PHASE_11 through PHASE_14; docs/LOCALIZATION.md; local reports and audit screenshots</div></aside>
+  </section>
+
+  <section class="slide" data-title="AI briefings">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>New: cited AI briefing</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">Phase 15</div>
+        <h2>AI summarizes evidence - it does not invent authority.</h2>
+        <div class="feature-list">
+          <div class="feature"><b>1</b><div><strong>Read-only evidence bundle</strong><span>Project status, progress, milestones, tasks, approvals, and bounded recent activity.</span></div></div>
+          <div class="feature"><b>2</b><div><strong>Cited structured output</strong><span>Summary, highlights, risks, upcoming items, actions, and data gaps link back to visible records.</span></div></div>
+          <div class="feature"><b>3</b><div><strong>Efficient Groq usage</strong><span>Default 120B quality, bounded evidence, fingerprints, caching metrics, and a deterministic offline provider.</span></div></div>
+        </div>
+      </div>
+      <figure class="screen ai-focus"><img src="assets/ai-briefing-ar.png" alt="Arabic cited AI project briefing"><figcaption class="arabic" lang="ar">موجز ذكي مع أدلة قابلة للفتح</figcaption></figure>
+    </div>
+    <div class="footer"><span>No tools, no autonomous writes, no unrestricted chat</span><span>07 / 13</span></div>
+    <aside class="notes"><strong>5:55-7:05 - Say:</strong> “Phase 15 adds a safe first AI use case. The model receives a bounded evidence packet and returns a strict structure. Every factual item is cited. It cannot call tools or change the project. The default model is Groq openai/gpt-oss-120b, with the 20B model available only when cost is the explicit priority.”<div class="sources">[Sources] docs/PHASES/PHASE_15_AI_PROJECT_BRIEFINGS.md; docs/PHASES/PHASE_15_VERIFICATION.md; local deterministic briefing screenshot</div></aside>
+  </section>
+
+  <section class="slide" data-title="Telegram executive channel">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>New: CEO Telegram channel</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">Phase 16</div>
+      <h2>Fixed executive briefings reach the CEO securely.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>01</b><strong>CEO command</strong><span>Fixed Arabic choices: help, current tasks, overdue work, or attendance.</span></div>
+        <div class="flow-step"><b>02</b><strong>n8n verifies</strong><span>Exact private chat, timestamp, HMAC signature, and one-use nonce.</span></div>
+        <div class="flow-step"><b>03</b><strong>Django authorizes</strong><span>CEO identity, role, permission, request bounds, and report scope.</span></div>
+        <div class="flow-step"><b>04</b><strong>Report generated</strong><span>Arabic AI summary or branded PDF with Hijri/Gregorian dates.</span></div>
+        <div class="flow-step"><b>05</b><strong>Safe delivery</strong><span>Short-lived one-time link, audit event, critical-task alert deduplication.</span></div>
+      </div>
+      <div class="quote" style="margin-top:26px">n8n has no database credentials. Groq never receives trainee names, phone numbers, email addresses, or attendance notes.</div>
+    </div>
+    <div class="footer"><span>Inactive by default until staging secrets and privacy UAT are approved</span><span>08 / 13</span></div>
+    <aside class="notes"><strong>7:05-8:15 - Say:</strong> “Phase 16 gives the CEO a simple Arabic Telegram interface. It is deliberately not a free-form bot. n8n routes fixed commands, Django performs all authorization and data selection, and sensitive attendance details stay out of the AI payload. The workflow remains inactive until a dedicated staging bot and signed secrets are tested.”<div class="sources">[Sources] docs/PHASES/PHASE_16_CEO_TELEGRAM_N8N.md; docs/PHASES/PHASE_16_VERIFICATION.md; deploy/n8n/insight_ceo_telegram_reports.json</div></aside>
+  </section>
+
+  <section class="slide" data-title="Recovery agent">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>New: governed recovery agent</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">Phase 17</div>
+      <h2>The agent plans, proposes, waits, and verifies.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>01</b><strong>Plan</strong><span>Validate the predefined goal, scope, step limit, time limit, and token budget.</span></div>
+        <div class="flow-step"><b>02</b><strong>Observe</strong><span>Dynamically select safe project reads; each result changes the next choice.</span></div>
+        <div class="flow-step"><b>03</b><strong>Propose</strong><span>Create cited before-and-proposed values without changing business data.</span></div>
+        <div class="flow-step"><b>04</b><strong>Approve</strong><span>Pause for a human reason, then recheck permission, expiry, and stale state.</span></div>
+        <div class="flow-step"><b>05</b><strong>Verify</strong><span>Execute once through domain services and cite the actual post-action state.</span></div>
+      </div>
+      <div class="cards" style="margin-top:24px">
+        <div class="card"><h3>Reviewed memory only</h3><p>A later run can recall only a human-reviewed completed run from the same project.</p></div>
+        <div class="card"><h3>Strict tool boundary</h3><p>No shell, SQL, filesystem, web, arbitrary HTTP, code, credentials, files, trainees, attendance, or raw audit tools.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>No shell, SQL, files, arbitrary URLs, credentials, or attendance tools</span><span>09 / 13</span></div>
+    <aside class="notes"><strong>8:15-9:45 - Say:</strong> “Phase 17 is the more advanced AI capability. It can inspect delays, blockers, milestones, approvals, workload, and progress. The observation changes what it does next. But the model still cannot write directly. It creates a cited proposal, pauses for a human decision, rechecks permissions and the original state, executes through existing services, and verifies the final state.”<div class="sources">[Sources] docs/PHASES/PHASE_17_AGENTIC_PROJECT_RECOVERY.md; docs/PHASES/PHASE_17_VERIFICATION.md; local deterministic agent screenshot</div></aside>
+  </section>
+
+  <section class="slide" data-title="Architecture and security">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Architecture and security</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">Built for a controlled pilot</div>
+      <h2>A maintainable monolith with explicit trust boundaries.</h2>
+      <div class="four-col">
+        <div class="card"><h3>Application</h3><p>Django 5.2 LTS, Python 3.13, server templates, Bootstrap 5, and HTMX.</p></div>
+        <div class="card"><h3>Data</h3><p>PostgreSQL transactions, constraints, indexes, protected records, and scoped selectors.</p></div>
+        <div class="card"><h3>Background</h3><p>Celery and Redis for briefings, agents, notifications, retries, and maintenance.</p></div>
+        <div class="card"><h3>Deployment</h3><p>Docker, Gunicorn, private S3-compatible storage, secret-managed configuration, and health checks.</p></div>
+      </div>
+      <div class="cards" style="margin-top:24px">
+        <div class="card"><h3>Authorization</h3><p>Authenticated sessions, CSRF, active-account checks, role permissions, and object-level scope at views, tools, approvals, execution, and exports.</p></div>
+        <div class="card"><h3>Arabic and privacy</h3><p>Preserved Unicode, reviewed search normalization, RTL/LTR, mixed-content isolation, private files, bounded audit metadata, and no production DEBUG.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>Portable architecture; hosting region and SSO remain university decisions</span><span>10 / 13</span></div>
+    <aside class="notes"><strong>9:45-10:55 - Say:</strong> “This is intentionally a maintainable Django monolith, not a collection of fragile microservices. PostgreSQL protects critical writes. Celery handles background work. Production secrets and files stay outside the repository. Authorization is repeated at every important boundary, including each AI tool and the moment of execution.”<div class="sources">[Sources] docs/DATA_MODEL.md; docs/SECURITY.md; docs/DEPLOYMENT.md; docs/DECISIONS/0020-0022</div></aside>
+  </section>
+
+  <section class="slide" data-title="Verification">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Verification evidence</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">Latest complete local gate</div>
+      <h2>Quality is measured, not assumed.</h2>
+      <div class="metrics">
+        <div class="metric"><b>200</b><span>unit, integration, security, and workflow tests passed</span></div>
+        <div class="metric"><b>16</b><span>real Chrome critical journeys passed</span></div>
+        <div class="metric"><b>1,173</b><span>Arabic messages with zero untranslated</span></div>
+        <div class="metric"><b>281</b><span>typed source files checked by mypy</span></div>
+      </div>
+      <div class="cards" style="margin-top:25px">
+        <div class="card"><h3>Static and database checks</h3><p>Ruff formatting and linting, mypy, Django checks, migration drift, compiled translations, and Git diff validation all passed.</p></div>
+        <div class="card"><h3>AI and security checks</h3><p>Prompt injection, forged IDs, stale state, revoked access, quotas, retries, HMAC replay, duplicate execution, and browser RTL/mobile behavior passed.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>Final Phase 17 gate executed on 2026-08-04</span><span>11 / 13</span></div>
+    <aside class="notes"><strong>10:55-12:00 - Say:</strong> “The latest complete gate passed 200 non-browser tests and all 16 Chrome journeys. That includes business rules, database constraints, permissions, reports, localization, AI schemas, retries, stale-state protection, and responsive Arabic flows. What I do not claim yet is university-scale load testing, formal penetration testing, or a production restore exercise.”<div class="sources">[Sources] docs/PHASES/PHASE_17_VERIFICATION.md; docs/TEST_STRATEGY.md</div></aside>
+  </section>
+
+  <section class="slide" data-title="Live demonstration">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Live demonstration</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">Three-minute product walkthrough</div>
+      <h2>Show one story from signal to verified action.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>00</b><strong>Dashboard</strong><span>Open Arabic leadership KPIs and overdue work.</span></div>
+        <div class="flow-step"><b>40</b><strong>KAU project</strong><span>Show team boundaries, tasks, progress, and shared specialists.</span></div>
+        <div class="flow-step"><b>85</b><strong>Approval</strong><span>Explain supervisor then manager completion control.</span></div>
+        <div class="flow-step"><b>125</b><strong>AI agent</strong><span>Open cited findings and the human proposal checkpoint.</span></div>
+        <div class="flow-step"><b>165</b><strong>Evidence</strong><span>Finish with PDF report, audit record, and verified test totals.</span></div>
+      </div>
+      <div class="quote" style="margin-top:28px">If the live environment fails, continue with these captured screens. Do not troubleshoot infrastructure during the decision meeting.</div>
+    </div>
+    <div class="footer"><span>Use fictional data; keep one tab ready for each step</span><span>12 / 13</span></div>
+    <aside class="notes"><strong>12:00-14:15 - Action:</strong> Deliver the live demo in this exact order. Do not open admin pages or explain every field. Narrate one outcome: leadership detects risk, the team owns the work, approval controls completion, the agent proposes recovery, a human approves, and the system verifies and reports the result.<div class="sources">[Sources] local fictional KAU/KSU/KKU dataset; docs/WORKFLOWS.md; docs/PHASES/PHASE_17_VERIFICATION.md</div></aside>
+  </section>
+
+  <section class="slide" data-title="Pilot decision">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Pilot decision</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">Responsible next step</div>
+        <h2>Approve a controlled pilot - not a governance shortcut.</h2>
+        <div class="feature-list">
+          <div class="feature"><b>1</b><div><strong>One sponsored program</strong><span>Named owner and users, fictional or anonymized data, and a four-to-eight-week window.</span></div></div>
+          <div class="feature"><b>2</b><div><strong>Measurable evidence</strong><span>Workflow completion, Arabic UAT, trusted reports, response times, and user feedback.</span></div></div>
+          <div class="feature"><b>3</b><div><strong>Production gates</strong><span>Hosting/data residency, SSO, security scan, load test, monitoring ownership, backup restore, and live-data approval.</span></div></div>
+        </div>
+      </div>
+      <div class="ask"><h3>The decision requested</h3><p>Nominate one pilot sponsor and one technical/security review date. The product is ready to demonstrate locally; the pilot will produce the evidence required for a responsible production decision.</p><p class="arabic" lang="ar" style="font-size:clamp(19px,1.65vw,27px);color:#e3e8d7">النظام جاهز لتجربة محكومة، مع بقاء بوابات الإنتاج والأمن واضحة وقابلة للقياس.</p></div>
+    </div>
+    <div class="footer"><span>Next: pilot evidence → technical review → go/no-go decision</span><span>13 / 13</span></div>
+    <aside class="notes"><strong>14:15-15:00 - Close:</strong> “I am asking for approval to run a controlled pilot, not approval to bypass production governance. The feature set and local verification are complete. The pilot will validate fit, Arabic usability, scale assumptions, operations, and security ownership before any real university deployment.” Then stop and invite questions.<div class="sources">[Sources] docs/DEPLOYMENT.md; docs/OPERATIONS.md; docs/PHASES/PHASE_17_VERIFICATION.md</div></aside>
+  </section>
+</main>
+
+<div class="controls" aria-label="Presentation controls"><button id="prev" type="button" aria-label="Previous slide">←</button><button id="notes" type="button" aria-label="Toggle presenter notes" title="Presenter notes (N)">N</button><button id="next" type="button" aria-label="Next slide">→</button></div>
+<div class="progress" aria-hidden="true"></div>
+<script>
+(() => {
+  const slides=[...document.querySelectorAll('.slide')];
+  const progress=document.querySelector('.progress');
+  let index=Math.max(0,Math.min(slides.length-1,Number(location.hash.slice(1))-1||0));
+  function show(nextIndex){
+    index=(nextIndex+slides.length)%slides.length;
+    slides.forEach((slide,i)=>slide.classList.toggle('active',i===index));
+    progress.style.width=`${((index+1)/slides.length)*100}%`;
+    document.title=`${slides[index].dataset.title} - Insight Projects`;
+    history.replaceState(null,'',`#${index+1}`);
+  }
+  document.getElementById('prev').addEventListener('click',()=>show(index-1));
+  document.getElementById('next').addEventListener('click',()=>show(index+1));
+  document.getElementById('notes').addEventListener('click',()=>document.body.classList.toggle('notes-on'));
+  document.addEventListener('keydown',event=>{
+    if(['ArrowRight','PageDown',' ','Enter'].includes(event.key)){event.preventDefault();show(index+1);}
+    if(['ArrowLeft','PageUp','Backspace'].includes(event.key)){event.preventDefault();show(index-1);}
+    if(event.key.toLowerCase()==='n')document.body.classList.toggle('notes-on');
+    if(event.key==='Home')show(0); if(event.key==='End')show(slides.length-1);
+  });
+  window.addEventListener('hashchange',()=>show(Number(location.hash.slice(1))-1||0));
+  show(index); window.presentationReady=true;
+})();
+</script>
+</body>
+</html>

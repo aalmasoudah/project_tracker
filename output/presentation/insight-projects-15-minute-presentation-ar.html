@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إنسايت بروجكتس - عرض مدير التقنية لمدة 15 دقيقة</title>
+  <style>
+    :root {
+      --deep: #0a400c;
+      --forest: #17531b;
+      --sage: #819067;
+      --stone: #b1ab86;
+      --paper: #f3f1e8;
+      --ink: #243127;
+      --muted: #617064;
+      --white: #fff;
+      --line: rgba(36,49,39,.15);
+      --shadow: 0 25px 64px rgba(10,64,12,.16);
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { color: var(--ink); background: #d9ddcf; font-family: "Segoe UI", Tahoma, Arial, sans-serif; }
+    .deck { position: relative; width: 100%; height: 100%; }
+    .slide {
+      position: absolute; inset: 0; display: none; grid-template-rows: auto 1fr auto;
+      width: 100vw; height: 100vh; overflow: hidden;
+      padding: clamp(26px,3.7vw,60px) clamp(34px,5vw,86px) clamp(25px,3vw,48px);
+      background: radial-gradient(circle at 88% 8%, rgba(129,144,103,.17), transparent 29%), linear-gradient(135deg,#fbfaf6,var(--paper));
+    }
+    .slide.active { display: grid; animation: enter .38s ease both; }
+    @keyframes enter { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+    .topline, .footer { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .topline { min-height: 44px; color: var(--deep); font-size: clamp(14px,1.15vw,19px); font-weight: 700; }
+    .brand-mini { display: inline-flex; align-items: center; gap: 10px; }
+    .brand-mini img { width: 36px; height: 29px; object-fit: contain; }
+    .footer { color: #687269; font-size: clamp(12px,.9vw,16px); border-top: 1px solid var(--line); padding-top: 12px; }
+    .slide-body { min-height: 0; display: grid; align-content: center; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--forest); text-transform: uppercase; letter-spacing: .09em; font-weight: 800; font-size: clamp(13px,1vw,17px); }
+    .eyebrow::before { content: ""; width: 28px; height: 3px; background: var(--stone); border-radius: 99px; }
+    h1,h2,h3,p { margin-top: 0; }
+    h1 { margin-bottom: 20px; color: var(--deep); font-size: clamp(52px,6.2vw,96px); line-height: .98; letter-spacing: -.05em; }
+    h2 { margin: 12px 0 clamp(20px,2.6vw,38px); color: var(--deep); font-size: clamp(38px,4.4vw,68px); line-height: 1.03; letter-spacing: -.04em; }
+    h3 { margin-bottom: 8px; color: var(--deep); font-size: clamp(20px,1.8vw,28px); }
+    .lead { max-width: 920px; color: #566158; font-size: clamp(21px,2.2vw,34px); line-height: 1.38; }
+    .small { color: var(--muted); font-size: clamp(15px,1.18vw,19px); line-height: 1.45; }
+    .arabic { direction: rtl; font-family: Tahoma,"Segoe UI",Arial,sans-serif; }
+    .two-col { display: grid; grid-template-columns: minmax(0,.92fr) minmax(0,1.08fr); gap: clamp(28px,4vw,70px); align-items: center; }
+    .two-col.equal { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .three-col { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(15px,2vw,28px); }
+    .four-col { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: clamp(12px,1.5vw,22px); }
+    .cover { color: white; background: linear-gradient(118deg,#062c08 0%,var(--deep) 56%,#526a41 100%); }
+    .cover::before { content:""; position:absolute; width:52vw; height:52vw; right:-17vw; top:-20vw; border:1px solid rgba(255,255,255,.18); border-radius:50%; box-shadow:0 0 0 7vw rgba(255,255,255,.03),0 0 0 14vw rgba(255,255,255,.025); }
+    .cover h1,.cover .topline { color: white; }
+    .cover h1 span { color: #cbd2b6; }
+    .cover .lead { color: rgba(255,255,255,.8); }
+    .cover-grid { position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1fr) 34%; gap:7vw; align-items:center; }
+    .logo-lockup { justify-self:end; width:min(27vw,390px); aspect-ratio:1; display:grid; place-items:center; padding:10%; border-radius:40px; background:rgba(255,255,255,.97); box-shadow:var(--shadow); }
+    .logo-lockup img { width:100%; height:100%; object-fit:contain; }
+    .cover-meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+    .pill { padding:9px 15px; border:1px solid rgba(255,255,255,.25); border-radius:999px; color:rgba(255,255,255,.88); font-size:clamp(13px,1vw,17px); }
+    .screen { position:relative; margin:0; overflow:hidden; border:1px solid rgba(10,64,12,.16); border-radius:22px; background:white; box-shadow:var(--shadow); }
+    .screen::before { content:""; display:block; height:30px; background:linear-gradient(90deg,#f5f4ef,#e7eadf); border-bottom:1px solid var(--line); }
+    .screen::after { content:"●  ●  ●"; position:absolute; top:6px; left:14px; color:var(--stone); font-size:10px; letter-spacing:3px; }
+    .screen img { display:block; width:100%; aspect-ratio:16/8.8; object-fit:cover; object-position:top; background:#eee; }
+    .screen.ai-focus img { object-position:center 30%; }
+    .screen.agent-focus img { object-position:center 34%; }
+    .screen.tall img { aspect-ratio:16/9.5; }
+    .screen figcaption { position:absolute; right:12px; bottom:10px; max-width:78%; padding:7px 10px; border-radius:9px; background:rgba(10,64,12,.91); color:white; font-size:13px; }
+    .screen-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; align-items:center; }
+    .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 28px; }
+    .card { padding:18px 20px; border-top:3px solid var(--sage); background:rgba(255,255,255,.62); }
+    .card p { margin:0; color:#5c675e; font-size:clamp(15px,1.14vw,19px); line-height:1.42; }
+    .feature-list { display:grid; gap:17px; }
+    .feature { display:grid; grid-template-columns:42px 1fr; gap:14px; align-items:start; }
+    .feature b { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; color:white; background:var(--deep); }
+    .feature strong { display:block; color:var(--deep); font-size:clamp(18px,1.45vw,24px); }
+    .feature span { display:block; margin-top:3px; color:#5b665d; font-size:clamp(14px,1.08vw,18px); line-height:1.4; }
+    .model { display:grid; grid-template-columns:1fr 42px 1fr 42px 1fr 42px 1fr; align-items:center; gap:6px; margin-top:20px; }
+    .model-node { min-height:125px; display:grid; place-items:center; align-content:center; gap:8px; padding:16px; text-align:center; border:1px solid var(--line); border-radius:24px; background:rgba(255,255,255,.78); }
+    .model-node strong { color:var(--deep); font-size:clamp(20px,1.7vw,28px); }
+    .model-node span { color:#687169; font-size:clamp(13px,1vw,17px); }
+    .arrow { color:var(--sage); font-size:34px; text-align:center; }
+    .uni-strip { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:24px; }
+    .uni { min-width:112px; padding:10px 20px; text-align:center; border:1px solid rgba(10,64,12,.22); border-radius:999px; color:var(--deep); background:rgba(255,255,255,.72); font-weight:800; }
+    .flow { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; align-items:stretch; }
+    .flow-step { position:relative; min-height:142px; padding:17px 16px; border-radius:20px; background:white; border:1px solid var(--line); }
+    .flow-step:not(:last-child)::after { content:"→"; position:absolute; right:-18px; top:50%; z-index:2; color:var(--sage); font-size:25px; font-weight:800; }
+    .flow-step b { display:block; color:var(--stone); font-size:24px; }
+    .flow-step strong { display:block; margin:4px 0 7px; color:var(--deep); font-size:clamp(16px,1.25vw,21px); }
+    .flow-step span { color:#606b62; font-size:clamp(13px,.96vw,16px); line-height:1.35; }
+    .metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+    .metric { padding:24px 18px; border-radius:22px; background:white; border:1px solid var(--line); box-shadow:0 14px 34px rgba(10,64,12,.08); text-align:center; }
+    .metric b { display:block; color:var(--deep); font-size:clamp(38px,4vw,62px); line-height:1; }
+    .metric span { display:block; margin-top:10px; color:#657067; font-size:clamp(14px,1.05vw,18px); }
+    .quote { padding:26px 30px; border-right:7px solid var(--stone); background:var(--deep); color:white; border-radius:24px; font-size:clamp(20px,1.8vw,29px); line-height:1.42; }
+    .ask { padding:28px; border-radius:28px; color:white; background:linear-gradient(145deg,var(--deep),#365936); box-shadow:var(--shadow); }
+    .ask h3 { color:white; font-size:clamp(27px,2.5vw,40px); }
+    .ask p { color:rgba(255,255,255,.84); font-size:clamp(17px,1.35vw,22px); line-height:1.45; }
+    .slide.compact h2 { margin:7px 0 12px; font-size:clamp(32px,3.3vw,48px); line-height:1; }
+    .slide.compact h3 { font-size:clamp(18px,1.55vw,23px); }
+    .slide.compact .card { padding:10px 17px; }
+    .slide.compact .card p { font-size:clamp(12px,.94vw,16px); line-height:1.3; }
+    .notes { display:none; position:fixed; left:4vw; right:4vw; bottom:5vh; z-index:20; max-height:38vh; overflow:auto; padding:20px 24px; border-radius:18px; color:white; background:rgba(7,31,10,.96); box-shadow:0 16px 50px rgba(0,0,0,.32); font-size:16px; line-height:1.5; }
+    body.notes-on .slide.active .notes { display:block; }
+    .notes strong { color:#d3d9bd; }
+    .notes .sources { margin-top:10px; color:#b9c0ba; font-size:13px; }
+    .controls { position:fixed; right:20px; bottom:18px; z-index:30; display:flex; gap:8px; }
+    .controls button { width:42px; height:42px; border:1px solid rgba(255,255,255,.45); border-radius:50%; color:white; background:rgba(10,64,12,.88); cursor:pointer; font-size:18px; }
+    .progress { position:fixed; left:0; bottom:0; z-index:40; height:4px; background:var(--stone); transition:width .25s ease; }
+    @media (max-width:900px) {
+      .two-col,.two-col.equal,.three-col,.four-col { grid-template-columns:1fr; }
+      .screen-pair { grid-template-columns:1fr 1fr; }
+      .model { grid-template-columns:1fr; }
+      .arrow { display:none; }
+      .model-node { min-height:auto; }
+      .flow { grid-template-columns:repeat(3,1fr); }
+      .metrics { grid-template-columns:repeat(2,1fr); }
+    }
+    @media print { .slide { position:relative; display:grid!important; break-after:page; width:100vw; height:100vh; } .controls,.progress,.notes { display:none!important; } }
+
+body{direction:rtl;text-align:right} .notes{text-align:right;left:4vw;right:4vw} .brand-mini{direction:rtl} .controls{direction:ltr} .screen figcaption{text-align:right}
+</style>
+</head>
+<body>
+<main class="deck">
+  <section class="slide cover active" data-title="إنسايت بروجكتس">
+    <div class="topline"><span>INSIGHT PROJECTS</span><span class="arabic" lang="ar">إنسايت بروجكتس</span></div>
+    <div class="slide-body cover-grid">
+      <div>
+        <div class="eyebrow" style="color:#d8ddc6">عرض موجز لمدة 15 دقيقة لمدير التقنية</div>
+        <h1>تحكّم في التنفيذ.<br><span>وتحقّق من كل نتيجة.</span></h1>
+        <p class="lead">منصة عربية أولاً لإدارة البرامج والمشاريع والفرق والتدريب والموافقات والتقارير والذكاء الاصطناعي المحكوم.</p>
+        <div class="cover-meta"><span class="pill">Django + PostgreSQL</span><span class="pill">العربية RTL + الإنجليزية LTR</span><span class="pill">ذكاء اصطناعي تحت إشراف الإنسان</span></div>
+      </div>
+      <div class="logo-lockup"><img src="../../static/img/project-insight-logo.png" alt="صورة توضيحية من نظام إنسايت بروجكتس"></div>
+    </div>
+    <div class="footer" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.18)"><span>المنتج، والأدلة، والاستعداد للتجربة</span><span dir="ltr">01 / 13</span></div>
+    <aside class="notes"><strong>0:00-0:45 - قل:</strong> «إنسايت بروجكتس نظام تشغيل ثنائي اللغة لتنفيذ أعمال الجامعة. يربط البرامج والمشاريع والمهام والفرق والتدريب والموافقات والأدلة. وأضيفت إليه قدرات ذكاء اصطناعي تعمل ضمن الصلاحيات نفسها ولا تتجاوز الموافقة البشرية.»<div class="sources">[المصادر] docs/SCOPE.md; docs/LOCALIZATION.md; README.md</div></aside>
+  </section>
+
+  <section class="slide" data-title="المشكلة التشغيلية">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>المشكلة التشغيلية</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">لماذا يهم ذلك؟</div>
+        <h2>تشتّت التحديثات يخفي مخاطر التنفيذ.</h2>
+        <div class="feature-list">
+          <div class="feature"><b>1</b><div><strong>برامج متعددة</strong><span>تحتاج القيادة إلى رؤية موحدة وحديثة دون فقدان حدود المسؤولية.</span></div></div>
+          <div class="feature"><b>2</b><div><strong>مساهمون متعددون</strong><span>يحتاج الخبراء المشتركون وأعضاء المشروع الواحد إلى مستويات وصول مختلفة.</span></div></div>
+          <div class="feature"><b>3</b><div><strong>قرارات متعددة</strong><span>تتطلب الموافقات والحضور والمواعيد والتقارير أدلة قابلة للتتبع.</span></div></div>
+        </div>
+      </div>
+      <figure class="screen"><img src="assets/dashboard-ar.png" alt="صورة توضيحية من نظام إنسايت بروجكتس"><figcaption class="arabic" lang="ar">لوحة معلومات تنفيذية موحدة</figcaption></figure>
+    </div>
+    <div class="footer"><span>مصدر تشغيلي موحد يراعي الصلاحيات</span><span dir="ltr">02 / 13</span></div>
+    <aside class="notes"><strong>0:45-1:40 - قل:</strong> «يبدأ المنتج من مشكلة عملية: بيانات المشاريع موزعة عادة بين الملفات والرسائل والمتابعات الفردية. تمنح إنسايت بروجكتس الإدارة لوحة حالية، بينما يرى كل مستخدم فقط البرامج والأعمال المصرح له بها.»<div class="sources">[المصادر] docs/WORKFLOWS.md; docs/USER_ROLES.md; لقطة محلية لبيانات تجريبية</div></aside>
+  </section>
+
+  <section class="slide" data-title="نموذج التشغيل">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>نموذج التشغيل</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">كيف يُنظّم التنفيذ؟</div>
+      <h2>برنامج ← مشاريع ← مهام ← أشخاص مسؤولون</h2>
+      <div class="model">
+        <div class="model-node"><strong>البرنامج</strong><span>هدف الجامعة وحوكمتها</span></div><div class="arrow">←</div>
+        <div class="model-node"><strong>المشاريع</strong><span>مبادرات مستقلة بتواريخ ومسؤولين وميزانيات</span></div><div class="arrow">←</div>
+        <div class="model-node"><strong>المهام</strong><span>أنماط مشتركة وأعمال خاصة بكل مشروع</span></div><div class="arrow">←</div>
+        <div class="model-node"><strong>الأشخاص</strong><span>خبراء مشتركون أو أعضاء مخصصون</span></div>
+      </div>
+      <div class="uni-strip"><span class="uni">KAU</span><span class="uni">KSU</span><span class="uni">KKU</span><span class="uni arabic" lang="ar">بيانات تجريبية خيالية</span></div>
+    </div>
+    <div class="footer"><span>سيناريوهات جامعية سعودية خيالية توضّح العمل المشترك والمعزول</span><span dir="ltr">03 / 13</span></div>
+    <aside class="notes"><strong>1:40-2:35 - قل:</strong> «نموذج التشغيل بسيط: البرنامج يحتوي عدة مشاريع، وكل مشروع يضم مراحل رئيسية ومهاماً. بعض المستخدمين يعملون عبر أكثر من برنامج، وبعضهم داخل مشروع واحد فقط. وتوضح بيانات KAU وKSU وKKU الخيالية الأدوار المشتركة والعزل الصارم بين المشاريع.»<div class="sources">[المصادر] docs/SCOPE.md; docs/USER_ROLES.md; بيانات العرض المحلية الخيالية</div></aside>
+  </section>
+
+  <section class="slide" data-title="التنفيذ الأساسي">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>التنفيذ الأساسي</span></div>
+    <div class="slide-body two-col equal">
+      <div>
+        <div class="eyebrow">تجربة الفريق اليومية</div>
+        <h2>خطّط، تعاون، ثم اعتمد.</h2>
+        <div class="cards">
+          <div class="card"><h3>المشاريع والفرق</h3><p>الأقسام والعملاء والتصنيفات والمسؤولون والمشرفون والأعضاء المشتركون والأولويات والميزانيات والأرشيف والسجل.</p></div>
+          <div class="card"><h3>المهام والأدلة</h3><p>مهام متداخلة وإسناد وتقدم وساعات ومعوقات وتعليقات ومرفقات ولوحة Kanban وتقويم وخط زمني وGantt.</p></div>
+          <div class="card"><h3>محرك التقدم</h3><p>معادلة مركزية واحدة للمهام والدورات والمشاريع والمراحل الرئيسية والعناصر الملغاة.</p></div>
+          <div class="card"><h3>موافقة على مرحلتين</h3><p>المشرف أولاً ثم مدير المشروع، مع الأسباب وإعادة التقديم وسجل ثابت لا يُعاد كتابته.</p></div>
+        </div>
+      </div>
+      <figure class="screen"><img src="assets/project-detail-ar.png" alt="صورة توضيحية من نظام إنسايت بروجكتس"><figcaption class="arabic" lang="ar">مشروع وفريق وصلاحيات واضحة</figcaption></figure>
+    </div>
+    <div class="footer"><span>واجهات رشيقة وخدمات أعمال وموافقات معاملية</span><span dir="ltr">04 / 13</span></div>
+    <aside class="notes"><strong>2:35-3:45 - قل:</strong> «هنا ينفذ الموظفون العمل اليومي: المهام والتعليقات والأدلة والتقدم والإسناد والمعوقات. أما المشرفون والمديرون فيتحكمون في الإكمال عبر مرحلتي اعتماد مستقلتين. وتحسب نسبة التقدم مركزياً كي لا تختلف اللوحات عن التقارير.»<div class="sources">[المصادر] docs/BUSINESS_RULES.md; docs/WORKFLOWS.md; لقطة مشروع KAU المحلية</div></aside>
+  </section>
+
+  <section class="slide" data-title="عمليات التدريب">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>عمليات التدريب</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">أكثر من تتبع المشاريع</div>
+      <h2>الدورات والمتدربون والجلسات والحضور ضمن مسار واحد.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>01</b><strong>الدورات</strong><span>دورات مرتبطة بالمشاريع ومدربون وجداول وحالات ونسب تقدم.</span></div>
+        <div class="flow-step"><b>02</b><strong>المتدربون</strong><span>سجلات عربية وإنجليزية متحقق منها واستيراد آمن من CSV وXLSX.</span></div>
+        <div class="flow-step"><b>03</b><strong>الجلسات</strong><span>تنفيذ مجدول عبر روابط مدرب مؤقتة تنتهي صلاحيتها.</span></div>
+        <div class="flow-step"><b>04</b><strong>الحضور</strong><span>حاضر وغائب ومتأخر وغائب بعذر، مع الملاحظات وأدلة المراجعة.</span></div>
+        <div class="flow-step"><b>05</b><strong>التصحيح</strong><span>إرسال واعتماد ورفض وإعادة فتح مع حفظ السجل.</span></div>
+      </div>
+      <div class="quote" style="margin-top:26px">يحصل المدرب على صلاحية عشوائية مؤقتة ومحددة بجلسة واحدة للحضور، وليس وصولاً داخلياً واسعاً.</div>
+    </div>
+    <div class="footer"><span>مسارات حضور تراعي الخصوصية وتضبط التصحيح</span><span dir="ltr">05 / 13</span></div>
+    <aside class="notes"><strong>3:45-4:40 - قل:</strong> «تغطي المنصة كذلك تنفيذ التدريب. يدير المسؤولون الدورات وقوائم المتدربين مع استيراد متحقق منه. ويستخدم المدرب رابطاً ضيق الصلاحية لجلسة واحدة، ثم يدخل الحضور مسار مراجعة وتصحيح مضبوطاً بدلاً من ملف قابل للتعديل بلا تاريخ.»<div class="sources">[المصادر] docs/WORKFLOWS.md; docs/SECURITY.md; مراحل 8 إلى 10</div></aside>
+  </section>
+
+  <section class="slide compact" data-title="الرؤية والحوكمة">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>الرؤية والحوكمة</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">أدلة القيادة</div>
+        <h2>شاهد العمل وأثبت ما تغيّر.</h2>
+        <div class="cards">
+          <div class="card"><h3>لوحات المعلومات ومساحة العمل</h3><p>مؤشرات حسب الدور، ومهام متأخرة، وموافقات، وأحمال عمل، وبحث، وعروض محفوظة، وتنقل متجاوب.</p></div>
+          <div class="card"><h3>التقارير والتصدير</h3><p>تقدم المشاريع والمهام المتأخرة والحضور بصيغ PDF وXLSX بالعربية أو الإنجليزية، مع التاريخين الهجري والميلادي.</p></div>
+          <div class="card"><h3>الإشعارات</h3><p>أحداث إلزامية داخل النظام وخيارات بريد مترجمة وتفضيلات وإعادة محاولة ومعالجة خلفية.</p></div>
+          <div class="card"><h3>التدقيق والعمليات</h3><p>أدلة تدقيق تراكمية، وأرشفة واستعادة، وفحوص صحة، ومهام احتفاظ، وحالة تشغيل آمنة.</p></div>
+        </div>
+      </div>
+      <div class="screen-pair">
+        <figure class="screen tall"><img src="assets/reports-ar.png" alt="صورة توضيحية من نظام إنسايت بروجكتس"><figcaption class="arabic" lang="ar">تقارير PDF وExcel</figcaption></figure>
+        <figure class="screen tall"><img src="assets/audit-ar.png" alt="صورة توضيحية من نظام إنسايت بروجكتس"><figcaption class="arabic" lang="ar">سجل تدقيق محمي</figcaption></figure>
+      </div>
+    </div>
+    <div class="footer"><span>مخرجات مقيدة بالصلاحيات دون روابط عامة للملفات المولدة</span><span dir="ltr">06 / 13</span></div>
+    <aside class="notes"><strong>4:40-5:55 - قل:</strong> «تستهلك القيادة البيانات المضبوطة نفسها عبر اللوحات والتقارير المحدودة. أضيف تقرير PDF للمهام المتأخرة إلى جانب Excel. التقارير مترجمة وتدعم التاريخين، وتغلق الإشعارات الحلقة، بينما تحفظ سجلات التدقيق والأرشفة الأدلة دون كشف بيانات خام حساسة.»<div class="sources">[المصادر] مراحل 11 إلى 14؛ docs/LOCALIZATION.md؛ لقطات التقارير والتدقيق المحلية</div></aside>
+  </section>
+
+  <section class="slide" data-title="جديد: موجز ذكاء اصطناعي موثق">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>جديد: موجز ذكاء اصطناعي موثق</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">المرحلة 15</div>
+        <h2>يلخص الذكاء الاصطناعي الأدلة ولا يمنح نفسه صلاحيات.</h2>
+        <div class="feature-list">
+          <div class="feature"><b>1</b><div><strong>حزمة أدلة للقراءة فقط</strong><span>حالة المشروع والتقدم والمراحل والمهام والموافقات والنشاط الحديث ضمن حدود واضحة.</span></div></div>
+          <div class="feature"><b>2</b><div><strong>مخرجات منظمة وموثقة</strong><span>الملخص والإنجازات والمخاطر والمواعيد والإجراءات وفجوات البيانات ترتبط بالسجلات المرئية.</span></div></div>
+          <div class="feature"><b>3</b><div><strong>استخدام كفؤ لـ Groq</strong><span>جودة 120B افتراضياً، وأدلة محدودة، وبصمات، ومقاييس تخزين مؤقت، ومزود حتمي للاختبار دون اتصال.</span></div></div>
+        </div>
+      </div>
+      <figure class="screen ai-focus"><img src="assets/ai-briefing-ar.png" alt="صورة توضيحية من نظام إنسايت بروجكتس"><figcaption class="arabic" lang="ar">موجز ذكي مع أدلة قابلة للفتح</figcaption></figure>
+    </div>
+    <div class="footer"><span>لا أدوات ولا كتابة ذاتية ولا محادثة غير مقيدة</span><span dir="ltr">07 / 13</span></div>
+    <aside class="notes"><strong>5:55-7:05 - قل:</strong> «تضيف المرحلة 15 أول استخدام آمن للذكاء الاصطناعي. يستقبل النموذج حزمة أدلة محدودة ويعيد بنية صارمة، وكل حقيقة لها استشهاد. لا يستطيع استدعاء أدوات أو تغيير المشروع. النموذج الافتراضي عبر Groq هو openai/gpt-oss-120b، ويتاح 20B فقط عند جعل التكلفة أولوية صريحة.»<div class="sources">[المصادر] docs/PHASES/PHASE_15_AI_PROJECT_BRIEFINGS.md; PHASE_15_VERIFICATION.md; لقطة محلية حتمية</div></aside>
+  </section>
+
+  <section class="slide" data-title="جديد: قناة المدير التنفيذي عبر تيليجرام">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>جديد: قناة المدير التنفيذي عبر تيليجرام</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">المرحلة 16</div>
+      <h2>تصل الموجزات التنفيذية الثابتة إلى المدير التنفيذي بأمان.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>01</b><strong>أمر المدير التنفيذي</strong><span>خيارات عربية ثابتة: المساعدة، المهام الحالية، المتأخرة، أو الحضور.</span></div>
+        <div class="flow-step"><b>02</b><strong>تحقق n8n</strong><span>المحادثة الخاصة المحددة، والطابع الزمني، وتوقيع HMAC، ورمز استخدام واحد.</span></div>
+        <div class="flow-step"><b>03</b><strong>تفويض Django</strong><span>هوية المدير التنفيذي ودوره وصلاحيته وحدود الطلب ونطاق التقرير.</span></div>
+        <div class="flow-step"><b>04</b><strong>إنشاء التقرير</strong><span>ملخص عربي بالذكاء الاصطناعي أو PDF يحمل الهوية البصرية والتاريخين الهجري والميلادي.</span></div>
+        <div class="flow-step"><b>05</b><strong>تسليم آمن</strong><span>رابط مؤقت لمرة واحدة، وسجل تدقيق، ومنع تكرار تنبيه المهمة الحرجة.</span></div>
+      </div>
+      <div class="quote" style="margin-top:26px">لا يملك n8n بيانات دخول لقاعدة البيانات، ولا يستقبل Groq أسماء المتدربين أو أرقامهم أو بريدهم أو ملاحظات الحضور.</div>
+    </div>
+    <div class="footer"><span>معطل افتراضياً حتى اعتماد أسرار بيئة الاختبار واختبار قبول الخصوصية</span><span dir="ltr">08 / 13</span></div>
+    <aside class="notes"><strong>7:05-8:15 - قل:</strong> «تمنح المرحلة 16 المدير التنفيذي واجهة عربية بسيطة عبر تيليجرام، وهي ليست روبوت محادثة مفتوحاً. يوجّه n8n الأوامر الثابتة، وينفذ Django التفويض واختيار البيانات، وتبقى تفاصيل الحضور الحساسة خارج حمولة الذكاء الاصطناعي. ولا يُفعّل المسار قبل اختبار روبوت مخصص وأسرار توقيع في بيئة الاختبار.»<div class="sources">[المصادر] docs/PHASES/PHASE_16_CEO_TELEGRAM_N8N.md; PHASE_16_VERIFICATION.md; ملف n8n</div></aside>
+  </section>
+
+  <section class="slide" data-title="جديد: وكيل تعافٍ محكوم">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>جديد: وكيل تعافٍ محكوم</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">المرحلة 17</div>
+      <h2>يخطط الوكيل ويقترح وينتظر ثم يتحقق.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>01</b><strong>التخطيط</strong><span>التحقق من الهدف المحدد والنطاق وحد الخطوات والوقت وميزانية الرموز.</span></div>
+        <div class="flow-step"><b>02</b><strong>الملاحظة</strong><span>اختيار قراءات آمنة للمشروع ديناميكياً، وتؤثر كل نتيجة في الاختيار التالي.</span></div>
+        <div class="flow-step"><b>03</b><strong>الاقتراح</strong><span>إنشاء قيم قبلية ومقترحة موثقة دون تغيير بيانات الأعمال.</span></div>
+        <div class="flow-step"><b>04</b><strong>الموافقة</strong><span>التوقف لسبب بشري ثم إعادة فحص الصلاحية والانتهاء وتقادم الحالة.</span></div>
+        <div class="flow-step"><b>05</b><strong>التحقق</strong><span>التنفيذ مرة واحدة عبر خدمات المجال والاستشهاد بالحالة الفعلية بعد الإجراء.</span></div>
+      </div>
+      <div class="cards" style="margin-top:24px">
+        <div class="card"><h3>ذاكرة مراجعة فقط</h3><p>لا يسترجع التشغيل اللاحق إلا تشغيلاً مكتملاً راجعه إنسان داخل المشروع نفسه.</p></div>
+        <div class="card"><h3>حدود أدوات صارمة</h3><p>لا أوامر نظام أو SQL أو ملفات أو ويب أو HTTP عشوائي أو كود أو أسرار أو متدربون أو حضور أو تدقيق خام.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>لا أوامر نظام أو SQL أو ملفات أو روابط عشوائية أو أسرار أو أدوات حضور</span><span dir="ltr">09 / 13</span></div>
+    <aside class="notes"><strong>8:15-9:45 - قل:</strong> «المرحلة 17 هي القدرة الأعمق. تفحص التأخير والمعوقات والمراحل والموافقات والأحمال والتقدم، وتغيّر الملاحظة خطوتها التالية. لكن النموذج لا يكتب مباشرة؛ ينشئ اقتراحاً موثقاً وينتظر قراراً بشرياً، ثم يعيد فحص الصلاحيات والحالة الأصلية وينفذ عبر الخدمات القائمة ويتحقق من النتيجة.»<div class="sources">[المصادر] docs/PHASES/PHASE_17_AGENTIC_PROJECT_RECOVERY.md; PHASE_17_VERIFICATION.md; لقطة محلية حتمية</div></aside>
+  </section>
+
+  <section class="slide" data-title="البنية والأمن">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>البنية والأمن</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">مصمم لتجربة محكومة</div>
+      <h2>تطبيق أحادي قابل للصيانة بحدود ثقة واضحة.</h2>
+      <div class="four-col">
+        <div class="card"><h3>التطبيق</h3><p>Django 5.2 LTS وPython 3.13 وقوالب خادم وBootstrap 5 وHTMX.</p></div>
+        <div class="card"><h3>البيانات</h3><p>معاملات PostgreSQL وقيود وفهارس وسجلات محمية ومحددات قراءة مقيدة.</p></div>
+        <div class="card"><h3>الخلفية</h3><p>Celery وRedis للموجزات والوكلاء والإشعارات وإعادة المحاولة والصيانة.</p></div>
+        <div class="card"><h3>النشر</h3><p>Docker وGunicorn وتخزين S3 خاص متوافق وإعداد أسرار وفحوص صحة.</p></div>
+      </div>
+      <div class="cards" style="margin-top:24px">
+        <div class="card"><h3>التفويض</h3><p>جلسات موثقة وCSRF وفحص الحساب النشط وصلاحيات الدور ونطاق الكائن في الواجهات والأدوات والموافقات والتنفيذ والتصدير.</p></div>
+        <div class="card"><h3>العربية والخصوصية</h3><p>حفظ Unicode وتطبيع بحث مراجع وRTL/LTR وعزل النص المختلط وملفات خاصة وبيانات تدقيق محدودة ومنع DEBUG في الإنتاج.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>بنية قابلة للنقل، بينما تبقى منطقة الاستضافة وSSO قرارين للجامعة</span><span dir="ltr">10 / 13</span></div>
+    <aside class="notes"><strong>9:45-10:55 - قل:</strong> «اختير تطبيق Django أحادي قابل للصيانة بدلاً من خدمات صغيرة هشة. يحمي PostgreSQL الكتابات الحرجة، ويتولى Celery العمل الخلفي، وتبقى أسرار وملفات الإنتاج خارج المستودع. ويعاد فحص التفويض عند كل حد مهم، بما في ذلك كل أداة ذكاء اصطناعي ولحظة التنفيذ.»<div class="sources">[المصادر] docs/DATA_MODEL.md; docs/SECURITY.md; docs/DEPLOYMENT.md; القرارات 0020-0022</div></aside>
+  </section>
+
+  <section class="slide" data-title="أدلة التحقق">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>أدلة التحقق</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">آخر بوابة محلية مكتملة</div>
+      <h2>الجودة تُقاس ولا تُفترض.</h2>
+      <div class="metrics">
+        <div class="metric"><b>200</b><span>اختبار وحدات وتكامل وأمن ومسارات عمل ناجح</span></div>
+        <div class="metric"><b>16</b><span>مساراً حرجاً ناجحاً في Chrome الحقيقي</span></div>
+        <div class="metric"><b>1,173</b><span>رسالة عربية دون أي ترجمة ناقصة</span></div>
+        <div class="metric"><b>281</b><span>ملف مصدر تحققت منه mypy</span></div>
+      </div>
+      <div class="cards" style="margin-top:25px">
+        <div class="card"><h3>فحوص الكود وقاعدة البيانات</h3><p>نجحت تهيئة Ruff وفحصه وmypy وفحوص Django وانحراف الترحيلات وترجمة الرسائل والتحقق من فرق Git.</p></div>
+        <div class="card"><h3>فحوص الذكاء الاصطناعي والأمن</h3><p>نجحت اختبارات حقن التعليمات والمعرفات المزورة وتقادم الحالة وسحب الوصول والحصص وإعادة المحاولة وإعادة تشغيل HMAC وتكرار التنفيذ وRTL على الجوال.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>نُفذت بوابة المرحلة 17 النهائية في 2026-08-04</span><span dir="ltr">11 / 13</span></div>
+    <aside class="notes"><strong>10:55-12:00 - قل:</strong> «نجحت البوابة الكاملة الأخيرة في 200 اختبار غير متصفح وجميع مسارات Chrome الستة عشر، بما يشمل قواعد الأعمال والقيود والصلاحيات والتقارير والتوطين ومخططات الذكاء الاصطناعي وإعادة المحاولة وحماية الحالة المتقادمة وتجارب العربية المتجاوبة. ولا ندعي بعد اختبار حمل بحجم الجامعة أو اختبار اختراق رسمي أو استعادة إنتاجية.»<div class="sources">[المصادر] docs/PHASES/PHASE_17_VERIFICATION.md; docs/TEST_STRATEGY.md</div></aside>
+  </section>
+
+  <section class="slide" data-title="العرض الحي">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>العرض الحي</span></div>
+    <div class="slide-body">
+      <div class="eyebrow">جولة في المنتج خلال ثلاث دقائق</div>
+      <h2>اعرض قصة واحدة من الإشارة إلى الإجراء المتحقق منه.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>00</b><strong>لوحة المعلومات</strong><span>افتح مؤشرات القيادة العربية والمهام المتأخرة.</span></div>
+        <div class="flow-step"><b>40</b><strong>مشروع KAU</strong><span>اعرض حدود الفريق والمهام والتقدم والخبراء المشتركين.</span></div>
+        <div class="flow-step"><b>85</b><strong>الموافقة</strong><span>اشرح تحكم المشرف ثم مدير المشروع في الإكمال.</span></div>
+        <div class="flow-step"><b>125</b><strong>وكيل الذكاء الاصطناعي</strong><span>افتح النتائج الموثقة ونقطة انتظار الاقتراح البشري.</span></div>
+        <div class="flow-step"><b>165</b><strong>الأدلة</strong><span>اختم بتقرير PDF وسجل التدقيق وإجمالي الاختبارات المتحقق منه.</span></div>
+      </div>
+      <div class="quote" style="margin-top:28px">إذا تعطلت البيئة الحية، تابع باللقطات المرفقة ولا تصلح البنية التحتية أثناء اجتماع القرار.</div>
+    </div>
+    <div class="footer"><span>استخدم بيانات خيالية وجهّز تبويباً لكل خطوة</span><span dir="ltr">12 / 13</span></div>
+    <aside class="notes"><strong>12:00-14:15 - نفّذ:</strong> نفّذ العرض الحي بهذا الترتيب. لا تفتح صفحات الإدارة ولا تشرح كل حقل. اروِ نتيجة واحدة: القيادة تكتشف الخطر، والفريق يملك العمل، والموافقة تضبط الإكمال، والوكيل يقترح التعافي، والإنسان يوافق، والنظام يتحقق من النتيجة ويبلغ عنها.<div class="sources">[المصادر] بيانات KAU/KSU/KKU الخيالية؛ docs/WORKFLOWS.md; PHASE_17_VERIFICATION.md</div></aside>
+  </section>
+
+  <section class="slide" data-title="قرار التجربة">
+    <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="صورة توضيحية من نظام إنسايت بروجكتس">إنسايت بروجكتس</span><span>قرار التجربة</span></div>
+    <div class="slide-body two-col">
+      <div>
+        <div class="eyebrow">الخطوة التالية المسؤولة</div>
+        <h2>اعتمد تجربة محكومة، لا اختصاراً للحوكمة.</h2>
+        <div class="feature-list">
+          <div class="feature"><b>1</b><div><strong>برنامج واحد برعاية واضحة</strong><span>مالك ومستخدمون محددون وبيانات خيالية أو مجهولة وفترة من أربعة إلى ثمانية أسابيع.</span></div></div>
+          <div class="feature"><b>2</b><div><strong>أدلة قابلة للقياس</strong><span>إكمال المسارات واختبار قبول العربية وتقارير موثوقة وأزمنة استجابة وملاحظات المستخدمين.</span></div></div>
+          <div class="feature"><b>3</b><div><strong>بوابات الإنتاج</strong><span>الاستضافة وإقامة البيانات وSSO وفحص الأمن واختبار الحمل وملكية المراقبة واستعادة النسخة واعتماد البيانات الحية.</span></div></div>
+        </div>
+      </div>
+      <div class="ask"><h3>القرار المطلوب</h3><p>سمِّ راعياً واحداً للتجربة وحدد موعداً واحداً للمراجعة التقنية والأمنية. المنتج جاهز للعرض محلياً، وستنتج التجربة الأدلة اللازمة لقرار إنتاج مسؤول.</p><p class="arabic" lang="ar" style="font-size:clamp(19px,1.65vw,27px);color:#e3e8d7">النظام جاهز لتجربة محكومة، مع بقاء بوابات الإنتاج والأمن واضحة وقابلة للقياس.</p></div>
+    </div>
+    <div class="footer"><span>التالي: أدلة التجربة ← المراجعة التقنية ← قرار الإطلاق أو التوقف</span><span dir="ltr">13 / 13</span></div>
+    <aside class="notes"><strong>14:15-15:00 - اختم:</strong> «أطلب اعتماد تجربة محكومة، لا تجاوز حوكمة الإنتاج. مجموعة الخصائص والتحقق المحلي مكتملان. ستختبر التجربة الملاءمة وجودة العربية وافتراضات التوسع والعمليات وملكية الأمن قبل أي نشر حقيقي داخل الجامعة.» ثم توقف وادعُ إلى الأسئلة.<div class="sources">[المصادر] docs/DEPLOYMENT.md; docs/OPERATIONS.md; docs/PHASES/PHASE_17_VERIFICATION.md</div></aside>
+  </section>
+</main>
+
+<div class="controls" aria-label="أدوات التحكم في العرض"><button id="prev" type="button" aria-label="الشريحة السابقة">←</button><button id="notes" type="button" aria-label="إظهار أو إخفاء ملاحظات المتحدث" title="ملاحظات المتحدث (N)">N</button><button id="next" type="button" aria-label="الشريحة التالية">→</button></div>
+<div class="progress" aria-hidden="true"></div>
+<script>
+(() => {
+  const slides=[...document.querySelectorAll('.slide')];
+  const progress=document.querySelector('.progress');
+  let index=Math.max(0,Math.min(slides.length-1,Number(location.hash.slice(1))-1||0));
+  function show(nextIndex){
+    index=(nextIndex+slides.length)%slides.length;
+    slides.forEach((slide,i)=>slide.classList.toggle('active',i===index));
+    progress.style.width=`${((index+1)/slides.length)*100}%`;
+    document.title=`${slides[index].dataset.title} - Insight Projects`;
+    history.replaceState(null,'',`#${index+1}`);
+  }
+  document.getElementById('prev').addEventListener('click',()=>show(index-1));
+  document.getElementById('next').addEventListener('click',()=>show(index+1));
+  document.getElementById('notes').addEventListener('click',()=>document.body.classList.toggle('notes-on'));
+  document.addEventListener('keydown',event=>{
+    if(['ArrowRight','PageDown',' ','Enter'].includes(event.key)){event.preventDefault();show(index+1);}
+    if(['ArrowLeft','PageUp','Backspace'].includes(event.key)){event.preventDefault();show(index-1);}
+    if(event.key.toLowerCase()==='n')document.body.classList.toggle('notes-on');
+    if(event.key==='Home')show(0); if(event.key==='End')show(slides.length-1);
+  });
+  window.addEventListener('hashchange',()=>show(Number(location.hash.slice(1))-1||0));
+  show(index); window.presentationReady=true;
+})();
+</script>
+</body>
+</html>

@@ -113,7 +113,7 @@ def test_report_index_and_forged_formats_follow_role_policy() -> None:
         reverse("reports:generate"),
         {
             "report_type": "overdue_tasks",
-            "output_format": "pdf",
+            "output_format": "csv",
             "locale": "en",
             "date_from": "2026-01-01",
             "date_to": "2026-01-31",
@@ -240,6 +240,7 @@ def test_every_approved_report_format_generates_in_both_languages() -> None:
     approved: tuple[tuple[str, str, dict[str, int]], ...] = (
         ("project_progress", "pdf", {}),
         ("project_progress", "xlsx", {}),
+        ("overdue_tasks", "pdf", {}),
         ("overdue_tasks", "xlsx", {}),
         ("course_attendance", "pdf", {"course": course.pk}),
         ("course_attendance", "xlsx", {"course": course.pk}),

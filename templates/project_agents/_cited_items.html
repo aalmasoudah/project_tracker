@@ -1,0 +1,13 @@
+{% load i18n %}
+<ul class="mb-0">
+  {% for item in items %}
+    <li class="mb-2">
+      <span>{{ item.text }}</span>
+      {% for citation in item.citations %}
+        {% if citation.url %}<a class="badge rounded-pill text-bg-light border text-decoration-none" href="{{ citation.url }}">{{ citation.label }}</a>{% else %}<span class="badge rounded-pill text-bg-light border">{{ citation.label }}</span>{% endif %}
+      {% endfor %}
+    </li>
+  {% empty %}
+    <li class="text-muted">{% translate "No cited items." %}</li>
+  {% endfor %}
+</ul>

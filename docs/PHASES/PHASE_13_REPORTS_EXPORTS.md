@@ -1,6 +1,7 @@
 # Phase 13: Reports and Exports
 
-Status: Approved, implemented, and verified on 2026-07-30.
+Status: Approved, implemented, and verified on 2026-07-30. PDF output for
+overdue-task reports was approved as an extension on 2026-08-03.
 
 ## 1. Goal
 
@@ -11,9 +12,10 @@ Arabic RTL/English LTR rendering.
 ## 2. Included Features
 
 - Project-progress reports in PDF and Excel.
-- Overdue-task reports in Excel.
+- Overdue-task reports in PDF and Excel.
 - Course- and project-attendance summaries in PDF and Excel.
-- Fixed Project Insight branding derived from the approved supplied logo.
+- Fixed Insight Projects / إنسايت بروجكتس branding derived from the approved
+  supplied logo, rendered without changing its source proportions.
 - Date-range/filter validation and empty/large dataset behavior.
 - Embedded Arabic-capable fonts, correct shaping/bidi/RTL layout, localized
   headers/values, and safe bilingual content.

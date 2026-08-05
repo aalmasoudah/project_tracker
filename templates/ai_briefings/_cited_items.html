@@ -1,0 +1,17 @@
+{% load i18n %}
+<ul class="list-unstyled mb-0">
+  {% for item in items %}
+    <li class="border-bottom pb-3 mb-3">
+      {% if show_severity %}<span class="badge text-bg-{% if item.severity == 'critical' or item.severity == 'high' %}danger{% elif item.severity == 'medium' %}warning{% else %}secondary{% endif %}">{{ item.severity }}</span>{% endif %}
+      <div class="preserve-lines mt-1">{{ item.text }}</div>
+      <div class="small mt-2">
+        <span class="text-muted">{% translate "Evidence" %}:</span>
+        {% for source in item.citations %}
+          {% if source.url %}<a class="ms-1" href="{{ source.url }}"><bdi>{{ source.label }}</bdi></a>{% else %}<span class="ms-1"><bdi>{{ source.label }}</bdi></span>{% endif %}{% if not forloop.last %}،{% endif %}
+        {% endfor %}
+      </div>
+    </li>
+  {% empty %}
+    <li class="text-muted">{% translate "No items were identified." %}</li>
+  {% endfor %}
+</ul>

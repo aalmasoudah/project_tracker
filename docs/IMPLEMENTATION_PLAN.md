@@ -2,9 +2,9 @@
 
 ## Planning Outcome
 
-Status: Planning pass completed on 2026-07-23. Phases 1 through 14 are
-implemented and verified. Production launch readiness remains subject to the
-final staging, UAT, ownership, provider, and recovery-exercise gates.
+Status: Planning pass completed on 2026-07-23. Phases 1 through 17 are
+implemented and verified locally. Production launch readiness remains subject
+to the final staging, UAT, ownership, provider, and recovery-exercise gates.
 
 The project proceeds one approved phase at a time. The approved scope permits
 planning, but it does not approve unresolved business rules, permissions, or
@@ -28,6 +28,9 @@ phase specifications.
 | 12 | Dashboards, Search, and Operational Views | Core domains and approved permissions | Completed on 2026-07-29 |
 | 13 | Reports and Exports | Central progress services and report permissions | Completed on 2026-07-30 |
 | 14 | Administration, Audit, and Operational Safety | Prior audit/archive behavior; retention policy | Completed on 2026-08-02 |
+| 15 | AI Project Briefings | Phase 14; approved AI evidence/provider boundary | Completed on 2026-08-04 |
+| 16 | CEO Telegram and n8n Executive Reports | Phase 15; approved CEO chat/privacy boundary | Completed locally on 2026-08-04 |
+| 17 | Agentic Project Recovery and Planning | Phases 5-7, 11, 14-15; Decision 0022 | Completed and verified locally on 2026-08-04 |
 
 Independent preparatory research may occur, but implementation may not skip
 dependencies or start a later phase without explicit approval.
@@ -154,3 +157,30 @@ After Phase 14, perform the playbook's traceability, accessibility, security,
 performance, UAT, Docker clean-install, staging, recovery-test, and production
 launch gates. Production is not complete merely because all feature phases are
 implemented.
+
+## Approved Phase 15 Extension
+
+Phase 15 adds only read-only, cited AI project briefings. It reuses existing
+project visibility, centralized progress, audit, notifications, PostgreSQL,
+Celery, and Redis. Groq is disabled by default and isolated behind a provider
+interface; the deterministic fake provider keeps automated tests independent
+from network availability. Decision 0020 and the Phase 15 specification are
+authoritative for this extension.
+
+## Approved Phase 16 Extension
+
+Phase 16 adds only the fixed CEO Telegram/n8n report and critical-alert
+workflow defined in decision 0021. Django owns authorization, data selection,
+AI generation, PDFs, one-time download enforcement, and audit. n8n owns
+Telegram command routing and delivery but receives no database credentials.
+The attendance exception permits names/statuses only in the bound CEO chat;
+Groq receives aggregate attendance evidence without names.
+
+## Approved Phase 17 Extension
+
+Phase 17 adds the permission-scoped project recovery agent defined in decision
+0022. It dynamically chooses only allowlisted project reads, recalls only
+human-reviewed run memory, creates cited proposals, waits for a human decision,
+and executes approved actions transactionally through existing domain services
+after fresh permission and stale-state checks. The agent cannot access shell,
+SQL, files, arbitrary URLs, credentials, attendance, or unrestricted tools.

@@ -35,6 +35,11 @@ From Phase 11:
 - `worker`: Celery worker.
 - `scheduler`: Celery Beat or approved platform scheduler.
 
+From Phase 16, when explicitly enabled:
+
+- `n8n`: a separately secured HTTPS orchestration service with no database or
+  Redis credential and an isolated native Telegram credential.
+
 Migrations run as a controlled release step, never automatically in every web
 container startup.
 
@@ -68,10 +73,42 @@ Expected variable categories include:
 - Redis URL after Phase 11.
 - Email provider settings after Phase 11.
 - Monitoring DSN and environment identifier.
+- Phase 15 AI feature flag, approved Groq model, reasoning effort, bounded
+  timeout/output/evidence/quota values, and secret-manager `GROQ_API_KEY`.
+- Phase 16 feature flag, fixed CEO username/private chat ID, signing/download
+  TTLs, row/quota/lease bounds, and a secret-manager signing secret shared only
+  with the dedicated n8n deployment.
+- Phase 17 feature/provider/model flags, step/token/time/result/quota/proposal
+  bounds, secret-manager Groq key, and an optional independent n8n HMAC secret.
 
 `.env.example` lists safe names and example formats without real credentials.
 Each settings module validates required production configuration and fails
 closed on missing or unsafe values.
+
+When AI briefings are enabled in production, the provider must be `groq`, the
+model must be `openai/gpt-oss-120b` or `openai/gpt-oss-20b`, and a Groq key is
+required. The fixed outbound endpoint is
+`https://api.groq.com/openai/v1/chat/completions`. Staging and production use
+different keys. The web, worker, and scheduler processes all receive the same
+non-secret AI settings; only processes that execute jobs need the provider
+secret.
+
+When Phase 16 is enabled, `APP_BASE_URL` must be a verified HTTPS origin
+reachable by n8n. n8n uses an independently secured HTTPS webhook origin,
+stores the Telegram bot token in its native credential store, receives the
+HMAC signing secret from the deployment secret manager, allows only the
+built-in `crypto` module in Code nodes, and disables successful and failed
+execution-data retention. Activate the imported workflow only after the
+Phase 16 staging checklist passes.
+
+When Phase 17 is enabled in production, the provider must be `groq`; the
+default model is `openai/gpt-oss-120b` and only `openai/gpt-oss-20b` is an
+allowed override. Web, worker, and Beat use the same bounded settings, while
+only worker processes receive the Groq secret. If the reviewed-event n8n
+workflow is enabled, Django and the dedicated n8n deployment receive the same
+independent 32-byte signing secret, n8n allows only built-in `crypto`, and
+success/error/progress retention stays disabled. Activate after the Phase 17
+staging checklist passes.
 
 ## CI/CD Flow
 
@@ -102,6 +139,11 @@ production secrets to forked/untrusted jobs.
 7. Run permission-safe smoke checks.
 8. Watch errors, latency, database capacity, and worker state.
 9. Record the release and rollback point.
+
+For Phase 17, also confirm a worker processes one fictional staging run, Beat
+recovers stale work and expires an aged pending proposal, approval executes
+once through a currently authorized actor, and optional n8n remains inactive
+until separately approved.
 
 ## Rollback
 

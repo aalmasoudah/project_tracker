@@ -18,6 +18,8 @@ navigation is never an authorization control.
 - Django/worker-to-private-object-storage access using restricted credentials.
 - Django/worker-to-email, Redis, and monitoring providers introduced only in
   approved phases.
+- Phase 16 n8n-to-Django signed requests and n8n-to-Telegram delivery for one
+  fixed private CEO chat; n8n receives no PostgreSQL or Redis credential.
 - CI, staging, and production are separate environments with separate secrets
   and data.
 
@@ -148,10 +150,72 @@ Every applicable phase includes:
 - Upload validation and unauthorized-download tests for file phases.
 - Production settings checks and dependency/security scans before deployment.
 
+## AI Briefing Security Boundary
+
+- Project permissions are checked on request, worker execution, viewing,
+  source navigation, and review.
+- Only allowlisted, compact evidence leaves the application. Budget, task
+  descriptions/comments/files, trainee/attendance records, credentials,
+  tokens, environment values, and raw audit metadata are excluded.
+- Database text is untrusted prompt data. Groq receives strict structured-
+  output instructions and no tools, browsing, code execution, or action hooks.
+- Local schema and citation validation is mandatory even when provider-side
+  strict schema succeeds. Django escapes all generated text.
+- Provider secrets, prompts, evidence payloads, generated content, and raw
+  errors are excluded from logs and audit metadata.
+- A disabled or unsafe provider configuration fails closed without changing
+  business records.
+
+## CEO Telegram and n8n Security Boundary
+
+- The integration is disabled by default and is not a general public API or
+  free-form chatbot. Only fixed read-only report and alert operations exist.
+- Every n8n JSON request is body-bounded and authenticated with HMAC-SHA256,
+  a five-minute timestamp window, a one-use hashed nonce, the exact configured
+  private chat ID, and one fixed active CEO account/permission.
+- PDF links contain a signed report/chat binding, expire after ten minutes,
+  download once, and render in memory. They are never stored as uploads.
+- Attendance PDFs may contain the explicitly approved trainee full name and
+  attendance status. Groq receives only attendance aggregates; phone, email,
+  notes, comments, files, chat identifiers, and tokens remain excluded.
+- Critical alerts use protected fingerprints, leases, and acknowledgements so
+  retries do not silently mark undelivered messages complete or change tasks.
+- n8n saves neither successful nor failed workflow execution data. The bot
+  token stays in the native credential store and the signing secret is
+  injected from the deployment secret manager, never workflow JSON.
+
+## Project Recovery Agent Security Boundary
+
+- Phase 17 is separate from the Phase 15 read-only/no-tools workflow. It uses
+  seven exact read tools and five proposal codes; no shell, SQL, filesystem,
+  web, arbitrary URL/HTTP, code, credential, file, raw-audit, trainee, or
+  attendance capability exists in its registry.
+- Goal, language, model, decision shape, tool/action code, arguments, payload,
+  IDs, citations, step count, token/time budget, result size, request quota,
+  and proposal lifetime are allowlisted or bounded server-side. Database and
+  optional-context strings are labelled untrusted prompt data.
+- Authorization and current object scope are rechecked at request, each tool,
+  proposal creation, decision, execution, and verification. Possession of a
+  run/proposal ID or earlier access grants nothing.
+- Model output can create only a pending proposal. An authorized human must
+  approve with a reason, and the approver becomes the execution actor. The
+  current Phase 17 and underlying domain permissions are both required.
+- Execution locks the proposal and target, validates the before-state
+  fingerprint, calls the existing transaction-safe domain service, and reads
+  the after state. Stale, expired, revoked, invalid, or duplicate attempts do
+  not bypass completion approval or create a partial/second write.
+- Only explicitly reviewed completed runs create same-project memory. Stored
+  records omit chain-of-thought, full prompts, secrets, raw provider payloads,
+  and raw errors; rendered provider/database text remains escaped.
+- The optional n8n path uses HMAC-SHA256 over method/path/body, short
+  timestamps, one-use hashed nonces, leased events, a human checkpoint, and an
+  idempotent signed callback. Its export is inactive, contains no credential,
+  and disables execution-data retention.
+
 ## Open Security Decisions
 
 - Complete each later-domain role and object-level permission slice.
-- Personal attendance visibility and export authorization.
+- Any attendance delivery outside the approved Phase 16 bound CEO chat.
 - Default language, persisted preference, and approved Arabic terminology.
 - Arabic normalization rules for identity, duplicate detection, and search.
 - Authorized reject/reopen/correct/override actors.

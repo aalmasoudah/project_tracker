@@ -11,6 +11,13 @@ SOURCE_ROOTS = ("apps", "config")
 TEMPLATE_TRANSLATE_RE = re.compile(
     r"""{%\s*(?:translate|trans)\s+(?P<quote>["'])(?P<message>.*?)(?P=quote)"""
 )
+TEMPLATE_BLOCK_TRANSLATE_RE = re.compile(
+    r"{%\s*(?:blocktranslate|blocktrans)\b.*?%}"
+    r"(?P<message>.*?)"
+    r"{%\s*(?:endblocktranslate|endblocktrans)\s*%}",
+    re.DOTALL,
+)
+TEMPLATE_VARIABLE_RE = re.compile(r"{{\s*(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*}}")
 
 
 def python_messages(path: Path) -> tuple[set[str], dict[str, str]]:
@@ -45,7 +52,15 @@ def python_messages(path: Path) -> tuple[set[str], dict[str, str]]:
 def template_messages(path: Path) -> set[str]:
     """Extract literal translate tags from one Django template."""
     source = path.read_text(encoding="utf-8")
-    return {match.group("message") for match in TEMPLATE_TRANSLATE_RE.finditer(source)}
+    messages = {
+        match.group("message") for match in TEMPLATE_TRANSLATE_RE.finditer(source)
+    }
+    for match in TEMPLATE_BLOCK_TRANSLATE_RE.finditer(source):
+        message = " ".join(match.group("message").split())
+        message = TEMPLATE_VARIABLE_RE.sub(r"%(\g<name>)s", message)
+        if message:
+            messages.add(message)
+    return messages
 
 
 def collect_messages() -> tuple[set[str], dict[str, str]]:
@@ -70,9 +85,11 @@ def update_catalog(
 ) -> None:
     """Merge extracted messages into a catalog without discarding translations."""
     catalog = polib.pofile(po_path)
-    existing = {entry.msgid: entry for entry in catalog if not entry.obsolete}
+    existing = {entry.msgid: entry for entry in catalog}
     for message in sorted(messages):
-        if message not in existing and message not in plural_messages:
+        if message in existing:
+            existing[message].obsolete = False
+        elif message not in plural_messages:
             catalog.append(polib.POEntry(msgid=message, msgstr=""))
     plural_forms = catalog.metadata.get("Plural-Forms", "")
     match = re.search(r"nplurals=(\d+)", plural_forms)
@@ -87,10 +104,12 @@ def update_catalog(
                     msgstr_plural=dict.fromkeys(range(plural_count), ""),
                 )
             )
-        elif entry.msgid_plural != plural:
-            entry.msgid_plural = plural
-            entry.msgstr_plural = dict.fromkeys(range(plural_count), "")
-            entry.msgstr = ""
+        else:
+            entry.obsolete = False
+            if entry.msgid_plural != plural:
+                entry.msgid_plural = plural
+                entry.msgstr_plural = dict.fromkeys(range(plural_count), "")
+                entry.msgstr = ""
     active_messages = messages | set(plural_messages)
     for entry in catalog:
         if entry.msgid and entry.msgid not in active_messages:

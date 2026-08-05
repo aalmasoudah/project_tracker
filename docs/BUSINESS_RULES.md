@@ -126,6 +126,75 @@ must be approved before their implementation phase.
 - Database backup and restoration remain infrastructure operations. Initial
   recovery targets are a 24-hour RPO, an 8-hour RTO, 35-day encrypted backup
   retention, and quarterly isolated restoration testing.
+- Phase 15 AI briefings are read-only derived drafts. They cannot create,
+  change, approve, archive, notify on behalf of a user, or otherwise mutate
+  projects, tasks, progress, milestones, approvals, attendance, or reports.
+- AI evidence is assembled by permission-scoped application selectors before
+  any provider call. Worker execution and later viewing recheck the requesting
+  user's active account and project access.
+- Phase 15 evidence excludes budgets, task comments, uploaded-file contents,
+  trainee and attendance data, credentials, tokens, raw audit metadata, and
+  environment configuration.
+- AI output uses a strict validated schema. Every factual risk, highlight,
+  upcoming item, and recommended action requires an allowlisted source
+  citation; unsupported or unauthorized citations fail validation.
+- Database text is untrusted prompt data. The Phase 15 provider receives no
+  tools or action capability, and generated content is escaped before HTML
+  presentation.
+- AI briefing records and their safe source references are protected from
+  normal hard deletion and follow the approved indefinite initial-release
+  application retention rule.
+- Phase 15 is disabled by default. A real provider call requires an explicit
+  feature flag, provider code, HTTPS endpoint, model, and secret supplied by
+  environment configuration. The deterministic fake provider is limited to
+  development and automated testing.
+- Pilot limits are 7, 14, or 30 days of evidence, at most 200 detailed source
+  records, and 20 requests per user per local day. Truncation is disclosed in
+  the generated briefing.
+- Phase 16 Telegram reporting is available only to one deployment-configured
+  active CEO username and one exact Telegram chat ID through the approved n8n
+  workflow. It is read-only and exposes no general API or free-form prompt.
+- Phase 16 integration calls use HMAC-SHA256, a five-minute timestamp window,
+  one-use nonces, bounded bodies, and constant-time secret/chat comparison.
+- The CEO explicitly approved trainee full names and attendance values in the
+  attendance PDF sent to the bound CEO Telegram chat. Phone numbers, emails,
+  notes, files, tokens, and other personal fields remain excluded.
+- Groq receives only bounded aggregate attendance evidence. Trainee names and
+  individual attendance rows are appended locally by Django and never enter
+  the AI prompt or provider payload.
+- Phase 16 PDFs are rendered in memory, use Arabic RTL with Gregorian and
+  Umm al-Qura Hijri dates, expire after ten minutes, and download once.
+- Critical Telegram alerts cover active, non-archived, incomplete Critical
+  tasks due tomorrow or earlier. A task/status/due-date fingerprint prevents
+  duplicates; n8n delivery requires lease acknowledgement and is retry-safe.
+- n8n successful execution-data retention is disabled. Telegram, n8n, Django,
+  and Groq credentials remain environment/credential-store secrets and never
+  appear in source, audit metadata, report content, or logs.
+- Phase 17 is a separate permission-scoped agent domain. It does not change
+  the Phase 15 no-tools/no-writes boundary and has no access to trainee,
+  attendance, file, budget, credential, raw-audit, filesystem, SQL, shell,
+  web, code-execution, or arbitrary-HTTP data or capabilities.
+- A Phase 17 model may select only approved read or proposal tool codes. It
+  never calls a domain write service. At least two distinct successful read
+  tools and cited observations are required before a proposal or final plan.
+- Only completed verified runs explicitly reviewed by an authorized user
+  become same-project memory. Unreviewed or cross-project runs are excluded.
+- Every proposal pauses for a human decision. The approver is the execution
+  actor and must still hold both Phase 17 and underlying domain authority at
+  execution. CEO remains unable to write because existing CEO business
+  permissions are read-only.
+- Approved execution locks the proposal and target, compares a server-issued
+  before-state fingerprint, calls an existing domain service transactionally,
+  applies one idempotency key, and reads the actual final state for cited
+  verification. Stale, revoked, duplicate, or invalid state writes nothing.
+- Phase 17 task-status proposals are limited to Todo, In Progress, or Blocked.
+  Completion, cancellation, pending approval, and approval decisions are not
+  agent-executable. Team notifications use fixed bilingual content rather
+  than arbitrary provider text.
+- Phase 17 stores bounded structured plans, calls, observations, proposals,
+  and results, but never chain-of-thought, full prompts, provider payloads,
+  credentials, secrets, or raw provider errors. Protected records follow the
+  approved initial-release retention rule.
 
 ## Decisions Required Before Planning
 
@@ -186,6 +255,17 @@ The project owner must approve answers to these questions:
     keyboard variants without merging `ة/ه` or `ى/ي`. Later duplicate policies
     remain open. Phase 8 trainee duplicate normalization is defined in decision
     0013.
+23. [Approved for Phase 15] AI project briefings are read-only, permission-
+    scoped, cited drafts. Groq is the only approved live provider, using
+    `openai/gpt-oss-120b` by default or `openai/gpt-oss-20b` as an explicit
+    lower-cost override. The feature has no tools, browsing, or write access.
+24. [Approved for Phase 16] The fixed CEO Telegram/n8n workflow, named
+    attendance PDF, signed integration boundary, one-time downloads, and
+    retry-safe critical alert rules are defined in decision 0021.
+25. [Approved for Phase 17] The allowlisted project-recovery agent, reviewed
+    memory, human proposal approval, current-authority execution, stale-state
+    checks, idempotency, verification, and optional signed n8n reviewed-event
+    flow are defined in decision 0022.
 
 ## Rule Approval
 
@@ -195,5 +275,6 @@ on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 2026-07-27 in decision 0010. Phase 6 progress portions were approved on
 2026-07-28 in decision 0011. Phase 7 was approved in decision 0012 and Phase 8
 in decision 0013. Phase 9 was approved in decision 0014, Phase 10 in decision
-0015, Phase 11 in decision 0016, and Phase 14 in decision 0019. Remaining
-decisions still block only separately approved extensions.
+0015, Phase 11 in decision 0016, Phase 14 in decision 0019, Phase 15 in
+decision 0020, and Phase 16 in decision 0021. Remaining decisions still block
+only separately approved extensions. Phase 17 was approved in decision 0022.

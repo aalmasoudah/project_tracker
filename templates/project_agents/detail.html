@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n project_tags %}
+
+{% block title %}{% translate "Project Recovery Agent" %} · {{ run.project|localized_project_name }}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+    <div>
+      <p class="text-primary fw-semibold mb-1"><bdi>{{ run.project.code }}</bdi></p>
+      <h1 class="h2">{% translate "Project Recovery Agent" %}</h1>
+      <p class="text-muted mb-0">{{ run.project|localized_project_name }}</p>
+    </div>
+    <a class="btn btn-outline-secondary align-self-start" href="{% url 'projects:detail' run.project.pk %}">{% translate "Back to project" %}</a>
+  </div>
+  {% include "project_agents/_status.html" %}
+{% endblock %}

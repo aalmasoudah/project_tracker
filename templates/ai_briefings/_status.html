@@ -1,0 +1,91 @@
+{% load i18n %}
+<section id="briefing-status"
+  {% if briefing.status == "queued" or briefing.status == "processing" %}
+    hx-get="{% url 'ai_briefings:status' briefing.pk %}"
+    hx-trigger="every 2s"
+    hx-swap="outerHTML"
+  {% endif %}>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between gap-2">
+        <div>
+          <span class="badge text-bg-{% if briefing.status == 'completed' %}success{% elif briefing.status == 'failed' %}danger{% else %}primary{% endif %}">{{ briefing.get_status_display }}</span>
+          <span class="ms-2">{{ briefing.get_detail_level_display }} · {{ briefing.get_language_display }} · {% blocktranslate with days=briefing.evidence_window_days %}{{ days }}-day evidence window{% endblocktranslate %}</span>
+        </div>
+        <small class="text-muted"><bdi>{{ briefing.created_at|date:"Y-m-d H:i" }}</bdi></small>
+      </div>
+      {% if briefing.status == "queued" or briefing.status == "processing" %}
+        <p class="mt-3 mb-0" role="status">{% translate "The briefing is being generated. You may leave this page and return from the project." %}</p>
+      {% elif briefing.status == "failed" %}
+        <p class="text-danger mt-3 mb-0" role="alert">{% translate "The briefing could not be generated safely. Try again later or contact the system operator." %}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if briefing.status == "completed" %}
+    <div class="alert alert-warning" role="note">
+      <strong>{% translate "AI-generated draft" %}:</strong>
+      {% translate "Verify the cited evidence before using this briefing for a decision." %}
+    </div>
+    {% if briefing.evidence_truncated %}
+      <div class="alert alert-secondary">{% translate "The evidence set reached its configured limit. The briefing identifies this as a data gap." %}</div>
+    {% endif %}
+
+    <section class="card card-body shadow-sm mb-4">
+      <h2 class="h4">{% translate "Summary" %}</h2>
+      <p class="preserve-lines mb-0">{{ summary }}</p>
+    </section>
+
+    <div class="row g-4">
+      <section class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm"><div class="card-body">
+          <h2 class="h4">{% translate "Highlights" %}</h2>
+          {% include "ai_briefings/_cited_items.html" with items=highlights %}
+        </div></div>
+      </section>
+      <section class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm"><div class="card-body">
+          <h2 class="h4">{% translate "Risks" %}</h2>
+          {% include "ai_briefings/_cited_items.html" with items=risks show_severity=True %}
+        </div></div>
+      </section>
+      <section class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm"><div class="card-body">
+          <h2 class="h4">{% translate "Upcoming items" %}</h2>
+          {% include "ai_briefings/_cited_items.html" with items=upcoming %}
+        </div></div>
+      </section>
+      <section class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm"><div class="card-body">
+          <h2 class="h4">{% translate "Recommended actions" %}</h2>
+          {% include "ai_briefings/_cited_items.html" with items=recommended_actions %}
+        </div></div>
+      </section>
+    </div>
+
+    <section class="card card-body shadow-sm mt-4">
+      <h2 class="h4">{% translate "Data gaps" %}</h2>
+      <ul class="mb-0">
+        {% for gap in data_gaps %}<li>{{ gap }}</li>{% empty %}<li class="text-muted">{% translate "No data gaps were identified." %}</li>{% endfor %}
+      </ul>
+    </section>
+
+    <dl class="detail-grid mt-4">
+      <div><dt>{% translate "Model" %}</dt><dd><bdi>{{ briefing.model_code }}</bdi></dd></div>
+      <div><dt>{% translate "Evidence" %}</dt><dd><bdi>{{ briefing.evidence_count }}</bdi></dd></div>
+      <div><dt>{% translate "Prompt version" %}</dt><dd><bdi>{{ briefing.prompt_version }}</bdi></dd></div>
+      {% if briefing.input_tokens != None %}<div><dt>{% translate "Input tokens" %}</dt><dd><bdi>{{ briefing.input_tokens }}</bdi></dd></div>{% endif %}
+      {% if briefing.cached_input_tokens != None %}<div><dt>{% translate "Cached input tokens" %}</dt><dd><bdi>{{ briefing.cached_input_tokens }}</bdi></dd></div>{% endif %}
+      {% if briefing.output_tokens != None %}<div><dt>{% translate "Output tokens" %}</dt><dd><bdi>{{ briefing.output_tokens }}</bdi></dd></div>{% endif %}
+    </dl>
+
+    {% if briefing.reviewed_at %}
+      <div class="alert alert-success mt-4">{% blocktranslate with reviewer=briefing.reviewed_by.display_name date=briefing.reviewed_at|date:"Y-m-d H:i" %}Reviewed by {{ reviewer }} on {{ date }}.{% endblocktranslate %}</div>
+    {% elif can_review %}
+      <form method="post" action="{% url 'ai_briefings:review' briefing.pk %}" class="mt-4">
+        {% csrf_token %}
+        <button class="btn btn-success" type="submit">{% translate "Mark as reviewed" %}</button>
+      </form>
+    {% endif %}
+  {% endif %}
+</section>

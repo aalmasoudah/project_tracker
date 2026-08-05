@@ -26,6 +26,13 @@ urlpatterns = [
     path("reports/", include("apps.reports.urls")),
     path("operations/", include("apps.operations.urls")),
     path("workspace/", include("apps.workspace.urls")),
+    path("ai/", include("apps.ai_briefings.urls")),
+    path("project-agent/", include("apps.project_agents.urls")),
+    path("integrations/n8n/telegram/", include("apps.executive_bot.urls")),
+    path(
+        "integrations/n8n/project-agent/",
+        include("apps.project_agents.integration_urls"),
+    ),
     path("health/", views.health, name="health"),
     path("", views.home, name="home"),
 ]

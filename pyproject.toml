@@ -50,7 +50,7 @@ markers = [
 [tool.ruff]
 line-length = 88
 target-version = "py313"
-extend-exclude = [".venv", ".venv-phase1", ".uv-cache-temp"]
+extend-exclude = [".venv", ".venv-phase1", ".uv-cache-temp", "output"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -81,6 +81,7 @@ exclude = [
     "^apps/.*/migrations/",
     "^\\.venv",
     "^\\.uv-cache-temp",
+    "^output/",
 ]
 
 [tool.django-stubs]

@@ -19,6 +19,9 @@ BUSINESS_AUDIT_SCOPES: Final = frozenset(
         AuditEvent.Scope.TRAINEES,
         AuditEvent.Scope.ATTENDANCE,
         AuditEvent.Scope.NOTIFICATIONS,
+        AuditEvent.Scope.AI_BRIEFINGS,
+        AuditEvent.Scope.EXECUTIVE_BOT,
+        AuditEvent.Scope.PROJECT_AGENTS,
     }
 )
 
@@ -37,6 +40,12 @@ TARGET_TYPES_BY_SCOPE: Final[dict[str, tuple[str, ...]]] = {
     AuditEvent.Scope.TRAINEES: ("enrollment", "import_batch"),
     AuditEvent.Scope.ATTENDANCE: ("session",),
     AuditEvent.Scope.NOTIFICATIONS: ("notification_preferences",),
+    AuditEvent.Scope.AI_BRIEFINGS: ("ai_briefing",),
+    AuditEvent.Scope.EXECUTIVE_BOT: (
+        "executive_report",
+        "critical_task_alert",
+    ),
+    AuditEvent.Scope.PROJECT_AGENTS: ("agent_run",),
     AuditEvent.Scope.OPERATIONS: (
         "audit_export",
         "backup",
@@ -49,6 +58,7 @@ SAFE_METADATA_KEYS: Final = frozenset(
     {
         "added_trainer_ids",
         "added_user_ids",
+        "alerts",
         "attempt",
         "backup_status",
         "categories",
@@ -60,14 +70,22 @@ SAFE_METADATA_KEYS: Final = frozenset(
         "environment",
         "errors",
         "evidence",
+        "evidence_count",
+        "evidence_truncated",
+        "evidence_window_days",
+        "detail_level",
+        "failure_code",
         "expires_at",
         "file_id",
         "filters",
         "kind",
         "language",
+        "model_code",
         "occurrences",
         "operation_key",
         "policy",
+        "project_id",
+        "report_type",
         "previous_status",
         "recurrence",
         "removed_trainer_ids",
@@ -81,8 +99,14 @@ SAFE_METADATA_KEYS: Final = frozenset(
         "sequence",
         "size",
         "status",
+        "source_count",
+        "source_truncated",
         "submission_id",
         "target_id",
         "target_type",
+        "window_days",
+        "proposal_id",
+        "action_code",
+        "executed",
     }
 )

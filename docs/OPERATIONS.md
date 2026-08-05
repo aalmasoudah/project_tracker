@@ -2,8 +2,8 @@
 
 ## Status and Purpose
 
-Status: Phase 14 application and recovery policy approved. Provider details,
-named contacts, and production routing remain production-readiness inputs.
+Status: Phase 16 application and recovery policy approved. Named contacts and
+production routing remain production-readiness inputs.
 
 This plan defines the operational capabilities required before company data is
 placed in production. Named owners, escalation contacts, retention periods,
@@ -115,6 +115,9 @@ auditable procedure.
 - Review inactive accounts, privileged groups, and service credentials.
 - Rotate secrets according to approved policy and after suspected exposure.
 - Review slow queries and indexes using realistic synthetic data.
+- Review Phase 17 queue age, safe provider retries, token/quota exhaustion,
+  awaiting-approval age, stale/expired/failed outcomes, and n8n authentication
+  failures using aggregate telemetry only.
 - Maintain change log, decision records, runbooks, and release history.
 - Review translation completeness and Arabic rendering whenever user-visible
   text, emails, imports, or reports change.
@@ -158,6 +161,20 @@ These commands are added only in the phase that owns their behavior.
 The Phase 14 application command, retention, audit-export, archive, backup
 verification, and isolated restoration procedure is documented in
 `docs/RUNBOOKS/PHASE_14_OPERATIONS.md`.
+
+The Phase 15 Groq configuration, worker recovery, secret rotation, safe
+failure, and rollback procedure is documented in
+`docs/RUNBOOKS/PHASE_15_AI_BRIEFINGS.md`.
+
+The Phase 16 fixed-chat configuration, n8n import, privacy acceptance test,
+alert retry/acknowledgement, rotation, incident response, and rollback
+procedure is documented in
+`docs/RUNBOOKS/PHASE_16_CEO_TELEGRAM_N8N.md`.
+
+The Phase 17 Groq/project-agent flags, proposal expiry, current-permission and
+stale-state checks, reviewed memory, optional signed n8n checkpoint, rotation,
+incident response, and rollback procedure are documented in
+`docs/RUNBOOKS/PHASE_17_PROJECT_AGENT.md`.
 
 - Deploy and rollback.
 - Create/revoke privileged access.

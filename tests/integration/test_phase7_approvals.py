@@ -106,6 +106,34 @@ def make_task(
     return task
 
 
+@pytest.mark.integration
+@pytest.mark.django_db
+def test_approval_queue_and_milestone_list_render_shared_pagination() -> None:
+    department = Department.objects.create(
+        code="PGN7",
+        name_ar="إدارة الموافقات",
+        name_en="Approvals",
+    )
+    manager = role_user("pagination-manager", "project_manager", department)
+    client = Client()
+    client.force_login(manager)
+
+    approval_response = client.get(
+        reverse("approvals:queue"),
+        {"status": ApprovalRequest.Status.PENDING_SUPERVISOR},
+    )
+    milestone_response = client.get(reverse("approvals:milestone_list"))
+
+    assert approval_response.status_code == 200
+    assert milestone_response.status_code == 200
+    assert "includes/pagination.html" in {
+        template.name for template in approval_response.templates
+    }
+    assert "includes/pagination.html" in {
+        template.name for template in milestone_response.templates
+    }
+
+
 def decide_both(
     approval_request: ApprovalRequest,
     *,

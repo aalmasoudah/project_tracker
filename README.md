@@ -1,12 +1,16 @@
-# Company Project Tracker
+# Insight Projects / إنسايت بروجكتس
 
 Internal project, course, task, trainee-attendance, and completion-tracking
 system.
 
 ## Current Status
 
-Phases 1 through 11 are complete. Phase 11, Notifications and Background
-Jobs, was implemented and verified on 2026-07-29.
+Phases 1 through 17 are implemented and verified locally. Phase 17 adds a
+permission-scoped project-recovery agent with dynamic allowlisted reads,
+reviewed memory, cited proposals, mandatory human approval, transactional
+idempotent execution, and final verification. Phase 16 remains the fixed,
+CEO-only Arabic Telegram/n8n reporting channel. Live Groq/n8n activation still
+requires the documented staging credentials and security UAT.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
@@ -41,6 +45,26 @@ uv run celery -A config beat --loglevel=INFO
 
 Development email uses the console backend, so localized email content appears
 in the worker terminal without contacting a real provider.
+
+For local deterministic AI briefing tests, set
+`AI_BRIEFING_ENABLED=true` and `AI_BRIEFING_PROVIDER=fake`. For approved live
+generation, use `AI_BRIEFING_PROVIDER=groq`, keep the default
+`openai/gpt-oss-120b` model, and provide `GROQ_API_KEY` only through the local
+ignored `.env` or the deployment secret manager. See
+`docs/RUNBOOKS/PHASE_15_AI_BRIEFINGS.md`.
+
+The Phase 16 Telegram integration remains disabled until Django and n8n are
+configured with matching secret-manager values and a native n8n Telegram
+credential. Import `deploy/n8n/insight_ceo_telegram_reports.json` only into a
+dedicated staging project first and follow
+`docs/RUNBOOKS/PHASE_16_CEO_TELEGRAM_N8N.md`.
+
+For local deterministic Phase 17 testing, set
+`PROJECT_AGENT_ENABLED=true` and `PROJECT_AGENT_PROVIDER=fake`. Production
+requires the Groq provider and defaults to `openai/gpt-oss-120b`; the 20B
+model is an explicit lower-cost choice. The optional reviewed-event n8n
+workflow remains disabled until its matching HMAC secrets and staging human
+checkpoint are verified. See `docs/RUNBOOKS/PHASE_17_PROJECT_AGENT.md`.
 
 The PostgreSQL initialization script creates both `tracker` and
 `tracker_test` on a fresh Docker volume. If the volume existed before Phase 1,

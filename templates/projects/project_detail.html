@@ -7,6 +7,8 @@
   <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
     <div><p class="text-primary fw-semibold mb-1"><bdi>{{ project.code }}</bdi></p><h1 class="h2">{{ project|localized_project_name }}</h1></div>
     <div class="d-flex flex-wrap gap-2">
+      {% if can_start_project_agent %}<a class="btn btn-primary" href="{% url 'project_agents:request' project.pk %}">{% translate "Start Project Agent" %}</a>{% endif %}
+      {% if can_generate_ai_briefing %}<a class="btn btn-primary" href="{% url 'ai_briefings:request' project.pk %}">{% translate "Generate AI Briefing" %}</a>{% endif %}
       {% if perms.approvals.submit_approval and project.status == "active" %}<a class="btn btn-primary" href="{% url 'approvals:submit' 'project' project.pk %}">{% translate "Submit for approval" %}</a>{% endif %}
       {% if can_manage %}<a class="btn btn-outline-primary" href="{% url 'projects:update' project.pk %}">{% translate "Edit" %}</a><a class="btn btn-outline-primary" href="{% url 'projects:team' project.pk %}">{% translate "Manage team" %}</a>{% endif %}
       {% if can_history %}<a class="btn btn-outline-secondary" href="{% url 'projects:history' project.pk %}">{% translate "History" %}</a>{% endif %}
@@ -38,4 +40,30 @@
   <section class="mt-5"><h2 class="h4">{% translate "Team members" %}</h2><ul>{% for membership in memberships %}<li>{{ membership.user.display_name }}</li>{% empty %}<li>{% translate "No additional team members." %}</li>{% endfor %}</ul></section>
   {% if perms.courses.view_course %}<section class="mt-4"><a class="btn btn-outline-secondary" href="{% url 'courses:list' %}?q={{ project.code|urlencode }}">{% translate "View project courses" %}</a></section>{% endif %}
   {% if perms.tasks.view_task %}<section class="mt-2"><a class="btn btn-outline-secondary" href="{% url 'tasks:list' %}?q={{ project.code|urlencode }}">{% translate "View project tasks" %}</a></section>{% endif %}
+  {% if recent_ai_briefings %}
+    <section class="mt-5" aria-labelledby="ai-briefings-heading">
+      <h2 id="ai-briefings-heading" class="h4">{% translate "AI project briefings" %}</h2>
+      <div class="list-group">
+        {% for briefing in recent_ai_briefings %}
+          <a class="list-group-item list-group-item-action d-flex flex-wrap justify-content-between gap-2" href="{% url 'ai_briefings:detail' briefing.pk %}">
+            <span>{{ briefing.get_detail_level_display }} · {{ briefing.get_language_display }}</span>
+            <span class="text-muted"><bdi>{{ briefing.created_at|date:"Y-m-d H:i" }}</bdi> · {{ briefing.get_status_display }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+  {% if recent_agent_runs %}
+    <section class="mt-5" aria-labelledby="agent-runs-heading">
+      <h2 id="agent-runs-heading" class="h4">{% translate "Project agent runs" %}</h2>
+      <div class="list-group">
+        {% for agent_run in recent_agent_runs %}
+          <a class="list-group-item list-group-item-action d-flex flex-wrap justify-content-between gap-2" href="{% url 'project_agents:detail' agent_run.pk %}">
+            <span>{{ agent_run.get_goal_code_display }} · {{ agent_run.get_language_display }}</span>
+            <span class="text-muted"><bdi>{{ agent_run.created_at|date:"Y-m-d H:i" }}</bdi> · {{ agent_run.get_status_display }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
 {% endblock %}

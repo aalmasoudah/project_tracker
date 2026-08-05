@@ -32,6 +32,9 @@ class AuditEvent(models.Model):
         ATTENDANCE = "attendance", _("Attendance")
         NOTIFICATIONS = "notifications", _("Notifications")
         OPERATIONS = "operations", _("Operations")
+        AI_BRIEFINGS = "ai_briefings", _("AI project briefings")
+        EXECUTIVE_BOT = "executive_bot", _("CEO Telegram reports")
+        PROJECT_AGENTS = "project_agents", _("Project recovery agents")
 
     scope = models.CharField(
         _("scope"),

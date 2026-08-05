@@ -38,6 +38,21 @@ class NotificationPreferencesForm(forms.Form):
     mention_email = forms.BooleanField(
         label=_("Mention email notifications"), required=False
     )
+    ai_briefing_in_app = forms.BooleanField(
+        label=_("AI briefing in-app notifications"), required=False
+    )
+    ai_briefing_email = forms.BooleanField(
+        label=_("AI briefing email notifications"), required=False
+    )
+    project_agent_in_app = forms.BooleanField(
+        label=_("Project-agent in-app notifications"),
+        required=False,
+        disabled=True,
+        help_text=_("Project-agent action notifications are mandatory in-app."),
+    )
+    project_agent_email = forms.BooleanField(
+        label=_("Project-agent email notifications"), required=False
+    )
 
     def __init__(self, *args: Any, recipient: User, **kwargs: Any) -> None:
         values = preference_values(recipient)

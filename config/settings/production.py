@@ -71,6 +71,40 @@ except ValidationError as error:
         "Production DEFAULT_FROM_EMAIL must be a valid email address."
     ) from error
 
+if AI_BRIEFING_ENABLED:
+    if AI_BRIEFING_PROVIDER != "groq":
+        raise ImproperlyConfigured(
+            "Production AI briefings require AI_BRIEFING_PROVIDER=groq."
+        )
+    if AI_BRIEFING_MODEL not in {
+        "openai/gpt-oss-20b",
+        "openai/gpt-oss-120b",
+    }:
+        raise ImproperlyConfigured("Production AI briefing model is not approved.")
+    if not GROQ_API_KEY:
+        raise ImproperlyConfigured("Production AI briefings require GROQ_API_KEY.")
+
+if EXECUTIVE_BOT_ENABLED:
+    if not AI_BRIEFING_ENABLED or AI_BRIEFING_PROVIDER != "groq":
+        raise ImproperlyConfigured(
+            "Production executive Telegram reports require the Groq AI feature."
+        )
+
+if PROJECT_AGENT_ENABLED:
+    if PROJECT_AGENT_PROVIDER != "groq":
+        raise ImproperlyConfigured(
+            "Production project agents require PROJECT_AGENT_PROVIDER=groq."
+        )
+    if not GROQ_API_KEY:
+        raise ImproperlyConfigured("Production project agents require GROQ_API_KEY.")
+    if (
+        PROJECT_AGENT_N8N_ENABLED
+        and len(PROJECT_AGENT_N8N_SIGNING_SECRET.encode("utf-8")) < 32
+    ):
+        raise ImproperlyConfigured(
+            "Production project agents require a 32-byte n8n signing secret."
+        )
+
 DATABASES = {
     "default": postgres_database_from_url(
         env_string("DATABASE_URL"),

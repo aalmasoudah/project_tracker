@@ -16,9 +16,6 @@ msgstr ""
 msgid "Accounts"
 msgstr "الحسابات"
 
-msgid "Company Project Tracker"
-msgstr "متتبع مشاريع الشركة"
-
 msgid "Language"
 msgstr "اللغة"
 
@@ -2677,8 +2674,8 @@ msgstr "المهام المتأخرة"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Project Insight"
-msgstr "بروجكت إنسايت"
+msgid "Insight Projects"
+msgstr "إنسايت بروجكتس"
 
 msgid "Project attendance"
 msgstr "حضور المشروع"
@@ -3082,6 +3079,537 @@ msgstr "يومًا"
 
 msgid "hours"
 msgstr "ساعة"
+
+# Phase 15 AI project briefings
+msgid "AI project briefings"
+msgstr "موجزات المشاريع الذكية"
+
+msgid "AI Project Briefing"
+msgstr "موجز المشروع الذكي"
+
+msgid "Generate AI Briefing"
+msgstr "إنشاء موجز ذكي"
+
+msgid "Queued"
+msgstr "في قائمة الانتظار"
+
+msgid "Executive detail"
+msgstr "تفاصيل تنفيذية"
+
+msgid "Operational detail"
+msgstr "تفاصيل تشغيلية"
+
+msgid "7 days"
+msgstr "7 أيام"
+
+msgid "14 days"
+msgstr "14 يومًا"
+
+msgid "30 days"
+msgstr "30 يومًا"
+
+msgid "requested by"
+msgstr "طلب بواسطة"
+
+msgid "language"
+msgstr "اللغة"
+
+msgid "detail level"
+msgstr "مستوى التفاصيل"
+
+msgid "evidence window"
+msgstr "نافذة الأدلة"
+
+msgid "reviewed by"
+msgstr "راجع بواسطة"
+
+msgid "Audit event"
+msgstr "حدث تدقيق"
+
+msgid "Briefing language"
+msgstr "لغة الموجز"
+
+msgid "Detail level"
+msgstr "مستوى التفاصيل"
+
+msgid "Evidence window"
+msgstr "نافذة الأدلة"
+
+msgid "You cannot generate a briefing for this project."
+msgstr "لا يمكنك إنشاء موجز لهذا المشروع."
+
+msgid "Select a valid briefing language."
+msgstr "اختر لغة صالحة للموجز."
+
+msgid "Select a valid detail level."
+msgstr "اختر مستوى تفاصيل صالحًا."
+
+msgid "Select a valid evidence window."
+msgstr "اختر نافذة أدلة صالحة."
+
+msgid "You reached today's AI briefing request limit. Try again tomorrow."
+msgstr "لقد وصلت إلى الحد اليومي لطلبات الموجز الذكي. حاول مرة أخرى غدًا."
+
+msgid "AI briefing request queued."
+msgstr "تمت إضافة طلب الموجز الذكي إلى قائمة الانتظار."
+
+msgid "AI briefing marked as reviewed."
+msgstr "تم وضع علامة تمت المراجعة على الموجز الذكي."
+
+msgid "AI-generated draft"
+msgstr "مسودة مولدة بالذكاء الاصطناعي"
+
+msgid ""
+"Verify the cited evidence before using this briefing for a decision. The "
+"briefing cannot change project data."
+msgstr ""
+"تحقق من الأدلة المشار إليها قبل استخدام هذا الموجز لاتخاذ قرار. لا يمكن "
+"للموجز تغيير بيانات المشروع."
+
+msgid "Generate briefing"
+msgstr "إنشاء الموجز"
+
+msgid "Back to project"
+msgstr "العودة إلى المشروع"
+
+msgid ""
+"The briefing is being generated. You may leave this page and return from the"
+" project."
+msgstr "يجري إنشاء الموجز. يمكنك مغادرة هذه الصفحة والعودة إليه من المشروع."
+
+msgid ""
+"The briefing could not be generated safely. Try again later or contact the "
+"system operator."
+msgstr "تعذر إنشاء الموجز بأمان. حاول لاحقًا أو تواصل مع مشغل النظام."
+
+msgid "Verify the cited evidence before using this briefing for a decision."
+msgstr "تحقق من الأدلة المشار إليها قبل استخدام هذا الموجز لاتخاذ قرار."
+
+msgid ""
+"The evidence set reached its configured limit. The briefing identifies this "
+"as a data gap."
+msgstr ""
+"وصلت مجموعة الأدلة إلى الحد المحدد. يوضح الموجز ذلك بوصفه فجوة في البيانات."
+
+msgid "Highlights"
+msgstr "أبرز النقاط"
+
+msgid "Risks"
+msgstr "المخاطر"
+
+msgid "Upcoming items"
+msgstr "العناصر القادمة"
+
+msgid "Recommended actions"
+msgstr "الإجراءات الموصى بها"
+
+msgid "Data gaps"
+msgstr "فجوات البيانات"
+
+msgid "No items were identified."
+msgstr "لم يتم تحديد أي عناصر."
+
+msgid "No data gaps were identified."
+msgstr "لم يتم تحديد فجوات في البيانات."
+
+msgid "Model"
+msgstr "النموذج"
+
+msgid "Evidence"
+msgstr "الأدلة"
+
+msgid "Prompt version"
+msgstr "إصدار التعليمات"
+
+msgid "Input tokens"
+msgstr "رموز الإدخال"
+
+msgid "Cached input tokens"
+msgstr "رموز الإدخال المخزنة مؤقتًا"
+
+msgid "Output tokens"
+msgstr "رموز الإخراج"
+
+msgid "Mark as reviewed"
+msgstr "وضع علامة تمت المراجعة"
+
+msgid "AI briefing requested"
+msgstr "تم طلب موجز ذكي"
+
+msgid "AI briefing completed"
+msgstr "اكتمل الموجز الذكي"
+
+msgid "AI briefing failed"
+msgstr "فشل الموجز الذكي"
+
+msgid "AI briefing reviewed"
+msgstr "تمت مراجعة الموجز الذكي"
+
+msgid "AI briefing in-app notifications"
+msgstr "إشعارات الموجز الذكي داخل التطبيق"
+
+msgid "AI briefing email notifications"
+msgstr "إشعارات الموجز الذكي عبر البريد الإلكتروني"
+
+msgid "CEO Telegram reports"
+msgstr "تقارير تيليجرام للرئيس التنفيذي"
+
+msgid "Trainee attendance"
+msgstr "حضور المتدربين"
+
+msgid "7 days"
+msgstr "7 أيام"
+
+msgid "14 days"
+msgstr "14 يومًا"
+
+msgid "30 days"
+msgstr "30 يومًا"
+
+msgid "Leased"
+msgstr "محجوز للإرسال"
+
+msgid "Delivered"
+msgstr "تم التسليم"
+
+msgid "Current task report"
+msgstr "تقرير المهام الحالية"
+
+msgid "Named trainee attendance report"
+msgstr "تقرير حضور المتدربين بالأسماء"
+
+msgid "Course code"
+msgstr "رمز الدورة"
+
+msgid "No due date"
+msgstr "لا يوجد موعد استحقاق"
+
+#, python-format
+msgid "As of %(date)s"
+msgstr "حتى %(date)s"
+
+msgid "Executive report requested"
+msgstr "تم طلب التقرير التنفيذي"
+
+msgid "Executive report completed"
+msgstr "اكتمل التقرير التنفيذي"
+
+msgid "Executive report failed"
+msgstr "فشل التقرير التنفيذي"
+
+msgid "Executive report downloaded"
+msgstr "تم تنزيل التقرير التنفيذي"
+
+msgid "Critical task alert delivered"
+msgstr "تم تسليم تنبيه المهمة الحرجة"
+
+msgid "CEO Telegram report"
+msgstr "تقرير تيليجرام للرئيس التنفيذي"
+
+msgid "Critical task alert"
+msgstr "تنبيه مهمة حرجة"
+
+msgid "A bounded decision reason is required."
+msgstr "يلزم إدخال سبب قرار ضمن الحد المسموح."
+
+msgid "A decided proposal prevents cancellation."
+msgstr "يمنع وجود مقترح تم اتخاذ قرار بشأنه إلغاء التشغيل."
+
+msgid "A valid decision reason is required."
+msgstr "يلزم إدخال سبب صالح للقرار."
+
+msgid "AI project briefing"
+msgstr "موجز المشروع بالذكاء الاصطناعي"
+
+msgid "Acknowledged"
+msgstr "تم التأكيد"
+
+msgid ""
+"Add a short project-specific note. It is treated as untrusted context and "
+"cannot grant access or actions."
+msgstr ""
+"أضف ملاحظة قصيرة خاصة بالمشروع. تُعامل كسياق غير موثوق ولا تمنح أي صلاحية "
+"وصول أو تنفيذ."
+
+msgid "Agent language"
+msgstr "لغة الوكيل"
+
+msgid "Agent timeline"
+msgstr "الخط الزمني للوكيل"
+
+msgid "Approve Proposal"
+msgstr "الموافقة على المقترح"
+
+msgid "Awaiting approval"
+msgstr "بانتظار الموافقة"
+
+msgid "Before State"
+msgstr "الحالة السابقة"
+
+msgid "Best quality (120B)"
+msgstr "أفضل جودة (120B)"
+
+msgid "Cancel run"
+msgstr "إلغاء التشغيل"
+
+msgid "Current business permission is required to approve this proposal."
+msgstr "يلزم توفر صلاحية العمل الحالية للموافقة على هذا المقترح."
+
+msgid "Deadline change"
+msgstr "تغيير الموعد النهائي"
+
+msgid "Decision reason"
+msgstr "سبب القرار"
+
+msgid "Executed"
+msgstr "تم التنفيذ"
+
+msgid "Executing"
+msgstr "جارٍ التنفيذ"
+
+msgid "Expired"
+msgstr "منتهي الصلاحية"
+
+msgid "Final"
+msgstr "النتيجة النهائية"
+
+msgid "Final Verification"
+msgstr "التحقق النهائي"
+
+msgid "Findings"
+msgstr "النتائج"
+
+msgid "Goal"
+msgstr "الهدف"
+
+msgid "Human approval required"
+msgstr "الموافقة البشرية مطلوبة"
+
+msgid "Lower cost (20B)"
+msgstr "تكلفة أقل (20B)"
+
+msgid "Mark reviewed and save memory"
+msgstr "وضع علامة تمت المراجعة وحفظ الذاكرة"
+
+msgid "No cited items."
+msgstr "لا توجد عناصر موثقة بمراجع."
+
+msgid "Observation"
+msgstr "ملاحظة"
+
+msgid "Optional context"
+msgstr "سياق اختياري"
+
+msgid "Optional context is too long."
+msgstr "السياق الاختياري طويل جدًا."
+
+msgid "Plan"
+msgstr "خطة"
+
+msgid "Planning"
+msgstr "جارٍ التخطيط"
+
+msgid "Project Recovery Agent"
+msgstr "وكيل تعافي المشروع"
+
+msgid "Project agent runs"
+msgstr "عمليات تشغيل وكيل المشروع"
+
+msgid "Project recovery agent"
+msgstr "وكيل تعافي المشروع"
+
+msgid "Project recovery agents"
+msgstr "وكلاء تعافي المشاريع"
+
+msgid "Project recovery plan"
+msgstr "خطة تعافي المشروع"
+
+msgid "Project-agent action notifications are mandatory in-app."
+msgstr "إشعارات إجراءات وكيل المشروع إلزامية داخل التطبيق."
+
+msgid "Project-agent email notifications"
+msgstr "إشعارات وكيل المشروع عبر البريد الإلكتروني"
+
+msgid "Project-agent in-app notifications"
+msgstr "إشعارات وكيل المشروع داخل التطبيق"
+
+msgid "Project-agent permission is required."
+msgstr "صلاحية وكيل المشروع مطلوبة."
+
+msgid "Project-agent proposal approved"
+msgstr "تمت الموافقة على مقترح وكيل المشروع"
+
+msgid "Project-agent proposal became stale"
+msgstr "أصبح مقترح وكيل المشروع متقادمًا"
+
+msgid "Project-agent proposal executed"
+msgstr "تم تنفيذ مقترح وكيل المشروع"
+
+msgid "Project-agent proposal failed safely"
+msgstr "توقف مقترح وكيل المشروع بأمان"
+
+msgid "Project-agent proposal rejected"
+msgstr "تم رفض مقترح وكيل المشروع"
+
+msgid "Project-agent review permission is required."
+msgstr "صلاحية مراجعة وكيل المشروع مطلوبة."
+
+msgid "Project-agent run"
+msgstr "تشغيل وكيل المشروع"
+
+msgid "Project-agent run awaiting approval"
+msgstr "تشغيل وكيل المشروع بانتظار الموافقة"
+
+msgid "Project-agent run cancelled"
+msgstr "تم إلغاء تشغيل وكيل المشروع"
+
+msgid "Project-agent run cancelled."
+msgstr "تم إلغاء تشغيل وكيل المشروع."
+
+msgid "Project-agent run completed"
+msgstr "اكتمل تشغيل وكيل المشروع"
+
+msgid "Project-agent run failed"
+msgstr "فشل تشغيل وكيل المشروع"
+
+msgid "Project-agent run queued."
+msgstr "تمت إضافة تشغيل وكيل المشروع إلى قائمة الانتظار."
+
+msgid "Project-agent run requested"
+msgstr "تم طلب تشغيل وكيل المشروع"
+
+msgid "Project-agent run reviewed"
+msgstr "تمت مراجعة تشغيل وكيل المشروع"
+
+msgid "Project-agent run reviewed and added to project memory."
+msgstr "تمت مراجعة تشغيل وكيل المشروع وإضافته إلى ذاكرة المشروع."
+
+msgid "Proposal"
+msgstr "المقترح"
+
+msgid "Proposal approved and queued for verified execution."
+msgstr "تمت الموافقة على المقترح وإضافته إلى قائمة التنفيذ المتحقق منه."
+
+msgid "Proposal decision permission is required."
+msgstr "صلاحية اتخاذ القرار بشأن المقترح مطلوبة."
+
+msgid "Proposal rejected."
+msgstr "تم رفض المقترح."
+
+msgid "Proposed change"
+msgstr "التغيير المقترح"
+
+msgid "Recommendations"
+msgstr "التوصيات"
+
+msgid "Recovery plan"
+msgstr "خطة التعافي"
+
+msgid "Reject Proposal"
+msgstr "رفض المقترح"
+
+msgid "Running"
+msgstr "جارٍ التشغيل"
+
+msgid "Select a valid language."
+msgstr "اختر لغة صالحة."
+
+msgid "Select a valid project-agent goal."
+msgstr "اختر هدفًا صالحًا لوكيل المشروع."
+
+msgid "Select an approved project-agent model."
+msgstr "اختر نموذجًا معتمدًا لوكيل المشروع."
+
+msgid "Start Project Agent"
+msgstr "بدء وكيل المشروع"
+
+msgid "Start analysis"
+msgstr "بدء التحليل"
+
+msgid "Steps"
+msgstr "الخطوات"
+
+msgid "Task assignment"
+msgstr "إسناد المهمة"
+
+msgid "Task comment"
+msgstr "تعليق المهمة"
+
+msgid "Task update"
+msgstr "تحديث المهمة"
+
+msgid "Team notification"
+msgstr "إشعار الفريق"
+
+msgid ""
+"The agent can read only approved project evidence and create proposals. It "
+"cannot change data until an authorized person approves one proposal."
+msgstr ""
+"لا يستطيع الوكيل سوى قراءة أدلة المشروع المعتمدة وإنشاء مقترحات. ولا يمكنه "
+"تغيير البيانات حتى يوافق شخص مخوّل على أحد المقترحات."
+
+msgid ""
+"The agent is processing a bounded step. You may leave and return later."
+msgstr "يعالج الوكيل خطوة محدودة. يمكنك المغادرة والعودة لاحقًا."
+
+msgid "The daily project-agent request limit was reached."
+msgstr "تم بلوغ الحد اليومي لطلبات وكيل المشروع."
+
+msgid "The plan has not started yet."
+msgstr "لم تبدأ الخطة بعد."
+
+msgid "The run stopped safely. No unverified action was executed."
+msgstr "توقف التشغيل بأمان. لم يتم تنفيذ أي إجراء غير متحقق منه."
+
+msgid "This project-agent run cannot be cancelled."
+msgstr "لا يمكن إلغاء تشغيل وكيل المشروع هذا."
+
+msgid "This verified run is available as reviewed project memory."
+msgstr "هذا التشغيل المتحقق منه متاح كذاكرة مشروع تمت مراجعتها."
+
+msgid "Tool"
+msgstr "أداة"
+
+msgid "Verification"
+msgstr "تحقق"
+
+msgid "Verifying"
+msgstr "جارٍ التحقق"
+
+msgid "You cannot review this briefing."
+msgstr "لا يمكنك مراجعة هذا الموجز."
+
+msgid "requester"
+msgstr "مقدم الطلب"
+
+msgid "Project-agent proposal expired"
+msgstr "انتهت صلاحية مقترح وكيل المشروع"
+
+msgid "This project-agent proposal has expired."
+msgstr "انتهت صلاحية مقترح وكيل المشروع هذا."
+
+msgid "Citations"
+msgstr "المراجع"
+
+msgid "Observation evidence"
+msgstr "دليل الملاحظة"
+
+#, python-format
+msgid "%(days)s-day evidence window"
+msgstr "نافذة أدلة لمدة %(days)s يومًا"
+
+#, python-format
+msgid "Reviewed by %(reviewer)s on %(date)s."
+msgstr "تمت المراجعة بواسطة %(reviewer)s في %(date)s."
+
+msgid "Project-agent proposal created"
+msgstr "تم إنشاء مقترح وكيل المشروع"
+
+msgid "Project-agent tool completed"
+msgstr "اكتمل تشغيل أداة وكيل المشروع"
+
+msgid "Project-agent tool failed safely"
+msgstr "توقفت أداة وكيل المشروع بأمان"
 
 #~ msgid "Append-only Phase 2 account and department events."
 #~ msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."

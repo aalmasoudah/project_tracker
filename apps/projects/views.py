@@ -12,7 +12,11 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from apps.accounts.models import User
+from apps.ai_briefings.policies import can_generate_briefing
+from apps.ai_briefings.selectors import briefings_visible_to
 from apps.progress.services import project_progress_for
+from apps.project_agents.models import AgentRun
+from apps.project_agents.policies import can_start_agent
 from apps.projects.forms import ProjectForm, ReferenceForm, TeamForm
 from apps.projects.models import Category, Client, Project
 from apps.projects.selectors import (
@@ -106,6 +110,16 @@ def project_detail(request: HttpRequest, project_id: int) -> HttpResponse:
                 removed_at__isnull=True
             ).select_related("user"),
             "progress": project_progress_for(actor, project),
+            "can_generate_ai_briefing": can_generate_briefing(actor, project),
+            "recent_ai_briefings": briefings_visible_to(actor).filter(project=project)[
+                :5
+            ],
+            "can_start_project_agent": can_start_agent(actor, project),
+            "recent_agent_runs": AgentRun.objects.filter(project=project).order_by(
+                "-created_at"
+            )[:5]
+            if actor.has_perm("project_agents.view_agentrun")
+            else (),
         },
     )
 

@@ -13,6 +13,8 @@ from openpyxl.worksheet.worksheet import Worksheet
 from apps.reports.datasets import ReportDocument, ReportTooLargeError, _bounded
 from apps.reports.dates import format_dual_date
 from apps.reports.renderers import (
+    brand_name,
+    fit_dimensions,
     render_pdf,
     render_xlsx,
     safe_spreadsheet_value,
@@ -59,7 +61,52 @@ def test_arabic_excel_is_rtl_branded_and_formula_safe() -> None:
     assert sheet.sheet_view.rightToLeft
     assert sheet["A6"].value == "'=2+2"
     assert sheet["A5"].fill.fgColor.rgb == "000A400C"
-    assert len(cast(Any, sheet)._images) == 1
+    images = cast(Any, sheet)._images
+    assert len(images) == 1
+    assert images[0].width / images[0].height == pytest.approx(2472 / 2649)
+    assert sheet.oddFooter is not None
+    assert sheet.oddFooter.center is not None
+    assert sheet.oddFooter.center.text == "إنسايت بروجكتس"
+    assert workbook.properties.creator == "إنسايت بروجكتس"
+
+
+@pytest.mark.unit
+def test_company_name_and_logo_dimensions_are_exact_and_proportional() -> None:
+    assert brand_name("en") == "Insight Projects"
+    assert brand_name("ar") == "إنسايت بروجكتس"
+    assert brand_name("ar-sa") == "إنسايت بروجكتس"
+
+    width, height = fit_dimensions(2472, 2649, max_width=170, max_height=95)
+    assert width / height == pytest.approx(2472 / 2649)
+    assert width <= 170
+    assert height <= 95
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    ("language_code", "expected_message"),
+    (("ar", "لا توجد بيانات مطابقة."), ("en", "No matching data.")),
+)
+def test_empty_excel_has_a_clear_localized_message(
+    language_code: str,
+    expected_message: str,
+) -> None:
+    document = sample_document()
+    empty_document = ReportDocument(
+        title=document.title,
+        subtitle=document.subtitle,
+        headers=document.headers,
+        rows=(),
+        filename_stem=document.filename_stem,
+        sheet_name=document.sheet_name,
+    )
+
+    payload = render_xlsx(empty_document, language_code=language_code)
+    workbook = load_workbook(BytesIO(payload))
+    sheet = cast(Worksheet, workbook.active)
+
+    assert sheet["A6"].value == expected_message
+    assert "A6:C6" in {str(cell_range) for cell_range in sheet.merged_cells.ranges}
 
 
 @pytest.mark.unit

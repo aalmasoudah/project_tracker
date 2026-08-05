@@ -42,6 +42,8 @@ remain understandable as the system grows.
 | `attendance` | Sessions, secure trainer links, submissions, review, and corrections | 9 |
 | `notifications` | In-app notifications, preferences, and delivery records | 11 |
 | `reports` | Report orchestration; no duplicate source-of-truth records | 13 |
+| `ai_briefings` | Protected AI briefing requests, output, sources, and review | 15 |
+| `executive_bot` | Signed n8n requests, one-time executive reports, and critical-alert outbox | 16 |
 | `files` | Shared upload metadata and validated storage access | First phase that needs uploads |
 | `audit` | Append-only security and business audit events | First audited workflow |
 
@@ -161,7 +163,57 @@ Session --< TrainerLink
 ImportBatch --< ImportRow --> Trainee
 Domain records --< FileRecord
 Domain events --< Notification / AuditEvent
+Project --< AIBriefing --< AIBriefingSource
+CEO --< ExecutiveReportRequest
+Task --< CriticalTaskAlert
+Project --< AgentRun --< AgentStep / AgentToolCall / AgentProposal
+Project --< AgentMemory --> reviewed AgentRun
 ```
+
+### AI Project Briefings
+
+- `AIBriefing` stores immutable request choices, bounded operational metrics,
+  validated structured output, lifecycle state, and optional human review.
+- `AIBriefingSource` stores only a safe internal reference and display label
+  for citations; it does not copy source records or provider prompts.
+- Both models use protected foreign keys and reject normal hard deletion under
+  the approved indefinite application-data retention rule.
+- Current project visibility is authoritative; possession of a briefing ID or
+  earlier access never grants continued access.
+
+### CEO Telegram and Critical Alerts
+
+- `ExecutiveReportRequest` stores the fixed report choice, bounded safe
+  metrics, validated structured result, configured-chat hash, and lifecycle.
+  The generated PDF exists only in memory at a one-time authorized download.
+- `CriticalTaskAlert` is a protected outbox row keyed by a task state/due-date
+  fingerprint. Lease digest/expiry and acknowledgement preserve retry safety.
+- `N8nRequestNonce` stores only a SHA-256 digest and short expiry for replay
+  rejection. It is temporary security state, not business history.
+- All source relationships are protected and normal hard deletion is denied;
+  neither model becomes a second source of truth for task or attendance data.
+
+### Project Recovery Agent
+
+- `AgentRun` stores one bounded project goal, requester, model/prompt version,
+  lifecycle, budgets, fingerprints, safe metrics, cited output, and final
+  verification. It never stores a full prompt, chain-of-thought, credential,
+  or raw provider response/error.
+- `AgentStep` and `AgentToolCall` preserve the bounded plan/tool/observation/
+  proposal/final/verification timeline. Tool calls use exact stable codes,
+  validated empty arguments, bounded safe results, and idempotency keys.
+- `AgentProposal` stores one allowlisted proposed action, validated payload,
+  observed citations, before-state fingerprint, risk, human decision, one
+  execution key, and safe result. The provider has no direct write relation.
+- `AgentMemory` is a reviewed same-project summary linked one-to-one to a
+  completed source run. An unreviewed, failed, stale, expired, or cancelled
+  run cannot become memory.
+- `AgentReviewedEvent` provides a protected leased minimized reviewed-event
+  outbox. `AgentIntegrationNonce` is temporary digest-only replay state with
+  an indexed expiry and scheduled cleanup, matching the approved security-
+  state retention exception.
+- All Phase 17 models are protected from normal hard deletion and follow the
+  approved indefinite retention rule.
 
 This is a planning outline. Exact cardinality, optionality, and field
 requirements are finalized only in an approved phase.

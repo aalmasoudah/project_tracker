@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=insight-projects-15-minute-presentation.html">
+  <link rel="canonical" href="insight-projects-15-minute-presentation.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insight Projects - CTO presentation</title>
+  <style>
+    :root {
+      --deep: #0a400c;
+      --forest: #17531b;
+      --sage: #819067;
+      --stone: #b1ab86;
+      --paper: #f3f1e8;
+      --ink: #243127;
+      --white: #ffffff;
+      --line: rgba(36, 49, 39, 0.14);
+      --shadow: 0 26px 70px rgba(10, 64, 12, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      color: var(--ink);
+      background: #d9ddcf;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    .deck { position: relative; width: 100%; height: 100%; }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      grid-template-rows: auto 1fr auto;
+      width: 100vw;
+      height: 100vh;
+      padding: clamp(30px, 4.4vw, 72px) clamp(40px, 6vw, 104px) clamp(30px, 4vw, 60px);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 83% 14%, rgba(129, 144, 103, 0.18), transparent 31%),
+        linear-gradient(135deg, #fbfaf6 0%, var(--paper) 100%);
+    }
+    .slide.active { display: grid; animation: enter 420ms ease both; }
+    @keyframes enter { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 48px;
+      color: var(--deep);
+      font-size: clamp(15px, 1.3vw, 22px);
+      font-weight: 650;
+      letter-spacing: .02em;
+    }
+    .brand-mini { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mini img { width: 38px; height: 30px; object-fit: contain; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--deep);
+      font-weight: 750;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 30px; height: 3px; border-radius: 99px; background: var(--stone); }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 20px;
+      max-width: 1050px;
+      font-size: clamp(54px, 7vw, 108px);
+      line-height: .98;
+      letter-spacing: -.055em;
+      color: var(--deep);
+    }
+    h2 {
+      margin-bottom: clamp(24px, 3vw, 42px);
+      max-width: 1100px;
+      font-size: clamp(42px, 5vw, 76px);
+      line-height: 1.03;
+      letter-spacing: -.045em;
+      color: var(--deep);
+    }
+    h3 { margin-bottom: 10px; font-size: clamp(21px, 2.2vw, 32px); color: var(--deep); }
+    .lead { max-width: 870px; font-size: clamp(23px, 2.4vw, 38px); line-height: 1.38; color: #536055; }
+    .small { font-size: clamp(15px, 1.25vw, 21px); line-height: 1.5; color: #5e695f; }
+    .arabic { font-family: Tahoma, "Segoe UI", Arial, sans-serif; direction: rtl; }
+
+    .slide-body { display: grid; align-content: center; min-height: 0; }
+    .two-col { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(30px, 5vw, 90px); align-items: center; }
+    .three-col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.2vw, 34px); }
+
+    .cover { color: var(--white); background: linear-gradient(118deg, #072f09 0%, var(--deep) 54%, #49613a 100%); }
+    .cover::before {
+      content: "";
+      position: absolute;
+      width: 54vw;
+      height: 54vw;
+      right: -17vw;
+      top: -20vw;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 0 0 7vw rgba(255,255,255,.03), 0 0 0 14vw rgba(255,255,255,.025);
+    }
+    .cover h1, .cover .topline { color: var(--white); }
+    .cover h1 span { color: #c9cfb2; }
+    .cover .lead { color: rgba(255,255,255,.78); }
+    .cover-grid { display: grid; grid-template-columns: minmax(0, 1fr) 36%; gap: 7vw; align-items: center; position: relative; z-index: 1; }
+    .logo-lockup {
+      justify-self: end;
+      width: min(28vw, 400px);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      padding: 11%;
+      border-radius: 42px;
+      background: rgba(255,255,255,.96);
+      box-shadow: var(--shadow);
+    }
+    .logo-lockup img { width: 100%; height: 100%; object-fit: contain; }
+    .cover-meta { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+    .pill { padding: 10px 16px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; color: rgba(255,255,255,.86); font-size: clamp(14px, 1vw, 18px); }
+
+    .problem-list { display: grid; gap: 22px; }
+    .problem-item { display: grid; grid-template-columns: 54px 1fr; gap: 17px; align-items: start; }
+    .number {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--deep);
+      color: var(--white);
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .problem-item p { margin: 3px 0 0; font-size: clamp(18px, 1.65vw, 27px); line-height: 1.35; color: #556157; }
+
+    .screen {
+      position: relative;
+      border: 1px solid rgba(10,64,12,.16);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+    .screen::before {
+      content: "";
+      display: block;
+      height: 34px;
+      background: linear-gradient(90deg, #f5f4ef, #e7eadf);
+      border-bottom: 1px solid var(--line);
+    }
+    .screen::after {
+      content: "●  ●  ●";
+      position: absolute;
+      top: 7px;
+      left: 15px;
+      color: var(--stone);
+      font-size: 12px;
+      letter-spacing: 4px;
+    }
+    .screen img { display: block; width: 100%; aspect-ratio: 16 / 8.65; object-fit: cover; object-position: top; background: #eee; }
+    .screen figcaption { position: absolute; right: 14px; bottom: 12px; padding: 7px 11px; border-radius: 10px; background: rgba(10,64,12,.88); color: white; font-size: 14px; }
+
+    .model {
+      display: grid;
+      grid-template-columns: 1fr 58px 1fr 58px 1fr 58px 1fr;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .model-node {
+      min-height: 150px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 9px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.8);
+    }
+    .model-node strong { font-size: clamp(23px, 2vw, 32px); color: var(--deep); }
+    .model-node span { font-size: clamp(15px, 1.2vw, 20px); color: #687169; }
+    .arrow { color: var(--sage); font-size: 42px; font-weight: 300; text-align: center; }
+    .university-strip { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+    .uni { padding: 11px 18px; border-radius: 999px; background: #e5e8dc; color: var(--deep); font-weight: 750; }
+
+    .workflow { display: grid; grid-template-columns: .94fr 1.06fr; gap: clamp(24px, 3vw, 46px); align-items: stretch; }
+    .steps { display: grid; gap: 15px; align-content: center; }
+    .step { display: grid; grid-template-columns: 52px 1fr; gap: 15px; align-items: center; padding: 16px 18px; border-radius: 19px; background: rgba(255,255,255,.78); border: 1px solid var(--line); }
+    .step-badge { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; background: var(--deep); color: white; font-weight: 800; font-size: 21px; }
+    .step strong { display: block; font-size: clamp(19px, 1.55vw, 25px); color: var(--deep); }
+    .step span { font-size: clamp(14px, 1.05vw, 18px); color: #667068; }
+    .screens-stack { position: relative; min-height: 480px; }
+    .screens-stack .screen { position: absolute; width: 85%; }
+    .screens-stack .screen:first-child { top: 0; right: 0; z-index: 2; }
+    .screens-stack .screen:last-child { bottom: 0; left: 0; z-index: 1; width: 72%; }
+
+    .readiness { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(26px, 4vw, 64px); align-items: center; }
+    .proof-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .proof { min-height: 126px; padding: 22px; border-radius: 22px; background: rgba(255,255,255,.82); border: 1px solid var(--line); }
+    .proof b { display: block; margin-bottom: 8px; font-size: clamp(22px, 1.9vw, 30px); color: var(--deep); }
+    .proof span { font-size: clamp(14px, 1.1vw, 18px); line-height: 1.35; color: #657066; }
+    .ask { padding: clamp(28px, 3vw, 46px); border-radius: 30px; background: linear-gradient(145deg, var(--deep), #355d2d); color: white; box-shadow: var(--shadow); }
+    .ask h3 { color: white; font-size: clamp(29px, 3vw, 46px); }
+    .ask p { font-size: clamp(18px, 1.5vw, 25px); line-height: 1.45; color: rgba(255,255,255,.82); }
+    .ask .pilot { display: grid; gap: 14px; margin-top: 26px; }
+    .ask .pilot div { display: flex; gap: 12px; align-items: center; font-size: clamp(16px, 1.25vw, 21px); }
+    .ask .pilot div::before { content: "✓"; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.15); }
+
+    .footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 34px; color: #707970; font-size: clamp(13px, 1vw, 17px); }
+    .cover .footer { color: rgba(255,255,255,.63); }
+    .page-no { margin-right: 190px; font-variant-numeric: tabular-nums; }
+
+    .controls {
+      position: fixed;
+      right: 22px;
+      bottom: 18px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 999px;
+      background: rgba(36,49,39,.72);
+      backdrop-filter: blur(10px);
+      transition: opacity .25s ease;
+    }
+    .controls button { width: 37px; height: 37px; border: 0; border-radius: 50%; background: transparent; color: white; cursor: pointer; font-size: 18px; }
+    .controls button:hover, .controls button:focus-visible { background: rgba(255,255,255,.15); outline: none; }
+    .progress { position: fixed; left: 0; bottom: 0; z-index: 31; height: 5px; width: 20%; background: var(--stone); transition: width .25s ease; }
+
+    .notes {
+      display: none;
+      position: fixed;
+      z-index: 40;
+      inset: auto 25px 74px 25px;
+      max-height: 40vh;
+      overflow: auto;
+      padding: 20px 24px;
+      border-radius: 20px;
+      color: #f8f7f1;
+      background: rgba(20,28,21,.94);
+      box-shadow: 0 25px 70px rgba(0,0,0,.34);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    body.notes-on .slide.active .notes { display: block; }
+    .notes strong { color: #c9cfb2; }
+    .notes .sources { margin-top: 12px; color: #b9c0ba; font-size: 14px; }
+
+    @media (max-width: 860px) {
+      .slide { padding: 25px 26px 48px; overflow: auto; }
+      .two-col, .workflow, .readiness, .cover-grid { grid-template-columns: 1fr; }
+      .logo-lockup { display: none; }
+      .model { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); font-size: 28px; }
+      .screens-stack { min-height: 430px; }
+      .three-col { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      @page { size: 16in 9in; margin: 0; }
+      html, body { overflow: visible; background: white; }
+      .deck { height: auto; }
+      .slide, .slide.active { position: relative; display: grid !important; width: 16in; height: 9in; page-break-after: always; animation: none; }
+      .controls, .progress, .notes { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="Insight Projects CTO presentation">
+    <section class="slide cover active" data-title="Insight Projects">
+      <div class="topline"><span>CTO briefing</span><span>3-minute overview</span></div>
+      <div class="slide-body cover-grid">
+        <div>
+          <div class="eyebrow" style="color:#d7dcc8">Insight Projects</div>
+          <h1>From program plan<br>to <span>verified result.</span></h1>
+          <p class="lead">One Arabic-first workspace for programs, projects, tasks, people, approvals, attendance, and executive reporting.</p>
+          <div class="cover-meta">
+            <span class="pill arabic" lang="ar">إنسايت بروجكتس</span>
+            <span class="pill">Arabic + English</span>
+            <span class="pill">University-ready workflow</span>
+          </div>
+        </div>
+        <div class="logo-lockup"><img src="../../static/img/project-insight-logo.png" alt="Insight Projects logo"></div>
+      </div>
+      <div class="footer"><span>Controlled pilot proposal</span><span class="page-no">01 / 05</span></div>
+      <aside class="notes"><strong>Say:</strong> “Insight Projects gives leadership and delivery teams one controlled view from the program plan to the evidence that work was completed. It is Arabic-first, bilingual, and built around the way university programs actually operate.”<div class="sources">[Sources] docs/SCOPE.md; docs/LOCALIZATION.md</div></aside>
+    </section>
+
+    <section class="slide" data-title="The problem">
+      <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Why it matters</span></div>
+      <div class="slide-body two-col">
+        <div>
+          <div class="eyebrow">The delivery gap</div>
+          <h2>Complex programs become difficult to control.</h2>
+          <div class="problem-list">
+            <div class="problem-item"><span class="number">1</span><p>Plans, tasks, attendance, and evidence live in separate places.</p></div>
+            <div class="problem-item"><span class="number">2</span><p>Responsibility and approval status are unclear until a deadline is missed.</p></div>
+            <div class="problem-item"><span class="number">3</span><p>Leadership receives late or manually assembled reports.</p></div>
+          </div>
+        </div>
+        <figure class="screen">
+          <img src="assets/dashboard-ar.png" alt="Arabic executive dashboard showing projects, tasks, and progress">
+          <figcaption class="arabic" lang="ar">لوحة معلومات تنفيذية</figcaption>
+        </figure>
+      </div>
+      <div class="footer"><span>One source of operational truth</span><span class="page-no">02 / 05</span></div>
+      <aside class="notes"><strong>Say:</strong> “The core problem is not creating more tasks. It is controlling delivery across different programs and teams. This dashboard turns fragmented updates into a current, permission-aware view for leadership.”<div class="sources">[Sources] docs/SCOPE.md; docs/WORKFLOWS.md; live local dashboard screenshot</div></aside>
+    </section>
+
+    <section class="slide" data-title="Operating model">
+      <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Operating model</span></div>
+      <div class="slide-body">
+        <div class="eyebrow">How work is organized</div>
+        <h2>Program → projects → tasks → accountable people</h2>
+        <div class="model" aria-label="Program structure">
+          <div class="model-node"><strong>Program</strong><span>University objective and governance</span></div>
+          <div class="arrow">→</div>
+          <div class="model-node"><strong>Projects</strong><span>Multiple initiatives with separate owners</span></div>
+          <div class="arrow">→</div>
+          <div class="model-node"><strong>Tasks</strong><span>Shared patterns plus project-specific work</span></div>
+          <div class="arrow">→</div>
+          <div class="model-node"><strong>People</strong><span>Shared specialists or single-project members</span></div>
+        </div>
+        <div class="university-strip"><span class="uni">KAU</span><span class="uni">KSU</span><span class="uni">KKU</span><span class="uni arabic" lang="ar">بيانات تجريبية خيالية</span></div>
+      </div>
+      <div class="footer"><span>Three fictional university programs already modeled for the demo</span><span class="page-no">03 / 05</span></div>
+      <aside class="notes"><strong>Say:</strong> “The model supports one program containing multiple projects and tasks. People can work across every project or only one. The demo uses fictional KAU, KSU, and KKU scenarios so the CTO can see shared and isolated responsibility without using real university data.”<div class="sources">[Sources] docs/SCOPE.md; docs/USER_ROLES.md; local fictional demo dataset</div></aside>
+    </section>
+
+    <section class="slide" data-title="Team workflow">
+      <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>Team experience</span></div>
+      <div class="slide-body workflow">
+        <div>
+          <div class="eyebrow">A controlled daily flow</div>
+          <h2>Update. Approve. Report.</h2>
+          <div class="steps">
+            <div class="step"><span class="step-badge">1</span><div><strong>Employee updates the task</strong><span>Status, progress, comments, evidence, and assignment.</span></div></div>
+            <div class="step"><span class="step-badge">2</span><div><strong>Two-stage approval</strong><span>Supervisor first, then Project Manager; decision history remains traceable.</span></div></div>
+            <div class="step"><span class="step-badge">3</span><div><strong>Leadership sees the result</strong><span>Dashboards, overdue work, PDF/Excel reports, and audit records.</span></div></div>
+          </div>
+        </div>
+        <div class="screens-stack" aria-label="Arabic application screenshots">
+          <figure class="screen">
+            <img src="assets/project-detail-ar.png" alt="Arabic KAU project detail with team and approval action">
+            <figcaption class="arabic" lang="ar">مشروع وفريق وصلاحيات</figcaption>
+          </figure>
+          <figure class="screen">
+            <img src="assets/reports-ar.png" alt="Arabic reports center with PDF and Excel output">
+            <figcaption class="arabic" lang="ar">تقارير PDF وإكسل</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="footer"><span>First-class Arabic RTL with English LTR available</span><span class="page-no">04 / 05</span></div>
+      <aside class="notes"><strong>Say:</strong> “For the team, the experience is simple: update the work, route completion through two independent approval stages, and let leaders consume trusted results. Reports support PDF and Excel in Arabic or English, including Gregorian and Hijri dates.”<div class="sources">[Sources] docs/BUSINESS_RULES.md; docs/WORKFLOWS.md; docs/LOCALIZATION.md; live local screenshots</div></aside>
+    </section>
+
+    <section class="slide" data-title="CTO readiness">
+      <div class="topline"><span class="brand-mini"><img src="../../static/img/project-insight-mark.png" alt="">Insight Projects</span><span>CTO readiness</span></div>
+      <div class="slide-body readiness">
+        <div>
+          <div class="eyebrow">A credible foundation</div>
+          <h2>Built to pilot safely, then harden for production.</h2>
+          <div class="proof-grid">
+            <div class="proof"><b>Secure access</b><span>Role and object-level permissions, CSRF protection, private file model, immutable audit history.</span></div>
+            <div class="proof"><b>Deployable stack</b><span>Django 5.2 LTS, PostgreSQL, Docker, Gunicorn, Redis/Celery when background work is needed.</span></div>
+            <div class="proof"><b>Arabic-first</b><span>Reviewed RTL/LTR behavior, bilingual labels, mixed Arabic/English content, Hijri + Gregorian dates.</span></div>
+            <div class="proof"><b>173 tests</b><span>Latest full local verification: 159 non-browser + 14 Playwright browser tests passed.</span></div>
+          </div>
+        </div>
+        <div class="ask">
+          <h3>The ask</h3>
+          <p>Approve a controlled pilot for one program using fictional or anonymized data and agreed success measures.</p>
+          <div class="pilot">
+            <div>Named pilot owner and users</div>
+            <div>Security and data-residency review</div>
+            <div>Arabic UAT and operational sign-off</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Honest status: feature-complete locally; production gates remain explicit</span><span class="page-no">05 / 05</span></div>
+      <aside class="notes"><strong>Say:</strong> “The product is feature-complete and verified locally, but I am not claiming production approval yet. My request is a controlled pilot. Before live university data, we will confirm hosting region, data residency, backup restoration, monitoring ownership, security scans, and role-based UAT.”<div class="sources">[Sources] docs/SECURITY.md; docs/TEST_STRATEGY.md; docs/DEPLOYMENT.md; docs/OPERATIONS.md; docs/PHASES/PHASE_14_VERIFICATION.md</div></aside>
+    </section>
+  </main>
+
+  <div class="controls" aria-label="Presentation controls">
+    <button type="button" id="prev" aria-label="Previous slide">←</button>
+    <button type="button" id="notes" aria-label="Toggle presenter notes" title="Presenter notes (N)">N</button>
+    <button type="button" id="next" aria-label="Next slide">→</button>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const progress = document.querySelector('.progress');
+      let index = Math.max(0, Math.min(slides.length - 1, Number(location.hash.slice(1)) - 1 || 0));
+
+      function show(nextIndex) {
+        index = (nextIndex + slides.length) % slides.length;
+        slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+        progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+        document.title = `${slides[index].dataset.title} - Insight Projects`;
+        history.replaceState(null, '', `#${index + 1}`);
+      }
+
+      document.getElementById('prev').addEventListener('click', () => show(index - 1));
+      document.getElementById('next').addEventListener('click', () => show(index + 1));
+      document.getElementById('notes').addEventListener('click', () => document.body.classList.toggle('notes-on'));
+      document.addEventListener('keydown', (event) => {
+        if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(event.key)) { event.preventDefault(); show(index + 1); }
+        if (['ArrowLeft', 'PageUp', 'Backspace'].includes(event.key)) { event.preventDefault(); show(index - 1); }
+        if (event.key.toLowerCase() === 'n') document.body.classList.toggle('notes-on');
+        if (event.key === 'Home') show(0);
+        if (event.key === 'End') show(slides.length - 1);
+      });
+      window.addEventListener('hashchange', () => show(Number(location.hash.slice(1)) - 1 || 0));
+      show(index);
+      window.presentationReady = true;
+    })();
+  </script>
+</body>
+</html>
