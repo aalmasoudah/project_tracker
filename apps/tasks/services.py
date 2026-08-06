@@ -176,7 +176,7 @@ def update_task(
     **data: object,
 ) -> Task:
     task = (
-        Task.objects.select_for_update()
+        Task.objects.select_for_update(of=("self",))
         .select_related("project", "course", "course__project", "parent")
         .get(pk=task.pk)
     )

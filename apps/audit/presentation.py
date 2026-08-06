@@ -96,6 +96,9 @@ ACTION_LABELS: Final = {
     actions.EXECUTIVE_REPORT_FAILED: _("Executive report failed"),
     actions.EXECUTIVE_REPORT_DOWNLOADED: _("Executive report downloaded"),
     actions.CRITICAL_ALERT_DELIVERED: _("Critical task alert delivered"),
+    actions.EXECUTIVE_ASSISTANT_REQUESTED: _("Executive assistant question requested"),
+    actions.EXECUTIVE_ASSISTANT_COMPLETED: _("Executive assistant answer completed"),
+    actions.EXECUTIVE_ASSISTANT_FAILED: _("Executive assistant answer failed"),
     actions.AGENT_RUN_REQUESTED: _("Project-agent run requested"),
     actions.AGENT_RUN_AWAITING_APPROVAL: _("Project-agent run awaiting approval"),
     actions.AGENT_RUN_COMPLETED: _("Project-agent run completed"),
@@ -136,6 +139,7 @@ TARGET_TYPE_LABELS: Final = {
     "trainer": _("Trainer"),
     "ai_briefing": _("AI project briefing"),
     "executive_report": _("CEO Telegram report"),
+    "executive_assistant_request": _("CEO Telegram AI question"),
     "critical_task_alert": _("Critical task alert"),
     "agent_run": _("Project-agent run"),
 }

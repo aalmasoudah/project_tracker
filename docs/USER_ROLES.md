@@ -257,6 +257,22 @@ therefore require an Executive Manager or owning Project Manager with the
 existing task-management authority. Completion and approval decisions are
 never agent-executable.
 
+## Phase 19 Telegram AI Assistant Matrix
+
+| Role | Ask executive questions | Evidence scope | Business writes |
+| --- | --- | --- | --- |
+| Technical Admin | None | None | None |
+| CEO | Configured active CEO/chat only | Current visible project/task/approval evidence | None |
+| Executive Manager | None | None | None |
+| Project Manager | None | None | None |
+| Supervisor | None | None | None |
+| Employee | None | None | None |
+| Contractor | None | None | None |
+
+The new permission alone is insufficient. Every start, worker, and status read
+also requires the exact configured active CEO identity and private Telegram
+chat. The extension grants no Phase 17 proposal or execution authority.
+
 ## Object-Level Access Questions
 
 1. [Approved through Phase 11] Use the account/department, project, course,
@@ -297,5 +313,6 @@ decision 0010. The Phase 6 progress-visibility slice was approved on
 on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
 on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014, Phase
 10 in decision 0015, Phase 11 in decision 0016, Phase 14 in decision 0019,
-Phase 15 in decision 0020, Phase 16 in decision 0021, and Phase 17 in decision
-0022. Separately approved extensions require their own permission decisions.
+Phase 15 in decision 0020, Phase 16 in decision 0021, Phase 17 in decision 0022,
+and Phase 19 in decision 0024. Separately approved extensions require their own
+permission decisions.

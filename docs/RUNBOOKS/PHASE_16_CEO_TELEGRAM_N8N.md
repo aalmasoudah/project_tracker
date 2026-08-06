@@ -69,10 +69,12 @@ EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
 EXECUTIONS_DATA_SAVE_ON_ERROR=none
 ```
 
-The two Code nodes need the built-in Node.js `crypto` module to calculate the
-documented HMAC. Limit environment access to the dedicated n8n deployment and
-its operators. Never paste a secret into a Code node, expression, workflow
-JSON, pinned data, execution note, or ticket.
+The Code nodes need the built-in Node.js `crypto` module to calculate the
+documented HMAC. The signed HTTP nodes must use n8n's native JSON body mode;
+raw body mode returns a response stream instead of parsed JSON in the pinned
+n8n version. Limit environment access to the dedicated n8n deployment and its
+operators. Never paste a secret into a Code node, expression, workflow JSON,
+pinned data, execution note, or ticket.
 
 1. Create a native n8n Telegram credential containing the bot token.
 2. Import `deploy/n8n/insight_ceo_telegram_reports.json`.

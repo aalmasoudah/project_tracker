@@ -160,6 +160,14 @@ citations, Gregorian dates, and Western digits remain direction-isolated.
 User-visible provider failures use reviewed safe translations and never expose
 raw provider text.
 
+Phase 19 terminology includes Telegram AI Executive Assistant
+`المساعد التنفيذي الذكي عبر تيليجرام`, Executive Question `سؤال تنفيذي`,
+Cited Finding `نتيجة موثقة`, Unsupported Question `سؤال غير مدعوم`, and
+Source `المصدر`. Arabic answers use clear RTL text while codes, dates, and
+citations remain direction-isolated. English questions receive English LTR
+answers. Gregorian dates and Western digits follow the approved Telegram
+report convention; no new user-entered date format is added.
+
 Separately approved extensions must resolve:
 
 - Official Arabic translations for later statuses, workflow actions, and

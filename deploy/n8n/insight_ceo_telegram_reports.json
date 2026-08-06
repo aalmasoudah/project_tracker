@@ -1,692 +1,243 @@
 {
-  "name": "Insight Projects - CEO Arabic Telegram Reports",
+  "name": "Insight Projects - CEO AI Telegram Assistant",
   "nodes": [
     {
-      "parameters": {
-        "updates": [
-          "message"
-        ],
-        "additionalFields": {}
-      },
+      "parameters": {"updates": ["message"], "additionalFields": {}},
       "id": "7e20a1f4-96a0-4eef-a6ca-f7f331806d7a",
       "name": "Telegram Command",
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
-      "position": [
-        -1280,
-        -320
-      ],
+      "position": [-1320, -300],
       "webhookId": "0fd404f5-c5ed-473f-93f9-34fbc42b213c"
     },
     {
       "parameters": {
-        "jsCode": "const crypto = require('crypto');\nconst event = $input.first().json;\nconst message = event.message || {};\nconst configuredChat = String($env.INSIGHT_TELEGRAM_CEO_CHAT_ID || '').trim();\nconst incomingChat = String(message.chat?.id ?? '');\nif (!configuredChat || incomingChat !== configuredChat) return [];\nconst command = String(message.text || '').trim().split(/\\s+/)[0].split('@')[0].toLowerCase();\nconst commands = { '/tasks': 'current_tasks', '/overdue': 'overdue_tasks', '/attendance': 'attendance' };\nif (command === '/help' || !commands[command]) {\n  return [{ json: { kind: 'help', text_ar: 'أوامر إنسايت بروجكتس:\\n/tasks - تقرير المهام الحالية\\n/overdue - تقرير المهام المتأخرة\\n/attendance - تقرير حضور المتدربين بالأسماء\\n/help - عرض هذه المساعدة' } }];\n}\nconst secret = String($env.INSIGHT_N8N_SIGNING_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (!secret || !baseUrl) throw new Error('Missing Insight integration configuration');\nconst path = '/integrations/n8n/telegram/reports/start/';\nconst body = JSON.stringify({ chat_id: configuredChat, report_type: commands[command], window_days: 30 });\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { kind: 'report', url: baseUrl + path, body, timestamp, nonce, signature } }];"
+        "jsCode": "const crypto = require('crypto');\nconst event = $input.first().json;\nconst message = event.message || {};\nconst configuredChat = String($env.INSIGHT_TELEGRAM_CEO_CHAT_ID || '').trim();\nconst incomingChat = String(message.chat?.id ?? '');\nif (!configuredChat || incomingChat !== configuredChat) return [];\nconst text = String(message.text || '').trim();\nconst command = text.split(/\\s+/)[0].split('@')[0].toLowerCase();\nconst commands = { '/tasks': 'current_tasks', '/overdue': 'overdue_tasks', '/attendance': 'attendance' };\nconst help = 'أوامر إنسايت بروجكتس:\\n/tasks - تقرير المهام الحالية\\n/overdue - تقرير المهام المتأخرة\\n/attendance - تقرير حضور المتدربين بالأسماء\\n/last - إعادة إرسال آخر إجابة ذكاء اصطناعي بدون استهلاك جديد\\n/help - عرض المساعدة\\n\\nأو أرسل سؤالاً تنفيذياً بالعربية أو الإنجليزية عن مخاطر المشاريع والمهام والمواعيد والتعطل والتقدم والاعتمادات.';\nconst isLatest = command === '/last';\nif (!text || command === '/help' || (command.startsWith('/') && !commands[command] && !isLatest)) return [{ json: { kind: 'help', text: help } }];\nconst secret = String($env.INSIGHT_N8N_SIGNING_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (!secret || !baseUrl) throw new Error('Missing Insight integration configuration');\nconst kind = commands[command] ? 'report' : 'assistant';\nconst path = isLatest ? '/integrations/n8n/telegram/assistant/latest/' : kind === 'report' ? '/integrations/n8n/telegram/reports/start/' : '/integrations/n8n/telegram/assistant/start/';\nconst payload = isLatest ? { chat_id: configuredChat } : kind === 'report' ? { chat_id: configuredChat, report_type: commands[command], window_days: 30 } : { chat_id: configuredChat, message_id: String(message.message_id || ''), question: text };\nconst body = JSON.stringify(payload);\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { kind, url: baseUrl + path, body, timestamp, nonce, signature } }];"
       },
       "id": "c72ef116-c435-4cb5-82f0-8ca50e7d063b",
-      "name": "Authorize and Sign Command",
+      "name": "Authorize Route and Sign",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -1040,
-        -320
-      ]
+      "position": [-1080, -300]
     },
     {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "078af411-d514-4914-abf5-f431839cc1bb",
-              "leftValue": "={{ $json.kind }}",
-              "rightValue": "help",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "help-condition", "leftValue": "={{ $json.kind }}", "rightValue": "help", "operator": {"type": "string", "operation": "equals"}}], "combinator": "and"}, "options": {}},
       "id": "112e0a50-7523-43dc-b549-320999635146",
       "name": "Help Command?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [
-        -800,
-        -320
-      ]
+      "position": [-840, -300]
     },
     {
-      "parameters": {
-        "chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}",
-        "text": "={{ $json.text_ar }}",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
+      "parameters": {"chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}", "text": "={{ $json.text }}", "additionalFields": {"appendAttribution": false}},
       "id": "5bdd2aad-c00c-4ac2-8787-f5b16663b4d5",
       "name": "Send Arabic Help",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [
-        -560,
-        -480
-      ]
+      "position": [-600, -440]
     },
     {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $json.url }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "X-Insight-Timestamp",
-              "value": "={{ $json.timestamp }}"
-            },
-            {
-              "name": "X-Insight-Nonce",
-              "value": "={{ $json.nonce }}"
-            },
-            {
-              "name": "X-Insight-Signature",
-              "value": "={{ $json.signature }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "raw",
-        "rawContentType": "application/json",
-        "body": "={{ $json.body }}",
-        "options": {
-          "response": {
-            "response": {
-              "neverError": false,
-              "responseFormat": "json"
-            }
-          }
-        }
-      },
-      "id": "47a137dd-46b0-45c5-9024-21a9550d697f",
-      "name": "Start Executive Report",
+      "parameters": {"method": "POST", "url": "={{ $json.url }}", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}, {"name": "X-Insight-Timestamp", "value": "={{ $json.timestamp }}"}, {"name": "X-Insight-Nonce", "value": "={{ $json.nonce }}"}, {"name": "X-Insight-Signature", "value": "={{ $json.signature }}"}]}, "sendBody": true, "contentType": "json", "specifyBody": "json", "jsonBody": "={{ $json.body }}", "options": {"response": {"response": {"neverError": false, "responseFormat": "json"}}}},
+      "id": "d88dca67-2eb2-46ca-8ab2-bd27d89ed176",
+      "name": "Start Executive Request",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -560,
-        -240
-      ]
+      "position": [-600, -220]
     },
     {
       "parameters": {
-        "amount": 5
+        "jsCode": "const root = $input.first().json;\nconst queue = [root];\nlet normalized = null;\nfor (let index = 0; index < queue.length && index < 16; index += 1) {\n  let candidate = queue[index];\n  if (typeof candidate === 'string') {\n    try { candidate = JSON.parse(candidate); } catch { continue; }\n  }\n  if (!candidate || typeof candidate !== 'object') continue;\n  if (candidate.status || candidate.request_id || candidate.message || candidate.message_ar) { normalized = candidate; break; }\n  for (const key of ['body', 'data', 'response', 'json']) {\n    if (candidate[key] !== undefined) queue.push(candidate[key]);\n  }\n}\nif (!normalized) throw new Error('Invalid Insight response');\nreturn [{ json: normalized }];"
       },
-      "id": "4cf76419-ef7d-4a1d-b85c-a4c0023fa79a",
+      "id": "d0e257c7-bd1f-4b45-b299-0cf4932372b4",
+      "name": "Normalize Start Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-360, -220]
+    },
+    {
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "rejected-condition", "leftValue": "={{ ($json.status === 'rejected' || ($json.kind === 'assistant' && $json.status === 'completed')) ? 'send' : 'wait' }}", "rightValue": "send", "operator": {"type": "string", "operation": "equals"}}], "combinator": "and"}, "options": {}},
+      "id": "18752004-f4d5-4ca5-9ca7-e96329811cd1",
+      "name": "Question Rejected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-120, -220]
+    },
+    {
+      "parameters": {"chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}", "text": "={{ $json.message }}", "additionalFields": {"appendAttribution": false}},
+      "id": "8cdfbd1f-737f-4b7f-b285-6fba3f4b153e",
+      "name": "Send Assistant Response",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [-120, -420]
+    },
+    {
+      "parameters": {"amount": 5},
+      "id": "7ff226e9-6313-44d0-a24c-e34cbd7d94ae",
       "name": "Wait Before Status",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [
-        -320,
-        -240
-      ],
-      "webhookId": "ceffca5f-469d-4331-bbec-2c77567daf0e"
+      "position": [-120, -160],
+      "webhookId": "beac5ee5-0a22-44e6-a72d-0fc62a49fd2a"
     },
     {
       "parameters": {
-        "jsCode": "const crypto = require('crypto');\nconst source = $input.first().json;\nconst requestId = String(source.request_id || source.id || '');\nconst configuredChat = String($env.INSIGHT_TELEGRAM_CEO_CHAT_ID || '').trim();\nconst secret = String($env.INSIGHT_N8N_SIGNING_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (!requestId || !configuredChat || !secret || !baseUrl) throw new Error('Missing report status configuration');\nconst path = '/integrations/n8n/telegram/reports/status/';\nconst body = JSON.stringify({ chat_id: configuredChat, request_id: requestId });\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { url: baseUrl + path, body, timestamp, nonce, signature } }];"
+        "jsCode": "const crypto = require('crypto');\nconst current = $input.first().json;\nconst started = $('Normalize Start Response').first().json;\nconst candidates = [started, current, current.body];\nlet response = started;\nfor (const candidate of candidates) {\n  if (candidate && typeof candidate === 'object' && (candidate.request_id || candidate.id)) { response = candidate; break; }\n}\nconst requestId = String(response.request_id || response.id || '');\nconst kind = response.kind === 'assistant' || started.kind === 'assistant' ? 'assistant' : 'report';\nconst configuredChat = String($env.INSIGHT_TELEGRAM_CEO_CHAT_ID || '').trim();\nconst secret = String($env.INSIGHT_N8N_SIGNING_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (!requestId || !configuredChat || !secret || !baseUrl) throw new Error('Missing request status configuration');\nconst path = kind === 'assistant' ? '/integrations/n8n/telegram/assistant/status/' : '/integrations/n8n/telegram/reports/status/';\nconst body = JSON.stringify({ chat_id: configuredChat, request_id: requestId });\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { kind, url: baseUrl + path, body, timestamp, nonce, signature } }];"
       },
-      "id": "fc8c98bc-ed38-4ca9-9227-e2f83e38a50d",
-      "name": "Sign Report Status",
+      "id": "b524492f-a801-42bf-9d31-71d357e32365",
+      "name": "Sign Request Status",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -80,
-        -240
-      ]
+      "position": [120, -160]
     },
     {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $json.url }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "X-Insight-Timestamp",
-              "value": "={{ $json.timestamp }}"
-            },
-            {
-              "name": "X-Insight-Nonce",
-              "value": "={{ $json.nonce }}"
-            },
-            {
-              "name": "X-Insight-Signature",
-              "value": "={{ $json.signature }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "raw",
-        "rawContentType": "application/json",
-        "body": "={{ $json.body }}",
-        "options": {
-          "response": {
-            "response": {
-              "neverError": false,
-              "responseFormat": "json"
-            }
-          }
-        }
-      },
-      "id": "59f302f2-2edc-48d8-8a3e-0bc930346b1c",
-      "name": "Get Report Status",
+      "parameters": {"method": "POST", "url": "={{ $json.url }}", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}, {"name": "X-Insight-Timestamp", "value": "={{ $json.timestamp }}"}, {"name": "X-Insight-Nonce", "value": "={{ $json.nonce }}"}, {"name": "X-Insight-Signature", "value": "={{ $json.signature }}"}]}, "sendBody": true, "contentType": "json", "specifyBody": "json", "jsonBody": "={{ $json.body }}", "options": {"response": {"response": {"neverError": false, "responseFormat": "json"}}}},
+      "id": "391e89d3-dd2d-4216-8010-456aa895d46e",
+      "name": "Get Request Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        160,
-        -240
-      ]
+      "position": [360, -160]
     },
     {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "f6277d51-282a-4c17-9c0e-31ea6e6ba4f8",
-              "leftValue": "={{ $json.status }}",
-              "rightValue": "completed",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "435af82f-2cdc-4e6d-b9da-8076f77be21e",
-      "name": "Report Completed?",
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "completed-condition", "leftValue": "={{ $json.status }}", "rightValue": "completed", "operator": {"type": "string", "operation": "equals"}}], "combinator": "and"}, "options": {}},
+      "id": "50d6bb8e-0568-4616-bf22-fc186236f02c",
+      "name": "Request Completed?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [
-        400,
-        -240
-      ]
+      "position": [600, -160]
     },
     {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "87cbaaf6-f84a-4946-95b6-74110728e926",
-              "leftValue": "={{ $json.status }}",
-              "rightValue": "failed",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "0d7ae541-5ba6-4692-82ac-6ed96d6d9bd1",
-      "name": "Report Failed?",
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "assistant-condition", "leftValue": "={{ $json.kind }}", "rightValue": "assistant", "operator": {"type": "string", "operation": "equals"}}], "combinator": "and"}, "options": {}},
+      "id": "31596927-dd87-4564-83cd-5e71b36d50e8",
+      "name": "Assistant Answer?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [
-        640,
-        -120
-      ]
+      "position": [840, -260]
     },
     {
-      "parameters": {
-        "chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}",
-        "text": "={{ $json.message_ar || 'تعذر إعداد التقرير الآن. يرجى المحاولة لاحقاً.' }}",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "id": "46dba04f-2df9-42f2-9717-0d67b28ddcda",
-      "name": "Send Report Failure",
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "failed-condition", "leftValue": "={{ $json.status }}", "rightValue": "failed", "operator": {"type": "string", "operation": "equals"}}], "combinator": "and"}, "options": {}},
+      "id": "01734613-f8da-41f8-86b7-44f5dd7ac7a1",
+      "name": "Request Failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [840, 20]
+    },
+    {
+      "parameters": {"chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}", "text": "={{ $json.message || $json.message_ar || 'تعذر إعداد النتيجة الآن. يرجى المحاولة لاحقاً.' }}", "additionalFields": {"appendAttribution": false}},
+      "id": "63e13148-ce40-445a-8480-4c495b19a53a",
+      "name": "Send Request Failure",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [
-        880,
-        -80
-      ]
+      "position": [1080, 20]
     },
     {
       "parameters": {
-        "url": "={{ $json.download_url }}",
-        "options": {
-          "response": {
-            "response": {
-              "neverError": false,
-              "responseFormat": "file",
-              "outputPropertyName": "data"
-            }
-          }
-        }
+        "jsCode": "const response = $input.first().json;\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nconst downloadPath = String(response.download_path || '');\nconst allowedPath = /^\\/integrations\\/n8n\\/telegram\\/reports\\/[0-9a-f-]{36}\\/download\\/\\?token=[A-Za-z0-9._~%+-]+$/;\nif (!/^https?:\\/\\/[^/]+$/.test(baseUrl) || !allowedPath.test(downloadPath)) throw new Error('Invalid report download target');\nreturn [{ json: { ...response, download_url: baseUrl + downloadPath } }];"
       },
-      "id": "c261601c-bba2-4c92-923d-e82bcfc3f8c1",
+      "id": "68fcf502-d9e9-4e2d-bebb-e273f1e9ec66",
+      "name": "Prepare PDF Download",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1080, -160]
+    },
+    {
+      "parameters": {"url": "={{ $json.download_url }}", "options": {"response": {"response": {"neverError": false, "responseFormat": "file", "outputPropertyName": "data"}}}},
+      "id": "fc1bfb3f-cded-4bfd-bb06-9f413a6dd626",
       "name": "Download One-Time PDF",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        640,
-        -360
-      ]
+      "position": [1320, -160]
     },
     {
-      "parameters": {
-        "resource": "message",
-        "operation": "sendDocument",
-        "chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}",
-        "binaryData": true,
-        "binaryPropertyName": "data",
-        "additionalFields": {
-          "caption": "={{ $('Get Report Status').item.json.message_ar }}"
-        }
-      },
-      "id": "2e91bfda-09b3-4eb4-8af7-b35a21670424",
+      "parameters": {"resource": "message", "operation": "sendDocument", "chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}", "binaryData": true, "binaryPropertyName": "data", "additionalFields": {"caption": "={{ $json.message_ar }}"}},
+      "id": "2c5d4139-af21-4ce6-8144-4480d13633a5",
       "name": "Send Arabic PDF",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [
-        880,
-        -360
-      ]
+      "position": [1560, -160]
     },
     {
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "field": "minutes",
-              "minutesInterval": 5
-            }
-          ]
-        }
-      },
-      "id": "765f82e9-da0b-44c2-9254-293b7c5995d4",
+      "parameters": {"rule": {"interval": [{"field": "minutes", "minutesInterval": 5}]}},
+      "id": "f35221d4-5fd6-4e10-b78f-4c1223a37d40",
       "name": "Critical Alert Schedule",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [
-        -1280,
-        320
-      ]
+      "position": [-600, 360]
     },
     {
       "parameters": {
         "jsCode": "const crypto = require('crypto');\nconst configuredChat = String($env.INSIGHT_TELEGRAM_CEO_CHAT_ID || '').trim();\nconst secret = String($env.INSIGHT_N8N_SIGNING_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (!configuredChat || !secret || !baseUrl) throw new Error('Missing critical alert configuration');\nconst path = '/integrations/n8n/telegram/alerts/claim/';\nconst body = JSON.stringify({ chat_id: configuredChat });\nconst timestamp = String(Math.floor(Date.now() / 1000));\nconst nonce = crypto.randomBytes(24).toString('base64url');\nconst bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\nconst canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\nconst signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\nreturn [{ json: { url: baseUrl + path, body, timestamp, nonce, signature } }];"
       },
-      "id": "5ada22af-b720-4cf1-8bb5-6a3f6e1cf7ab",
+      "id": "2550e536-e386-4877-90f5-c849e03403bc",
       "name": "Sign Critical Alert Claim",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -1040,
-        320
-      ]
+      "position": [-360, 360]
     },
     {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $json.url }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "X-Insight-Timestamp",
-              "value": "={{ $json.timestamp }}"
-            },
-            {
-              "name": "X-Insight-Nonce",
-              "value": "={{ $json.nonce }}"
-            },
-            {
-              "name": "X-Insight-Signature",
-              "value": "={{ $json.signature }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "raw",
-        "rawContentType": "application/json",
-        "body": "={{ $json.body }}",
-        "options": {
-          "response": {
-            "response": {
-              "neverError": false,
-              "responseFormat": "json"
-            }
-          }
-        }
-      },
-      "id": "27bc5fc8-8d96-460a-97e3-7926153d9480",
+      "parameters": {"method": "POST", "url": "={{ $json.url }}", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}, {"name": "X-Insight-Timestamp", "value": "={{ $json.timestamp }}"}, {"name": "X-Insight-Nonce", "value": "={{ $json.nonce }}"}, {"name": "X-Insight-Signature", "value": "={{ $json.signature }}"}]}, "sendBody": true, "contentType": "json", "specifyBody": "json", "jsonBody": "={{ $json.body }}", "options": {"response": {"response": {"neverError": false, "responseFormat": "json"}}}},
+      "id": "7cabf5c0-d75e-48b3-9a89-884276098351",
       "name": "Claim Critical Alerts",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -800,
-        320
-      ]
+      "position": [-120, 360]
     },
     {
       "parameters": {
         "jsCode": "const crypto = require('crypto');\nconst response = $input.first().json;\nconst alerts = Array.isArray(response.alerts) ? response.alerts : [];\nif (!alerts.length) return [];\nconst configuredChat = String($env.INSIGHT_TELEGRAM_CEO_CHAT_ID || '').trim();\nconst secret = String($env.INSIGHT_N8N_SIGNING_SECRET || '');\nconst baseUrl = String($env.INSIGHT_APP_BASE_URL || '').replace(/\\/$/, '');\nif (!response.lease_token || !configuredChat || !secret || !baseUrl) throw new Error('Invalid critical alert claim response');\nconst path = '/integrations/n8n/telegram/alerts/acknowledge/';\nreturn alerts.map((alert) => {\n  const body = JSON.stringify({ chat_id: configuredChat, lease_token: String(response.lease_token), alert_ids: [String(alert.alert_id)] });\n  const timestamp = String(Math.floor(Date.now() / 1000));\n  const nonce = crypto.randomBytes(24).toString('base64url');\n  const bodyHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex');\n  const canonical = [timestamp, nonce, 'POST', path, bodyHash].join('\\n');\n  const signature = crypto.createHmac('sha256', secret).update(canonical, 'utf8').digest('hex');\n  return { json: { message_ar: String(alert.message_ar), url: baseUrl + path, body, timestamp, nonce, signature } };\n});"
       },
-      "id": "76c97949-50d6-45d8-a914-f09f4a4e4587",
+      "id": "8f1b03b4-b14a-48b7-86e1-f534995409f7",
       "name": "Prepare Critical Alerts",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -560,
-        320
-      ]
+      "position": [120, 360]
     },
     {
-      "parameters": {
-        "chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}",
-        "text": "={{ $json.message_ar }}",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "id": "3ad10d3e-f304-4532-a2c0-0e44a11854d4",
+      "parameters": {"chatId": "={{ $env.INSIGHT_TELEGRAM_CEO_CHAT_ID }}", "text": "={{ $json.message_ar }}", "additionalFields": {"appendAttribution": false}},
+      "id": "86b785d1-6291-46e8-9c44-c34864641f5f",
       "name": "Send Critical Alert",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [
-        -320,
-        320
-      ]
+      "position": [360, 360]
     },
     {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $('Prepare Critical Alerts').item.json.url }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "X-Insight-Timestamp",
-              "value": "={{ $('Prepare Critical Alerts').item.json.timestamp }}"
-            },
-            {
-              "name": "X-Insight-Nonce",
-              "value": "={{ $('Prepare Critical Alerts').item.json.nonce }}"
-            },
-            {
-              "name": "X-Insight-Signature",
-              "value": "={{ $('Prepare Critical Alerts').item.json.signature }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "raw",
-        "rawContentType": "application/json",
-        "body": "={{ $('Prepare Critical Alerts').item.json.body }}",
-        "options": {
-          "response": {
-            "response": {
-              "neverError": false,
-              "responseFormat": "json"
-            }
-          }
-        }
-      },
-      "id": "36f14009-8ed9-411e-96c0-ef5e32eff286",
+      "parameters": {"method": "POST", "url": "={{ $('Prepare Critical Alerts').item.json.url }}", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}, {"name": "X-Insight-Timestamp", "value": "={{ $('Prepare Critical Alerts').item.json.timestamp }}"}, {"name": "X-Insight-Nonce", "value": "={{ $('Prepare Critical Alerts').item.json.nonce }}"}, {"name": "X-Insight-Signature", "value": "={{ $('Prepare Critical Alerts').item.json.signature }}"}]}, "sendBody": true, "contentType": "json", "specifyBody": "json", "jsonBody": "={{ $('Prepare Critical Alerts').item.json.body }}", "options": {"response": {"response": {"neverError": false, "responseFormat": "json"}}}},
+      "id": "6ef1373c-de36-4c43-a379-fd2c526382d0",
       "name": "Acknowledge Critical Alert",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -80,
-        320
-      ]
+      "position": [600, 360]
     }
   ],
   "pinData": {},
   "connections": {
-    "Telegram Command": {
-      "main": [
-        [
-          {
-            "node": "Authorize and Sign Command",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Authorize and Sign Command": {
-      "main": [
-        [
-          {
-            "node": "Help Command?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Help Command?": {
-      "main": [
-        [
-          {
-            "node": "Send Arabic Help",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Start Executive Report",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Start Executive Report": {
-      "main": [
-        [
-          {
-            "node": "Wait Before Status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait Before Status": {
-      "main": [
-        [
-          {
-            "node": "Sign Report Status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Sign Report Status": {
-      "main": [
-        [
-          {
-            "node": "Get Report Status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Report Status": {
-      "main": [
-        [
-          {
-            "node": "Report Completed?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Report Completed?": {
-      "main": [
-        [
-          {
-            "node": "Download One-Time PDF",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Report Failed?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Report Failed?": {
-      "main": [
-        [
-          {
-            "node": "Send Report Failure",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Wait Before Status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Download One-Time PDF": {
-      "main": [
-        [
-          {
-            "node": "Send Arabic PDF",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Critical Alert Schedule": {
-      "main": [
-        [
-          {
-            "node": "Sign Critical Alert Claim",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Sign Critical Alert Claim": {
-      "main": [
-        [
-          {
-            "node": "Claim Critical Alerts",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Claim Critical Alerts": {
-      "main": [
-        [
-          {
-            "node": "Prepare Critical Alerts",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare Critical Alerts": {
-      "main": [
-        [
-          {
-            "node": "Send Critical Alert",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send Critical Alert": {
-      "main": [
-        [
-          {
-            "node": "Acknowledge Critical Alert",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
+    "Telegram Command": {"main": [[{"node": "Authorize Route and Sign", "type": "main", "index": 0}]]},
+    "Authorize Route and Sign": {"main": [[{"node": "Help Command?", "type": "main", "index": 0}]]},
+    "Help Command?": {"main": [[{"node": "Send Arabic Help", "type": "main", "index": 0}], [{"node": "Start Executive Request", "type": "main", "index": 0}]]},
+    "Start Executive Request": {"main": [[{"node": "Normalize Start Response", "type": "main", "index": 0}]]},
+    "Normalize Start Response": {"main": [[{"node": "Question Rejected?", "type": "main", "index": 0}]]},
+    "Question Rejected?": {"main": [[{"node": "Send Assistant Response", "type": "main", "index": 0}], [{"node": "Wait Before Status", "type": "main", "index": 0}]]},
+    "Wait Before Status": {"main": [[{"node": "Sign Request Status", "type": "main", "index": 0}]]},
+    "Sign Request Status": {"main": [[{"node": "Get Request Status", "type": "main", "index": 0}]]},
+    "Get Request Status": {"main": [[{"node": "Request Completed?", "type": "main", "index": 0}]]},
+    "Request Completed?": {"main": [[{"node": "Assistant Answer?", "type": "main", "index": 0}], [{"node": "Request Failed?", "type": "main", "index": 0}]]},
+    "Assistant Answer?": {"main": [[{"node": "Send Assistant Response", "type": "main", "index": 0}], [{"node": "Prepare PDF Download", "type": "main", "index": 0}]]},
+    "Request Failed?": {"main": [[{"node": "Send Request Failure", "type": "main", "index": 0}], [{"node": "Wait Before Status", "type": "main", "index": 0}]]},
+    "Prepare PDF Download": {"main": [[{"node": "Download One-Time PDF", "type": "main", "index": 0}]]},
+    "Download One-Time PDF": {"main": [[{"node": "Send Arabic PDF", "type": "main", "index": 0}]]},
+    "Critical Alert Schedule": {"main": [[{"node": "Sign Critical Alert Claim", "type": "main", "index": 0}]]},
+    "Sign Critical Alert Claim": {"main": [[{"node": "Claim Critical Alerts", "type": "main", "index": 0}]]},
+    "Claim Critical Alerts": {"main": [[{"node": "Prepare Critical Alerts", "type": "main", "index": 0}]]},
+    "Prepare Critical Alerts": {"main": [[{"node": "Send Critical Alert", "type": "main", "index": 0}]]},
+    "Send Critical Alert": {"main": [[{"node": "Acknowledge Critical Alert", "type": "main", "index": 0}]]}
   },
   "active": false,
   "settings": {
     "executionOrder": "v1",
-    "saveManualExecutions": false,
-    "saveExecutionProgress": false,
-    "saveDataErrorExecution": "none",
     "saveDataSuccessExecution": "none",
-    "executionTimeout": 600,
-    "timezone": "Asia/Riyadh"
+    "saveDataErrorExecution": "none",
+    "saveExecutionProgress": false
   },
-  "versionId": "6e1941fb-2d2e-45a5-96f0-55cae730e9aa",
-  "meta": {
-    "templateCredsSetupCompleted": false
-  },
+  "versionId": "32e76198-06bc-48f5-a3bb-26b2de4424f1",
+  "meta": {"templateCredsSetupCompleted": true},
   "tags": []
 }

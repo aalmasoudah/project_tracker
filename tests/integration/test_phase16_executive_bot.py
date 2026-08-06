@@ -138,6 +138,12 @@ def test_signed_report_lifecycle_pdf_once_and_safe_audit() -> None:
     assert status_payload["status"] == "completed"
     assert status_payload["message_ar"]
     download_parts = urlsplit(status_payload["download_url"])
+    assert status_payload["download_path"] == (
+        f"{download_parts.path}?{download_parts.query}"
+    )
+    assert status_payload["download_path"].startswith(
+        "/integrations/n8n/telegram/reports/"
+    )
     first_download = client.get(f"{download_parts.path}?{download_parts.query}")
     assert first_download.status_code == 200
     assert first_download["Content-Type"] == "application/pdf"

@@ -108,6 +108,14 @@ built-in `crypto` module in Code nodes, and disables successful and failed
 execution-data retention. Activate the imported workflow only after the
 Phase 16 staging checklist passes.
 
+When Phase 19 is enabled, Phase 16 must remain enabled and the same exact
+CEO/chat, n8n HMAC secret, Telegram native credential, Redis, worker, public
+HTTPS origins, and Groq provider boundary apply. Set the separate assistant
+quota/evidence/output/stale limits in web and worker environments. Only the
+worker receives the Groq key. Import and publish the reviewed combined
+workflow after verifying all Telegram nodes retain their native credential and
+n8n execution-data retention remains disabled.
+
 When Phase 17 is enabled in production, the provider must be `groq`; the
 default model is `openai/gpt-oss-120b` and only `openai/gpt-oss-20b` is an
 allowed override. Web, worker, and Beat use the same bounded settings, while

@@ -269,6 +269,7 @@ def test_n8n_workflow_is_inactive_private_and_covers_fixed_arabic_commands() -> 
     assert "n8n-nodes-base.telegramTrigger" in node_types
     assert "n8n-nodes-base.scheduleTrigger" in node_types
     assert "Send Arabic PDF" in node_names
+    assert "Prepare PDF Download" in node_names
     assert "Acknowledge Critical Alert" in node_names
     assert all(
         command in serialized
@@ -284,6 +285,23 @@ def test_n8n_workflow_is_inactive_private_and_covers_fixed_arabic_commands() -> 
         )
     )
     assert "createHmac('sha256'" in serialized
+    json_requests = [
+        node
+        for node in workflow["nodes"]
+        if node["type"] == "n8n-nodes-base.httpRequest"
+        and node["name"] != "Download One-Time PDF"
+    ]
+    assert len(json_requests) == 4
+    assert all(node["parameters"]["contentType"] == "json" for node in json_requests)
+    assert all(node["parameters"]["specifyBody"] == "json" for node in json_requests)
+    assert all("jsonBody" in node["parameters"] for node in json_requests)
+    assert "INSIGHT_APP_BASE_URL" in serialized
+    assert "response.download_path" in serialized
+    assert "Invalid report download target" in serialized
+    assert (
+        workflow["connections"]["Prepare PDF Download"]["main"][0][0]["node"]
+        == "Download One-Time PDF"
+    )
     assert "String(alert.alert_id)" in serialized
     assert "INSIGHT_N8N_SIGNING_SECRET" in serialized
     assert "INSIGHT_TELEGRAM_CEO_CHAT_ID" in serialized

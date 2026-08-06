@@ -184,6 +184,22 @@ Every applicable phase includes:
   token stays in the native credential store and the signing secret is
   injected from the deployment secret manager, never workflow JSON.
 
+## Telegram AI Assistant Security Boundary
+
+- Phase 19 is a separate opt-in extension of the exact Phase 16 CEO/chat and
+  signed-request boundary. It does not make the integration public.
+- Questions are standalone, length/topic bounded, idempotent by hashed message
+  key, and locally rejected for injection, secrets, personal data, URLs/web,
+  shell/SQL, files, attendance/trainees, or business writes before Groq.
+- Evidence is permission-scoped and locally risk-ranked. It excludes budgets,
+  people, comments, files, attendance, trainees, credentials, environment, and
+  raw audit data. Groq receives no tools or conversation history.
+- Strict schema and citation validation run locally. Telegram receives only a
+  bounded plain-text answer with resolved safe source labels.
+- Protected lifecycle records retain the validated question and safe answer
+  but never the provider prompt/envelope, chain-of-thought, chat/message ID,
+  credential, or raw error. Audit/log metadata contains codes and counts only.
+
 ## Project Recovery Agent Security Boundary
 
 - Phase 17 is separate from the Phase 15 read-only/no-tools workflow. It uses

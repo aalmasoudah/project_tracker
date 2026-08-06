@@ -117,6 +117,23 @@ Every phase is complete only when:
 - The signed n8n reviewed-event flow enforces HMAC, freshness, replay
   protection, idempotency, and a human checkpoint; its export has no secrets.
 
+## Phase 19 Telegram AI Executive Assistant
+
+- Only the exact configured active CEO/chat can create or retrieve a question.
+- Arabic and English standalone executive questions produce bounded cited
+  answers from current permission-scoped task/project/approval evidence.
+- Deterministic local risk ranking limits evidence before Groq; strict schema
+  and citation validation prevent unsupported factual output.
+- Duplicate Telegram messages are idempotent, daily/evidence/token/time limits
+  fail closed, and temporary provider failures retry only within the bound.
+- Unknown commands, prompt injection, secret/personal-data requests, URLs,
+  shell, SQL, web, files, attendance, and write requests reach no provider and
+  disclose no record existence.
+- n8n preserves all Phase 16 commands/alerts, contains no credentials, and
+  sends the answer only to the configured private chat.
+- Audit and logs contain safe lifecycle codes/counts only, never question or
+  answer text, provider payloads, chat/message IDs, credentials, or raw errors.
+
 ## Requirement Status
 
 These criteria are a system-level baseline. Detailed phase acceptance

@@ -8,6 +8,9 @@ urlpatterns = [
     path("reports/start/", views.start_report, name="start_report"),
     path("reports/status/", views.report_status, name="report_status"),
     path("reports/<uuid:report_id>/download/", views.download_report, name="download"),
+    path("assistant/start/", views.start_assistant, name="start_assistant"),
+    path("assistant/status/", views.assistant_status, name="assistant_status"),
+    path("assistant/latest/", views.assistant_latest, name="assistant_latest"),
     path("alerts/claim/", views.claim_alerts, name="claim_alerts"),
     path("alerts/acknowledge/", views.acknowledge_alerts, name="acknowledge_alerts"),
 ]

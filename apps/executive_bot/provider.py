@@ -83,6 +83,7 @@ def _groq_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResu
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
             "Accept": "application/json",
+            "User-Agent": "InsightProjects/1.0",
         },
         method="POST",
     )

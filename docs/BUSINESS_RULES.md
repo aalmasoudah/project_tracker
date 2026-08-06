@@ -195,6 +195,19 @@ must be approved before their implementation phase.
   and results, but never chain-of-thought, full prompts, provider payloads,
   credentials, secrets, or raw provider errors. Protected records follow the
   approved initial-release retention rule.
+- Phase 19 preserves Phase 16 fixed commands and adds only bounded standalone
+  Arabic/English executive questions from the exact configured CEO/chat pair.
+- Phase 19 questions are read-only, have no tools or memory, and may use only
+  permission-scoped project, task, milestone, approval, and aggregate workload
+  evidence. Budgets, people, attendance, trainees, comments, files, secrets,
+  environment data, and raw audit metadata are excluded.
+- Questions are locally bounded and rejected before Groq when they request
+  unsupported, personal, secret, prompt/system, URL, shell, SQL, web, or write
+  behavior. Every factual answer item requires an allowlisted citation.
+- One hashed Telegram message key creates at most one protected assistant
+  request. Processing is asynchronous, quota/token/evidence bounded, retry-
+  safe, audited without question/answer content, and rechecks authority at
+  request, processing, and status retrieval.
 
 ## Decisions Required Before Planning
 
@@ -266,6 +279,8 @@ The project owner must approve answers to these questions:
     memory, human proposal approval, current-authority execution, stale-state
     checks, idempotency, verification, and optional signed n8n reviewed-event
     flow are defined in decision 0022.
+26. [Approved for Phase 19] The bounded, cited, read-only CEO Telegram AI
+    assistant is defined in decision 0024.
 
 ## Rule Approval
 
@@ -277,4 +292,5 @@ on 2026-07-27 in decision 0009. Phase 5 task portions were approved on
 in decision 0013. Phase 9 was approved in decision 0014, Phase 10 in decision
 0015, Phase 11 in decision 0016, Phase 14 in decision 0019, Phase 15 in
 decision 0020, and Phase 16 in decision 0021. Remaining decisions still block
-only separately approved extensions. Phase 17 was approved in decision 0022.
+only separately approved extensions. Phase 17 was approved in decision 0022,
+and Phase 19 in decision 0024.

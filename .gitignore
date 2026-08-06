@@ -12,6 +12,7 @@ __pycache__/
 !*.env.example
 db.sqlite3
 media/
+private-media/
 staticfiles/
 celerybeat-schedule*
 

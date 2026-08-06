@@ -31,6 +31,9 @@ operational audit records.
   reviewed memory, human-approved proposals, transactional idempotent
   execution through existing business services, and final verification under
   the Phase 17 boundary.
+- A CEO-only, read-only Telegram AI executive assistant for bounded standalone
+  Arabic/English questions using permission-scoped cited evidence under the
+  Phase 19 boundary.
 - First-class Arabic and English localization across the application,
   including RTL/LTR layouts, validation, search, imports, notifications,
   operational views, and generated reports.
@@ -78,10 +81,12 @@ operational audit records.
 15. AI Project Briefings
 16. CEO Telegram and n8n Executive Reports
 17. Agentic Project Recovery and Planning
+18. Deployment Readiness
+19. Telegram AI Executive Assistant
 
 ## Scope Approval
 
-Status: Approved through the Phase 17 agentic project-recovery extension.
+Status: Approved through the Phase 19 Telegram AI-assistant extension.
 
 The project owner approved the original scope on 2026-07-23 and subsequently
 added full Arabic support on the same date. Approval of this scope does not
@@ -103,3 +108,9 @@ The project owner approved the Phase 17 agentic project-recovery extension on
 Decision 0022. No model may write directly; execution requires a separate
 human approval, current underlying business permission, unchanged source
 state, idempotent service execution, and final verification.
+
+The project owner approved the Phase 19 bounded Telegram AI executive
+assistant on 2026-08-06. This adds only standalone read-only executive
+questions for the configured CEO/chat pair. It does not authorize multi-turn
+memory, unrestricted prompts or data, other recipients, tools, or writes. The
+approved boundary is recorded in decision 0024.

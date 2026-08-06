@@ -220,8 +220,29 @@ restoration is handled through a documented operational procedure.
    signed, replay-protected endpoint, pauses at its own human checkpoint, then
    sends a signed idempotent callback for safe notification/archive handling.
 
+## Telegram AI Executive Assistant
+
+1. The configured CEO sends a standalone Arabic or English non-command text
+   message to the dedicated private bot.
+2. n8n rejects every other chat, rejects unknown slash commands, detects the
+   response language, and sends a signed bounded start request containing the
+   Telegram message ID and question.
+3. Django rechecks configuration, HMAC, freshness, nonce, exact CEO/chat,
+   assistant permission, idempotency, quota, length, supported topic, and
+   unsafe-content patterns before creating a queued protected request.
+4. Celery rechecks current authority and gathers a small deterministic ranking
+   of currently visible project, task, milestone, and approval evidence.
+5. Groq receives the standalone question and untrusted structured evidence,
+   has no tools, and returns strict cited JSON in the requested language.
+6. Django validates every citation, resolves safe labels, formats a Telegram-
+   length answer, and stores no provider prompt, envelope, or raw error.
+7. n8n polls the signed status endpoint and sends only the completed safe text
+   to the same configured chat. Each status read rechecks current authority.
+8. Unsupported, malicious, personal-data, secret, or write requests return a
+   fixed safe response without a provider call. No conversation memory exists.
+
 ## Workflow Approval
 
-Status: Account lifecycle and Phase 3 through Phase 17 approved domain
-lifecycles are approved. Other phase-specific transitions and permissions
-require later approval.
+Status: Account lifecycle and Phase 3 through Phase 17 domain lifecycles and
+the Phase 19 read-only Telegram assistant are approved. Other phase-specific
+transitions and permissions require later approval.

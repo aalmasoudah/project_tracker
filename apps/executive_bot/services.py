@@ -11,7 +11,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.http import Http404, HttpRequest
 from django.urls import reverse
@@ -26,13 +26,30 @@ from apps.ai_briefings.providers.base import (
 from apps.audit import actions
 from apps.audit.models import AuditEvent
 from apps.audit.services import record_audit_event
+from apps.executive_bot.assistant_evidence import build_assistant_evidence
+from apps.executive_bot.assistant_provider import (
+    PROMPT_VERSION as ASSISTANT_PROMPT_VERSION,
+)
+from apps.executive_bot.assistant_provider import (
+    format_assistant_message,
+    generate_assistant_answer,
+)
+from apps.executive_bot.assistant_validation import validate_executive_question
 from apps.executive_bot.evidence import (
     ExecutiveEvidence,
     build_executive_evidence,
     critical_tasks_for,
 )
-from apps.executive_bot.models import CriticalTaskAlert, ExecutiveReportRequest
-from apps.executive_bot.policies import can_use_executive_bot, chat_id_hash
+from apps.executive_bot.models import (
+    CriticalTaskAlert,
+    ExecutiveAssistantRequest,
+    ExecutiveReportRequest,
+)
+from apps.executive_bot.policies import (
+    can_use_executive_assistant,
+    can_use_executive_bot,
+    chat_id_hash,
+)
 from apps.executive_bot.provider import PROMPT_VERSION, generate_executive_summary
 from apps.reports.datasets import ReportDocument
 from apps.reports.dates import format_dual_date
@@ -53,6 +70,19 @@ def _queue_report(report_id: str) -> None:
             "Executive report enqueue failed.", extra={"report_id": report_id}
         )
         mark_report_failed(report_id=report_id, failure_code="enqueue_failed")
+
+
+def _queue_assistant(request_id: str) -> None:
+    try:
+        from apps.executive_bot.tasks import generate_executive_answer
+
+        generate_executive_answer.delay(request_id)
+    except Exception:
+        logger.exception(
+            "Executive assistant enqueue failed.",
+            extra={"assistant_request_id": request_id},
+        )
+        mark_assistant_failed(request_id=request_id, failure_code="enqueue_failed")
 
 
 def _local_day_bounds() -> tuple[datetime, datetime]:
@@ -110,6 +140,73 @@ def request_report(
     )
     transaction.on_commit(partial(_queue_report, str(report.pk)))
     return report
+
+
+@transaction.atomic
+def request_assistant_answer(
+    *,
+    actor: User,
+    chat_id: str,
+    message_id: str,
+    question: object,
+    request: HttpRequest | None = None,
+) -> tuple[ExecutiveAssistantRequest, bool]:
+    if not can_use_executive_assistant(actor, chat_id):
+        raise PermissionDenied("Executive assistant access is required.")
+    if not message_id.isascii() or not message_id.isdigit() or len(message_id) > 20:
+        raise ValidationError("invalid_message_id")
+    cleaned_question, language = validate_executive_question(question)
+    message_key_hash = hashlib.sha256(f"{chat_id}:{message_id}".encode()).hexdigest()
+    existing = ExecutiveAssistantRequest.objects.filter(
+        message_key_hash=message_key_hash
+    ).first()
+    if existing is not None:
+        if existing.requested_by_id != actor.pk or not secrets.compare_digest(
+            existing.chat_id_hash, chat_id_hash(chat_id)
+        ):
+            raise PermissionDenied("Executive assistant access is required.")
+        return existing, False
+
+    User.objects.select_for_update().get(pk=actor.pk)
+    day_start, day_end = _local_day_bounds()
+    request_count = ExecutiveAssistantRequest.objects.filter(
+        requested_by=actor,
+        created_at__gte=day_start,
+        created_at__lt=day_end,
+    ).count()
+    if request_count >= int(settings.EXECUTIVE_ASSISTANT_DAILY_LIMIT):
+        raise ValidationError("daily_limit")
+    try:
+        with transaction.atomic():
+            assistant_request = ExecutiveAssistantRequest.objects.create(
+                requested_by=actor,
+                chat_id_hash=chat_id_hash(chat_id),
+                message_key_hash=message_key_hash,
+                question_text=cleaned_question,
+                question_hash=hashlib.sha256(cleaned_question.encode()).hexdigest(),
+                language=language,
+            )
+    except IntegrityError:
+        concurrent = ExecutiveAssistantRequest.objects.get(
+            message_key_hash=message_key_hash
+        )
+        if concurrent.requested_by_id != actor.pk or not secrets.compare_digest(
+            concurrent.chat_id_hash, chat_id_hash(chat_id)
+        ):
+            raise PermissionDenied("Executive assistant access is required.") from None
+        return concurrent, False
+    record_audit_event(
+        actor=actor,
+        action=actions.EXECUTIVE_ASSISTANT_REQUESTED,
+        target_type="executive_assistant_request",
+        target_id=str(assistant_request.pk),
+        target_label="executive_assistant",
+        metadata={"language": language, "status": assistant_request.status},
+        request=request,
+        scope=AuditEvent.Scope.EXECUTIVE_BOT,
+    )
+    transaction.on_commit(partial(_queue_assistant, str(assistant_request.pk)))
+    return assistant_request, True
 
 
 def _document_data(document: ReportDocument) -> dict[str, object]:
@@ -362,20 +459,23 @@ def visible_report(
         raise Http404 from error
 
 
-def create_download_url(report: ExecutiveReportRequest) -> str:
+def create_download_path(report: ExecutiveReportRequest) -> str:
     token = signing.dumps(
         {"report_id": str(report.pk), "chat_id_hash": report.chat_id_hash},
         salt=DOWNLOAD_SIGNING_SALT,
         compress=True,
     )
     path = reverse("executive_bot:download", args=(report.pk,))
-    return (
-        f"{str(settings.APP_BASE_URL).rstrip('/')}{path}?{urlencode({'token': token})}"
-    )
+    return f"{path}?{urlencode({'token': token})}"
+
+
+def create_download_url(report: ExecutiveReportRequest) -> str:
+    return f"{str(settings.APP_BASE_URL).rstrip('/')}{create_download_path(report)}"
 
 
 def report_status_payload(report: ExecutiveReportRequest) -> dict[str, object]:
     payload: dict[str, object] = {
+        "kind": "report",
         "request_id": str(report.pk),
         "status": report.status,
         "report_type": report.report_type,
@@ -383,10 +483,14 @@ def report_status_payload(report: ExecutiveReportRequest) -> dict[str, object]:
     if report.status == ExecutiveReportRequest.Status.COMPLETED:
         summary = report.output_data.get("summary", {})
         summary_text = summary.get("summary", "") if isinstance(summary, dict) else ""
+        download_path = create_download_path(report)
         payload.update(
             {
                 "message_ar": str(summary_text)[:1500],
-                "download_url": create_download_url(report),
+                "download_path": download_path,
+                "download_url": (
+                    f"{str(settings.APP_BASE_URL).rstrip('/')}{download_path}"
+                ),
                 "download_expires_seconds": int(
                     settings.EXECUTIVE_BOT_DOWNLOAD_TTL_SECONDS
                 ),
@@ -517,6 +621,320 @@ def consume_report_download(*, report_id: str, token: str) -> tuple[bytes, str]:
     date_suffix = timezone.localdate().isoformat()
     filename = f"insight-projects-{document.filename_stem}-{date_suffix}.pdf"
     return content, filename
+
+
+def _complete_assistant_request(
+    *,
+    assistant_request: ExecutiveAssistantRequest,
+    answer: dict[str, object],
+    message: str,
+    source_labels: dict[str, str],
+    source_count: int,
+    source_truncated: bool,
+    provider_code: str,
+    model_code: str,
+    input_tokens: int | None,
+    cached_input_tokens: int | None,
+    output_tokens: int | None,
+) -> str:
+    with transaction.atomic():
+        locked = ExecutiveAssistantRequest.objects.select_for_update().get(
+            pk=assistant_request.pk
+        )
+        if locked.status in (
+            ExecutiveAssistantRequest.Status.COMPLETED,
+            ExecutiveAssistantRequest.Status.FAILED,
+        ):
+            return locked.status
+        locked.status = ExecutiveAssistantRequest.Status.COMPLETED
+        locked.output_data = {
+            "answer": answer,
+            "message": message,
+            "source_labels": source_labels,
+        }
+        locked.provider_code = provider_code
+        locked.model_code = model_code
+        locked.prompt_version = ASSISTANT_PROMPT_VERSION
+        locked.source_count = source_count
+        locked.source_truncated = source_truncated
+        locked.input_tokens = input_tokens
+        locked.cached_input_tokens = cached_input_tokens
+        locked.output_tokens = output_tokens
+        locked.failure_code = ""
+        locked.completed_at = timezone.now()
+        locked.save(
+            update_fields=(
+                "status",
+                "output_data",
+                "provider_code",
+                "model_code",
+                "prompt_version",
+                "source_count",
+                "source_truncated",
+                "input_tokens",
+                "cached_input_tokens",
+                "output_tokens",
+                "failure_code",
+                "completed_at",
+                "updated_at",
+            )
+        )
+        record_audit_event(
+            actor=locked.requested_by,
+            action=actions.EXECUTIVE_ASSISTANT_COMPLETED,
+            target_type="executive_assistant_request",
+            target_id=str(locked.pk),
+            target_label="executive_assistant",
+            metadata={
+                "language": locked.language,
+                "status": locked.status,
+                "source_count": locked.source_count,
+                "source_truncated": locked.source_truncated,
+                "model_code": locked.model_code,
+            },
+            scope=AuditEvent.Scope.EXECUTIVE_BOT,
+        )
+    return ExecutiveAssistantRequest.Status.COMPLETED
+
+
+def generate_assistant_request(*, request_id: str) -> str:
+    with transaction.atomic():
+        assistant_request = (
+            ExecutiveAssistantRequest.objects.select_for_update()
+            .select_related("requested_by")
+            .get(pk=request_id)
+        )
+        if assistant_request.status in (
+            ExecutiveAssistantRequest.Status.COMPLETED,
+            ExecutiveAssistantRequest.Status.FAILED,
+        ):
+            return assistant_request.status
+        if assistant_request.status == ExecutiveAssistantRequest.Status.PROCESSING:
+            return assistant_request.status
+        assistant_request.status = ExecutiveAssistantRequest.Status.PROCESSING
+        assistant_request.started_at = timezone.now()
+        assistant_request.save(update_fields=("status", "started_at", "updated_at"))
+    try:
+        configured_chat = str(settings.EXECUTIVE_BOT_TELEGRAM_CHAT_ID).strip()
+        if not can_use_executive_assistant(
+            assistant_request.requested_by, configured_chat
+        ):
+            raise PermissionDenied("Executive assistant access is required.")
+        if not secrets.compare_digest(
+            assistant_request.chat_id_hash,
+            chat_id_hash(configured_chat),
+        ):
+            raise PermissionDenied("Executive assistant access is required.")
+        cleaned, language = validate_executive_question(assistant_request.question_text)
+        if language != assistant_request.language or not secrets.compare_digest(
+            hashlib.sha256(cleaned.encode("utf-8")).hexdigest(),
+            assistant_request.question_hash,
+        ):
+            raise PermissionDenied("Executive assistant request changed.")
+        evidence = build_assistant_evidence(
+            actor=assistant_request.requested_by,
+            question=cleaned,
+            language=language,
+        )
+        output, provider_result = generate_assistant_answer(
+            evidence=evidence.provider_payload,
+            allowed_citations=evidence.allowed_citations,
+        )
+        message = format_assistant_message(
+            output=output,
+            source_labels=evidence.source_labels,
+            language=language,
+        )
+    except TemporaryProviderError:
+        _requeue_assistant_request(request_id=request_id)
+        raise
+    except PermissionDenied:
+        return mark_assistant_failed(
+            request_id=request_id, failure_code="access_revoked"
+        )
+    except ProviderConfigurationError:
+        return mark_assistant_failed(
+            request_id=request_id, failure_code="provider_unavailable"
+        )
+    except ProviderResponseError:
+        return mark_assistant_failed(
+            request_id=request_id, failure_code="invalid_provider_response"
+        )
+    except Exception:
+        logger.exception(
+            "Executive assistant generation failed.",
+            extra={"assistant_request_id": request_id},
+        )
+        return mark_assistant_failed(
+            request_id=request_id, failure_code="generation_failed"
+        )
+    return _complete_assistant_request(
+        assistant_request=assistant_request,
+        answer=cast(dict[str, object], output),
+        message=message,
+        source_labels=evidence.source_labels,
+        source_count=evidence.source_count,
+        source_truncated=evidence.truncated,
+        provider_code=provider_result.provider_code,
+        model_code=provider_result.model_code,
+        input_tokens=provider_result.input_tokens,
+        cached_input_tokens=provider_result.cached_input_tokens,
+        output_tokens=provider_result.output_tokens,
+    )
+
+
+@transaction.atomic
+def _requeue_assistant_request(*, request_id: str) -> None:
+    assistant_request = ExecutiveAssistantRequest.objects.select_for_update().get(
+        pk=request_id
+    )
+    if assistant_request.status != ExecutiveAssistantRequest.Status.PROCESSING:
+        return
+    assistant_request.status = ExecutiveAssistantRequest.Status.QUEUED
+    assistant_request.started_at = None
+    assistant_request.save(update_fields=("status", "started_at", "updated_at"))
+
+
+@transaction.atomic
+def mark_assistant_failed(*, request_id: str, failure_code: str) -> str:
+    assistant_request = (
+        ExecutiveAssistantRequest.objects.select_for_update()
+        .select_related("requested_by")
+        .get(pk=request_id)
+    )
+    if assistant_request.status == ExecutiveAssistantRequest.Status.COMPLETED:
+        return assistant_request.status
+    if assistant_request.status == ExecutiveAssistantRequest.Status.FAILED:
+        return assistant_request.status
+    now = timezone.now()
+    assistant_request.status = ExecutiveAssistantRequest.Status.FAILED
+    assistant_request.started_at = assistant_request.started_at or now
+    assistant_request.completed_at = now
+    assistant_request.failure_code = failure_code[:64]
+    assistant_request.output_data = {}
+    assistant_request.save(
+        update_fields=(
+            "status",
+            "started_at",
+            "completed_at",
+            "failure_code",
+            "output_data",
+            "updated_at",
+        )
+    )
+    record_audit_event(
+        actor=assistant_request.requested_by,
+        action=actions.EXECUTIVE_ASSISTANT_FAILED,
+        target_type="executive_assistant_request",
+        target_id=str(assistant_request.pk),
+        target_label="executive_assistant",
+        metadata={
+            "language": assistant_request.language,
+            "status": assistant_request.status,
+            "failure_code": assistant_request.failure_code,
+        },
+        scope=AuditEvent.Scope.EXECUTIVE_BOT,
+    )
+    return assistant_request.status
+
+
+def recover_stale_assistant_requests() -> int:
+    stale_before = timezone.now() - timedelta(
+        minutes=int(settings.EXECUTIVE_ASSISTANT_STALE_MINUTES)
+    )
+    request_ids = list(
+        ExecutiveAssistantRequest.objects.filter(
+            status=ExecutiveAssistantRequest.Status.PROCESSING,
+            started_at__lt=stale_before,
+        )
+        .order_by("started_at")
+        .values_list("pk", flat=True)[:100]
+    )
+    recovered: list[str] = []
+    for assistant_request_id in request_ids:
+        with transaction.atomic():
+            assistant_request = (
+                ExecutiveAssistantRequest.objects.select_for_update().get(
+                    pk=assistant_request_id
+                )
+            )
+            if (
+                assistant_request.status != ExecutiveAssistantRequest.Status.PROCESSING
+                or assistant_request.started_at is None
+                or assistant_request.started_at >= stale_before
+            ):
+                continue
+            assistant_request.status = ExecutiveAssistantRequest.Status.QUEUED
+            assistant_request.started_at = None
+            assistant_request.save(update_fields=("status", "started_at", "updated_at"))
+            recovered.append(str(assistant_request.pk))
+    for recovered_request_id in recovered:
+        _queue_assistant(recovered_request_id)
+    return len(recovered)
+
+
+def visible_assistant_request(
+    *, actor: User, chat_id: str, request_id: str
+) -> ExecutiveAssistantRequest:
+    if not can_use_executive_assistant(actor, chat_id):
+        raise Http404
+    try:
+        return ExecutiveAssistantRequest.objects.select_related("requested_by").get(
+            pk=request_id,
+            requested_by=actor,
+            chat_id_hash=chat_id_hash(chat_id),
+        )
+    except (ExecutiveAssistantRequest.DoesNotExist, ValueError) as error:
+        raise Http404 from error
+
+
+def latest_completed_assistant_request(
+    *, actor: User, chat_id: str
+) -> ExecutiveAssistantRequest:
+    if not can_use_executive_assistant(actor, chat_id):
+        raise Http404
+    assistant_request = (
+        ExecutiveAssistantRequest.objects.select_related("requested_by")
+        .filter(
+            requested_by=actor,
+            chat_id_hash=chat_id_hash(chat_id),
+            status=ExecutiveAssistantRequest.Status.COMPLETED,
+        )
+        .order_by("-completed_at", "-created_at")
+        .first()
+    )
+    if assistant_request is None:
+        raise Http404
+    return assistant_request
+
+
+def assistant_status_payload(
+    assistant_request: ExecutiveAssistantRequest,
+) -> dict[str, object]:
+    payload: dict[str, object] = {
+        "kind": "assistant",
+        "request_id": str(assistant_request.pk),
+        "status": assistant_request.status,
+        "language": assistant_request.language,
+    }
+    if assistant_request.status == ExecutiveAssistantRequest.Status.COMPLETED:
+        message = assistant_request.output_data.get("message", "")
+        if not isinstance(message, str) or not message:
+            raise ValueError("Stored assistant response is invalid.")
+        payload["message"] = message[:3900]
+    elif assistant_request.status == ExecutiveAssistantRequest.Status.FAILED:
+        payload["message"] = (
+            "تعذر إعداد الإجابة الآن. يرجى المحاولة لاحقاً."
+            if assistant_request.language == ExecutiveAssistantRequest.Language.ARABIC
+            else "The answer could not be prepared. Please try again later."
+        )
+    else:
+        payload["message"] = (
+            "جاري تحليل السؤال من الأدلة الحالية."
+            if assistant_request.language == ExecutiveAssistantRequest.Language.ARABIC
+            else "The current evidence is being analyzed."
+        )
+    return payload
 
 
 def _critical_fingerprint(task: Task) -> str:

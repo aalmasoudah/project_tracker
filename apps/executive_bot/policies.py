@@ -26,3 +26,11 @@ def can_use_executive_bot(actor: User, chat_id: str) -> bool:
             configured_chat.encode("utf-8"),
         )
     )
+
+
+def can_use_executive_assistant(actor: User, chat_id: str) -> bool:
+    return (
+        bool(settings.EXECUTIVE_ASSISTANT_ENABLED)
+        and can_use_executive_bot(actor, chat_id)
+        and actor.has_perm("executive_bot.ask_executiveassistant")
+    )

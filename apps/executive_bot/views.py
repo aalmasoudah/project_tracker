@@ -10,6 +10,7 @@ from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
+from apps.executive_bot.assistant_validation import detect_question_language
 from apps.executive_bot.authentication import (
     AuthenticatedIntegrationRequest,
     IntegrationAuthenticationError,
@@ -17,10 +18,14 @@ from apps.executive_bot.authentication import (
 )
 from apps.executive_bot.services import (
     acknowledge_critical_alerts,
+    assistant_status_payload,
     claim_critical_alerts,
     consume_report_download,
+    latest_completed_assistant_request,
     report_status_payload,
+    request_assistant_answer,
     request_report,
+    visible_assistant_request,
     visible_report,
 )
 
@@ -89,6 +94,7 @@ def start_report(
     )
     return _json(
         {
+            "kind": "report",
             "request_id": str(report.pk),
             "status": report.status,
             "message_ar": "تم استلام الطلب وجارٍ إعداد التقرير.",
@@ -116,6 +122,125 @@ def report_status(
         report_id=report_id,
     )
     return _json(report_status_payload(report))
+
+
+def _rejected_question_payload(
+    *, question: object, failure_code: str
+) -> dict[str, object]:
+    language = detect_question_language(question) if isinstance(question, str) else "ar"
+    if language == "ar":
+        if failure_code == "daily_limit":
+            message = "تم الوصول إلى الحد اليومي لأسئلة المساعد. حاول غداً."
+        else:
+            message = (
+                "يمكنني الإجابة فقط عن مخاطر المشاريع والمهام والمواعيد "
+                "والتعطل والتقدم والاعتمادات. لا أستطيع تنفيذ تغييرات أو "
+                "الوصول إلى الأسرار أو البيانات الشخصية."
+            )
+    elif failure_code == "daily_limit":
+        message = "The daily assistant question limit has been reached. Try tomorrow."
+    else:
+        message = (
+            "I can only answer about project/task risks, deadlines, blockers, "
+            "progress, and approvals. I cannot change records or access secrets "
+            "or personal data."
+        )
+    return {
+        "kind": "assistant",
+        "status": "rejected",
+        "failure_code": failure_code,
+        "language": language,
+        "message": message,
+    }
+
+
+@csrf_exempt
+@require_POST
+@signed_json_view
+def start_assistant(
+    request: HttpRequest,
+    authenticated: AuthenticatedIntegrationRequest,
+) -> JsonResponse:
+    payload = _exact_payload(
+        authenticated.payload,
+        {"chat_id", "message_id", "question"},
+    )
+    chat_id = payload["chat_id"]
+    message_id = payload["message_id"]
+    question = payload["question"]
+    if not isinstance(chat_id, str) or not isinstance(message_id, str):
+        raise ValidationError("invalid_request")
+    try:
+        assistant_request, created = request_assistant_answer(
+            actor=authenticated.actor,
+            chat_id=chat_id,
+            message_id=message_id,
+            question=question,
+            request=request,
+        )
+    except ValidationError as error:
+        failure_code = str(error.messages[0]) if error.messages else "invalid_question"
+        return _json(
+            _rejected_question_payload(
+                question=question,
+                failure_code=failure_code,
+            )
+        )
+    return _json(
+        {
+            "kind": "assistant",
+            "request_id": str(assistant_request.pk),
+            "status": assistant_request.status,
+            "language": assistant_request.language,
+            "created": created,
+            "message": (
+                "تم استلام السؤال وجارٍ تحليل الأدلة الحالية."
+                if assistant_request.language == "ar"
+                else "The question was received and current evidence is being analyzed."
+            ),
+        },
+        status=202 if created else 200,
+    )
+
+
+@csrf_exempt
+@require_POST
+@signed_json_view
+def assistant_status(
+    request: HttpRequest,
+    authenticated: AuthenticatedIntegrationRequest,
+) -> JsonResponse:
+    del request
+    payload = _exact_payload(authenticated.payload, {"chat_id", "request_id"})
+    chat_id = payload["chat_id"]
+    request_id = payload["request_id"]
+    if not isinstance(chat_id, str) or not isinstance(request_id, str):
+        raise ValidationError("invalid_request")
+    assistant_request = visible_assistant_request(
+        actor=authenticated.actor,
+        chat_id=chat_id,
+        request_id=request_id,
+    )
+    return _json(assistant_status_payload(assistant_request))
+
+
+@csrf_exempt
+@require_POST
+@signed_json_view
+def assistant_latest(
+    request: HttpRequest,
+    authenticated: AuthenticatedIntegrationRequest,
+) -> JsonResponse:
+    del request
+    payload = _exact_payload(authenticated.payload, {"chat_id"})
+    chat_id = payload["chat_id"]
+    if not isinstance(chat_id, str):
+        raise ValidationError("invalid_request")
+    assistant_request = latest_completed_assistant_request(
+        actor=authenticated.actor,
+        chat_id=chat_id,
+    )
+    return _json(assistant_status_payload(assistant_request))
 
 
 @csrf_exempt

@@ -89,6 +89,9 @@ EXECUTIVE_REPORT_COMPLETED = "executive_report.completed"
 EXECUTIVE_REPORT_FAILED = "executive_report.failed"
 EXECUTIVE_REPORT_DOWNLOADED = "executive_report.downloaded"
 CRITICAL_ALERT_DELIVERED = "critical_alert.delivered"
+EXECUTIVE_ASSISTANT_REQUESTED = "executive_assistant.requested"
+EXECUTIVE_ASSISTANT_COMPLETED = "executive_assistant.completed"
+EXECUTIVE_ASSISTANT_FAILED = "executive_assistant.failed"
 AGENT_RUN_REQUESTED = "project_agent.run_requested"
 AGENT_RUN_AWAITING_APPROVAL = "project_agent.awaiting_approval"
 AGENT_RUN_COMPLETED = "project_agent.run_completed"
@@ -195,6 +198,9 @@ ALL_ACTION_CODES = (
     EXECUTIVE_REPORT_FAILED,
     EXECUTIVE_REPORT_DOWNLOADED,
     CRITICAL_ALERT_DELIVERED,
+    EXECUTIVE_ASSISTANT_REQUESTED,
+    EXECUTIVE_ASSISTANT_COMPLETED,
+    EXECUTIVE_ASSISTANT_FAILED,
     AGENT_RUN_REQUESTED,
     AGENT_RUN_AWAITING_APPROVAL,
     AGENT_RUN_COMPLETED,

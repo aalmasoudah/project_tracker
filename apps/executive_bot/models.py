@@ -127,6 +127,106 @@ class ExecutiveReportRequest(models.Model):
         raise PermissionDenied("Executive report requests cannot be hard-deleted.")
 
 
+class ExecutiveAssistantRequest(models.Model):
+    """One protected, standalone CEO question and its cited safe answer."""
+
+    class Language(models.TextChoices):
+        ARABIC = "ar", _("Arabic")
+        ENGLISH = "en", _("English")
+
+    class Status(models.TextChoices):
+        QUEUED = "queued", _("Queued")
+        PROCESSING = "processing", _("Processing")
+        COMPLETED = "completed", _("Completed")
+        FAILED = "failed", _("Failed")
+
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    requested_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="executive_assistant_requests",
+    )
+    chat_id_hash = models.CharField(max_length=64)
+    message_key_hash = models.CharField(max_length=64, unique=True)
+    question_text = models.CharField(max_length=500)
+    question_hash = models.CharField(max_length=64)
+    language = models.CharField(max_length=2, choices=Language.choices)
+    status = models.CharField(
+        max_length=16,
+        choices=Status.choices,
+        default=Status.QUEUED,
+        db_index=True,
+    )
+    output_data = models.JSONField(default=dict, blank=True)
+    provider_code = models.CharField(max_length=24, blank=True)
+    model_code = models.CharField(max_length=80, blank=True)
+    prompt_version = models.CharField(max_length=32, blank=True)
+    source_count = models.PositiveSmallIntegerField(default=0)
+    source_truncated = models.BooleanField(default=False)
+    input_tokens = models.PositiveIntegerField(blank=True, null=True)
+    cached_input_tokens = models.PositiveIntegerField(blank=True, null=True)
+    output_tokens = models.PositiveIntegerField(blank=True, null=True)
+    failure_code = models.CharField(max_length=64, blank=True)
+    started_at = models.DateTimeField(blank=True, null=True)
+    completed_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ProtectedExecutiveBotQuerySet.as_manager()
+
+    class Meta:
+        default_permissions = ("view",)
+        ordering = ("-created_at",)
+        permissions = (
+            ("ask_executiveassistant", "Can ask the CEO Telegram AI assistant"),
+        )
+        indexes: ClassVar[list[models.Index]] = [
+            models.Index(
+                fields=("requested_by", "-created_at"),
+                name="exec_assist_user_created_idx",
+            ),
+        ]
+        constraints: ClassVar[list[models.BaseConstraint]] = [
+            models.CheckConstraint(
+                condition=models.Q(language__in=("ar", "en")),
+                name="exec_assist_language_valid",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(
+                    status__in=("queued", "processing", "completed", "failed")
+                ),
+                name="exec_assist_status_valid",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(
+                        status="queued",
+                        started_at__isnull=True,
+                        completed_at__isnull=True,
+                    )
+                    | models.Q(
+                        status="processing",
+                        started_at__isnull=False,
+                        completed_at__isnull=True,
+                    )
+                    | models.Q(
+                        status__in=("completed", "failed"),
+                        started_at__isnull=False,
+                        completed_at__isnull=False,
+                    )
+                ),
+                name="exec_assist_lifecycle_valid",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"assistant:{self.pk}"
+
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        del args, kwargs
+        raise PermissionDenied("Executive assistant requests cannot be hard-deleted.")
+
+
 class CriticalTaskAlert(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", _("Pending")

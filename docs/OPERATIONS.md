@@ -171,6 +171,14 @@ alert retry/acknowledgement, rotation, incident response, and rollback
 procedure is documented in
 `docs/RUNBOOKS/PHASE_16_CEO_TELEGRAM_N8N.md`.
 
+The destructive development-only fictional university demonstration dataset
+is documented in `docs/RUNBOOKS/UNIVERSITY_SHOWCASE.md`. Always create a
+recoverable PostgreSQL backup and pause outbound automation before loading it.
+
+The bounded CEO Telegram AI assistant configuration, verification, incident,
+and rollback procedure is documented in
+`docs/RUNBOOKS/PHASE_19_TELEGRAM_AI_ASSISTANT.md`.
+
 The Phase 17 Groq/project-agent flags, proposal expiry, current-permission and
 stale-state checks, reviewed memory, optional signed n8n checkpoint, rotation,
 incident response, and rollback procedure are documented in
