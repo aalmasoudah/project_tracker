@@ -175,25 +175,120 @@ AI_BRIEFING_REASONING_EFFORT = env_string(
     default="high",
 )
 GROQ_API_KEY = env_string("GROQ_API_KEY")
+GROQ_RATE_LIMITER_ENABLED = env_bool("GROQ_RATE_LIMITER_ENABLED", default=True)
+GROQ_RATE_LIMIT_RPM = env_int("GROQ_RATE_LIMIT_RPM", default=30)
+GROQ_RATE_LIMIT_RPD = env_int("GROQ_RATE_LIMIT_RPD", default=1_000)
+GROQ_RATE_LIMIT_TPM = env_int("GROQ_RATE_LIMIT_TPM", default=8_000)
+GROQ_RATE_LIMIT_TPD = env_int("GROQ_RATE_LIMIT_TPD", default=200_000)
+GROQ_RATE_LIMIT_TOKEN_RESERVE = env_int("GROQ_RATE_LIMIT_TOKEN_RESERVE", default=256)
+GROQ_RATE_LIMIT_MIN_OUTPUT_TOKENS = env_int(
+    "GROQ_RATE_LIMIT_MIN_OUTPUT_TOKENS", default=512
+)
+GROQ_RATE_LIMIT_WINDOW_SECONDS = env_int("GROQ_RATE_LIMIT_WINDOW_SECONDS", default=60)
+LM_STUDIO_BASE_URL = env_string(
+    "LM_STUDIO_BASE_URL",
+    default="http://127.0.0.1:1234/v1",
+)
+LM_STUDIO_API_TOKEN = env_string("LM_STUDIO_API_TOKEN")
+LM_STUDIO_MODEL_ID = env_string(
+    "LM_STUDIO_MODEL_ID",
+    default="openai/gpt-oss-20b",
+)
+LM_STUDIO_MODEL_CODE = env_string(
+    "LM_STUDIO_MODEL_CODE",
+    default="openai/gpt-oss-20b",
+)
+LM_STUDIO_REASONING_EFFORT = env_string(
+    "LM_STUDIO_REASONING_EFFORT",
+    default="none",
+)
+LM_STUDIO_FALLBACK_ENABLED = env_bool(
+    "LM_STUDIO_FALLBACK_ENABLED",
+    default=False,
+)
+LM_STUDIO_TIMEOUT_SECONDS = env_int("LM_STUDIO_TIMEOUT_SECONDS", default=180)
+LM_STUDIO_CONTEXT_LENGTH = env_int("LM_STUDIO_CONTEXT_LENGTH", default=16_384)
+LM_STUDIO_CONTEXT_TOKEN_RESERVE = env_int(
+    "LM_STUDIO_CONTEXT_TOKEN_RESERVE",
+    default=512,
+)
+if LM_STUDIO_BASE_URL != "http://127.0.0.1:1234/v1":
+    raise ImproperlyConfigured(
+        "LM_STUDIO_BASE_URL must be the approved local loopback endpoint."
+    )
 AI_BRIEFING_TIMEOUT_SECONDS = env_int("AI_BRIEFING_TIMEOUT_SECONDS", default=45)
 AI_BRIEFING_MAX_OUTPUT_TOKENS = env_int(
     "AI_BRIEFING_MAX_OUTPUT_TOKENS",
-    default=2_000,
+    default=7_950,
 )
 AI_BRIEFING_MAX_EVIDENCE = env_int("AI_BRIEFING_MAX_EVIDENCE", default=200)
-AI_BRIEFING_DAILY_LIMIT = env_int("AI_BRIEFING_DAILY_LIMIT", default=20)
+AI_BRIEFING_DAILY_LIMIT = env_int("AI_BRIEFING_DAILY_LIMIT", default=100)
 AI_BRIEFING_STALE_MINUTES = env_int("AI_BRIEFING_STALE_MINUTES", default=15)
-if AI_BRIEFING_PROVIDER not in {"disabled", "fake", "groq"}:
-    raise ImproperlyConfigured("AI_BRIEFING_PROVIDER must be disabled, fake, or groq.")
+if AI_BRIEFING_PROVIDER not in {"disabled", "fake", "groq", "lm_studio"}:
+    raise ImproperlyConfigured(
+        "AI_BRIEFING_PROVIDER must be disabled, fake, groq, or lm_studio."
+    )
 if AI_BRIEFING_REASONING_EFFORT not in {"low", "medium", "high"}:
     raise ImproperlyConfigured(
         "AI_BRIEFING_REASONING_EFFORT must be low, medium, or high."
     )
 if not 1 <= AI_BRIEFING_TIMEOUT_SECONDS <= 120:
     raise ImproperlyConfigured("AI_BRIEFING_TIMEOUT_SECONDS must be between 1 and 120.")
-if not 256 <= AI_BRIEFING_MAX_OUTPUT_TOKENS <= 8_192:
+if not 256 <= AI_BRIEFING_MAX_OUTPUT_TOKENS <= 7_950:
     raise ImproperlyConfigured(
-        "AI_BRIEFING_MAX_OUTPUT_TOKENS must be between 256 and 8192."
+        "AI_BRIEFING_MAX_OUTPUT_TOKENS must be between 256 and 7950."
+    )
+if not 1 <= GROQ_RATE_LIMIT_RPM <= 10_000:
+    raise ImproperlyConfigured("GROQ_RATE_LIMIT_RPM must be between 1 and 10000.")
+if not GROQ_RATE_LIMIT_RPM <= GROQ_RATE_LIMIT_RPD <= 1_000_000:
+    raise ImproperlyConfigured(
+        "GROQ_RATE_LIMIT_RPD must be at least RPM and at most 1000000."
+    )
+if not 1_000 <= GROQ_RATE_LIMIT_TPM <= 10_000_000:
+    raise ImproperlyConfigured("GROQ_RATE_LIMIT_TPM must be between 1000 and 10000000.")
+if not GROQ_RATE_LIMIT_TPM <= GROQ_RATE_LIMIT_TPD <= 100_000_000:
+    raise ImproperlyConfigured(
+        "GROQ_RATE_LIMIT_TPD must be at least TPM and at most 100000000."
+    )
+if not 0 <= GROQ_RATE_LIMIT_TOKEN_RESERVE < GROQ_RATE_LIMIT_TPM:
+    raise ImproperlyConfigured(
+        "GROQ_RATE_LIMIT_TOKEN_RESERVE must be below the TPM limit."
+    )
+if not 256 <= GROQ_RATE_LIMIT_MIN_OUTPUT_TOKENS <= 7_950:
+    raise ImproperlyConfigured(
+        "GROQ_RATE_LIMIT_MIN_OUTPUT_TOKENS must be between 256 and 7950."
+    )
+if not 10 <= GROQ_RATE_LIMIT_WINDOW_SECONDS <= 120:
+    raise ImproperlyConfigured(
+        "GROQ_RATE_LIMIT_WINDOW_SECONDS must be between 10 and 120."
+    )
+if LM_STUDIO_MODEL_CODE not in {
+    "openai/gpt-oss-20b",
+    "qwen/qwen3.5-9b",
+}:
+    raise ImproperlyConfigured("LM_STUDIO_MODEL_CODE must be an approved local model.")
+if LM_STUDIO_REASONING_EFFORT not in {"none", "low", "medium", "high"}:
+    raise ImproperlyConfigured(
+        "LM_STUDIO_REASONING_EFFORT must be none, low, medium, or high."
+    )
+if LM_STUDIO_MODEL_CODE == "qwen/qwen3.5-9b" and LM_STUDIO_REASONING_EFFORT != "none":
+    raise ImproperlyConfigured(
+        "LM_STUDIO_REASONING_EFFORT must be none for qwen/qwen3.5-9b."
+    )
+if not LM_STUDIO_MODEL_ID or len(LM_STUDIO_MODEL_ID) > 200:
+    raise ImproperlyConfigured(
+        "LM_STUDIO_MODEL_ID must identify one pinned local model."
+    )
+if not 10 <= LM_STUDIO_TIMEOUT_SECONDS <= 600:
+    raise ImproperlyConfigured("LM_STUDIO_TIMEOUT_SECONDS must be between 10 and 600.")
+if not 4_096 <= LM_STUDIO_CONTEXT_LENGTH <= 131_072:
+    raise ImproperlyConfigured(
+        "LM_STUDIO_CONTEXT_LENGTH must be between 4096 and 131072."
+    )
+if not 128 <= LM_STUDIO_CONTEXT_TOKEN_RESERVE < LM_STUDIO_CONTEXT_LENGTH:
+    raise ImproperlyConfigured(
+        "LM_STUDIO_CONTEXT_TOKEN_RESERVE must be at least 128 and below the "
+        "LM Studio context length."
     )
 if not 1 <= AI_BRIEFING_MAX_EVIDENCE <= 200:
     raise ImproperlyConfigured("AI_BRIEFING_MAX_EVIDENCE must be between 1 and 200.")
@@ -214,19 +309,21 @@ EXECUTIVE_BOT_DOWNLOAD_TTL_SECONDS = env_int(
 )
 EXECUTIVE_BOT_MAX_BODY_BYTES = env_int("EXECUTIVE_BOT_MAX_BODY_BYTES", default=8192)
 EXECUTIVE_BOT_REPORT_MAX_ROWS = env_int("EXECUTIVE_BOT_REPORT_MAX_ROWS", default=500)
-EXECUTIVE_BOT_DAILY_LIMIT = env_int("EXECUTIVE_BOT_DAILY_LIMIT", default=20)
+EXECUTIVE_BOT_DAILY_LIMIT = env_int("EXECUTIVE_BOT_DAILY_LIMIT", default=100)
 EXECUTIVE_BOT_ALERT_BATCH_SIZE = env_int("EXECUTIVE_BOT_ALERT_BATCH_SIZE", default=20)
 EXECUTIVE_BOT_ALERT_LEASE_SECONDS = env_int(
     "EXECUTIVE_BOT_ALERT_LEASE_SECONDS", default=300
 )
 EXECUTIVE_BOT_STALE_MINUTES = env_int("EXECUTIVE_BOT_STALE_MINUTES", default=15)
 EXECUTIVE_ASSISTANT_ENABLED = env_bool("EXECUTIVE_ASSISTANT_ENABLED", default=False)
-EXECUTIVE_ASSISTANT_DAILY_LIMIT = env_int("EXECUTIVE_ASSISTANT_DAILY_LIMIT", default=30)
+EXECUTIVE_ASSISTANT_DAILY_LIMIT = env_int(
+    "EXECUTIVE_ASSISTANT_DAILY_LIMIT", default=100
+)
 EXECUTIVE_ASSISTANT_EVIDENCE_LIMIT = env_int(
     "EXECUTIVE_ASSISTANT_EVIDENCE_LIMIT", default=40
 )
 EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS = env_int(
-    "EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS", default=2000
+    "EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS", default=7_950
 )
 EXECUTIVE_ASSISTANT_STALE_MINUTES = env_int(
     "EXECUTIVE_ASSISTANT_STALE_MINUTES", default=15
@@ -267,9 +364,9 @@ if not 5 <= EXECUTIVE_ASSISTANT_EVIDENCE_LIMIT <= 100:
     raise ImproperlyConfigured(
         "EXECUTIVE_ASSISTANT_EVIDENCE_LIMIT must be between 5 and 100."
     )
-if not 256 <= EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS <= 4096:
+if not 256 <= EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS <= 7_950:
     raise ImproperlyConfigured(
-        "EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS must be between 256 and 4096."
+        "EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS must be between 256 and 7950."
     )
 if not 5 <= EXECUTIVE_ASSISTANT_STALE_MINUTES <= 120:
     raise ImproperlyConfigured(
@@ -310,14 +407,14 @@ PROJECT_AGENT_REASONING_EFFORT = env_string(
 )
 PROJECT_AGENT_TIMEOUT_SECONDS = env_int("PROJECT_AGENT_TIMEOUT_SECONDS", default=45)
 PROJECT_AGENT_MAX_OUTPUT_TOKENS = env_int(
-    "PROJECT_AGENT_MAX_OUTPUT_TOKENS", default=1_800
+    "PROJECT_AGENT_MAX_OUTPUT_TOKENS", default=7_950
 )
 PROJECT_AGENT_MAX_TOTAL_TOKENS = env_int(
-    "PROJECT_AGENT_MAX_TOTAL_TOKENS", default=16_000
+    "PROJECT_AGENT_MAX_TOTAL_TOKENS", default=50_000
 )
 PROJECT_AGENT_MAX_STEPS = env_int("PROJECT_AGENT_MAX_STEPS", default=8)
-PROJECT_AGENT_MAX_SECONDS = env_int("PROJECT_AGENT_MAX_SECONDS", default=180)
-PROJECT_AGENT_DAILY_LIMIT = env_int("PROJECT_AGENT_DAILY_LIMIT", default=10)
+PROJECT_AGENT_MAX_SECONDS = env_int("PROJECT_AGENT_MAX_SECONDS", default=600)
+PROJECT_AGENT_DAILY_LIMIT = env_int("PROJECT_AGENT_DAILY_LIMIT", default=100)
 PROJECT_AGENT_MAX_CONTEXT_CHARS = env_int(
     "PROJECT_AGENT_MAX_CONTEXT_CHARS", default=500
 )
@@ -335,9 +432,9 @@ PROJECT_AGENT_N8N_ENABLED = env_bool("PROJECT_AGENT_N8N_ENABLED", default=False)
 PROJECT_AGENT_N8N_SIGNATURE_TTL_SECONDS = env_int(
     "PROJECT_AGENT_N8N_SIGNATURE_TTL_SECONDS", default=300
 )
-if PROJECT_AGENT_PROVIDER not in {"disabled", "fake", "groq"}:
+if PROJECT_AGENT_PROVIDER not in {"disabled", "fake", "groq", "lm_studio"}:
     raise ImproperlyConfigured(
-        "PROJECT_AGENT_PROVIDER must be disabled, fake, or groq."
+        "PROJECT_AGENT_PROVIDER must be disabled, fake, groq, or lm_studio."
     )
 if PROJECT_AGENT_DEFAULT_MODEL not in {
     "openai/gpt-oss-20b",
@@ -354,9 +451,17 @@ if not 1_000 <= PROJECT_AGENT_MAX_TOTAL_TOKENS <= 50_000:
     raise ImproperlyConfigured(
         "PROJECT_AGENT_MAX_TOTAL_TOKENS must be between 1000 and 50000."
     )
-if not 256 <= PROJECT_AGENT_MAX_OUTPUT_TOKENS <= 4_096:
+if not 256 <= PROJECT_AGENT_MAX_OUTPUT_TOKENS <= 7_950:
     raise ImproperlyConfigured(
-        "PROJECT_AGENT_MAX_OUTPUT_TOKENS must be between 256 and 4096."
+        "PROJECT_AGENT_MAX_OUTPUT_TOKENS must be between 256 and 7950."
+    )
+if GROQ_RATE_LIMIT_MIN_OUTPUT_TOKENS > min(
+    AI_BRIEFING_MAX_OUTPUT_TOKENS,
+    EXECUTIVE_ASSISTANT_MAX_OUTPUT_TOKENS,
+    PROJECT_AGENT_MAX_OUTPUT_TOKENS,
+):
+    raise ImproperlyConfigured(
+        "GROQ_RATE_LIMIT_MIN_OUTPUT_TOKENS cannot exceed an AI output ceiling."
     )
 if not 10 <= PROJECT_AGENT_TIMEOUT_SECONDS <= 120:
     raise ImproperlyConfigured(

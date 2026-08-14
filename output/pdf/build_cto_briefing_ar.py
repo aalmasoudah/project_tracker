@@ -26,9 +26,9 @@ from reportlab.platypus import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "output" / "pdf" / "insight-projects-complete-cto-guide-ar.pdf"
-LOGO = ROOT / "static" / "img" / "project-insight-logo.png"
-MARK = ROOT / "static" / "img" / "project-insight-mark.png"
+OUTPUT = ROOT / "output" / "pdf" / "insight-tracker-complete-cto-guide-ar.pdf"
+LOGO = ROOT / "static" / "img" / "insight-tracker-logo.png"
+MARK = ROOT / "static" / "img" / "insight-tracker-mark.png"
 FONT = (
     ROOT / "static" / "vendor" / "fonts" / "NotoSansArabic-VariableFont_wdth,wght.ttf"
 )
@@ -265,7 +265,7 @@ def page_decor(canvas: Canvas, doc: SimpleDocTemplate) -> None:
         canvas.drawRightString(
             page_width - 18 * mm,
             10.8 * mm,
-            ar("إنسايت بروجكتس - موجز داخلي لمدير التقنية - 4 أغسطس 2026"),
+            ar("إنسايت تراكر - موجز داخلي لمدير التقنية - 4 أغسطس 2026"),
         )
     else:
         canvas.setFillColor(DEEP)
@@ -274,7 +274,7 @@ def page_decor(canvas: Canvas, doc: SimpleDocTemplate) -> None:
         canvas.setFillColor(DEEP)
         canvas.setFont("NotoArabicGuide", 8.5)
         canvas.drawRightString(
-            page_width - 18 * mm, page_height - 14.8 * mm, ar("إنسايت بروجكتس")
+            page_width - 18 * mm, page_height - 14.8 * mm, ar("إنسايت تراكر")
         )
         canvas.setStrokeColor(LINE)
         canvas.line(18 * mm, 14 * mm, page_width - 18 * mm, 14 * mm)
@@ -294,7 +294,7 @@ story.extend(
     [
         Spacer(1, 82 * mm),
         p("موجز داخلي لمدة 15 دقيقة لمدير التقنية", "CoverKickerAr"),
-        p("إنسايت بروجكتس", "CoverTitleAr"),
+        p("إنسايت تراكر", "CoverTitleAr"),
         p("منظومة عربية آمنة من خطة البرنامج إلى النتيجة المتحقق منها.", "CoverLeadAr"),
         Spacer(1, 12 * mm),
         p(
@@ -315,7 +315,7 @@ story.extend(
 story.extend(title("النظرة التنفيذية", "ما المنتج؟ ولماذا تستخدمه الجامعة؟"))
 overview = [
     p(
-        "إنسايت بروجكتس تطبيق مبني بـ Django وPostgreSQL يجمع البرامج والمشاريع والدورات والمهام والأشخاص والحضور والموافقات والأدلة والإشعارات واللوحات والتقارير في مساحة واحدة مضبوطة بالصلاحيات."
+        "إنسايت تراكر تطبيق مبني بـ Django وPostgreSQL يجمع البرامج والمشاريع والدورات والمهام والأشخاص والحضور والموافقات والأدلة والإشعارات واللوحات والتقارير في مساحة واحدة مضبوطة بالصلاحيات."
     ),
     bullet(
         "ترى القيادة التقدم الحالي والعمل المتأخر وحالة الموافقات دون انتظار تقارير يدوية."
@@ -587,7 +587,7 @@ story.extend(
                 ["تفويض Django", "هوية ودور وصلاحية وحدود ونطاق تقرير."],
                 [
                     "إنشاء",
-                    "ملخص عربي أو PDF بعلامة إنسايت بروجكتس وتاريخ هجري وميلادي.",
+                    "ملخص عربي أو PDF بعلامة إنسايت تراكر وتاريخ هجري وميلادي.",
                 ],
                 [
                     "تسليم",
@@ -1090,8 +1090,8 @@ def build() -> None:
         leftMargin=16 * mm,
         topMargin=22 * mm,
         bottomMargin=18 * mm,
-        title="دليل إنسايت بروجكتس الكامل لمدير التقنية",
-        author="إنسايت بروجكتس",
+        title="دليل إنسايت تراكر الكامل لمدير التقنية",
+        author="إنسايت تراكر",
         subject="الخصائص الكاملة وحوكمة الذكاء الاصطناعي والأسئلة والاختبارات ونص العرض والتجربة",
     )
     document.build(story, onFirstPage=page_decor, onLaterPages=page_decor)

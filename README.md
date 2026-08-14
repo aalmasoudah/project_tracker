@@ -1,23 +1,32 @@
-# Insight Projects / إنسايت بروجكتس
+# Insight Tracker / إنسايت تراكر
 
 Internal project, course, task, trainee-attendance, and completion-tracking
 system.
 
 ## Current Status
 
-Phases 1 through 18 are implemented and verified locally. Phase 18 adds the
-provider-neutral, non-root container and secure staging contract. Phase 17 adds a
-permission-scoped project-recovery agent with dynamic allowlisted reads,
+Phases 1 through 20 are implemented and verified locally. Phase 21 is approved
+and adds an explicitly operated local-development LM Studio provider plus a
+controlled Groq-to-local fallback for Telegram AI and project recovery. Phase
+18 adds the provider-neutral, non-root container and secure staging contract.
+Phase 17 adds a permission-scoped project-recovery agent with dynamic allowlisted reads,
 reviewed memory, cited proposals, mandatory human approval, transactional
 idempotent execution, and final verification. Phase 16 remains the fixed,
 CEO-only Arabic Telegram/n8n reporting channel. Live Groq/n8n activation still
-requires the documented staging credentials and security UAT.
+requires the documented staging credentials and security UAT; staging and
+production remain Groq-only.
 
 Approved scope includes first-class Arabic and English support across the UI,
 validation, search, imports, notifications, operational views, PDF/Excel
 reports, and RTL/LTR layouts.
 
 ## Local Setup
+
+After the initial setup below, Windows users can restart the complete local
+demo by double-clicking `START_INSIGHT_TRACKER.cmd`. It starts the application,
+worker, scheduler, database, Redis, n8n, and the existing Telegram tunnel, then
+prints the current phone/hotspot URL. See
+`docs/RUNBOOKS/LOCAL_ONE_CLICK_START.md` for behavior and troubleshooting.
 
 Requirements:
 
@@ -53,6 +62,16 @@ generation, use `AI_BRIEFING_PROVIDER=groq`, keep the default
 `openai/gpt-oss-120b` model, and provide `GROQ_API_KEY` only through the local
 ignored `.env` or the deployment secret manager. See
 `docs/RUNBOOKS/PHASE_15_AI_BRIEFINGS.md`.
+
+LM Studio is a user-operated local dependency, not part of Docker Compose. The
+approved endpoint is exactly `http://127.0.0.1:1234/v1`; the approved logical
+local model choices are `qwen/qwen3.5-9b` and `openai/gpt-oss-20b`. The exact
+loaded API model ID is
+pinned separately after `/v1/models` readiness and the bilingual strict-JSON
+capability probe. The currently installed Qwen model requires
+`LM_STUDIO_REASONING_EFFORT=none`; gpt-oss is supported but not installed. No
+launcher silently downloads a model or exposes LM Studio
+to the phone/LAN. See `docs/RUNBOOKS/PHASE_21_LOCAL_LM_STUDIO.md`.
 
 The Phase 16 Telegram integration remains disabled until Django and n8n are
 configured with matching secret-manager values and a native n8n Telegram

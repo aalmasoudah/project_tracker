@@ -208,6 +208,43 @@ def test_evidence_is_locally_ranked_bounded_cited_and_privacy_minimized() -> Non
 
 
 @pytest.mark.django_db
+def test_project_completion_question_uses_only_relevant_progress_evidence() -> None:
+    actor = _ceo()
+    project, _risky, normal = _project_and_tasks(actor)
+    normal.status = Task.Status.COMPLETED
+    normal.save(update_fields=("status", "updated_at"))
+
+    question = "Give a percentage of the projects completion"
+    assert validate_executive_question(question) == (question, "en")
+
+    evidence = build_assistant_evidence(
+        actor=actor,
+        question=question,
+        language="en",
+    )
+
+    assert evidence.provider_payload["question_focus"] == "project_progress"
+    assert evidence.provider_payload["tasks"] == []
+    assert evidence.provider_payload["pending_approvals"] == []
+    projects = evidence.provider_payload["projects"]
+    assert isinstance(projects, list)
+    assert projects == [
+        {
+            "source_ref": f"project:{project.pk}",
+            "code": project.code,
+            "name": project.name_en,
+            "status": project.status,
+            "priority": project.priority,
+            "end_date": project.end_date.isoformat(),
+            "days_to_end": (project.end_date - timezone.localdate()).days,
+            "progress_percent": "50.00",
+        }
+    ]
+    assert evidence.source_count == 1
+    assert evidence.truncated is False
+
+
+@pytest.mark.django_db
 def test_request_is_idempotent_and_audit_excludes_question(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -483,7 +520,7 @@ def test_telegram_groq_requests_use_approved_application_signature(
 
     def fake_urlopen(request: Any, *, timeout: int) -> _ProviderResponse:
         del timeout
-        assert request.get_header("User-agent") == "InsightProjects/1.0"
+        assert request.get_header("User-agent") == "InsightTracker/1.0"
         return _ProviderResponse(envelope)
 
     monkeypatch.setattr(module, "urlopen", fake_urlopen)

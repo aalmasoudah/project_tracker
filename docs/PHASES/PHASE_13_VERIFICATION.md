@@ -21,7 +21,7 @@ on 2026-08-03.
   formula-safe, and branded. English remains LTR.
 - The application theme uses the owner-supplied logo and its deep-green,
   sage, and warm-stone palette across desktop and mobile.
-- The approved company name is Insight Projects / إنسايت بروجكتس throughout
+- The approved company name is Insight Tracker / إنسايت تراكر throughout
   the interface and generated reports, and every logo placement preserves the
   supplied artwork's intrinsic aspect ratio.
 
@@ -139,8 +139,8 @@ Recommended extension commit message:
 
 ## Company-Name and Logo Correction - 2026-08-03
 
-- The project owner confirmed the company name as Insight Projects in English
-  and إنسايت بروجكتس in Arabic.
+- The project owner confirmed the company name as Insight Tracker in English
+  and إنسايت تراكر in Arabic.
 - Navigation, accessibility text, page titles, report metadata, Excel footers,
   PDF footers, documentation, and translation catalogs use the confirmed name.
 - Browser, PDF, and Excel logo placements preserve the supplied artwork's
@@ -155,4 +155,4 @@ Recommended extension commit message:
 
 Recommended correction commit message:
 
-`fix: standardize Insight Projects branding`
+`fix: standardize Insight Tracker branding`

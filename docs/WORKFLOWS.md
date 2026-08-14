@@ -6,6 +6,8 @@
 2. The administrator assigns one department and one approved predefined role.
 3. The user signs in with a temporary hashed password and must replace it.
 4. The user may change their password and persisted language preference.
+4a. The user may upload, replace, or deactivate their own verified profile
+    avatar; replacement retains protected historical evidence.
 5. Technical Admin may update non-security profile fields, reset a password,
    or deactivate/reactivate the account.
 6. Deactivation revokes all sessions; reactivation requires a new login.
@@ -157,8 +159,11 @@ restoration is handled through a documented operational procedure.
    audit event, and schedules background generation after commit.
 3. The worker rechecks the requester's active account, permission, and current
    project visibility before collecting allowlisted project evidence.
-4. The system sends only the approved evidence JSON to Groq. The request uses
-   strict JSON Schema mode and provides no tools, browsing, or actions.
+4. The system sends only the approved evidence JSON to the explicitly selected
+   provider. Groq remains the deployment provider; local development may
+   explicitly select LM Studio. The request uses strict JSON Schema mode and
+   provides no tools, browsing, or actions. Enabling fallback alone does not
+   silently change a Phase 15 briefing from Groq to LM Studio.
 5. The system validates structure and citations against the evidence allowlist
    before saving a completed briefing and its source references.
 6. Invalid or temporarily unavailable responses retry within bounded limits;
@@ -180,7 +185,9 @@ restoration is handled through a documented operational procedure.
 5. For a report, Django queues an idempotent Celery job and returns an opaque
    request identifier. n8n polls the signed status endpoint.
 6. Django gathers permission-scoped source data. Groq receives only compact
-   aggregate evidence and returns a strict Arabic executive summary. Named
+   aggregate evidence and returns a strict Arabic executive summary. During
+   approved local development, an eligible transient Groq failure may make one
+   controlled LM Studio fallback call with the same aggregate boundary. Named
    attendance rows remain local and are added deterministically to the PDF.
 7. When complete, n8n obtains a ten-minute one-time download URL, downloads
    the in-memory branded Arabic PDF, and sends it as a Telegram document.
@@ -193,8 +200,9 @@ restoration is handled through a documented operational procedure.
 ## Agentic Project Recovery and Planning
 
 1. An authorized user selects a visible non-archived project, a predefined
-   recovery goal, Arabic or English, the approved Groq model, and optional
-   bounded context.
+   recovery goal, Arabic or English, an approved provider/model configuration,
+   and optional bounded context. Deployments use Groq; local development may
+   explicitly use LM Studio or enable controlled fallback.
 2. The system applies the daily and run budgets, creates a queued run, records
    a safe audit event, and schedules the agent loop after commit.
 3. The worker rechecks the requester and project, stores a strict plan, then
@@ -233,7 +241,9 @@ restoration is handled through a documented operational procedure.
 4. Celery rechecks current authority and gathers a small deterministic ranking
    of currently visible project, task, milestone, and approval evidence.
 5. Groq receives the standalone question and untrusted structured evidence,
-   has no tools, and returns strict cited JSON in the requested language.
+   has no tools, and returns strict cited JSON in the requested language. In
+   approved local development, an eligible transient Groq failure may make one
+   controlled LM Studio call with the identical evidence and schema boundary.
 6. Django validates every citation, resolves safe labels, formats a Telegram-
    length answer, and stores no provider prompt, envelope, or raw error.
 7. n8n polls the signed status endpoint and sends only the completed safe text
@@ -241,8 +251,34 @@ restoration is handled through a documented operational procedure.
 8. Unsupported, malicious, personal-data, secret, or write requests return a
    fixed safe response without a provider call. No conversation memory exists.
 
+## Local LM Studio and Controlled Fallback
+
+1. An operator explicitly installs and loads one approved Qwen/gpt-oss artifact in
+   LM Studio, starts the API on `127.0.0.1:1234`, and keeps CORS and MCP off.
+   Application startup never downloads a model.
+2. The readiness/capability probe verifies `/v1/models`, pins its exact API
+   model ID to its approved logical code, and validates bilingual strict JSON
+   with the configured reasoning mode before local inference can be enabled.
+   The approved Qwen model requires reasoning effort `none`.
+3. Django gathers evidence and rechecks authority exactly as the calling Phase
+   15, 16, 17, or 19 workflow requires. LM Studio never reads PostgreSQL or
+   calls a domain service directly.
+4. Direct LM Studio primary selection is local-development only. Telegram and
+   Recovery retain Groq primary when controlled fallback is enabled.
+5. Only a stable transient Groq timeout, connection, rate-limit, or 5xx code is
+   eligible. Django rechecks configuration, authority, scope, and remaining
+   budgets before making one local attempt.
+6. A valid local result pins that Telegram request or Recovery run to the same
+   local provider/model. There is no switch back, second fallback, or silent
+   model selection. Invalid or unavailable local inference fails safely.
+7. Django independently validates the strict schema, citations, IDs, and
+   permissions, discards reasoning fields, and records only safe provider,
+   usage, and transition metadata.
+
 ## Workflow Approval
 
 Status: Account lifecycle and Phase 3 through Phase 17 domain lifecycles and
-the Phase 19 read-only Telegram assistant are approved. Other phase-specific
+the Phase 19 read-only Telegram assistant and Phase 20 self-service profile
+avatar lifecycle plus the Phase 21 provider workflow are approved. Other
+phase-specific
 transitions and permissions require later approval.

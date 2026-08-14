@@ -93,9 +93,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build deployment image
-        run: docker build --tag insight-projects:ci .
+        run: docker build --tag insight-tracker:ci .
 
       - name: Verify non-root runtime and deployment assets
         run: |
-          test "$(docker inspect insight-projects:ci --format '{{.Config.User}}')" = "insight"
-          docker run --rm --entrypoint python insight-projects:ci -c "from pathlib import Path; assert Path('/app/locale/ar/LC_MESSAGES/django.mo').is_file(); assert Path('/app/staticfiles/staticfiles.json').is_file()"
+          test "$(docker inspect insight-tracker:ci --format '{{.Config.User}}')" = "insight"
+          docker run --rm --entrypoint python insight-tracker:ci -c "from pathlib import Path; assert Path('/app/locale/ar/LC_MESSAGES/django.mo').is_file(); assert Path('/app/staticfiles/staticfiles.json').is_file()"

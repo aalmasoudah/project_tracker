@@ -25,6 +25,14 @@ playwright-report/
 test-results/
 tmp/
 
+# Local generated deliverables and inspection artifacts
+*.inspect.ndjson
+output/presentation/*/slide-*.png
+output/reports/
+output/pdf/weekly_logs/
+output/pdf/*-polished.pdf
+outputs/
+
 # Local tool caches
 .tools/
 .docker-codex-temp/

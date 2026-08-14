@@ -46,6 +46,8 @@ remain unresolved until their workflows are approved.
 | Contractor | View own profile | View own department | None |
 
 All internal users may change their own password and language preference.
+All active internal users may also manage their own Phase 20 profile avatar;
+this grants no access to another user's profile or storage object.
 There are no Phase 2 approve or export actions. The public `/health/` endpoint
 remains minimal; detailed operational information is deferred.
 
@@ -314,5 +316,6 @@ on 2026-07-28 in decision 0012. The Phase 8 trainee/import slice was approved
 on 2026-07-29 in decision 0013. Phase 9 was approved in decision 0014, Phase
 10 in decision 0015, Phase 11 in decision 0016, Phase 14 in decision 0019,
 Phase 15 in decision 0020, Phase 16 in decision 0021, Phase 17 in decision 0022,
-and Phase 19 in decision 0024. Separately approved extensions require their own
+and Phase 19 in decision 0024. Phase 20 adds no role or domain permission and
+is approved in decision 0025. Separately approved extensions require their own
 permission decisions.

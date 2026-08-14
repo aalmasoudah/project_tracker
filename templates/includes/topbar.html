@@ -1,0 +1,36 @@
+{% load i18n static %}
+<header class="app-topbar">
+  <div class="d-flex align-items-center gap-2">
+    <button class="btn btn-icon navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-navigation" aria-controls="mobile-navigation" aria-label="{% translate 'Toggle navigation' %}">
+      <span aria-hidden="true">☰</span>
+    </button>
+    <a class="topbar-mobile-brand d-lg-none" href="{% url 'home' %}" aria-label="{% translate 'Insight Tracker' %}">
+      <img alt="" height="32" src="{% static 'img/insight-tracker-mark.png' %}" width="42">
+    </a>
+    <button class="btn btn-icon d-none d-lg-inline-flex" id="sidebar-toggle" type="button" aria-controls="desktop-navigation" aria-expanded="true" aria-label="{% translate 'Collapse navigation' %}" data-label-collapse="{% translate 'Collapse navigation' %}" data-label-expand="{% translate 'Expand navigation' %}">
+      <span aria-hidden="true">⇤</span>
+    </button>
+    <form class="topbar-search" action="{% url 'workspace:search' %}" method="get" role="search">
+      <label class="visually-hidden" for="global-search">{% translate "Global search" %}</label>
+      <span class="topbar-search-icon" aria-hidden="true">⌕</span>
+      <input class="form-control" id="global-search" maxlength="100" minlength="2" name="q" placeholder="{% translate 'Search projects, tasks, and people' %}" type="search">
+    </form>
+  </div>
+  <div class="topbar-actions">
+    <a class="btn btn-icon notification-button" href="{% url 'notifications:list' %}" aria-label="{% translate 'Notifications' %}">
+      <span aria-hidden="true">●</span>
+      {% if unread_notification_count %}<span class="notification-count"><bdi>{{ unread_notification_count }}</bdi></span>{% endif %}
+    </a>
+    <form class="language-form" action="{% url 'set_language' %}" method="post">
+      {% csrf_token %}
+      <input name="next" type="hidden" value="{{ request.get_full_path }}">
+      <label class="visually-hidden" for="language-select">{% translate "Language" %}</label>
+      {% get_available_languages as LANGUAGES %}
+      {% get_language_info_list for LANGUAGES as language_info_list %}
+      <select class="form-select form-select-sm" id="language-select" name="language">
+        {% for language in language_info_list %}<option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>{% endfor %}
+      </select>
+      <button class="btn btn-outline-primary btn-sm language-submit" type="submit">{% translate "Switch language" %}</button>
+    </form>
+  </div>
+</header>

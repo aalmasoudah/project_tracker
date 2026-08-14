@@ -23,7 +23,7 @@ individual attendance rows.
 - Django web, PostgreSQL, Redis, one Celery worker, and exactly one Celery Beat
   process.
 - A dedicated n8n staging/production project reachable through HTTPS.
-- A Telegram bot created for Insight Projects / إنسايت بروجكتس and a private
+- A Telegram bot created for Insight Tracker / إنسايت تراكر and a private
   one-to-one chat with the approved CEO.
 - Synchronized server clocks. Signed requests permit at most five minutes of
   clock skew.
@@ -44,7 +44,11 @@ AI_BRIEFING_ENABLED=true
 AI_BRIEFING_PROVIDER=groq
 AI_BRIEFING_MODEL=openai/gpt-oss-120b
 GROQ_API_KEY=<secret-manager-reference>
+GROQ_RATE_LIMITER_ENABLED=true
+GROQ_RATE_LIMIT_TPM=8000
+GROQ_RATE_LIMIT_TPD=200000
 EXECUTIVE_BOT_ENABLED=true
+EXECUTIVE_BOT_DAILY_LIMIT=100
 EXECUTIVE_BOT_CEO_USERNAME=<approved-ceo-username>
 EXECUTIVE_BOT_TELEGRAM_CHAT_ID=<approved-private-chat-id>
 EXECUTIVE_BOT_SIGNING_SECRET=<at-least-32-random-bytes>
@@ -53,6 +57,36 @@ EXECUTIVE_BOT_SIGNING_SECRET=<at-least-32-random-bytes>
 Keep the bounded defaults in `.env.example` unless a reviewed capacity change
 requires different values. Apply migrations, restart web/worker/scheduler,
 and run `python manage.py check --deploy` before activating n8n.
+Telegram reports share the same Redis-coordinated Groq RPM/TPM/RPD/TPD budget
+as web briefings, project-agent decisions, and Telegram assistant questions.
+
+For the approved local-development fallback only, keep Groq primary and add:
+
+```text
+LM_STUDIO_FALLBACK_ENABLED=true
+LM_STUDIO_BASE_URL=http://127.0.0.1:1234/v1
+LM_STUDIO_MODEL_CODE=qwen/qwen3.5-9b
+LM_STUDIO_MODEL_ID=qwen/qwen3.5-9b
+LM_STUDIO_REASONING_EFFORT=none
+LM_STUDIO_API_TOKEN=
+LM_STUDIO_TIMEOUT_SECONDS=180
+LM_STUDIO_CONTEXT_LENGTH=32768
+LM_STUDIO_CONTEXT_TOKEN_RESERVE=512
+```
+
+LM Studio is user-operated on the Django/Celery host and is never called by
+n8n or Telegram. The exact ID must be present in `/v1/models` and pass the
+Phase 21 capability probe. No service silently downloads a model. This local
+configuration is prohibited in staging and production.
+The shown Qwen configuration is the installed live-gated artifact and requires
+reasoning `none`. gpt-oss 20B remains an approved alternative only after it is
+explicitly installed, exactly pinned, and gated.
+
+Only a locally classified Groq timeout, connection failure, rate limit, or 5xx
+may make one fallback call. Invalid credentials/configuration, HMAC/chat/role,
+unsafe input, schema/citation, quota/budget, cancellation, stale, duplicate,
+or business-rule failures never fallback. Named attendance rows remain local
+to Django for both providers.
 
 ## n8n Configuration and Import
 
@@ -116,13 +150,21 @@ Arabic data.
    and provider telemetry. They must not contain the chat ID, signing secret,
    bot token, trainee names, attendance rows, report body, or provider payload.
 
+For a separate local fallback drill, first complete the Phase 21 live probe,
+then simulate or induce one eligible transient Groq failure using a fictional
+request. Verify one local summary, one safe provider transition, no duplicate
+PDF/Telegram delivery, and no second provider switch. Do not invalidate a real
+credential to simulate a transient error; configuration/authentication failures
+must not fallback.
+
 Do not perform the privacy test using real trainee data.
 
 ## Monitoring and Recovery
 
 - Monitor report queued/processing/failed counts, Celery queue age, failed
-  Groq calls, integration authentication failures, unacknowledged alert age,
-  and Telegram/n8n availability using safe counts only.
+  Groq calls, local fallback/availability counts, integration authentication
+  failures, unacknowledged alert age, and Telegram/n8n availability using safe
+  counts only.
 - n8n polls report status every five seconds for at most ten minutes. A failed
   report returns a safe Arabic message; application business workflows remain
   available.

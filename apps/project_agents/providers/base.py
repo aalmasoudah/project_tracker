@@ -19,7 +19,18 @@ class ProviderConfigurationError(RuntimeError):
 
 
 class TemporaryProviderError(RuntimeError):
-    pass
+    def __init__(
+        self,
+        message: str,
+        *,
+        retry_after_seconds: int | None = None,
+        fallback_eligible: bool = False,
+        reason_code: str = "provider_unavailable",
+    ) -> None:
+        super().__init__(message)
+        self.retry_after_seconds = retry_after_seconds
+        self.fallback_eligible = fallback_eligible
+        self.reason_code = reason_code
 
 
 class ProviderResponseError(RuntimeError):

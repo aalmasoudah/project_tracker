@@ -56,7 +56,6 @@ def test_mobile_bilingual_workspace_navigation_and_read_only_views(
         assert page.locator("html").get_attribute("dir") == "rtl"
         assert page.get_by_text("للقراءة فقط", exact=True).count() == 1
 
-        page.locator("button.navbar-toggler").click()
         page.locator('select[name="language"]').select_option("en")
         page.locator('form[action$="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")

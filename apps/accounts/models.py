@@ -1,6 +1,7 @@
 """Authentication models created before all later business domains."""
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
+from uuid import uuid4
 
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import PermissionDenied
@@ -124,6 +125,76 @@ class User(AbstractUser):
     def __str__(self) -> str:
         """Use the approved display name while retaining a stable username."""
         return self.display_name or self.username
+
+    @property
+    def active_profile_avatar(self) -> "UserAvatar | None":
+        """Return the retained avatar currently selected for presentation."""
+        cache_name = "_active_profile_avatar_cache"
+        if cache_name in self.__dict__:
+            return cast("UserAvatar | None", self.__dict__[cache_name])
+        avatar = UserAvatar.objects.filter(user_id=self.pk, is_active=True).first()
+        self.__dict__[cache_name] = avatar
+        return avatar
+
+
+def profile_avatar_upload_path(instance: "UserAvatar", filename: str) -> str:
+    """Create an unguessable key without retaining the source filename."""
+    del filename
+    return f"accounts/avatars/{instance.user_id}/{uuid4().hex}.webp"
+
+
+class UserAvatar(models.Model):
+    """Private retained profile-avatar lifecycle evidence."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="profile_avatars",
+    )
+    image = models.ImageField(upload_to=profile_avatar_upload_path, max_length=255)
+    content_sha256 = models.CharField(max_length=64, editable=False)
+    source_size = models.PositiveIntegerField(editable=False)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    deactivated_at = models.DateTimeField(blank=True, null=True)
+    deactivated_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="deactivated_profile_avatars",
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        default_permissions: ClassVar[tuple[str, ...]] = ()
+        constraints: ClassVar[list[models.BaseConstraint]] = [
+            models.UniqueConstraint(
+                fields=("user",),
+                condition=models.Q(is_active=True),
+                name="accounts_one_active_avatar_per_user",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(is_active=True, deactivated_at__isnull=True)
+                    | models.Q(is_active=False, deactivated_at__isnull=False)
+                ),
+                name="accounts_avatar_active_timestamp_consistent",
+            ),
+        ]
+        indexes: ClassVar[list[models.Index]] = [
+            models.Index(
+                fields=("user", "is_active"),
+                name="acct_avatar_user_active_idx",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"avatar:{self.user_id}:{self.pk}"
+
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        """Retain avatar files and lifecycle records under Phase 14 rules."""
+        del args, kwargs
+        raise PermissionDenied("Profile avatar history cannot be hard-deleted.")
 
 
 class LoginThrottle(models.Model):

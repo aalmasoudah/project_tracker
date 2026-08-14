@@ -1,0 +1,27 @@
+{% load i18n %}
+{% if request.resolver_match.url_name != "home" %}
+  <nav class="app-breadcrumb" aria-label="{% translate 'Breadcrumb' %}">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">{% translate "Dashboard" %}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {% if request.resolver_match.app_name == "projects" %}{% translate "Projects" %}
+        {% elif request.resolver_match.app_name == "courses" %}{% translate "Courses" %}
+        {% elif request.resolver_match.app_name == "tasks" %}{% translate "Tasks" %}
+        {% elif request.resolver_match.app_name == "approvals" %}{% translate "Approvals" %}
+        {% elif request.resolver_match.app_name == "attendance" %}{% translate "Attendance" %}
+        {% elif request.resolver_match.app_name == "trainees" %}{% translate "Trainees" %}
+        {% elif request.resolver_match.app_name == "accounts" and request.resolver_match.url_name == "profile" %}{% translate "My profile" %}
+        {% elif request.resolver_match.app_name == "accounts" %}{% translate "Accounts" %}
+        {% elif request.resolver_match.app_name == "organizations" %}{% translate "Departments" %}
+        {% elif request.resolver_match.app_name == "notifications" %}{% translate "Notifications" %}
+        {% elif request.resolver_match.app_name == "reports" %}{% translate "Reports" %}
+        {% elif request.resolver_match.app_name == "audit" %}{% translate "Audit" %}
+        {% elif request.resolver_match.app_name == "operations" %}{% translate "Operations" %}
+        {% elif request.resolver_match.app_name == "ai_briefings" %}{% translate "AI briefing" %}
+        {% elif request.resolver_match.app_name == "project_agents" %}{% translate "Project agent" %}
+        {% elif request.resolver_match.app_name == "workspace" %}{% translate "Workspace" %}
+        {% else %}{% translate "Workspace" %}{% endif %}
+      </li>
+    </ol>
+  </nav>
+{% endif %}

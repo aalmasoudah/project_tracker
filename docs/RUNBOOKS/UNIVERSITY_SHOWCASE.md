@@ -10,7 +10,7 @@ The development-only showcase represents three fictional client programs:
 
 Each program is represented by a university client and a bilingual project
 category. Every program contains multiple projects. All projects belong to one
-fictional Insight Projects PMO department so the approved department boundary
+fictional Insight Tracker PMO department so the approved department boundary
 still permits shared analysts, quality staff, and contractors to work across
 programs. University specialists remain assigned only to their program.
 
@@ -101,3 +101,34 @@ uv run pytest tests/browser -q
 
 The focused integration test is
 `tests/integration/test_university_showcase.py`.
+
+## Minimal Full-Feature Scenario
+
+Use `load_minimal_feature_showcase` when one compact scenario is easier to
+test than the three-university dataset. It keeps the existing `zx` and
+`demo.executive` database identities and password hashes, then creates one
+account for each remaining internal role: Executive Manager, Project Manager,
+Supervisor, Employee, and Contractor. An external trainer remains link-only,
+so the complete scenario uses seven internal accounts in total.
+
+The scenario creates one active project plus one lightweight archived project,
+one course, nested/current/blocked/overdue/completed/cancelled/archived tasks,
+all three approval outcomes, confirmed and cancelled trainee imports, approved
+and pending attendance, correction evidence, saved filters, notifications,
+reportable rows, and evidence for the approved AI features. Live AI and
+Telegram calls still require their normal feature flags, credentials, quotas,
+signatures, and permission checks.
+
+```powershell
+uv run python manage.py load_minimal_feature_showcase `
+  --environment development `
+  --demo-password "<runtime-demo-password>" `
+  --apply `
+  --confirm "LOAD-MINIMAL-FEATURE-SHOWCASE:development"
+```
+
+This command is destructive and development-only. Stop active workers, create
+a verified database backup outside Git, and preserve private media separately
+when recovery is required. The Telegram-bound CEO username remains
+`demo.executive`; changing the temporary password argument affects only the
+five newly created operational accounts.

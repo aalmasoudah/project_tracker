@@ -23,9 +23,11 @@ PROJECT_AGENT_ENABLED=true
 PROJECT_AGENT_PROVIDER=groq
 PROJECT_AGENT_DEFAULT_MODEL=openai/gpt-oss-120b
 PROJECT_AGENT_REASONING_EFFORT=high
+PROJECT_AGENT_MAX_OUTPUT_TOKENS=7950
 PROJECT_AGENT_MAX_STEPS=8
-PROJECT_AGENT_MAX_TOTAL_TOKENS=16000
-PROJECT_AGENT_DAILY_LIMIT=10
+PROJECT_AGENT_MAX_TOTAL_TOKENS=50000
+PROJECT_AGENT_MAX_SECONDS=600
+PROJECT_AGENT_DAILY_LIMIT=100
 PROJECT_AGENT_PROPOSAL_TTL_HOURS=72
 GROQ_API_KEY=<secret-manager-reference>
 ```
@@ -35,8 +37,50 @@ defaults in `.env.example` unless a reviewed capacity and security change is
 approved. Development and tests may use `PROJECT_AGENT_PROVIDER=fake` only;
 production fails closed unless the provider is Groq and the key is present.
 
+The output value is only a ceiling for one decision. The shared adaptive
+limiter reduces each decision to the largest safe value after accounting for
+the prompt and recent 8K-TPM usage. The 50K run budget remains a separate
+cumulative input-plus-output guard across all decisions; bounded Celery rate
+deferrals allow a multi-step run to continue without bypassing that guard.
+
 Apply reviewed migrations, compile messages, restart web/worker/Beat, and run
 `python manage.py check --deploy` before staging activation.
+
+## Local LM Studio Development and Fallback
+
+Direct local primary selection is allowed only in development with
+`PROJECT_AGENT_PROVIDER=lm_studio`. For the approved Groq-primary fallback,
+retain `PROJECT_AGENT_PROVIDER=groq` and add:
+
+```text
+LM_STUDIO_FALLBACK_ENABLED=true
+LM_STUDIO_BASE_URL=http://127.0.0.1:1234/v1
+LM_STUDIO_MODEL_CODE=qwen/qwen3.5-9b
+LM_STUDIO_MODEL_ID=qwen/qwen3.5-9b
+LM_STUDIO_REASONING_EFFORT=none
+LM_STUDIO_API_TOKEN=
+LM_STUDIO_TIMEOUT_SECONDS=180
+LM_STUDIO_CONTEXT_LENGTH=32768
+LM_STUDIO_CONTEXT_TOKEN_RESERVE=512
+```
+
+`LM_STUDIO_MODEL_CODE` is the stable allowlist/persisted code.
+`LM_STUDIO_MODEL_ID` is the exact loaded server identifier from `/v1/models`
+and is sent in API requests. Complete the Phase 21 bilingual strict-JSON and
+agent-decision capability probe before either mode. The launcher never silently
+downloads a model, and deployed settings continue to reject LM Studio.
+The installed Qwen artifact requires reasoning `none`; other values fail
+configuration because the live strict probe exhausted reasoning instead of
+completing JSON. gpt-oss 20B remains supported only after installation/gating.
+
+A run may transition once after an eligible transient Groq timeout, connection
+failure, rate limit, or 5xx. After the first valid local decision, every later
+provider turn remains pinned to that local ID. Authentication/configuration,
+permission/security, prompt/input, schema/citation, quota/budget, cancellation,
+stale/duplicate, and business-rule errors never fallback. If local inference
+then fails, the run uses its existing safe failure path; it never oscillates.
+All existing tool allowlists, human approval, stale-state recheck, idempotent
+execution, and cited verification remain mandatory.
 
 ## Operator Workflow
 
@@ -115,13 +159,17 @@ an upcoming milestone, a pending approval, and uneven workload.
 7. Inspect audit events and logs. They must contain stable codes and bounded
    identifiers only—not prompts, chain-of-thought, provider payloads, raw
    errors, credentials, or excluded-domain data.
+8. In a separate local fallback drill, make an eligible transient Groq failure
+   occur after at least one successful decision. Verify one safe transition,
+   the same exact local ID for every remaining turn, no Groq return, and an
+   otherwise complete multi-tool/approval/execution/verification workflow.
 
 ## Monitoring and Recovery
 
 - Monitor queued/running/awaiting-approval/failed/stale/expired counts, age of
-  running jobs, Celery queue age, provider timeout/retry counts, token/quota
-  exhaustion, proposal outcomes, and n8n authentication failures using safe
-  aggregates only.
+  running jobs, Celery queue age, provider timeout/retry/fallback counts, safe
+  provider transitions, token/quota exhaustion, proposal outcomes, and n8n
+  authentication failures using safe aggregates only.
 - Provider timeouts retry twice with bounded backoff. Stuck planning/running
   jobs are requeued by Celery Beat. Pending proposals expire after the
   configured TTL and cannot be approved. Beat also removes expired n8n nonce

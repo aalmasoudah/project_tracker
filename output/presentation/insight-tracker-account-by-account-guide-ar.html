@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="دليل عربي تفاعلي لشرح Insight Tracker حسابًا بحساب وصلاحيات كل دور.">
+  <title>Insight Tracker | الدليل حسب الحساب والدور</title>
+  <style>
+    @font-face {
+      font-family: "Insight Arabic";
+      src: url("../../static/vendor/fonts/NotoSansArabic-VariableFont_wdth,wght.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --deep: #0a400c;
+      --forest: #17531b;
+      --sage: #819067;
+      --stone: #b1ab86;
+      --paper: #f3f1e8;
+      --surface: #ffffff;
+      --app: #f7f8f3;
+      --ink: #243127;
+      --muted: #617064;
+      --line: #d8ded2;
+      --success: #176b35;
+      --warning: #916517;
+      --danger: #9b2c2c;
+      --blue: #285a75;
+      --shadow: 0 18px 45px rgba(10, 64, 12, 0.10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 94px; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 7% 8%, rgba(129, 144, 103, 0.18), transparent 29rem),
+        linear-gradient(180deg, #f9faf6 0%, var(--app) 48%, #eef1e9 100%);
+      font-family: "Insight Arabic", "Segoe UI", Tahoma, sans-serif;
+      line-height: 1.85;
+    }
+
+    button, input, a { font: inherit; }
+    a { color: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 74px;
+      padding: .65rem clamp(1rem, 3vw, 3rem);
+      color: #fff;
+      background: rgba(6, 48, 8, .96);
+      border-bottom: 1px solid rgba(255, 255, 255, .14);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .16);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      padding: 4px;
+      background: #fff;
+      border-radius: 12px;
+    }
+
+    .brand strong { display: block; font-size: 1rem; line-height: 1.35; }
+    .brand small { display: block; color: #d8e4d6; font-size: .78rem; }
+
+    .top-actions { display: flex; align-items: center; gap: .55rem; }
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      min-height: 42px;
+      padding: .5rem .85rem;
+      color: #fff;
+      text-decoration: none;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 12px;
+    }
+    .action:hover, .action:focus-visible { background: rgba(255, 255, 255, .18); outline: none; }
+
+    .page-shell {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      gap: clamp(1.25rem, 2.5vw, 2.5rem);
+      width: min(1540px, calc(100% - 2rem));
+      margin: 1.5rem auto 4rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      align-self: start;
+      max-height: calc(100vh - 112px);
+      overflow: auto;
+      padding: 1rem;
+      background: rgba(255, 255, 255, .90);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar h2 { margin: 0 0 .55rem; color: var(--deep); font-size: 1rem; }
+    .sidebar a {
+      display: block;
+      padding: .55rem .65rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 10px;
+    }
+    .sidebar a:hover, .sidebar a:focus-visible, .sidebar a.active {
+      color: var(--deep);
+      background: #edf3e8;
+      outline: none;
+    }
+
+    main { min-width: 0; }
+    section { margin-bottom: 1.5rem; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr);
+      align-items: center;
+      gap: 2rem;
+      min-height: 480px;
+      padding: clamp(2rem, 5vw, 4.5rem);
+      color: #fff;
+      background: linear-gradient(135deg, var(--deep), #0d5b17 68%, #47724a);
+      border-radius: 28px;
+      box-shadow: 0 24px 60px rgba(10, 64, 12, .22);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -8rem -13rem auto;
+      width: 30rem;
+      height: 30rem;
+      background: rgba(255, 255, 255, .07);
+      border-radius: 50%;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      width: fit-content;
+      padding: .35rem .75rem;
+      color: #eaf3e7;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .20);
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .84rem;
+    }
+    .hero h1 {
+      max-width: 850px;
+      margin: 1rem 0 .75rem;
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+      line-height: 1.25;
+      letter-spacing: -.04em;
+    }
+    .hero p { max-width: 800px; margin: 0; color: #e7efe5; font-size: 1.08rem; }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .7rem;
+      margin-top: 1.5rem;
+    }
+    .hero-stat {
+      padding: .85rem;
+      text-align: center;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 14px;
+    }
+    .hero-stat strong { display: block; font-size: 1.55rem; }
+    .hero-stat span { color: #d9e8d6; font-size: .82rem; }
+    .hero-logo {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      min-height: 300px;
+      padding: 1.4rem;
+      background: #fff;
+      border-radius: 24px;
+      transform: rotate(-1.5deg);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, .24);
+    }
+    .hero-logo img { width: min(100%, 250px); max-height: 260px; object-fit: contain; }
+
+    .panel {
+      padding: clamp(1.25rem, 3vw, 2.2rem);
+      background: rgba(255, 255, 255, .94);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .section-head h2 { margin: 0; color: var(--deep); font-size: clamp(1.45rem, 3vw, 2.15rem); line-height: 1.35; }
+    .section-head p { max-width: 780px; margin: .35rem 0 0; color: var(--muted); }
+
+    .method-grid, .role-grid, .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .method-card, .role-summary, .demo-card {
+      padding: 1rem;
+      background: var(--app);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: .65rem;
+      color: #fff;
+      background: var(--forest);
+      border-radius: 12px;
+      font-weight: 900;
+    }
+    .method-card h3, .role-summary h3, .demo-card h3 { margin: 0 0 .35rem; color: var(--deep); }
+    .method-card p, .role-summary p, .demo-card p { margin: 0; color: var(--muted); }
+
+    .role-summary { border-top: 4px solid var(--role-color, var(--forest)); }
+    .role-summary .count { color: var(--role-color, var(--forest)); font-size: 1.55rem; font-weight: 900; }
+
+    .filters {
+      position: sticky;
+      top: 86px;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      padding: .75rem;
+      margin-bottom: 1rem;
+      background: rgba(247, 248, 243, .94);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .filter-button {
+      min-height: 42px;
+      padding: .45rem .85rem;
+      color: var(--deep);
+      background: #fff;
+      border: 1px solid #ccd6c6;
+      border-radius: 999px;
+      font-weight: 750;
+    }
+    .filter-button:hover, .filter-button:focus-visible, .filter-button.active {
+      color: #fff;
+      background: var(--deep);
+      border-color: var(--deep);
+      outline: none;
+    }
+    .search {
+      flex: 1 1 230px;
+      min-height: 42px;
+      padding: .45rem .9rem;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid #ccd6c6;
+      border-radius: 999px;
+      outline: none;
+    }
+    .search:focus { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(23, 83, 27, .12); }
+
+    .accounts { display: grid; gap: 1rem; }
+    .account {
+      --account: var(--forest);
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-right: 7px solid var(--account);
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(36, 49, 39, .06);
+    }
+    .account[hidden] { display: none; }
+    .account-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: .9rem;
+      padding: 1rem 1.15rem;
+      background: linear-gradient(90deg, rgba(247, 248, 243, .3), rgba(247, 248, 243, .95));
+    }
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      color: #fff;
+      background: var(--account);
+      border-radius: 18px;
+      font-size: 1.15rem;
+      font-weight: 900;
+    }
+    .account-title h3 { margin: 0; color: var(--deep); font-size: 1.2rem; }
+    .username { direction: ltr; unicode-bidi: isolate; color: var(--muted); font-family: Consolas, monospace; font-size: .85rem; }
+    .role-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: .3rem .7rem;
+      color: var(--account);
+      background: color-mix(in srgb, var(--account) 10%, white);
+      border: 1px solid color-mix(in srgb, var(--account) 30%, white);
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .account-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      padding: 1rem 1.15rem 1.2rem;
+    }
+    .scope {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: start;
+      gap: .75rem;
+      padding: .85rem;
+      background: #f2f6ef;
+      border-radius: 13px;
+    }
+    .scope strong { color: var(--deep); white-space: nowrap; }
+    .scope p { margin: 0; }
+    .feature-box {
+      padding: .9rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .feature-box h4 { margin: 0 0 .5rem; color: var(--deep); }
+    .feature-box ul, .feature-box ol { margin: 0; padding-inline-start: 1.25rem; }
+    .feature-box li + li { margin-top: .3rem; }
+    .feature-box.limit { background: #fff8f2; border-color: #ead9c6; }
+    .feature-box.demo { grid-column: 1 / -1; background: #f7faf5; }
+    .account-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: .75rem 1.15rem;
+      color: var(--muted);
+      background: #f8f9f6;
+      border-top: 1px solid var(--line);
+      font-size: .84rem;
+    }
+    .check-label { display: inline-flex; align-items: center; gap: .45rem; color: var(--deep); font-weight: 700; }
+    .check-label input { width: 19px; height: 19px; accent-color: var(--forest); }
+
+    .role-ceo { --account: #7a5b12; }
+    .role-executive { --account: #0e5a40; }
+    .role-pm { --account: #285a75; }
+    .role-supervisor { --account: #5b4a86; }
+    .role-employee { --account: #2f6d33; }
+    .role-contractor { --account: #995523; }
+    .role-admin { --account: #8a2f36; }
+    .role-trainer { --account: #5f6970; }
+
+    .matrix-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; }
+    table { width: 100%; min-width: 920px; border-collapse: collapse; background: #fff; }
+    th, td { padding: .75rem; text-align: right; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: #fff; background: var(--deep); }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f5f7f1; }
+    .yes { color: var(--success); font-weight: 900; }
+    .scoped { color: var(--warning); font-weight: 900; }
+    .no { color: var(--danger); font-weight: 900; }
+
+    .demo-card { position: relative; padding-top: 3rem; }
+    .demo-card .minute {
+      position: absolute;
+      top: .8rem;
+      inset-inline-start: .8rem;
+      padding: .2rem .55rem;
+      color: #fff;
+      background: var(--forest);
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 800;
+    }
+    .demo-card ol { margin: .65rem 0 0; padding-inline-start: 1.25rem; }
+
+    .notice {
+      padding: 1rem;
+      color: #5f4817;
+      background: #fff9e8;
+      border: 1px solid #ead8a2;
+      border-radius: 14px;
+    }
+    .notice strong { color: #4b3608; }
+
+    .progress-float {
+      position: fixed;
+      inset: auto auto 1rem 1rem;
+      z-index: 35;
+      min-width: 185px;
+      padding: .7rem;
+      color: #fff;
+      background: rgba(6, 48, 8, .94);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .progress-float strong { display: flex; justify-content: space-between; gap: .5rem; font-size: .8rem; }
+    .progress-track { height: 8px; margin-top: .45rem; overflow: hidden; background: rgba(255,255,255,.2); border-radius: 999px; }
+    .progress-fill { width: 0; height: 100%; background: #b7cf96; transition: width .25s ease; }
+
+    footer {
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .page-shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; display: flex; overflow-x: auto; max-height: none; gap: .3rem; }
+      .sidebar h2 { display: none; }
+      .sidebar a { flex: 0 0 auto; white-space: nowrap; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-logo { min-height: 220px; }
+      .method-grid, .role-grid, .demo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      html { scroll-padding-top: 80px; }
+      .topbar { min-height: 64px; padding: .5rem .75rem; }
+      .brand small, .top-actions .print-label { display: none; }
+      .brand img { width: 42px; height: 42px; }
+      .page-shell { width: min(100% - 1rem, 1540px); margin-top: .75rem; }
+      .sidebar { padding: .55rem; }
+      .hero { min-height: auto; padding: 1.5rem; border-radius: 20px; }
+      .hero h1 { font-size: 2.05rem; }
+      .hero-logo { display: none; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .method-grid, .role-grid, .demo-grid { grid-template-columns: 1fr; }
+      .filters { top: 70px; }
+      .account-head { grid-template-columns: auto minmax(0, 1fr); }
+      .role-pill { grid-column: 1 / -1; width: fit-content; }
+      .account-body { grid-template-columns: 1fr; }
+      .scope, .feature-box.demo { grid-column: auto; }
+      .scope { display: block; }
+      .scope strong { display: block; margin-bottom: .25rem; }
+      .account-foot { align-items: start; flex-direction: column; }
+      .progress-float { inset: auto .5rem .5rem .5rem; min-width: 0; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { background: #fff; font-size: 10.5pt; }
+      .topbar, .sidebar, .filters, .progress-float, .no-print { display: none !important; }
+      .page-shell { display: block; width: 100%; margin: 0; }
+      .hero { min-height: auto; padding: 18mm; color: #fff !important; print-color-adjust: exact; }
+      .hero-logo { min-height: 150px; }
+      .panel { box-shadow: none; }
+      .account { break-inside: avoid; box-shadow: none; }
+      .account[hidden] { display: block; }
+      .method-grid, .role-grid, .demo-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="../../static/img/insight-tracker-mark.png" alt="شعار Insight Tracker">
+      <div>
+        <strong>Insight Tracker — الدليل حسب الحساب</strong>
+        <small>من يرى ماذا؟ ومن يستطيع تنفيذ أي إجراء؟</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="action" href="insight-tracker-complete-feature-guide-ar.html">الدليل الشامل</a>
+      <button class="action" type="button" onclick="window.print()"><span aria-hidden="true">⎙</span><span class="print-label">طباعة / PDF</span></button>
+    </div>
+  </header>
+
+  <div class="page-shell">
+    <nav class="sidebar" aria-label="فهرس الدليل">
+      <h2>انتقل إلى</h2>
+      <a href="#intro">البداية</a>
+      <a href="#method">طريقة الشرح</a>
+      <a href="#roles">ملخص الأدوار</a>
+      <a href="#accounts">الحسابات</a>
+      <a href="#matrix">مصفوفة الصلاحيات</a>
+      <a href="#demo">مسار العرض المختصر</a>
+      <a href="#notes">ملاحظات مهمة</a>
+    </nav>
+
+    <main>
+      <section class="hero" id="intro">
+        <div>
+          <span class="eyebrow">نسخة العرض التجريبية الحالية</span>
+          <h1>شرح البرنامج حسابًا بحساب</h1>
+          <p>هذا الدليل يحوّل الصلاحيات التقنية إلى تجربة عملية: ندخل بحساب حقيقي، نوضح نطاق بياناته، نعرض أهم المميزات التي تظهر له، ثم نبيّن بوضوح ما لا يستطيع تنفيذه.</p>
+          <div class="hero-stats" aria-label="إحصاءات الدليل">
+            <div class="hero-stat"><strong>16</strong><span>حسابًا داخليًا</span></div>
+            <div class="hero-stat"><strong>7</strong><span>أدوار فعلية</span></div>
+            <div class="hero-stat"><strong>7</strong><span>مشاريع إجمالًا</span></div>
+          </div>
+        </div>
+        <div class="hero-logo">
+          <img src="../../static/img/insight-tracker-logo.png" alt="شعار Insight Tracker كاملًا">
+        </div>
+      </section>
+
+      <section class="panel" id="method">
+        <div class="section-head">
+          <div>
+            <h2>طريقة الشرح المقترحة</h2>
+            <p>بدل استعراض كل قائمة في النظام، نعرض نفس العمل من وجهات نظر مختلفة. بهذه الطريقة يفهم العميل قيمة الصلاحيات وتدفق العمل بسرعة.</p>
+          </div>
+        </div>
+        <div class="method-grid">
+          <article class="method-card"><div class="step-number">1</div><h3>عرّف الحساب</h3><p>اذكر اسم الشخص ودوره والجامعة أو المشاريع التي تدخل ضمن نطاقه.</p></article>
+          <article class="method-card"><div class="step-number">2</div><h3>اعرض ما يراه</h3><p>ابدأ بلوحة المعلومات ثم افتح عنصرًا حقيقيًا ضمن صلاحيات الحساب.</p></article>
+          <article class="method-card"><div class="step-number">3</div><h3>نفّذ إجراءً واحدًا</h3><p>حدّث مهمة أو راجع حضورًا أو أنشئ تقريرًا بحسب الدور.</p></article>
+          <article class="method-card"><div class="step-number">4</div><h3>وضّح الحد الأمني</h3><p>اذكر إجراءً لا يظهر للحساب أو لا يستطيع تنفيذه، ولماذا.</p></article>
+          <article class="method-card"><div class="step-number">5</div><h3>بدّل الحساب</h3><p>أكمل نفس العملية من صاحب القرار التالي لإظهار تسلسل المسؤولية.</p></article>
+          <article class="method-card"><div class="step-number">6</div><h3>اختم بالنتيجة</h3><p>ارجع للرئيس التنفيذي وأظهر أثر التحديث في التقدم والتقارير والذكاء الاصطناعي.</p></article>
+        </div>
+      </section>
+
+      <section class="panel" id="roles">
+        <div class="section-head">
+          <div>
+            <h2>ملخص الأدوار</h2>
+            <p>المسار الإداري يبدأ بالرئيس التنفيذي، بينما المسؤول التقني مسار منفصل لإدارة النظام ولا يملك صلاحية تلقائية على بيانات الأعمال.</p>
+          </div>
+        </div>
+        <div class="role-grid">
+          <article class="role-summary" style="--role-color:#7a5b12"><span class="count">1</span><h3>الرئيس التنفيذي</h3><p>رؤية شاملة وقراءة فقط، تقارير وذكاء اصطناعي وTelegram.</p></article>
+          <article class="role-summary" style="--role-color:#0e5a40"><span class="count">1</span><h3>المدير التنفيذي</h3><p>الإدارة التشغيلية الكاملة لجميع المشاريع والموارد.</p></article>
+          <article class="role-summary" style="--role-color:#285a75"><span class="count">3</span><h3>مديرو المشاريع</h3><p>كل مدير يدير مشروعي جامعته فقط.</p></article>
+          <article class="role-summary" style="--role-color:#5b4a86"><span class="count">3</span><h3>المشرفون</h3><p>متابعة التنفيذ والموافقة الأولى ومراجعة الحضور.</p></article>
+          <article class="role-summary" style="--role-color:#2f6d33"><span class="count">6</span><h3>الموظفون</h3><p>تنفيذ المهام المعيّنة والتعاون عليها حسب النطاق.</p></article>
+          <article class="role-summary" style="--role-color:#995523"><span class="count">1</span><h3>المتعاقد</h3><p>تنفيذ مهامه المعيّنة دون صلاحيات إدارية.</p></article>
+          <article class="role-summary" style="--role-color:#8a2f36"><span class="count">1</span><h3>المسؤول التقني</h3><p>الحسابات والأقسام والأمن والتشغيل، وليس بيانات المشاريع.</p></article>
+          <article class="role-summary" style="--role-color:#5f6970"><span class="count">رابط</span><h3>المدرب الخارجي</h3><p>ليس حسابًا داخليًا؛ يدخل لجلسة واحدة عبر رابط آمن مؤقت.</p></article>
+        </div>
+      </section>
+
+      <section class="panel" id="accounts">
+        <div class="section-head">
+          <div>
+            <h2>الحسابات الفعلية في السيناريو</h2>
+            <p>استخدم المرشحات للتركيز على رول أو جامعة. كل بطاقة تحتوي على نطاق الحساب والمميزات وحدود الصلاحية وخطوات العرض.</p>
+          </div>
+        </div>
+
+        <div class="filters no-print" role="group" aria-label="تصفية الحسابات">
+          <button class="filter-button active" type="button" data-filter="all">الكل</button>
+          <button class="filter-button" type="button" data-filter="executive">القيادة</button>
+          <button class="filter-button" type="button" data-filter="kau">KAU</button>
+          <button class="filter-button" type="button" data-filter="ksu">KSU</button>
+          <button class="filter-button" type="button" data-filter="kku">KKU</button>
+          <button class="filter-button" type="button" data-filter="shared">الفريق المشترك</button>
+          <button class="filter-button" type="button" data-filter="technical">التقني</button>
+          <input class="search" id="account-search" type="search" placeholder="ابحث بالاسم أو اسم المستخدم أو الرول…" aria-label="البحث في الحسابات">
+        </div>
+
+        <div class="accounts" id="account-list">
+          <article class="account role-ceo" data-groups="executive ceo" data-search="نورة الحربي الرئيس التنفيذي demo.executive ceo">
+            <div class="account-head"><div class="avatar">ن ح</div><div class="account-title"><h3>نورة الحربي — الرئيس التنفيذي</h3><div class="username">demo.executive</div></div><span class="role-pill">CEO</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>جميع مشاريع KAU وKSU وKKU: خمسة نشطة، ومشروع واحد مسودة، ومشروع KAU مؤرشف، بما فيها الميزانيات والبيانات التنفيذية المسموح بها.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>لوحة معلومات شاملة وتقدم المشاريع والدورات والمهام.</li><li>عرض المشاريع والدورات والمهام والمراحل الرئيسية والملفات والتاريخ دون تعديل.</li><li>تقارير المشاريع والمهام المتأخرة والحضور، وعرض سجل الأعمال المصرح به.</li><li>AI Briefing وProject Recovery Agent للقراءة والمراجعة.</li><li>تقارير وأسئلة وتنبيهات Telegram عبر محادثة CEO المضبوطة فقط.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>إنشاء أو تعديل المشاريع والمهام والحضور.</li><li>اعتماد الإكمال أو تنفيذ مقترحات Agent؛ الرول التنفيذي هنا للرقابة والقراءة.</li><li>إدارة الحسابات أو إعدادات التشغيل التقنية.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح لوحة المعلومات وقارن تقدم الجامعات الثلاث.</li><li>افتح مشروعًا متعثرًا واعرض المهام المتأخرة والاعتمادات المعلقة.</li><li>أنشئ تقريرًا تنفيذيًا أو AI Briefing مع المصادر.</li><li>اختم برسالة Telegram مثل: ما نسبة إنجاز المشاريع؟</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 3 دقائق</span><label class="check-label"><input type="checkbox" data-account-check="demo.executive"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-executive" data-groups="executive" data-search="سلمان القحطاني المدير التنفيذي demo.exec.manager executive manager">
+            <div class="account-head"><div class="avatar">س ق</div><div class="account-title"><h3>سلمان القحطاني — المدير التنفيذي</h3><div class="username">demo.exec.manager</div></div><span class="role-pill">Executive Manager</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>جميع الجامعات والمشاريع والفرق، مع صلاحيات الإدارة التشغيلية على كامل نطاق الأعمال.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>إنشاء وتعديل المشاريع والعملاء والتصنيفات والفرق والحالات والميزانيات.</li><li>إدارة الدورات والمدربين والملفات والمهام والتكليفات والتعليقات والوسوم.</li><li>إدارة المتدربين والاستيراد والجلسات وروابط المدربين.</li><li>تصحيح الحضور المعتمد مع سبب وسجل قبل/بعد.</li><li>الأرشيف، سجل الأعمال، التقارير، AI Briefing وAgent.</li><li>اعتماد وتنفيذ مقترحات Agent فقط عندما يسمح الإجراء الأصلي بذلك.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>استخدام Telegram التنفيذي المخصص لحساب CEO.</li><li>الحساب الحالي ليس مشرفًا أو مديرًا معيّنًا لأي مشروع؛ لذلك لا يقرر مرحلتي اعتماد الإكمال، ولا يعتمد الحضور بدل المشرف.</li><li>إدارة كلمات المرور والصلاحيات التقنية كالمسؤول التقني.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>أنشئ أو عدّل مشروعًا وحدد مديره ومشرفه وفريقه.</li><li>افتح مهمة وعدّل التكليف أو الموعد وأضف تعليقًا.</li><li>اعرض استيراد المتدربين أو إنشاء جلسة ورابط حضور.</li><li>افتح Agent واعرض مقترحًا يحتاج موافقة بشرية ثم تحقق من النتيجة.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 3 دقائق</span><label class="check-label"><input type="checkbox" data-account-check="demo.exec.manager"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-pm" data-groups="kau" data-search="ريم الغامدي مدير برنامج KAU demo.pm.kau project manager">
+            <div class="account-head"><div class="avatar">ر غ</div><div class="account-title"><h3>ريم الغامدي — مدير مشاريع KAU</h3><div class="username">demo.pm.kau</div></div><span class="role-pill">Project Manager</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>مشروعا KAU النشطان: «منصة حوكمة البيانات» و«بوابة الخدمات الطلابية الذكية»، إضافة إلى «تجربة بوابة سابقة» المؤرشفة.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>إدارة مشروعي KAU وفريقهما وميزانيتهما ودوراتهما ومهامهما.</li><li>إدارة المدربين والمتدربين والاستيراد والجلسات وروابط الحضور ضمن KAU.</li><li>تصحيح الحضور المعتمد ضمن النطاق مع سبب.</li><li>إدارة المراحل الرئيسية واعتماد الخطوة الثانية لإكمال العناصر.</li><li>تقارير وAI Briefing وAgent خاص بمشاريعها.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>فتح أو إدارة مشاريع KSU أو KKU.</li><li>اعتماد خطوة المشرف الأولى أو تجاوزها.</li><li>إدارة العملاء والتصنيفات العامة أو الحسابات.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مشروع KAU وأظهر الفريق والتقدم والميزانية.</li><li>أنشئ أو عدّل مهمة وعيّن موظفًا.</li><li>اعرض طلب إكمال وافق عليه المشرف ثم اتخذ القرار النهائي.</li><li>اعرض تقرير المشروع أو موجز AI المقيد بالمشروع.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 2–3 دقائق</span><label class="check-label"><input type="checkbox" data-account-check="demo.pm.kau"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-pm" data-groups="ksu" data-search="خالد العتيبي مدير برنامج KSU demo.pm.ksu project manager">
+            <div class="account-head"><div class="avatar">خ ع</div><div class="account-title"><h3>خالد العتيبي — مدير مشاريع KSU</h3><div class="username">demo.pm.ksu</div></div><span class="role-pill">Project Manager</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>مشروعا KSU فقط: «جاهزية مختبرات الذكاء الاصطناعي» و«منصة إدارة المنح البحثية».</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>نفس أدوات مدير المشروع ضمن KSU: المشروع والفريق والميزانية والدورات والمهام.</li><li>المراحل الرئيسية والاعتمادات النهائية والتقارير.</li><li>المتدربون والجلسات وروابط المدرب وتصحيح الحضور.</li><li>AI Briefing وAgent ضمن مشروعي KSU.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>رؤية أو إدارة بيانات KAU وKKU.</li><li>إدارة حسابات الموظفين أو الإعدادات التقنية.</li><li>تجاوز مراجعة المشرف في الإكمال والحضور.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مشروع مختبرات الذكاء الاصطناعي.</li><li>اعرض المهام الحرجة والقادمة والتقدم.</li><li>افتح جلسة حضور أو تقرير المشروع.</li><li>وضّح أن مشروع KAU لا يظهر لهذا الحساب.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 2 دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.pm.ksu"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-pm" data-groups="kku" data-search="سارة الشهراني مدير برنامج KKU demo.pm.kku project manager">
+            <div class="account-head"><div class="avatar">س ش</div><div class="account-title"><h3>سارة الشهراني — مدير مشاريع KKU</h3><div class="username">demo.pm.kku</div></div><span class="role-pill">Project Manager</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>مشروعا KKU: «رحلة الطالب الرقمية» النشط، و«أكاديمية المهارات المستقبلية» الموجودة حاليًا كمسودة.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>إدارة المشروع والفريق والدورات والمهام والمواعيد ضمن KKU.</li><li>إدارة المتدربين والجلسات وروابط المدربين والتصحيح.</li><li>المراحل الرئيسية والاعتماد النهائي والتقارير والأرشفة.</li><li>AI Briefing وAgent ضمن مشروعي KKU.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>الوصول إلى مشروعات KAU أو KSU.</li><li>الوصول إلى Telegram التنفيذي أو الإدارة التقنية.</li><li>اعتماد خطوة المشرف بالنيابة عنه.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح أكاديمية المهارات المستقبلية.</li><li>اعرض الدورة والمتدربين والجلسة.</li><li>صحح حضورًا مع كتابة السبب.</li><li>اعرض أثر التغيير في التقرير.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 2 دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.pm.kku"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-supervisor" data-groups="kau" data-search="عمر الزهراني مشرف KAU demo.supervisor.kau supervisor">
+            <div class="account-head"><div class="avatar">ع ز</div><div class="account-title"><h3>عمر الزهراني — مشرف KAU</h3><div class="username">demo.supervisor.kau</div></div><span class="role-pill">Supervisor</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>المشروعات النشطة التي يشرف عليها في KAU، ودوراتها وجلساتها ومهامها المرئية.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>متابعة تقدم المشروعات والدورات النشطة ضمن نطاق الإشراف.</li><li>التعليق ورفع الملفات، وتحديث حالة وساعات وسبب تعطل المهمة إذا كان مكلّفًا بها.</li><li>الخطوة الأولى في اعتماد إكمال المهمة أو الدورة أو المرحلة أو المشروع.</li><li>مراجعة حضور المدرب: قبول أو رفض مع السبب، وتقارير حضور الدورة والمشروع ضمن النطاق.</li><li>AI Briefing وAgent مع تنفيذ محدود لتحديث/تعليق مهمة مكلّف بها.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>إنشاء المشروع أو الدورة أو المهمة أو تغيير الفريق.</li><li>تنفيذ اعتماد مدير المشروع النهائي.</li><li>تصحيح الحضور بعد اعتماده أو استيراد المتدربين.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح قائمة الاعتمادات واتخذ قرار الخطوة الأولى.</li><li>افتح مراجعات الحضور وراجع إرسال المدرب.</li><li>افتح مهمة مكلّفًا بها وحدّث الحالة أو سبب التعطل.</li><li>وضّح انتقال الطلب إلى مدير المشروع بعد الموافقة.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقتان</span><label class="check-label"><input type="checkbox" data-account-check="demo.supervisor.kau"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-supervisor" data-groups="ksu" data-search="هند المطيري مشرف KSU demo.supervisor.ksu supervisor">
+            <div class="account-head"><div class="avatar">ه م</div><div class="account-title"><h3>هند المطيري — مشرف KSU</h3><div class="username">demo.supervisor.ksu</div></div><span class="role-pill">Supervisor</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>مشروعات KSU النشطة التي تشرف عليها، دون الوصول إلى مشروعات الجامعات الأخرى.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>نفس أدوات المشرف ضمن KSU فقط.</li><li>متابعة تقدم السياق المرئي والمهام المتأخرة.</li><li>مراجعة الإكمال في الخطوة الأولى ومراجعة الحضور.</li><li>التعاون على المهام المكلّفة، وتقارير الحضور وAI ضمن النطاق.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>رؤية أو إدارة KAU وKKU.</li><li>تعديل الميزانية أو الفرق أو مواعيد المشروع.</li><li>تصحيح حضور معتمد أو إصدار اعتماد نهائي.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مشروع KSU الخاضع للإشراف.</li><li>اعرض مهمة متعثرة ثم أضف تعليقًا.</li><li>راجع طلب إكمال أو حضورًا معلقًا.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 90 ثانية</span><label class="check-label"><input type="checkbox" data-account-check="demo.supervisor.ksu"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-supervisor" data-groups="kku" data-search="ماجد الأسمري مشرف KKU demo.supervisor.kku supervisor">
+            <div class="account-head"><div class="avatar">م أ</div><div class="account-title"><h3>ماجد الأسمري — مشرف KKU</h3><div class="username">demo.supervisor.kku</div></div><span class="role-pill">Supervisor</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>مشروع «رحلة الطالب الرقمية» النشط فقط؛ لا تظهر «أكاديمية المهارات المستقبلية» للمشرف لأنها ما زالت مسودة.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>متابعة KKU ومؤشرات التقدم المرئية.</li><li>الخطوة الأولى في اعتماد الإكمال.</li><li>اعتماد أو رفض حضور المدرب.</li><li>تعليقات وملفات وتحديث محدود للمهام المكلّف بها.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>إدارة المشروع والدورات والتكليفات كمدير المشروع.</li><li>الدخول إلى بيانات جامعات أخرى.</li><li>الوصول إلى الحسابات أو Telegram التنفيذي.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مراجعات الحضور في KKU.</li><li>اعرض سبب الرفض وإعادة فتح رابط المدرب عند الرفض.</li><li>اعرض سجل القرار دون تعديل القرار القديم.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 90 ثانية</span><label class="check-label"><input type="checkbox" data-account-check="demo.supervisor.kku"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-employee" data-groups="kau" data-search="جود العمري أخصائي KAU demo.kau.specialist employee">
+            <div class="account-head"><div class="avatar">ج ع</div><div class="account-title"><h3>جود العمري — أخصائي KAU</h3><div class="username">demo.kau.specialist</div></div><span class="role-pill">Employee</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>المهام المعيّنة له داخل مشروعي KAU النشطين، مع الوصول المرتبط بهذه المهام فقط.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>المهام المعيّنة، والبحث والعروض المكانية مثل Kanban والتقويم حسب نطاقه.</li><li>تحديث حالة المهمة والساعات الفعلية وسبب التعطل.</li><li>إضافة تعليقات ورفع ملفات ومشاهدة الوسوم.</li><li>إرسال المهمة المؤهلة للاعتماد ومتابعة طلباته.</li><li>الإشعارات والتفضيلات والملف الشخصي والصورة واللغة.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>إنشاء المهمة أو تغيير المكلّفين أو الموعد والميزانية.</li><li>رؤية تقدم المشروع المجمع أو سجلات المهام الكاملة.</li><li>رؤية المتدربين أو الحضور أو مشاريع الجامعات الأخرى.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح «مهامي» أو لوحة Kanban.</li><li>حدّث مهمة إلى «قيد التنفيذ» وأدخل الساعات.</li><li>أضف تعليقًا أو ملفًا ثم أرسلها للاعتماد عند اكتمالها.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 90 ثانية</span><label class="check-label"><input type="checkbox" data-account-check="demo.kau.specialist"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-employee" data-groups="ksu" data-search="تركي الدوسري أخصائي KSU demo.ksu.specialist employee">
+            <div class="account-head"><div class="avatar">ت د</div><div class="account-title"><h3>تركي الدوسري — أخصائي KSU</h3><div class="username">demo.ksu.specialist</div></div><span class="role-pill">Employee</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>المهام المعيّنة له في مشروعي KSU النشطين.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>المهام المعيّنة وتحديث الحالة والساعات وسبب التعطل.</li><li>التعليقات والملفات والوسوم والإشعارات.</li><li>إرسال المهمة للاعتماد ومتابعة طلباته الشخصية.</li><li>الملف الشخصي والصورة واللغة.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>رؤية مهام غير مكلّف بها أو بيانات KAU/KKU.</li><li>إدارة المشروع أو الفريق أو الحضور والتقارير التنفيذية.</li><li>استخدام AI Briefing أو Agent.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مهمة KSU مكلّفًا بها.</li><li>سجّل سبب تعطّل واضحًا.</li><li>أظهر وصول الحالة للمشرف ومدير المشروع.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.ksu.specialist"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-employee" data-groups="kku" data-search="شهد القحطاني أخصائي KKU demo.kku.specialist employee">
+            <div class="account-head"><div class="avatar">ش ق</div><div class="account-title"><h3>شهد القحطاني — أخصائي KKU</h3><div class="username">demo.kku.specialist</div></div><span class="role-pill">Employee</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>المهام المعيّنة لها في مشروعي KKU النشطين.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>إدارة التنفيذ اليومي للمهام المعيّنة فقط.</li><li>الحالة والساعات والتعطل والتعليقات والملفات.</li><li>العروض المكانية والإشعارات والملف الشخصي.</li><li>إرسال المهمة المكتملة للاعتماد.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>تغيير موعد المهمة أو تعيين موظف آخر.</li><li>رؤية الميزانيات والحضور والمتدربين.</li><li>رؤية بيانات خارج KKU أو استخدام AI الإداري.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح تقويم المهام أو Kanban.</li><li>اختر مهمة وأضف تحديثًا عمليًا.</li><li>اعرض الإشعار الذي يصل بعد تغيير متعلق بالمهمة.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.kku.specialist"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-employee" data-groups="shared kau ksu kku" data-search="ليان الشريف محلل مشترك demo.shared.analyst employee">
+            <div class="account-head"><div class="avatar">ل ش</div><div class="account-title"><h3>ليان الشريف — محلل مشترك</h3><div class="username">demo.shared.analyst</div></div><span class="role-pill">Employee</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>عضو فريق مشترك في المشاريع الجامعية، ويرى المشاريع الخمسة النشطة حاليًا؛ أما تفاصيل تنفيذ المهام فتبقى مرتبطة بالتكليف والصلاحية الفعلية.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>المهام المعيّنة عبر أكثر من جامعة في قائمة موحّدة.</li><li>البحث والعروض المكانية المحكومة بصلاحيتها.</li><li>تحديث التنفيذ والتعليق والملفات والإشعارات.</li><li>إرسال المهام المؤهلة للاعتماد.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>اعتبار عضوية المشروع صلاحية لرؤية كل مهامه.</li><li>إدارة المشاريع أو تبديل التكليفات والمواعيد.</li><li>رؤية الميزانيات والمتدربين والحضور.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح قائمة المهام وشاهد مهامًا من أكثر من جامعة.</li><li>استخدم البحث أو فلترًا محفوظًا لترتيب العمل.</li><li>حدّث مهمة واحدة وأظهر بقاء باقي الصلاحيات مقيدة.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 90 ثانية</span><label class="check-label"><input type="checkbox" data-account-check="demo.shared.analyst"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-employee" data-groups="shared kau ksu kku" data-search="عبدالله السلمي ضمان جودة مشترك demo.shared.qa employee qa">
+            <div class="account-head"><div class="avatar">ع س</div><div class="account-title"><h3>عبدالله السلمي — ضمان جودة مشترك</h3><div class="username">demo.shared.qa</div></div><span class="role-pill">Employee</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>عضو مشترك في المشاريع الخمسة النشطة، ويعمل على مهام الجودة التي يتم تكليفه بها عبر الجامعات الثلاث.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>قائمة موحدة لمهام الجودة المعيّنة من الجامعات الثلاث.</li><li>التعليقات ورفع أدلة الاختبار والملفات.</li><li>تحديث الحالة والساعات وسبب التعطل.</li><li>الإشعارات والفلاتر الشخصية والملف الشخصي.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>اعتماد المهمة؛ يرسلها لمسار المشرف ثم مدير المشروع.</li><li>مشاهدة كل مهام المشروع لمجرد أنه عضو.</li><li>تعديل المشروع أو الدورة أو الحضور.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مهمة جودة وارفع ملف نتيجة الاختبار.</li><li>أضف تعليقًا يشرح الحالة.</li><li>أرسل المهمة للاعتماد وأظهر انتقالها للمشرف الصحيح.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.shared.qa"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-contractor" data-groups="shared kau ksu kku" data-search="رزان المالكي مصمم متعاقد demo.shared.designer contractor">
+            <div class="account-head"><div class="avatar">ر م</div><div class="account-title"><h3>رزان المالكي — مصمم متعاقد</h3><div class="username">demo.shared.designer</div></div><span class="role-pill">Contractor</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>عضو متعاقد في المشاريع الخمسة النشطة، ويصل فقط إلى مهام التصميم المعيّنة والسياق اللازم لها. وهي مكلّفة ثانوية في المهام الحالية.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>المهام المعيّنة وتفاصيلها ووسومها.</li><li>رفع ملفات التصميم وإضافة تعليقات.</li><li>تحديث حالة المهمة والساعات وسبب التعطل.</li><li>الإشعارات والملف الشخصي واللغة.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>رؤية الميزانية أو دليل المستخدمين العام.</li><li>إنشاء المهام أو تغيير المكلّفين والمواعيد.</li><li>رؤية الحضور والمتدربين أو تقارير الإدارة وAI.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح مهمة تصميم مكلّفة للمتعاقد.</li><li>ارفع تسليمًا وأضف تعليقًا.</li><li>وضّح أن الميزانية وإدارة المشروع غير ظاهرة.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.shared.designer"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-employee" data-groups="shared" data-search="موظف جديد اختبار تغيير كلمة المرور demo.new.employee employee">
+            <div class="account-head"><div class="avatar">م ج</div><div class="account-title"><h3>موظف جديد — اختبار التهيئة الأولى</h3><div class="username">demo.new.employee</div></div><span class="role-pill">Employee</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>حساب موظف نشط غير مكلّف بمشروع حاليًا، مخصص لإظهار تجربة الدخول الأولى.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>فرض تغيير كلمة المرور عند أول دخول إذا كانت العلامة مفعلة.</li><li>الملف الشخصي والصورة واللغة وتفضيلات الإشعارات.</li><li>واجهة خالية بوضوح عند عدم وجود مهام أو مشاريع مسموحة.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>رؤية المشاريع أو المهام قبل إضافته وتكليفه ضمن النطاق.</li><li>اختيار دوره أو منح نفسه صلاحيات.</li><li>الوصول إلى الإدارة التقنية أو بيانات موظفين آخرين.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>سجّل الدخول وأظهر خطوة تغيير كلمة المرور.</li><li>أضف صورة شخصية واختر اللغة.</li><li>وضّح مبدأ «لا بيانات دون تكليف».</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقة</span><label class="check-label"><input type="checkbox" data-account-check="demo.new.employee"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-admin" data-groups="technical" data-search="zx المسؤول التقني technical admin">
+            <div class="account-head"><div class="avatar">ZX</div><div class="account-title"><h3>zx — المسؤول التقني</h3><div class="username">zx</div></div><span class="role-pill">Technical Admin</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>الحالة الفعلية للحساب:</strong><p>الحساب عضو في دور Technical Admin، لكنه أيضًا <bdi dir="ltr">superuser / staff</bdi> للطوارئ؛ لذلك قد تظهر له فعليًا صلاحيات تتجاوز الدور التقني المقيد.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>إنشاء وعرض وتعديل وتعطيل وإعادة تفعيل الحسابات.</li><li>إسناد الأدوار غير التقنية وإعادة تعيين كلمات المرور.</li><li>إنشاء وتعديل وأرشفة واستعادة الأقسام.</li><li>سجل الأمن والتشغيل وتصديره بصورة منقحة.</li><li>حالة التطبيق وقاعدة البيانات والنسخ الاحتياطي وحالة توصيل الإشعارات.</li><li>ملفه الشخصي وصورته وتفضيلاته.</li></ul></div>
+              <div class="feature-box limit"><h4>الحد المقصود للدور</h4><ul><li>Technical Admin العادي لا يرى المشاريع والدورات والمهام والميزانيات.</li><li>لا يرى المتدربين أو الحضور أو تقارير الأعمال، ولا يستخدم AI أو Telegram التنفيذي.</li><li>لا تستخدم حساب <bdi dir="ltr">zx</bdi> لإثبات هذا العزل؛ صلاحية superuser تتجاوزه.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح الحسابات واعرض دورًا وحالة حساب.</li><li>اعرض إعادة تعيين كلمة المرور أو تعطيل حساب تجريبي دون تنفيذه أثناء العرض.</li><li>افتح حالة التشغيل وسجل الأمن.</li><li>وضّح بصراحة أنه حساب طوارئ شامل، وأن نموذج Technical Admin المقيد يحتاج حسابًا غير superuser.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: دقيقتان</span><label class="check-label"><input type="checkbox" data-account-check="zx"> تم استعراض الحساب</label></div>
+          </article>
+
+          <article class="account role-trainer" data-groups="shared kau ksu kku" data-search="المدرب الخارجي رابط حضور trainer">
+            <div class="account-head"><div class="avatar">رابط</div><div class="account-title"><h3>المدرب الخارجي — ليس حسابًا داخليًا</h3><div class="username">secure attendance link</div></div><span class="role-pill">External Trainer</span></div>
+            <div class="account-body">
+              <div class="scope"><strong>نطاق البيانات:</strong><p>جلسة واحدة وقائمة حضور مقفلة فقط، عبر رابط عشوائي مؤقت يصدره المدير المخوّل.</p></div>
+              <div class="feature-box"><h4>المميزات التي تظهر</h4><ul><li>بيانات الجلسة المحددة وأسماء المتدربين اللازمين لتسجيل الحضور.</li><li>تسجيل حالة الحضور وإرسال القائمة للمراجعة.</li><li>إعادة الإرسال عند رفض المشرف خلال مدة إعادة الفتح المعتمدة.</li></ul></div>
+              <div class="feature-box limit"><h4>لا يستطيع</h4><ul><li>فتح لوحة النظام أو أي مشروع أو جلسة أخرى.</li><li>تغيير قائمة المتدربين أو اعتماد إرساله بنفسه.</li><li>إعادة استخدام الرابط بعد انتهاء صلاحيته أو إغلاقه.</li></ul></div>
+              <div class="feature-box demo"><h4>سيناريو العرض</h4><ol><li>افتح الرابط في نافذة خاصة دون تسجيل دخول.</li><li>سجّل حضور الجلسة وأرسل القائمة.</li><li>بدّل إلى حساب المشرف لمراجعتها.</li></ol></div>
+            </div>
+            <div class="account-foot"><span>الوقت المقترح: 90 ثانية</span><label class="check-label"><input type="checkbox" data-account-check="external.trainer"> تم استعراض المسار</label></div>
+          </article>
+        </div>
+        <p id="empty-state" class="notice" hidden>لا توجد حسابات مطابقة للبحث أو المرشح الحالي.</p>
+      </section>
+
+      <section class="panel" id="matrix">
+        <div class="section-head"><div><h2>مصفوفة الصلاحيات السريعة</h2><p>✓ صلاحية عامة، ◐ صلاحية مقيدة بالمشروع أو التكليف، — غير متاحة.</p></div></div>
+        <div class="matrix-wrap">
+          <table>
+            <thead><tr><th>الرول</th><th>رؤية المشاريع</th><th>إدارة الأعمال</th><th>تنفيذ المهام</th><th>اعتماد الإكمال</th><th>الحضور</th><th>AI</th><th>Telegram</th><th>إدارة الحسابات</th></tr></thead>
+            <tbody>
+              <tr><td>CEO</td><td class="yes">✓ الكل</td><td class="no">— قراءة فقط</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ قراءة</td><td class="yes">✓ قراءة ومراجعة</td><td class="yes">✓ الحساب المضبوط</td><td class="no">—</td></tr>
+              <tr><td>Executive Manager</td><td class="yes">✓ الكل</td><td class="yes">✓ كاملة</td><td class="yes">✓ كاملة</td><td class="scoped">◐ إذا عُيّن للخطوة</td><td class="yes">✓ إدارة وتصحيح</td><td class="yes">✓ وإجراءات مسموحة</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><td>Project Manager</td><td class="scoped">◐ المشاريع المدارة</td><td class="scoped">◐ ضمن النطاق</td><td class="scoped">◐ إدارة ضمن النطاق</td><td class="scoped">◐ الخطوة الثانية</td><td class="scoped">◐ إدارة وتصحيح</td><td class="scoped">◐ ضمن النطاق</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><td>Supervisor</td><td class="scoped">◐ المشاريع المشرف عليها</td><td class="no">—</td><td class="scoped">◐ إذا كان مكلّفًا</td><td class="scoped">◐ الخطوة الأولى</td><td class="scoped">◐ مراجعة</td><td class="scoped">◐ قراءة وإجراء محدود</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><td>Employee</td><td class="scoped">◐ سياق المهمة</td><td class="no">—</td><td class="scoped">◐ مهامه فقط</td><td class="scoped">◐ إرسال فقط</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><td>Contractor</td><td class="scoped">◐ سياق المهمة</td><td class="no">—</td><td class="scoped">◐ مهامه فقط</td><td class="scoped">◐ إرسال فقط</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><td>Technical Admin*</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ كاملة تقنيًا</td></tr>
+              <tr><td>External Trainer</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="scoped">◐ جلسة واحدة</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="demo">
+        <div class="section-head"><div><h2>أفضل مسار عرض بدون تكرار</h2><p>ليس من الضروري تسجيل الدخول بكل الحسابات الستة عشر أمام العميل. اعرض ست وجهات نظر، ثم استخدم بقية البطاقات للإجابة عن الأسئلة.</p></div></div>
+        <div class="demo-grid">
+          <article class="demo-card"><span class="minute">3 دقائق</span><h3>1. نورة — CEO</h3><p>ابدأ بالصورة الشاملة، المخاطر، التقارير وAI/Telegram.</p><ol><li>Dashboard</li><li>مشروع متعثر</li><li>تقرير أو موجز AI</li></ol></article>
+          <article class="demo-card"><span class="minute">3 دقائق</span><h3>2. سلمان — الإدارة</h3><p>أظهر كيف تُنشأ البيانات وتُدار دون الخروج من النظام.</p><ol><li>المشروع والفريق</li><li>المهمة والتكليف</li><li>الدورة أو الجلسة</li></ol></article>
+          <article class="demo-card"><span class="minute">3 دقائق</span><h3>3. ريم — مدير KAU</h3><p>أثبت العزل بين الجامعات وأظهر الاعتماد النهائي.</p><ol><li>نطاق KAU</li><li>تعديل مهمة</li><li>اعتماد الخطوة الثانية</li></ol></article>
+          <article class="demo-card"><span class="minute">2 دقيقة</span><h3>4. عمر — المشرف</h3><p>اعرض مراجعة التنفيذ والحضور.</p><ol><li>اعتماد الخطوة الأولى</li><li>مراجعة حضور</li><li>تعليق على مهمة</li></ol></article>
+          <article class="demo-card"><span class="minute">2 دقيقة</span><h3>5. جود — الموظف</h3><p>أظهر تجربة العمل اليومية البسيطة.</p><ol><li>مهامي</li><li>تحديث الحالة والساعات</li><li>إرسال للاعتماد</li></ol></article>
+          <article class="demo-card"><span class="minute">2 دقيقة</span><h3>6. zx — التقني</h3><p>اختم بالأمن والإدارة التقنية المنفصلة.</p><ol><li>الحسابات</li><li>سجل الأمن</li><li>حالة التشغيل</li></ol></article>
+        </div>
+      </section>
+
+      <section class="panel" id="notes">
+        <div class="section-head"><div><h2>ملاحظات قبل العرض</h2></div></div>
+        <div class="notice"><strong>الأمان:</strong> لا يحتوي هذا الدليل على كلمات مرور. احتفظ ببيانات الدخول في مكان منفصل، ولا تعرضها على شاشة العميل.</div>
+        <ul>
+          <li>حسابات KAU وKSU وKKU تتشابه في المميزات، والفرق الأساسي هو نطاق الجامعة والمشروعات.</li>
+          <li>لا يوجد رول داخلي للمدرب؛ الوصول للحضور يتم برابط جلسة واحد مؤقت.</li>
+          <li>CEO يملك الرؤية التنفيذية لكنه لا يكتب في بيانات الأعمال ولا يعتمد طلبات الإكمال.</li>
+          <li>Technical Admin المقيد قوي تقنيًا لكنه لا يرى بيانات الأعمال؛ أما <bdi dir="ltr">zx</bdi> الحالي فهو superuser للطوارئ وقد يتجاوز هذا العزل.</li>
+          <li>Project Agent لا ينفذ أي اقتراح تلقائيًا: ينتظر موافقة بشرية ويعيد التحقق من الصلاحية والحالة.</li>
+          <li>يمكن فتح التطبيق أثناء العرض من <a href="http://127.0.0.1:8000/accounts/login/?next=/">صفحة تسجيل الدخول المحلية</a> بشرط تشغيل الخادم.</li>
+        </ul>
+      </section>
+
+      <footer>Insight Tracker — دليل محلي لشرح الحسابات والأدوار — آخر إعداد: أغسطس 2026</footer>
+    </main>
+  </div>
+
+  <div class="progress-float no-print" aria-live="polite">
+    <strong><span>تقدم الاستعراض</span><span id="progress-text">0 / 17</span></strong>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <script>
+    (() => {
+      const buttons = [...document.querySelectorAll('[data-filter]')];
+      const accounts = [...document.querySelectorAll('.account')];
+      const search = document.querySelector('#account-search');
+      const empty = document.querySelector('#empty-state');
+      const checks = [...document.querySelectorAll('[data-account-check]')];
+      const progressText = document.querySelector('#progress-text');
+      const progressFill = document.querySelector('#progress-fill');
+      const storageKey = 'insight-tracker-account-guide-progress-v1';
+      let activeFilter = 'all';
+
+      const normalize = (value) => (value || '').toLocaleLowerCase('ar').trim();
+
+      function applyFilters() {
+        const query = normalize(search.value);
+        let shown = 0;
+        accounts.forEach((account) => {
+          const groups = (account.dataset.groups || '').split(/\s+/);
+          const filterMatch = activeFilter === 'all' || groups.includes(activeFilter);
+          const searchMatch = !query || normalize(account.dataset.search).includes(query);
+          account.hidden = !(filterMatch && searchMatch);
+          if (!account.hidden) shown += 1;
+        });
+        empty.hidden = shown !== 0;
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          activeFilter = button.dataset.filter;
+          buttons.forEach((item) => item.classList.toggle('active', item === button));
+          applyFilters();
+        });
+      });
+      search.addEventListener('input', applyFilters);
+
+      function loadProgress() {
+        let saved = [];
+        try { saved = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (_) { saved = []; }
+        checks.forEach((check) => { check.checked = saved.includes(check.dataset.accountCheck); });
+        updateProgress(false);
+      }
+
+      function updateProgress(save = true) {
+        const completed = checks.filter((check) => check.checked).map((check) => check.dataset.accountCheck);
+        if (save) localStorage.setItem(storageKey, JSON.stringify(completed));
+        const percent = checks.length ? Math.round((completed.length / checks.length) * 100) : 0;
+        progressText.textContent = `${completed.length} / ${checks.length}`;
+        progressFill.style.width = `${percent}%`;
+      }
+
+      checks.forEach((check) => check.addEventListener('change', () => updateProgress(true)));
+      loadProgress();
+
+      const navLinks = [...document.querySelectorAll('.sidebar a[href^="#"]')];
+      const sections = navLinks.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`));
+      }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .2, .5] });
+      sections.forEach((section) => observer.observe(section));
+    })();
+  </script>
+</body>
+</html>

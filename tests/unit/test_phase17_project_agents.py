@@ -2,14 +2,18 @@
 
 import json
 import time
+from collections.abc import Iterable
 from pathlib import Path
 from typing import cast
 from unittest.mock import Mock
 from urllib.request import Request
 
 import pytest
+from django import forms
 from django.test import override_settings
 
+from apps.accounts.models import User
+from apps.project_agents.forms import AgentRunRequestForm
 from apps.project_agents.integration_auth import (
     event_signature,
     request_signature,
@@ -197,9 +201,56 @@ def test_groq_agent_uses_strict_schema_and_approved_model(
     assert body["model"] == "openai/gpt-oss-120b"
     assert body["response_format"]["json_schema"]["strict"] is True
     assert "tools" not in body
-    assert request.get_header("User-agent") == "InsightProjects/1.0"
+    assert request.get_header("User-agent") == "InsightTracker/1.0"
     assert result.cached_input_tokens == 40
     assert captured["timeout"] == 15
+
+
+@pytest.mark.unit
+@override_settings(
+    GROQ_API_KEY="fictional-key",
+    PROJECT_AGENT_TIMEOUT_SECONDS=15,
+    PROJECT_AGENT_MAX_OUTPUT_TOKENS=900,
+    PROJECT_AGENT_REASONING_EFFORT="high",
+)
+def test_groq_agent_treats_missing_optional_cached_usage_as_zero(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    envelope = {
+        "choices": [{"message": {"content": json.dumps(decision())}}],
+        "usage": {"prompt_tokens": 100, "completion_tokens": 30},
+    }
+    response = Mock()
+    response.read.return_value = json.dumps(envelope).encode()
+    response.__enter__ = Mock(return_value=response)
+    response.__exit__ = Mock(return_value=False)
+
+    monkeypatch.setattr(
+        "apps.project_agents.providers.groq.urlopen",
+        lambda _request, *, timeout: response,
+    )
+    provider = GroqAgentProvider.from_settings(model_code="openai/gpt-oss-120b")
+
+    result = provider.decide(context={"steps": [], "language": "en"})
+
+    assert result.input_tokens == 100
+    assert result.cached_input_tokens == 0
+    assert result.output_tokens == 30
+
+
+@pytest.mark.unit
+@override_settings(
+    PROJECT_AGENT_PROVIDER="groq",
+    LM_STUDIO_MODEL_CODE="qwen/qwen3.5-9b",
+)
+def test_groq_agent_form_does_not_offer_local_qwen() -> None:
+    form = AgentRunRequestForm(actor=User(preferred_language="ar"))
+    model_code_field = cast(forms.ChoiceField, form.fields["model_code"])
+    choices = dict(cast(Iterable[tuple[str, str]], model_code_field.choices))
+
+    assert "openai/gpt-oss-120b" in choices
+    assert "openai/gpt-oss-20b" in choices
+    assert "qwen/qwen3.5-9b" not in choices
 
 
 @pytest.mark.unit
@@ -218,7 +269,7 @@ def test_groq_timeout_is_classified_for_bounded_celery_retry(
 
     monkeypatch.setattr("apps.project_agents.providers.groq.urlopen", timed_out)
     provider = GroqAgentProvider.from_settings(model_code="openai/gpt-oss-120b")
-    assert process_project_agent.max_retries == 2
+    assert process_project_agent.max_retries == 8
     assert execute_project_agent_proposal.max_retries == 2
     with pytest.raises(TemporaryProviderError, match="temporarily unavailable"):
         provider.decide(context={"steps": [], "language": "en"})

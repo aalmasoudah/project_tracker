@@ -1,4 +1,4 @@
-name: insight-projects-staging
+name: insight-tracker-staging
 
 x-app: &app
   image: ${INSIGHT_IMAGE:?Set INSIGHT_IMAGE to one immutable image tag or digest}

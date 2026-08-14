@@ -11,6 +11,14 @@ from config.settings.environment import env_bool, env_int, env_list, env_string
 from .base import *
 
 DEBUG = False
+if LM_STUDIO_FALLBACK_ENABLED:
+    raise ImproperlyConfigured(
+        "LM Studio fallback is limited to local development in Phase 21."
+    )
+if AI_BRIEFING_PROVIDER == "lm_studio" or PROJECT_AGENT_PROVIDER == "lm_studio":
+    raise ImproperlyConfigured(
+        "LM Studio providers are limited to local development in Phase 21."
+    )
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 DEPLOYMENT_PROCESS_ROLE = env_string("DEPLOYMENT_PROCESS_ROLE", default="web")
 if DEPLOYMENT_PROCESS_ROLE not in {"web", "worker", "scheduler", "release"}:

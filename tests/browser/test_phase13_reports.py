@@ -57,8 +57,8 @@ def test_mobile_bilingual_report_page_and_download(live_server: LiveServer) -> N
 
         assert page.locator("html").get_attribute("dir") == "rtl"
         assert page.locator(".report-logo").is_visible()
-        assert page.get_by_role("link", name="إنسايت بروجكتس").is_visible()
-        assert page.locator(".report-logo").get_attribute("alt") == "إنسايت بروجكتس"
+        assert page.get_by_role("link", name="إنسايت تراكر").is_visible()
+        assert page.locator(".report-logo").get_attribute("alt") == "إنسايت تراكر"
         logo_ratio = page.locator(".report-logo").evaluate(
             "(logo) => ({ rendered: logo.clientWidth / logo.clientHeight, "
             "natural: logo.naturalWidth / logo.naturalHeight })"
@@ -97,11 +97,10 @@ def test_mobile_bilingual_report_page_and_download(live_server: LiveServer) -> N
         assert download_info.value.suggested_filename == "project-progress-ar.xlsx"
 
         page.goto(f"{live_server.url}/reports/")
-        page.locator("button.navbar-toggler").click()
         page.locator('select[name="language"]').select_option("en")
         page.locator('form[action$="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")
         assert page.locator("html").get_attribute("dir") == "ltr"
-        assert page.get_by_role("link", name="Insight Projects").is_visible()
+        assert page.get_by_role("link", name="Insight Tracker").is_visible()
         assert page.get_by_role("heading", name="Reports and exports").is_visible()
         browser.close()

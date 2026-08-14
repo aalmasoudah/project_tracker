@@ -107,7 +107,6 @@ def test_mobile_arabic_course_and_trainer_workflow(
         assert page.get_by_text("نورة المدربة", exact=False).is_visible()
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
 
-        page.locator(".navbar-toggler").click()
         page.locator("#language-select").select_option("en")
         page.locator('form[action="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")

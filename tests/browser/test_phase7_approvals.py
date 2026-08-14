@@ -195,7 +195,6 @@ def test_mobile_arabic_milestone_two_step_approval(
         assert manager_page.evaluate(
             "document.documentElement.scrollWidth <= innerWidth"
         )
-        manager_page.locator(".navbar-toggler").click()
         manager_page.locator("#language-select").select_option("en")
         manager_page.locator('form[action="/i18n/setlang/"] button').click()
         manager_page.wait_for_load_state("networkidle")

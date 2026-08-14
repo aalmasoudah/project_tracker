@@ -79,7 +79,9 @@ TERMINAL_RUN_STATUSES = frozenset(
         AgentRun.Status.STALE,
     }
 )
-APPROVED_MODELS = frozenset({"openai/gpt-oss-20b", "openai/gpt-oss-120b"})
+APPROVED_MODELS = frozenset(
+    {"openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.5-9b"}
+)
 ACTION_RISKS: dict[str, str] = {
     AgentProposal.Action.TASK_COMMENT: AgentProposal.Risk.LOW,
     AgentProposal.Action.TEAM_NOTIFICATION: AgentProposal.Risk.LOW,
@@ -147,6 +149,16 @@ def request_agent_run(
     if language not in AgentRun.Language.values:
         raise ValidationError(_("Select a valid language."))
     if model_code not in APPROVED_MODELS:
+        raise ValidationError(_("Select an approved project-agent model."))
+    configured_provider = str(settings.PROJECT_AGENT_PROVIDER)
+    if configured_provider == "lm_studio" and model_code != str(
+        settings.LM_STUDIO_MODEL_CODE
+    ):
+        raise ValidationError(_("Select the configured local project-agent model."))
+    if configured_provider == "groq" and model_code not in {
+        "openai/gpt-oss-20b",
+        "openai/gpt-oss-120b",
+    }:
         raise ValidationError(_("Select an approved project-agent model."))
     optional_context = " ".join(optional_context.split())
     if len(optional_context) > int(settings.PROJECT_AGENT_MAX_CONTEXT_CHARS):
@@ -260,9 +272,21 @@ def _create_step(
 
 
 def _apply_usage(run: AgentRun, result: ProviderResult) -> None:
-    input_tokens = int(result.input_tokens or 0)
-    cached_tokens = int(result.cached_input_tokens or 0)
-    output_tokens = int(result.output_tokens or 0)
+    raw_usage = (
+        result.input_tokens,
+        result.cached_input_tokens,
+        result.output_tokens,
+    )
+    if any(
+        not isinstance(value, int) or isinstance(value, bool) or value < 0
+        for value in raw_usage
+    ):
+        raise AgentSchemaError("The provider returned invalid token usage.")
+    input_tokens = cast(int, result.input_tokens)
+    cached_tokens = cast(int, result.cached_input_tokens)
+    output_tokens = cast(int, result.output_tokens)
+    if input_tokens == 0 or output_tokens == 0 or cached_tokens > input_tokens:
+        raise AgentSchemaError("The provider returned invalid token usage.")
     if (
         run.input_tokens + run.output_tokens + input_tokens + output_tokens
         > run.max_total_tokens
@@ -281,6 +305,39 @@ def _apply_usage(run: AgentRun, result: ProviderResult) -> None:
             "updated_at",
         )
     )
+
+
+@transaction.atomic
+def _pin_local_agent_fallback(*, run_id: UUID | str, reason_code: str) -> AgentRun:
+    """Pin one run to LM Studio before its first local fallback request."""
+    run = (
+        AgentRun.objects.select_for_update()
+        .select_related("project", "requester")
+        .get(pk=run_id)
+    )
+    if run.status not in (AgentRun.Status.PLANNING, AgentRun.Status.RUNNING):
+        raise AgentSchemaError("The project-agent run cannot change provider now.")
+    if not can_start_agent(run.requester, run.project):
+        raise PermissionDenied("Project-agent access was revoked.")
+    if run.provider_code not in {"", "groq"}:
+        raise AgentSchemaError("The project-agent provider is already pinned.")
+    previous_model = run.model_code
+    run.provider_code = "lm_studio"
+    run.model_code = str(settings.LM_STUDIO_MODEL_CODE)
+    run.save(update_fields=("provider_code", "model_code", "updated_at"))
+    _audit(
+        actor=run.requester,
+        action=actions.AGENT_PROVIDER_FALLBACK,
+        run=run,
+        metadata={
+            "from_provider": "groq",
+            "to_provider": "lm_studio",
+            "from_model": previous_model,
+            "to_model": run.model_code,
+            "reason_code": reason_code,
+        },
+    )
+    return run
 
 
 def _task_for_proposal(run: AgentRun, task_id: int) -> Task:
@@ -435,7 +492,11 @@ def process_agent_run(*, run_id: UUID | str) -> str:
         )
         run.save(update_fields=("started_at", "status", "updated_at"))
     try:
-        provider = get_agent_provider(model_code=run.model_code)
+        selected_provider = run.provider_code or str(settings.PROJECT_AGENT_PROVIDER)
+        provider = get_agent_provider(
+            model_code=run.model_code,
+            provider_code=selected_provider,
+        )
         while run.current_step < run.max_steps:
             run = AgentRun.objects.select_related("project", "requester").get(pk=run.pk)
             if run.status == AgentRun.Status.CANCELLED:
@@ -457,7 +518,41 @@ def process_agent_run(*, run_id: UUID | str) -> str:
                 )
             allowed_refs, _task_ids, _user_ids = observed_references(run)
             call_started = time.monotonic()
-            provider_result = provider.decide(context=_provider_context(run))
+            try:
+                provider_result = provider.decide(context=_provider_context(run))
+            except TemporaryProviderError as error:
+                if not (
+                    selected_provider == "groq"
+                    and bool(settings.LM_STUDIO_FALLBACK_ENABLED)
+                    and settings.DEPLOYMENT_ENVIRONMENT == "development"
+                    and error.fallback_eligible
+                ):
+                    raise
+                if run.started_at is not None and (
+                    timezone.now() - run.started_at
+                ).total_seconds() > int(settings.PROJECT_AGENT_MAX_SECONDS):
+                    return mark_agent_run_failed(
+                        run_id=run.pk, failure_code="time_budget_exceeded"
+                    )
+                run = _pin_local_agent_fallback(
+                    run_id=run.pk,
+                    reason_code=error.reason_code,
+                )
+                selected_provider = "lm_studio"
+                provider = get_agent_provider(
+                    model_code=run.model_code,
+                    provider_code=selected_provider,
+                )
+                call_started = time.monotonic()
+                try:
+                    provider_result = provider.decide(context=_provider_context(run))
+                except TemporaryProviderError as local_error:
+                    raise TemporaryProviderError(
+                        "The pinned local project-agent provider is unavailable.",
+                        retry_after_seconds=local_error.retry_after_seconds,
+                        fallback_eligible=False,
+                        reason_code="local_provider_unavailable",
+                    ) from local_error
             duration_ms = int((time.monotonic() - call_started) * 1000)
             run = AgentRun.objects.select_related("project", "requester").get(pk=run.pk)
             if run.status == AgentRun.Status.CANCELLED:

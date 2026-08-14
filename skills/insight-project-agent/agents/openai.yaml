@@ -1,4 +1,4 @@
 interface:
   display_name: "Insight Project Agent"
   short_description: "Operate and evaluate recovery-agent runs"
-  default_prompt: "Use $insight-project-agent to safely operate or evaluate an Insight Projects recovery-agent run."
+  default_prompt: "Use $insight-project-agent to safely operate or evaluate an Insight Tracker recovery-agent run."

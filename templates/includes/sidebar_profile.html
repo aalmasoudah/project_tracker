@@ -1,0 +1,22 @@
+{% load account_tags i18n %}
+<div class="sidebar-profile-wrap">
+  <a class="sidebar-profile{% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'profile' %} active{% endif %}" href="{% url 'accounts:profile' %}" {% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'profile' %}aria-current="page"{% endif %} title="{% translate 'My profile' %}">
+    <span class="profile-avatar" aria-hidden="true">
+      {% with avatar=request.user.active_profile_avatar %}
+        {% if avatar %}<img alt="" src="{% url 'accounts:avatar' request.user.pk %}">{% else %}{{ request.user.display_name|slice:":1"|upper }}{% endif %}
+      {% endwith %}
+    </span>
+    <span class="sidebar-profile-copy">
+      <strong><bdi>{{ request.user.display_name }}</bdi></strong>
+      <small>{{ request.user|user_role_label }}</small>
+    </span>
+    <span class="sidebar-profile-arrow" aria-hidden="true">›</span>
+  </a>
+  <form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+    <button class="btn btn-quiet sidebar-signout" type="submit">
+      <span aria-hidden="true">↪</span>
+      <span class="sidebar-link-label">{% translate "Sign out" %}</span>
+    </button>
+  </form>
+</div>

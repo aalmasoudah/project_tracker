@@ -27,6 +27,7 @@ def production_environment() -> dict[str, str]:
             "EMAIL_HOST_USER": "tracker@example.test",
             "EMAIL_PORT": "587",
             "EMAIL_USE_TLS": "true",
+            "LM_STUDIO_FALLBACK_ENABLED": "false",
             "SECRET_KEY": "fictional-production-key-with-sufficient-length-123",
             "AWS_STORAGE_BUCKET_NAME": "fictional-private-bucket",
             "AWS_ACCESS_KEY_ID": "fictional-access-key",
@@ -34,6 +35,26 @@ def production_environment() -> dict[str, str]:
         }
     )
     return environment
+
+
+@pytest.mark.unit
+@pytest.mark.security
+@pytest.mark.parametrize(
+    ("name", "value"),
+    (
+        ("LM_STUDIO_FALLBACK_ENABLED", "true"),
+        ("AI_BRIEFING_PROVIDER", "lm_studio"),
+        ("PROJECT_AGENT_PROVIDER", "lm_studio"),
+    ),
+)
+def test_production_rejects_local_lm_studio(name: str, value: str) -> None:
+    environment = production_environment()
+    environment[name] = value
+
+    result = run_production_settings(environment)
+
+    assert result.returncode != 0
+    assert "LM Studio" in result.stderr
 
 
 def run_production_settings(

@@ -258,22 +258,46 @@ def validate_proposal_payload(
     return result
 
 
-def agent_decision_json_schema() -> dict[str, object]:
+def agent_decision_json_schema(
+    *,
+    allowed_citations: frozenset[str] | None = None,
+    stage: str | None = None,
+    available_tools: frozenset[str] | None = None,
+    available_actions: frozenset[str] | None = None,
+    observed_task_ids: frozenset[int] | None = None,
+    observed_user_ids: frozenset[int] | None = None,
+) -> dict[str, object]:
+    citation_items: dict[str, object] = {"type": "string"}
+    if allowed_citations:
+        citation_items["enum"] = sorted(allowed_citations)
+    citation_list: dict[str, object] = {
+        "type": "array",
+        "items": citation_items,
+        "maxItems": MAX_CITATIONS,
+    }
+    if allowed_citations == frozenset():
+        citation_list["maxItems"] = 0
+    if stage == "proposal":
+        citation_list["minItems"] = 1
     cited = {
         "type": "object",
         "properties": {
             "text": {"type": "string", "maxLength": MAX_TEXT},
-            "citations": {
-                "type": "array",
-                "items": {"type": "string"},
-                "maxItems": MAX_CITATIONS,
-            },
+            "citations": citation_list,
         },
         "required": ["text", "citations"],
         "additionalProperties": False,
     }
+    task_id_schema: dict[str, object] = {"type": ["integer", "null"]}
+    if observed_task_ids is not None:
+        task_id_schema["enum"] = [None, *sorted(observed_task_ids)]
+    user_id_schema: dict[str, object] = {"type": "integer"}
+    primary_owner_schema: dict[str, object] = {"type": ["integer", "null"]}
+    if observed_user_ids is not None:
+        user_id_schema["enum"] = sorted(observed_user_ids)
+        primary_owner_schema["enum"] = [None, *sorted(observed_user_ids)]
     payload_properties: dict[str, object] = {
-        "task_id": {"type": ["integer", "null"]},
+        "task_id": task_id_schema,
         "status": {
             "type": ["string", "null"],
             "enum": [None, "todo", "in_progress", "blocked"],
@@ -282,30 +306,54 @@ def agent_decision_json_schema() -> dict[str, object]:
         "blocking_reason": {"type": "string", "maxLength": MAX_TEXT},
         "assignee_ids": {
             "type": "array",
-            "items": {"type": "integer"},
+            "items": user_id_schema,
             "maxItems": 20,
         },
-        "primary_owner_id": {"type": ["integer", "null"]},
+        "primary_owner_id": primary_owner_schema,
         "comment": {"type": "string", "maxLength": MAX_TEXT},
         "due_date": {"type": "string", "maxLength": 10},
         "notification_topic": {"type": "string", "maxLength": 200},
     }
+    kind_values = (
+        [stage]
+        if stage in {"plan", "tool_call", "proposal", "final"}
+        else ["plan", "tool_call", "proposal", "final"]
+    )
+    plan_steps_schema: dict[str, object] = {
+        "type": "array",
+        "items": {"type": "string", "maxLength": MAX_TEXT},
+        "maxItems": 6,
+    }
+    if stage == "plan":
+        plan_steps_schema["minItems"] = 2
+    elif stage is not None:
+        plan_steps_schema["maxItems"] = 0
+    tool_values: list[str | None] = [None, *sorted(READ_TOOLS)]
+    if stage == "tool_call":
+        tool_values = cast(list[str | None], sorted(available_tools or READ_TOOLS))
+    elif stage is not None:
+        tool_values = [None]
+    action_values: list[str | None] = [None, *sorted(PROPOSAL_ACTIONS)]
+    if stage == "proposal":
+        action_values = cast(
+            list[str | None], sorted(available_actions or PROPOSAL_ACTIONS)
+        )
+    elif stage is not None:
+        action_values = [None]
+    cited_max_items = 0 if stage in {"plan", "tool_call"} else MAX_ITEMS
+    cited_min_items = 1 if stage == "proposal" else 0
     return {
         "type": "object",
         "properties": {
             "kind": {
                 "type": "string",
-                "enum": ["plan", "tool_call", "proposal", "final"],
+                "enum": kind_values,
             },
             "summary": {"type": "string", "maxLength": MAX_TEXT},
-            "plan_steps": {
-                "type": "array",
-                "items": {"type": "string", "maxLength": MAX_TEXT},
-                "maxItems": 6,
-            },
+            "plan_steps": plan_steps_schema,
             "tool_code": {
                 "type": ["string", "null"],
-                "enum": [None, *sorted(READ_TOOLS)],
+                "enum": tool_values,
             },
             "arguments": {
                 "type": "object",
@@ -314,7 +362,7 @@ def agent_decision_json_schema() -> dict[str, object]:
             },
             "action_code": {
                 "type": ["string", "null"],
-                "enum": [None, *sorted(PROPOSAL_ACTIONS)],
+                "enum": action_values,
             },
             "payload": {
                 "type": "object",
@@ -322,13 +370,19 @@ def agent_decision_json_schema() -> dict[str, object]:
                 "required": sorted(PAYLOAD_KEYS),
                 "additionalProperties": False,
             },
-            "citations": {
+            "citations": citation_list,
+            "findings": {
                 "type": "array",
-                "items": {"type": "string"},
-                "maxItems": MAX_CITATIONS,
+                "items": cited,
+                "minItems": cited_min_items,
+                "maxItems": cited_max_items,
             },
-            "findings": {"type": "array", "items": cited, "maxItems": MAX_ITEMS},
-            "recommendations": {"type": "array", "items": cited, "maxItems": MAX_ITEMS},
+            "recommendations": {
+                "type": "array",
+                "items": cited,
+                "minItems": cited_min_items,
+                "maxItems": cited_max_items,
+            },
         },
         "required": sorted(DECISION_KEYS),
         "additionalProperties": False,

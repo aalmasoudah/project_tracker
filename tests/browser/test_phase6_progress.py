@@ -143,15 +143,15 @@ def test_mobile_bilingual_progress_details(live_server: LiveServer) -> None:
         )
         page = context.new_page()
 
-        for path, expected in (
-            (f"/projects/{project.pk}/", "75,00%"),
-            (f"/courses/{course.pk}/", "100,00%"),
-            (f"/tasks/{parent.pk}/", "50,00%"),
+        for path, expected, label in (
+            (f"/projects/{project.pk}/", "75,00%", "التقدم الإجمالي"),
+            (f"/courses/{course.pk}/", "100,00%", "التقدم"),
+            (f"/tasks/{parent.pk}/", "50,00%", "التقدم"),
         ):
             page.goto(f"{live_server.url}{path}", wait_until="networkidle")
             assert page.locator("html").get_attribute("lang") == "ar"
             assert page.locator("html").get_attribute("dir") == "rtl"
-            assert page.get_by_text("التقدم", exact=True).is_visible()
+            assert page.get_by_text(label, exact=True).is_visible()
             assert page.get_by_text(expected, exact=True).is_visible()
             assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
 
@@ -166,7 +166,6 @@ def test_mobile_bilingual_progress_details(live_server: LiveServer) -> None:
         )
         assert page.get_by_text("لا ينطبق", exact=True).is_visible()
 
-        page.locator(".navbar-toggler").click()
         page.locator("#language-select").select_option("en")
         page.locator('form[action="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")

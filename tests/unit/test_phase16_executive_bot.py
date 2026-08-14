@@ -29,6 +29,7 @@ from apps.executive_bot.authentication import (
 )
 from apps.executive_bot.evidence import build_executive_evidence
 from apps.executive_bot.models import ExecutiveReportRequest, N8nRequestNonce
+from apps.executive_bot.services import _summary_sections
 from apps.organizations.models import Department
 from apps.projects.models import Project
 from apps.trainees.models import CourseEnrollment, Trainee
@@ -39,6 +40,36 @@ WORKFLOW_PATH = (
     / "n8n"
     / "insight_ceo_telegram_reports.json"
 )
+
+
+@pytest.mark.unit
+def test_pdf_summary_uses_compact_citations_and_arabic_severity() -> None:
+    sections = _summary_sections(
+        {
+            "summary": {
+                "summary": "ملخص تنفيذي موجز.",
+                "risks": [
+                    {
+                        "text": 'قد يتأخر التسليم بسبب "blocked" task.',
+                        "severity": "critical",
+                        "citations": ["task:1", "task:2"],
+                    }
+                ],
+            },
+            "source_labels": {
+                "task:1": "TASK-001 - مهمة طويلة الاسم",
+                "task:2": "TASK-002 - مهمة أخرى طويلة الاسم",
+            },
+        }
+    )
+
+    risk_lines = dict(sections)["المخاطر"]
+    assert risk_lines == (
+        "قد يتأخر التسليم بسبب محجوبة task. (الخطورة: حرج) "
+        "[المصادر: TASK-001، TASK-002]",
+    )
+    assert "مهمة طويلة الاسم" not in risk_lines[0]
+    assert '"' not in risk_lines[0]
 
 
 def _ceo() -> User:

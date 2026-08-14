@@ -121,6 +121,10 @@ def test_mobile_arabic_project_agent_human_approval_and_verification(
             "تم تحليل حالة المشروع من الأدلة المتاحة.", exact=True
         ).is_visible()
         assert page.locator("ol.list-group > li").count() == 7
+        proposal_card = page.locator("section.card.border-warning")
+        assert proposal_card.locator("pre").count() == 0
+        assert proposal_card.locator("dl.detail-grid").count() == 2
+        assert "propose_task_comment" not in proposal_card.inner_text()
         page.locator('textarea[name="reason"]').fill(
             "تمت مراجعة المهمة والاستشهاد وأوافق على تعليق المتابعة."
         )

@@ -1,25 +1,64 @@
 {% extends "base.html" %}
-{% load account_tags i18n %}
+{% load account_tags i18n static %}
 
 {% block title %}{% translate "My profile" %}{% endblock %}
 
 {% block content %}
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
+      <p class="text-primary fw-semibold mb-1">{% translate "Account settings" %}</p>
       <h1 class="h2 mb-1">{% translate "My profile" %}</h1>
-      <p class="text-body-secondary mb-0">{% translate "Your approved internal account details." %}</p>
+      <p class="text-body-secondary mb-0">{% translate "Manage your picture and review your approved internal account details." %}</p>
     </div>
-    <a class="btn btn-primary" href="{% url 'accounts:password_change' %}">
-      {% translate "Change password" %}
-    </a>
+    <a class="btn btn-outline-primary" href="{% url 'accounts:password_change' %}">{% translate "Change password" %}</a>
   </div>
 
-  <dl class="detail-grid card border-0 shadow-sm p-4">
-    <div><dt>{% translate "Display name" %}</dt><dd><bdi>{{ profile_user.display_name }}</bdi></dd></div>
-    <div><dt>{% translate "Username" %}</dt><dd><bdi>{{ profile_user.username }}</bdi></dd></div>
-    <div><dt>{% translate "Email address" %}</dt><dd><bdi>{{ profile_user.email }}</bdi></dd></div>
-    <div><dt>{% translate "Role" %}</dt><dd>{{ profile_user|user_role_label }}</dd></div>
-    <div><dt>{% translate "Department" %}</dt><dd>{{ profile_user.department|department_name }}</dd></div>
-    <div><dt>{% translate "Preferred language" %}</dt><dd>{{ profile_user.get_preferred_language_display }}</dd></div>
-  </dl>
+  <div class="row g-4">
+    <section class="col-12 col-lg-5 col-xl-4" aria-labelledby="profile-picture-title">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h2 class="h4" id="profile-picture-title">{% translate "Profile picture" %}</h2>
+          <p class="text-body-secondary">{% translate "This picture appears in your navigation profile tab." %}</p>
+          <div class="profile-avatar-large" id="avatar-preview-fallback" {% if active_avatar %}hidden{% endif %} aria-hidden="true">{{ profile_user.display_name|slice:":1"|upper }}</div>
+          <img class="profile-avatar-large profile-avatar-image" id="avatar-preview" {% if not active_avatar %}hidden{% endif %} {% if active_avatar %}src="{% url 'accounts:avatar' profile_user.pk %}"{% endif %} alt="{% translate 'Current profile picture' %}">
+
+          <form class="mt-4" action="{% url 'accounts:avatar_update' %}" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label" for="{{ avatar_form.avatar.id_for_label }}">{{ avatar_form.avatar.label }}</label>
+              {{ avatar_form.avatar }}
+              {% if avatar_form.avatar.help_text %}<div class="form-text">{{ avatar_form.avatar.help_text }}</div>{% endif %}
+              {% for error in avatar_form.avatar.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+            </div>
+            <button class="btn btn-primary w-100" type="submit">{% translate "Upload picture" %}</button>
+          </form>
+
+          {% if active_avatar %}
+            <form class="mt-2" action="{% url 'accounts:avatar_remove' %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger w-100" type="submit">{% translate "Remove picture" %}</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <section class="col-12 col-lg-7 col-xl-8" aria-labelledby="account-details-title">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h2 class="h4 mb-4" id="account-details-title">{% translate "Account details" %}</h2>
+          <dl class="detail-grid mb-0">
+            <div><dt>{% translate "Display name" %}</dt><dd><bdi>{{ profile_user.display_name }}</bdi></dd></div>
+            <div><dt>{% translate "Username" %}</dt><dd><bdi>{{ profile_user.username }}</bdi></dd></div>
+            <div><dt>{% translate "Email address" %}</dt><dd><bdi>{{ profile_user.email }}</bdi></dd></div>
+            <div><dt>{% translate "Role" %}</dt><dd>{{ profile_user|user_role_label }}</dd></div>
+            <div><dt>{% translate "Department" %}</dt><dd>{{ profile_user.department|department_name }}</dd></div>
+            <div><dt>{% translate "Preferred language" %}</dt><dd>{{ profile_user.get_preferred_language_display }}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock %}
+
+{% block extra_scripts %}<script src="{% static 'js/profile-avatar.js' %}?v=20260807-ui20-2" defer></script>{% endblock %}

@@ -1,0 +1,72 @@
+{% load i18n %}
+<nav class="sidebar-navigation" aria-label="{% translate 'Main navigation' %}">
+  <p class="sidebar-section-label">{% translate "Overview" %}</p>
+  <ul class="sidebar-list">
+    <li>
+      <a class="sidebar-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}" href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %} title="{% translate 'Dashboard' %}">
+        <span class="sidebar-link-icon" aria-hidden="true">⌂</span>
+        <span class="sidebar-link-label">{% translate "Dashboard" %}</span>
+      </a>
+    </li>
+    <li>
+      <a class="sidebar-link{% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'search' %} active{% endif %}" href="{% url 'workspace:search' %}" {% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'search' %}aria-current="page"{% endif %} title="{% translate 'Global search' %}">
+        <span class="sidebar-link-icon" aria-hidden="true">⌕</span>
+        <span class="sidebar-link-label">{% translate "Global search" %}</span>
+      </a>
+    </li>
+    <li>
+      <a class="sidebar-link{% if request.resolver_match.app_name == 'notifications' %} active{% endif %}" href="{% url 'notifications:list' %}" {% if request.resolver_match.app_name == 'notifications' %}aria-current="page"{% endif %} title="{% translate 'Notifications' %}">
+        <span class="sidebar-link-icon" aria-hidden="true">●</span>
+        <span class="sidebar-link-label">{% translate "Notifications" %}</span>
+        {% if unread_notification_count %}<span class="sidebar-badge"><bdi>{{ unread_notification_count }}</bdi></span>{% endif %}
+      </a>
+    </li>
+  </ul>
+
+  {% if perms.projects.view_project or perms.courses.view_course or perms.tasks.view_task or perms.approvals.view_milestone %}
+    <p class="sidebar-section-label">{% translate "Project management" %}</p>
+    <ul class="sidebar-list">
+      {% if perms.projects.view_project %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'projects' %} active{% endif %}" href="{% url 'projects:list' %}" {% if request.resolver_match.app_name == 'projects' %}aria-current="page"{% endif %} title="{% translate 'Projects' %}"><span class="sidebar-link-icon" aria-hidden="true">◆</span><span class="sidebar-link-label">{% translate "Projects" %}</span></a></li>{% endif %}
+      {% if perms.courses.view_course %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'courses' %} active{% endif %}" href="{% url 'courses:list' %}" {% if request.resolver_match.app_name == 'courses' %}aria-current="page"{% endif %} title="{% translate 'Courses' %}"><span class="sidebar-link-icon" aria-hidden="true">▤</span><span class="sidebar-link-label">{% translate "Courses" %}</span></a></li>{% endif %}
+      {% if perms.tasks.view_task %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'tasks' %} active{% endif %}" href="{% url 'tasks:list' %}" {% if request.resolver_match.app_name == 'tasks' %}aria-current="page"{% endif %} title="{% translate 'Tasks' %}"><span class="sidebar-link-icon" aria-hidden="true">✓</span><span class="sidebar-link-label">{% translate "Tasks" %}</span></a></li>{% endif %}
+      {% if perms.approvals.view_milestone %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'approvals' and 'milestone' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'approvals:milestone_list' %}" title="{% translate 'Milestones' %}"><span class="sidebar-link-icon" aria-hidden="true">◇</span><span class="sidebar-link-label">{% translate "Milestones" %}</span></a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if perms.accounts.manage_accounts or perms.accounts.view_all_directory or perms.accounts.view_department_directory or perms.organizations.view_department or perms.trainees.view_courseenrollment or perms.attendance.view_session or perms.attendance.review_attendance %}
+    <p class="sidebar-section-label">{% translate "People and attendance" %}</p>
+    <ul class="sidebar-list">
+      {% if perms.accounts.manage_accounts or perms.accounts.view_all_directory or perms.accounts.view_department_directory %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name != 'profile' and request.resolver_match.url_name != 'password_change' %} active{% endif %}" href="{% url 'accounts:list' %}" title="{% translate 'Accounts' %}"><span class="sidebar-link-icon" aria-hidden="true">◉</span><span class="sidebar-link-label">{% translate "Accounts" %}</span></a></li>{% endif %}
+      {% if perms.organizations.view_department %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'organizations' %} active{% endif %}" href="{% url 'organizations:list' %}" title="{% translate 'Departments' %}"><span class="sidebar-link-icon" aria-hidden="true">▦</span><span class="sidebar-link-label">{% translate "Departments" %}</span></a></li>{% endif %}
+      {% if perms.trainees.view_courseenrollment %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'trainees' %} active{% endif %}" href="{% url 'trainees:list' %}" title="{% translate 'Trainees' %}"><span class="sidebar-link-icon" aria-hidden="true">♙</span><span class="sidebar-link-label">{% translate "Trainees" %}</span></a></li>{% endif %}
+      {% if perms.attendance.view_session %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'attendance' and request.resolver_match.url_name != 'review-queue' %} active{% endif %}" href="{% url 'attendance:list' %}" title="{% translate 'Sessions' %}"><span class="sidebar-link-icon" aria-hidden="true">◷</span><span class="sidebar-link-label">{% translate "Sessions" %}</span></a></li>{% endif %}
+      {% if perms.attendance.review_attendance %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'attendance' and request.resolver_match.url_name == 'review-queue' %} active{% endif %}" href="{% url 'attendance:review-queue' %}" title="{% translate 'Attendance reviews' %}"><span class="sidebar-link-icon" aria-hidden="true">◎</span><span class="sidebar-link-label">{% translate "Attendance reviews" %}</span></a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  <p class="sidebar-section-label">{% translate "Workspace" %}</p>
+  <ul class="sidebar-list">
+    <li><a class="sidebar-link{% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'kanban' %} active{% endif %}" href="{% url 'workspace:kanban' %}" title="{% translate 'Kanban' %}"><span class="sidebar-link-icon" aria-hidden="true">▥</span><span class="sidebar-link-label">{% translate "Kanban" %}</span></a></li>
+    <li><a class="sidebar-link{% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'calendar' %} active{% endif %}" href="{% url 'workspace:calendar' %}" title="{% translate 'Calendar' %}"><span class="sidebar-link-icon" aria-hidden="true">□</span><span class="sidebar-link-label">{% translate "Calendar" %}</span></a></li>
+    <li><a class="sidebar-link{% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'timeline' %} active{% endif %}" href="{% url 'workspace:timeline' %}" title="{% translate 'Timeline' %}"><span class="sidebar-link-icon" aria-hidden="true">↔</span><span class="sidebar-link-label">{% translate "Timeline" %}</span></a></li>
+    <li><a class="sidebar-link{% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'gantt' %} active{% endif %}" href="{% url 'workspace:gantt' %}" title="{% translate 'Gantt' %}"><span class="sidebar-link-icon" aria-hidden="true">▰</span><span class="sidebar-link-label">{% translate "Gantt" %}</span></a></li>
+    <li><a class="sidebar-link{% if request.resolver_match.app_name == 'workspace' and request.resolver_match.url_name == 'filters' %} active{% endif %}" href="{% url 'workspace:filters' %}" title="{% translate 'Saved filters' %}"><span class="sidebar-link-icon" aria-hidden="true">▽</span><span class="sidebar-link-label">{% translate "Saved filters" %}</span></a></li>
+  </ul>
+
+  {% if perms.approvals.view_approvalrequest or perms.reports.export_project_progress or perms.reports.export_overdue_tasks or perms.reports.export_course_attendance or perms.reports.export_project_attendance %}
+    <p class="sidebar-section-label">{% translate "Management" %}</p>
+    <ul class="sidebar-list">
+      {% if perms.approvals.view_approvalrequest %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'approvals' and 'milestone' not in request.resolver_match.url_name %} active{% endif %}" href="{% url 'approvals:queue' %}" title="{% translate 'Approvals' %}"><span class="sidebar-link-icon" aria-hidden="true">✓</span><span class="sidebar-link-label">{% translate "Approvals" %}</span></a></li>{% endif %}
+      {% if perms.reports.export_project_progress or perms.reports.export_overdue_tasks or perms.reports.export_course_attendance or perms.reports.export_project_attendance %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'reports' %} active{% endif %}" href="{% url 'reports:index' %}" title="{% translate 'Reports' %}"><span class="sidebar-link-icon" aria-hidden="true">▧</span><span class="sidebar-link-label">{% translate "Reports" %}</span></a></li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if perms.audit.view_security_audit or perms.audit.view_business_audit or perms.operations.view_archive_center or perms.operations.view_operations_status %}
+    <p class="sidebar-section-label">{% translate "Administration" %}</p>
+    <ul class="sidebar-list">
+      {% if perms.audit.view_security_audit or perms.audit.view_business_audit %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'audit' %} active{% endif %}" href="{% url 'audit:list' %}" title="{% translate 'Audit' %}"><span class="sidebar-link-icon" aria-hidden="true">◫</span><span class="sidebar-link-label">{% translate "Audit" %}</span></a></li>{% endif %}
+      {% if perms.operations.view_archive_center %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'operations' and request.resolver_match.url_name == 'archives' %} active{% endif %}" href="{% url 'operations:archives' %}" title="{% translate 'Archives' %}"><span class="sidebar-link-icon" aria-hidden="true">▣</span><span class="sidebar-link-label">{% translate "Archives" %}</span></a></li>{% endif %}
+      {% if perms.operations.view_operations_status %}<li><a class="sidebar-link{% if request.resolver_match.app_name == 'operations' and request.resolver_match.url_name == 'status' %} active{% endif %}" href="{% url 'operations:status' %}" title="{% translate 'Operations' %}"><span class="sidebar-link-icon" aria-hidden="true">⚙</span><span class="sidebar-link-label">{% translate "Operations" %}</span></a></li>{% endif %}
+    </ul>
+  {% endif %}
+</nav>

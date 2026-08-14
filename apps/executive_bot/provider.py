@@ -1,6 +1,7 @@
 """Strict Arabic executive-summary provider isolated from delivery concerns."""
 
 import json
+from dataclasses import replace
 from typing import Final, cast
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -17,12 +18,19 @@ from apps.ai_briefings.providers.groq import (
     APPROVED_GROQ_MODELS,
     GROQ_CHAT_COMPLETIONS_URL,
 )
+from apps.ai_briefings.providers.groq_rate_limits import (
+    GroqCapacityUnavailable,
+    GroqPromptBudgetExceeded,
+    reserve_groq_capacity,
+    retry_after_seconds,
+)
 from apps.ai_briefings.schemas import (
     BriefingOutput,
     BriefingValidationError,
     briefing_json_schema,
     validate_briefing_output,
 )
+from apps.executive_bot.lm_studio import generate_local_json
 
 PROMPT_VERSION: Final = "executive-telegram-v1"
 SYSTEM_PROMPT: Final = """You produce a concise Arabic executive report from JSON
@@ -57,7 +65,7 @@ def _groq_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResu
         raise ProviderConfigurationError("GROQ_API_KEY is required.")
     if model not in APPROVED_GROQ_MODELS:
         raise ProviderConfigurationError("The Groq model is not approved.")
-    body = {
+    body: dict[str, object] = {
         "model": model,
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -72,10 +80,28 @@ def _groq_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResu
             },
         },
         "temperature": 0.1,
-        "max_completion_tokens": int(settings.AI_BRIEFING_MAX_OUTPUT_TOKENS),
         "reasoning_effort": str(settings.AI_BRIEFING_REASONING_EFFORT),
         "stream": False,
     }
+    try:
+        reservation = reserve_groq_capacity(
+            api_key=api_key,
+            model=model,
+            body=body,
+            configured_output_tokens=int(settings.AI_BRIEFING_MAX_OUTPUT_TOKENS),
+        )
+    except GroqCapacityUnavailable as error:
+        raise TemporaryProviderError(
+            "Groq rate capacity is temporarily reserved.",
+            retry_after_seconds=error.retry_after_seconds,
+            fallback_eligible=True,
+            reason_code="rate_limited",
+        ) from error
+    except GroqPromptBudgetExceeded as error:
+        raise ProviderResponseError(
+            "The report evidence exceeds the safe Groq token budget."
+        ) from error
+    body["max_completion_tokens"] = reservation.max_output_tokens
     request = Request(
         GROQ_CHAT_COMPLETIONS_URL,
         data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
@@ -83,7 +109,7 @@ def _groq_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResu
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "User-Agent": "InsightProjects/1.0",
+            "User-Agent": "InsightTracker/1.0",
         },
         method="POST",
     )
@@ -94,11 +120,28 @@ def _groq_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResu
         ) as response:
             raw_response = response.read(2_000_001)
     except HTTPError as error:
-        if error.code == 429 or 500 <= error.code < 600:
-            raise TemporaryProviderError("Groq is temporarily unavailable.") from error
+        reservation.release()
+        if error.code in {408, 429} or 500 <= error.code < 600:
+            raise TemporaryProviderError(
+                "Groq is temporarily unavailable.",
+                retry_after_seconds=retry_after_seconds(error.headers),
+                fallback_eligible=True,
+                reason_code=(
+                    "rate_limited"
+                    if error.code == 429
+                    else "transport_error"
+                    if error.code == 408
+                    else "provider_unavailable"
+                ),
+            ) from error
         raise ProviderResponseError("Groq rejected the report request.") from error
     except (TimeoutError, URLError) as error:
-        raise TemporaryProviderError("Groq is temporarily unavailable.") from error
+        reservation.release()
+        raise TemporaryProviderError(
+            "Groq is temporarily unavailable.",
+            fallback_eligible=True,
+            reason_code="transport_error",
+        ) from error
     if len(raw_response) > 2_000_000:
         raise ProviderResponseError("Groq returned an oversized response.")
     try:
@@ -116,6 +159,13 @@ def _groq_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResu
     cached_input_tokens: object = None
     if isinstance(token_details, dict):
         cached_input_tokens = token_details.get("cached_tokens")
+    reservation.reconcile(
+        input_tokens=input_tokens if isinstance(input_tokens, int) else None,
+        cached_input_tokens=(
+            cached_input_tokens if isinstance(cached_input_tokens, int) else None
+        ),
+        output_tokens=output_tokens if isinstance(output_tokens, int) else None,
+    )
     return ProviderResult(
         data=data,
         provider_code="groq",
@@ -180,6 +230,17 @@ def _fake_generate(evidence: dict[str, object]) -> ProviderResult:
     )
 
 
+def _lm_studio_generate(*, evidence: dict[str, object], repair: bool) -> ProviderResult:
+    return generate_local_json(
+        system_prompt=SYSTEM_PROMPT,
+        user_prompt=_user_prompt(evidence=evidence, repair=repair),
+        schema_name="executive_telegram_report",
+        schema=briefing_json_schema(),
+        max_output_tokens=int(settings.AI_BRIEFING_MAX_OUTPUT_TOKENS),
+        raw_response_limit=2_000_000,
+    )
+
+
 def generate_executive_summary(
     *, evidence: dict[str, object], allowed_citations: frozenset[str]
 ) -> tuple[BriefingOutput, ProviderResult]:
@@ -192,7 +253,29 @@ def generate_executive_summary(
         }:
             result = _fake_generate(evidence)
         elif provider_code == "groq":
-            result = _groq_generate(evidence=evidence, repair=repair)
+            try:
+                result = _groq_generate(evidence=evidence, repair=repair)
+            except TemporaryProviderError as error:
+                if not (
+                    bool(settings.LM_STUDIO_FALLBACK_ENABLED)
+                    and settings.DEPLOYMENT_ENVIRONMENT == "development"
+                    and error.fallback_eligible
+                ):
+                    raise
+                provider_code = "lm_studio"
+                try:
+                    local_result = _lm_studio_generate(evidence=evidence, repair=repair)
+                except TemporaryProviderError as local_error:
+                    raise ProviderConfigurationError(
+                        "Both configured report providers are unavailable."
+                    ) from local_error
+                result = replace(
+                    local_result,
+                    fallback_from_provider="groq",
+                    fallback_reason_code=error.reason_code,
+                )
+        elif provider_code == "lm_studio":
+            result = _lm_studio_generate(evidence=evidence, repair=repair)
         else:
             raise ProviderConfigurationError(
                 "The executive report provider is disabled."

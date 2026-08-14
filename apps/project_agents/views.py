@@ -23,6 +23,7 @@ from apps.project_agents.policies import (
     can_review_agent_run,
     can_start_agent,
 )
+from apps.project_agents.presentation import present_agent_proposal
 from apps.project_agents.selectors import (
     visible_agent_proposal_or_404,
     visible_agent_run_or_404,
@@ -105,6 +106,7 @@ def _run_context(actor: User, run: AgentRun) -> dict[str, object]:
     proposal_cards = [
         {
             "proposal": proposal,
+            "presentation": present_agent_proposal(actor, proposal),
             "can_decide": can_decide_agent_proposal(actor, proposal),
             "citations": [
                 sources[reference]

@@ -11,7 +11,7 @@ from apps.ai_briefings.services import (
 )
 
 
-@shared_task(bind=True, max_retries=2)  # type: ignore[untyped-decorator]
+@shared_task(bind=True, max_retries=4)  # type: ignore[untyped-decorator]
 def generate_ai_briefing(self: Task, briefing_id: int) -> str:
     try:
         return generate_briefing(briefing_id=briefing_id)
@@ -21,7 +21,7 @@ def generate_ai_briefing(self: Task, briefing_id: int) -> str:
                 briefing_id=briefing_id,
                 failure_code="provider_retry_exhausted",
             )
-        countdown = 30 * (2**self.request.retries)
+        countdown = error.retry_after_seconds or 30 * (2**self.request.retries)
         raise self.retry(
             exc=RuntimeError("AI briefing provider is temporarily unavailable."),
             countdown=countdown,

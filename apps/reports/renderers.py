@@ -26,6 +26,7 @@ from reportlab.platypus import (
     Flowable,
     Image,
     KeepTogether,
+    PageBreak,
     Paragraph,
     SimpleDocTemplate,
     Spacer,
@@ -44,8 +45,8 @@ TEXT: Final = "243127"
 FORMULA_PREFIXES: Final = ("=", "+", "-", "@")
 ARABIC_PATTERN: Final = re.compile(r"[\u0600-\u06ff]")
 PDF_FONT_NAME: Final = "NotoSansArabic"
-BRAND_NAME_EN: Final = "Insight Projects"
-BRAND_NAME_AR: Final = "إنسايت بروجكتس"
+BRAND_NAME_EN: Final = "Insight Tracker"
+BRAND_NAME_AR: Final = "إنسايت تراكر"
 
 
 def brand_name(language_code: str) -> str:
@@ -95,7 +96,7 @@ def render_xlsx(document: ReportDocument, *, language_code: str) -> bytes:
     sheet.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
     sheet.freeze_panes = "A6"
 
-    logo = SpreadsheetImage(_asset_path("img/project-insight-logo.png"))
+    logo = SpreadsheetImage(_asset_path("img/insight-tracker-logo.png"))
     logo_width, logo_height = fit_dimensions(
         float(logo.width),
         float(logo.height),
@@ -200,9 +201,15 @@ def _register_pdf_font() -> None:
 
 
 def _display_text(value: str, *, language_code: str) -> str:
-    del language_code
     if ARABIC_PATTERN.search(value):
-        return cast(str, get_display(arabic_reshaper.reshape(value)))
+        base_direction = "R" if language_code.startswith("ar") else None
+        return cast(
+            str,
+            get_display(
+                arabic_reshaper.reshape(value),
+                base_dir=base_direction,
+            ),
+        )
     return value
 
 
@@ -216,6 +223,27 @@ def _paragraph(
         escape(_display_text(value, language_code=language_code)),
         style,
     )
+
+
+def _pdf_column_widths(
+    document: ReportDocument,
+    *,
+    available_width: float,
+    language_code: str,
+) -> list[float]:
+    """Scale optional semantic column weights to the available table width."""
+    column_count = len(document.headers)
+    weights = document.column_weights
+    if (
+        len(weights) != column_count
+        or not weights
+        or any(weight <= 0 for weight in weights)
+    ):
+        widths = [available_width / max(column_count, 1)] * column_count
+    else:
+        total = sum(weights)
+        widths = [available_width * weight / total for weight in weights]
+    return list(reversed(widths)) if language_code.startswith("ar") else widths
 
 
 def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
@@ -243,7 +271,8 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         leading=11,
         alignment=alignment,
         textColor=colors.HexColor(f"#{TEXT}"),
-        wordWrap="CJK",
+        wordWrap="RTL" if language_code == "ar" else "LTR",
+        splitLongWords=False,
     )
     heading = ParagraphStyle(
         "ReportHeading",
@@ -267,6 +296,7 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         spaceBefore=4,
         spaceAfter=3,
         textColor=colors.HexColor(f"#{PRIMARY_DARK}"),
+        keepWithNext=True,
     )
     section_item = ParagraphStyle(
         "ReportSectionItem",
@@ -276,6 +306,7 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         leftIndent=4 * mm,
         rightIndent=4 * mm,
         spaceAfter=2,
+        splitLongWords=False,
     )
     header = ParagraphStyle(
         "ReportHeader",
@@ -283,6 +314,7 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         fontSize=8,
         leading=10,
         textColor=colors.white,
+        splitLongWords=False,
     )
     empty = ParagraphStyle(
         "ReportEmpty",
@@ -292,7 +324,7 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         textColor=colors.HexColor(f"#{TEXT}"),
     )
 
-    logo = Image(str(_asset_path("img/project-insight-logo.png")))
+    logo = Image(str(_asset_path("img/insight-tracker-logo.png")))
     logo.drawWidth, logo.drawHeight = fit_dimensions(
         float(logo.imageWidth),
         float(logo.imageHeight),
@@ -345,6 +377,18 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
         story.append(Spacer(1, 2 * mm))
 
     if document.rows:
+        if document.sections:
+            story.extend(
+                [
+                    PageBreak(),
+                    _paragraph(
+                        "تفاصيل التقرير" if language_code == "ar" else "Report details",
+                        language_code=language_code,
+                        style=section_heading,
+                    ),
+                    Spacer(1, 2 * mm),
+                ]
+            )
         displayed_headers = (
             tuple(reversed(document.headers))
             if language_code == "ar"
@@ -368,11 +412,16 @@ def render_pdf(document: ReportDocument, *, language_code: str) -> bytes:
                 for row in displayed_rows
             ],
         ]
-        column_width = report.width / max(len(document.headers), 1)
+        column_widths = _pdf_column_widths(
+            document,
+            available_width=report.width,
+            language_code=language_code,
+        )
         table = Table(
             table_data,
-            colWidths=[column_width] * len(document.headers),
+            colWidths=column_widths,
             repeatRows=1,
+            splitByRow=1,
         )
         table.setStyle(
             TableStyle(

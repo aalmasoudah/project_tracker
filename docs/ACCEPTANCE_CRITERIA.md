@@ -83,7 +83,7 @@ Every phase is complete only when:
 - Requests require valid HMAC-SHA256, a fresh timestamp, a one-use nonce, a
   bounded known schema, and complete fail-closed production configuration.
 - PDF links expire after ten minutes, download once, render in memory, and
-  preserve Arabic RTL, Insight Projects branding, and Gregorian/Hijri dates.
+  preserve Arabic RTL, Insight Tracker branding, and Gregorian/Hijri dates.
 - Critical task alerts are fingerprint-deduplicated, leased, retryable, and
   acknowledged by n8n before delivery is final.
 - n8n workflow exports contain no credential values and successful/failed
@@ -133,6 +133,53 @@ Every phase is complete only when:
   sends the answer only to the configured private chat.
 - Audit and logs contain safe lifecycle codes/counts only, never question or
   answer text, provider payloads, chat/message IDs, credentials, or raw errors.
+
+## Phase 20 UI/UX Navigation, Progress, and Profiles
+
+- The permission-aware desktop sidebar and mobile off-canvas menu mirror for
+  Arabic/English, remain keyboard accessible, and expose no unauthorized link.
+- Documented common destinations are reachable within three navigation
+  interactions without removing security, confirmation, or approval steps.
+- Shared buttons and footer remain readable, responsive, direction aware, and
+  consistent with the approved Insight Tracker brand.
+- Linear and circular indicators visibly present the exact existing Phase 6
+  progress result, including empty and not-applicable states.
+- The sidebar profile tab shows the current name, translated role, and active
+  avatar or fallback without clipping or distortion.
+- Avatar input is decoded, bounded, normalized, stored privately, served only
+  after permission checks, and protected against malformed/deceptive uploads.
+- Replacement and removal are transactional and audited, deactivate the prior
+  display, and retain protected historical avatar evidence.
+
+## Phase 21 Local LM Studio Inference and Controlled Fallback
+
+- Local inference is disabled by default, limited to development, fixed to
+  `http://127.0.0.1:1234/v1`, and cannot expose LM Studio through CORS, MCP,
+  LAN, phone, n8n, Telegram, tunnel, staging, or production.
+- Only logical model codes `qwen/qwen3.5-9b` and `openai/gpt-oss-20b` are
+  accepted. One matching exact API model ID is pinned from `/v1/models`, and
+  the artifact/reasoning pair passes the bilingual strict-JSON capability gate
+  before enablement. Qwen requires `LM_STUDIO_REASONING_EFFORT=none`.
+- Django independently validates every local schema, citation, identifier,
+  permission, and object scope. Reasoning fields are discarded, and the model
+  has no direct database, credential, tool, or business-service access.
+- Telegram report summaries and executive answers make at most one Groq-to-
+  local transition for an eligible transient failure and retain all existing
+  command, privacy, evidence, citation, HMAC, idempotency, and delivery rules.
+- A Recovery Agent run may transition once after a transient Groq failure,
+  records safe transition metadata, stays pinned locally after the first valid
+  local decision, and still satisfies the multi-tool, human-approval,
+  transactional execution, stale-state, idempotency, and verification rules.
+- Authentication, configuration, permission, security, unsafe-input, schema,
+  citation, quota/budget, cancellation, stale, duplicate, and business-rule
+  failures never trigger fallback. Local unavailability fails safely without
+  oscillation or duplicate output.
+- Usage remains bounded across retries and providers, effective local
+  concurrency is one, and no missing usage is treated as zero.
+- The user-operated launcher/readiness probe never silently downloads a model
+  or prints secrets; Arabic/English, security, fallback, regression, and full
+  quality-gate verification pass. The Project Recovery model constraint has a
+  reviewed migration. Production remains Groq-only.
 
 ## Requirement Status
 

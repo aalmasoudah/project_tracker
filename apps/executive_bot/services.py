@@ -2,6 +2,7 @@
 
 import hashlib
 import logging
+import re
 import secrets
 from datetime import datetime, time, timedelta
 from functools import partial
@@ -217,6 +218,7 @@ def _document_data(document: ReportDocument) -> dict[str, object]:
         "rows": [list(row) for row in document.rows],
         "filename_stem": document.filename_stem,
         "sheet_name": document.sheet_name,
+        "column_weights": list(document.column_weights),
     }
 
 
@@ -230,6 +232,8 @@ def _complete_report(
     input_tokens: int | None,
     cached_input_tokens: int | None,
     output_tokens: int | None,
+    fallback_from_provider: str | None = None,
+    fallback_reason_code: str | None = None,
 ) -> str:
     with transaction.atomic():
         locked = ExecutiveReportRequest.objects.select_for_update().get(pk=report.pk)
@@ -283,6 +287,9 @@ def _complete_report(
                 "source_count": locked.source_count,
                 "source_truncated": locked.source_truncated,
                 "model_code": locked.model_code,
+                "provider_code": locked.provider_code,
+                "fallback_from_provider": fallback_from_provider or "",
+                "fallback_reason_code": fallback_reason_code or "",
             },
             scope=AuditEvent.Scope.EXECUTIVE_BOT,
         )
@@ -355,6 +362,8 @@ def generate_report(*, report_id: str) -> str:
         input_tokens=provider_result.input_tokens,
         cached_input_tokens=provider_result.cached_input_tokens,
         output_tokens=provider_result.output_tokens,
+        fallback_from_provider=provider_result.fallback_from_provider,
+        fallback_reason_code=provider_result.fallback_reason_code,
     )
 
 
@@ -511,6 +520,44 @@ def _summary_sections(
     if not isinstance(summary, dict) or not isinstance(labels, dict):
         raise ValueError("Stored executive report summary is invalid.")
 
+    severity_labels = {
+        "critical": "حرج",
+        "high": "عالٍ",
+        "medium": "متوسط",
+        "low": "منخفض",
+    }
+    report_term_labels = {
+        "todo": "قيد البدء",
+        "in_progress": "قيد التنفيذ",
+        "blocked": "محجوبة",
+        "critical": "حرجة",
+        "high": "عالية",
+        "medium": "متوسطة",
+        "low": "منخفضة",
+    }
+    report_term_pattern = re.compile(
+        rf"(?<![A-Za-z0-9_])({'|'.join(report_term_labels)})(?![A-Za-z0-9_])",
+        flags=re.IGNORECASE,
+    )
+    quoted_report_term_pattern = re.compile(
+        rf'["“”]({"|".join(report_term_labels)})["“”]',
+        flags=re.IGNORECASE,
+    )
+
+    def localized_report_text(value: str) -> str:
+        without_code_quotes = quoted_report_term_pattern.sub(
+            lambda match: report_term_labels[match.group(1).lower()],
+            value,
+        )
+        return report_term_pattern.sub(
+            lambda match: report_term_labels[match.group(1).lower()],
+            without_code_quotes,
+        )
+
+    def compact_source_label(reference: str) -> str:
+        label = str(labels.get(reference, reference))
+        return label.split(" - ", 1)[0].strip()
+
     def cited_lines(key: str, *, include_severity: bool = False) -> tuple[str, ...]:
         value = summary.get(key)
         if not isinstance(value, list):
@@ -521,19 +568,23 @@ def _summary_sections(
                 continue
             references = item.get("citations", [])
             reference_labels = [
-                str(labels.get(reference, reference))
+                compact_source_label(reference)
                 for reference in references
                 if isinstance(reference, str)
             ]
-            severity = f" ({item.get('severity')})" if include_severity else ""
-            citations = f" [{'; '.join(reference_labels)}]" if reference_labels else ""
-            lines.append(f"{item['text']}{severity}{citations}")
+            severity_code = str(item.get("severity", "")).lower()
+            severity_label = severity_labels.get(severity_code, severity_code)
+            severity = f" (الخطورة: {severity_label})" if include_severity else ""
+            citations = (
+                f" [المصادر: {'، '.join(reference_labels)}]" if reference_labels else ""
+            )
+            lines.append(f"{localized_report_text(item['text'])}{severity}{citations}")
         return tuple(lines)
 
     sections: list[tuple[str, tuple[str, ...]]] = []
     summary_text = summary.get("summary")
     if isinstance(summary_text, str) and summary_text:
-        sections.append(("الملخص التنفيذي", (summary_text,)))
+        sections.append(("الملخص التنفيذي", (localized_report_text(summary_text),)))
     section_specs = (
         ("أبرز النقاط", "highlights", False),
         ("المخاطر", "risks", True),
@@ -546,7 +597,9 @@ def _summary_sections(
             sections.append((title, lines))
     data_gaps = summary.get("data_gaps")
     if isinstance(data_gaps, list):
-        gaps = tuple(str(item) for item in data_gaps if isinstance(item, str))
+        gaps = tuple(
+            localized_report_text(item) for item in data_gaps if isinstance(item, str)
+        )
         if gaps:
             sections.append(("فجوات البيانات", gaps))
     return tuple(sections)
@@ -558,8 +611,11 @@ def _stored_document(output_data: dict[str, object]) -> ReportDocument:
         raise ValueError("Stored executive report document is invalid.")
     headers = data.get("headers")
     rows = data.get("rows")
+    column_weights = data.get("column_weights", [])
     if not isinstance(headers, list) or not isinstance(rows, list):
         raise ValueError("Stored executive report table is invalid.")
+    if not isinstance(column_weights, list):
+        raise ValueError("Stored executive report column widths are invalid.")
     return ReportDocument(
         title=str(data["title"]),
         subtitle=str(data["subtitle"]),
@@ -570,6 +626,7 @@ def _stored_document(output_data: dict[str, object]) -> ReportDocument:
         filename_stem=str(data["filename_stem"]),
         sheet_name=str(data["sheet_name"]),
         sections=_summary_sections(output_data),
+        column_weights=tuple(float(weight) for weight in column_weights),
     )
 
 
@@ -619,7 +676,7 @@ def consume_report_download(*, report_id: str, token: str) -> tuple[bytes, str]:
             scope=AuditEvent.Scope.EXECUTIVE_BOT,
         )
     date_suffix = timezone.localdate().isoformat()
-    filename = f"insight-projects-{document.filename_stem}-{date_suffix}.pdf"
+    filename = f"insight-tracker-{document.filename_stem}-{date_suffix}.pdf"
     return content, filename
 
 
@@ -636,6 +693,8 @@ def _complete_assistant_request(
     input_tokens: int | None,
     cached_input_tokens: int | None,
     output_tokens: int | None,
+    fallback_from_provider: str | None = None,
+    fallback_reason_code: str | None = None,
 ) -> str:
     with transaction.atomic():
         locked = ExecutiveAssistantRequest.objects.select_for_update().get(
@@ -691,6 +750,9 @@ def _complete_assistant_request(
                 "source_count": locked.source_count,
                 "source_truncated": locked.source_truncated,
                 "model_code": locked.model_code,
+                "provider_code": locked.provider_code,
+                "fallback_from_provider": fallback_from_provider or "",
+                "fallback_reason_code": fallback_reason_code or "",
             },
             scope=AuditEvent.Scope.EXECUTIVE_BOT,
         )
@@ -780,6 +842,8 @@ def generate_assistant_request(*, request_id: str) -> str:
         input_tokens=provider_result.input_tokens,
         cached_input_tokens=provider_result.cached_input_tokens,
         output_tokens=provider_result.output_tokens,
+        fallback_from_provider=provider_result.fallback_from_provider,
+        fallback_reason_code=provider_result.fallback_reason_code,
     )
 
 

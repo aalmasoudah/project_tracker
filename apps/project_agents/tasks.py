@@ -14,7 +14,7 @@ from apps.project_agents.services import (
 )
 
 
-@shared_task(bind=True, max_retries=2)  # type: ignore[untyped-decorator]
+@shared_task(bind=True, max_retries=8)  # type: ignore[untyped-decorator]
 def process_project_agent(self: Task, run_id: str) -> str:
     try:
         return process_agent_run(run_id=run_id)
@@ -25,7 +25,7 @@ def process_project_agent(self: Task, run_id: str) -> str:
             )
         raise self.retry(
             exc=RuntimeError("Project-agent provider is temporarily unavailable."),
-            countdown=30 * (2**self.request.retries),
+            countdown=(error.retry_after_seconds or 30 * (2**self.request.retries)),
         ) from error
 
 

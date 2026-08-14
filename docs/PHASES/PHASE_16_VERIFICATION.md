@@ -80,9 +80,9 @@ the complete pytest database setup.
   each page at 120 DPI.
 - Confirmed correct RTL column order, shaped Arabic, readable mixed Arabic/
   Latin codes, repeated table headers, stable row spacing, clean pagination,
-  proportional Insight Projects logo, Arabic footer/page numbers, and no
+  proportional Insight Tracker logo, Arabic footer/page numbers, and no
   clipping, overlap, black glyphs, or broken borders.
-- Confirmed the report title/footer use Insight Projects / إنسايت بروجكتس and
+- Confirmed the report title/footer use Insight Tracker / إنسايت تراكر and
   the subtitle displays both Gregorian and Hijri dates.
 - Removed all generated QA scratch files after inspection.
 

@@ -13,6 +13,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from apps.reports.datasets import ReportDocument, ReportTooLargeError, _bounded
 from apps.reports.dates import format_dual_date
 from apps.reports.renderers import (
+    _pdf_column_widths,
     brand_name,
     fit_dimensions,
     render_pdf,
@@ -66,15 +67,15 @@ def test_arabic_excel_is_rtl_branded_and_formula_safe() -> None:
     assert images[0].width / images[0].height == pytest.approx(2472 / 2649)
     assert sheet.oddFooter is not None
     assert sheet.oddFooter.center is not None
-    assert sheet.oddFooter.center.text == "إنسايت بروجكتس"
-    assert workbook.properties.creator == "إنسايت بروجكتس"
+    assert sheet.oddFooter.center.text == "إنسايت تراكر"
+    assert workbook.properties.creator == "إنسايت تراكر"
 
 
 @pytest.mark.unit
 def test_company_name_and_logo_dimensions_are_exact_and_proportional() -> None:
-    assert brand_name("en") == "Insight Projects"
-    assert brand_name("ar") == "إنسايت بروجكتس"
-    assert brand_name("ar-sa") == "إنسايت بروجكتس"
+    assert brand_name("en") == "Insight Tracker"
+    assert brand_name("ar") == "إنسايت تراكر"
+    assert brand_name("ar-sa") == "إنسايت تراكر"
 
     width, height = fit_dimensions(2472, 2649, max_width=170, max_height=95)
     assert width / height == pytest.approx(2472 / 2649)
@@ -115,6 +116,34 @@ def test_arabic_pdf_embeds_report_content_without_temporary_files() -> None:
 
     assert payload.startswith(b"%PDF-")
     assert len(payload) > 10_000
+
+
+@pytest.mark.unit
+def test_pdf_column_weights_scale_and_follow_arabic_visual_order() -> None:
+    document = ReportDocument(
+        title="Weighted report",
+        subtitle="Scope",
+        headers=("Code", "Description", "Status"),
+        rows=(("A", "A readable description", "Open"),),
+        filename_stem="weighted-report",
+        sheet_name="Weighted",
+        column_weights=(1.0, 3.0, 2.0),
+    )
+
+    english = _pdf_column_widths(
+        document,
+        available_width=500,
+        language_code="en",
+    )
+    arabic = _pdf_column_widths(
+        document,
+        available_width=500,
+        language_code="ar",
+    )
+
+    assert english == pytest.approx([500 / 6, 250, 500 / 3])
+    assert arabic == pytest.approx([500 / 3, 250, 500 / 6])
+    assert sum(arabic) == pytest.approx(500)
 
 
 @pytest.mark.unit

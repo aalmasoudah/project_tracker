@@ -17,6 +17,32 @@ from apps.projects.models import Project
 from apps.projects.selectors import projects_visible_to
 from apps.tasks.models import Task
 
+PROJECT_PROGRESS_FOCUS = "project_progress"
+
+
+def _question_focus(question: str) -> str:
+    folded = question.casefold()
+    project_terms = ("project", "projects", "مشروع", "مشاريع")
+    progress_terms = (
+        "progress",
+        "completion",
+        "complete",
+        "completed",
+        "percentage",
+        "percent",
+        "%",
+        "تقدم",
+        "إنجاز",
+        "اكتمال",
+        "نسبة",
+        "نسب",
+    )
+    if any(term in folded for term in project_terms) and any(
+        term in folded for term in progress_terms
+    ):
+        return PROJECT_PROGRESS_FOCUS
+    return "general"
+
 
 @dataclass(frozen=True, slots=True)
 class AssistantEvidence:
@@ -91,29 +117,35 @@ def build_assistant_evidence(
 ) -> AssistantEvidence:
     today = timezone.localdate()
     limit = int(settings.EXECUTIVE_ASSISTANT_EVIDENCE_LIMIT)
+    question_focus = _question_focus(question)
     source_labels: dict[str, str] = {}
     task_items: list[dict[str, object]] = []
     project_items: list[dict[str, object]] = []
     approval_items: list[dict[str, object]] = []
 
-    task_queryset = _active_task_queryset(actor).annotate(
-        active_assignee_count=Count(
-            "assignments",
-            filter=Q(assignments__removed_at__isnull=True),
-            distinct=True,
+    task_candidates_truncated = False
+    ranked_tasks: list[Task] = []
+    task_limit = (
+        0 if question_focus == PROJECT_PROGRESS_FOCUS else max(1, (limit * 3) // 4)
+    )
+    if task_limit:
+        task_queryset = _active_task_queryset(actor).annotate(
+            active_assignee_count=Count(
+                "assignments",
+                filter=Q(assignments__removed_at__isnull=True),
+                distinct=True,
+            )
         )
-    )
-    candidate_tasks = list(task_queryset[:501])
-    task_candidates_truncated = len(candidate_tasks) > 500
-    ranked_tasks = sorted(
-        candidate_tasks[:500],
-        key=lambda task: (
-            -_risk_score(task, today=today),
-            task.due_date or date.max,
-            task.code,
-        ),
-    )
-    task_limit = max(1, (limit * 3) // 4)
+        candidate_tasks = list(task_queryset[:501])
+        task_candidates_truncated = len(candidate_tasks) > 500
+        ranked_tasks = sorted(
+            candidate_tasks[:500],
+            key=lambda task: (
+                -_risk_score(task, today=today),
+                task.due_date or date.max,
+                task.code,
+            ),
+        )
     for task in ranked_tasks[:task_limit]:
         project = _task_project(task)
         source_ref = f"task:{task.pk}"
@@ -133,7 +165,9 @@ def build_assistant_evidence(
                     (task.due_date - today).days if task.due_date else None
                 ),
                 "has_blocker": task.status == Task.Status.BLOCKED,
-                "active_assignee_count": cast(int, task.active_assignee_count),
+                "active_assignee_count": cast(
+                    int, task.__dict__["active_assignee_count"]
+                ),
                 "local_risk_score": _risk_score(task, today=today),
             }
         )
@@ -155,7 +189,10 @@ def build_assistant_evidence(
             project.code,
         )
     )
-    project_budget = min(remaining, max(1, limit // 6)) if remaining else 0
+    preferred_project_budget = (
+        limit if question_focus == PROJECT_PROGRESS_FOCUS else max(1, limit // 6)
+    )
+    project_budget = min(remaining, preferred_project_budget) if remaining else 0
     for project in visible_projects[:project_budget]:
         progress = project_progress_for(actor, project)
         source_ref = f"project:{project.pk}"
@@ -177,17 +214,22 @@ def build_assistant_evidence(
             }
         )
 
-    remaining = limit - len(source_labels)
+    remaining = (
+        0 if question_focus == PROJECT_PROGRESS_FOCUS else limit - len(source_labels)
+    )
     pending_statuses = (
         ApprovalRequest.Status.PENDING_SUPERVISOR,
         ApprovalRequest.Status.PENDING_MANAGER,
     )
-    approval_candidates = list(
-        approval_requests_visible_to(actor)
-        .filter(status__in=pending_statuses)
-        .order_by("submitted_at", "pk")[:101]
-    )
-    approval_candidates_truncated = len(approval_candidates) > 100
+    approval_candidates: list[ApprovalRequest] = []
+    approval_candidates_truncated = False
+    if remaining:
+        approval_candidates = list(
+            approval_requests_visible_to(actor)
+            .filter(status__in=pending_statuses)
+            .order_by("submitted_at", "pk")[:101]
+        )
+        approval_candidates_truncated = len(approval_candidates) > 100
     for approval in approval_candidates[:remaining]:
         target_code, target_name, project_code = _target_details(approval, language)
         source_ref = f"approval:{approval.pk}"
@@ -203,17 +245,23 @@ def build_assistant_evidence(
             }
         )
 
-    truncated = (
-        task_candidates_truncated
-        or project_candidates_truncated
-        or approval_candidates_truncated
-        or len(ranked_tasks) > len(task_items)
-        or len(visible_projects) > len(project_items)
-        or len(approval_candidates) > len(approval_items)
-    )
+    if question_focus == PROJECT_PROGRESS_FOCUS:
+        truncated = project_candidates_truncated or len(visible_projects) > len(
+            project_items
+        )
+    else:
+        truncated = (
+            task_candidates_truncated
+            or project_candidates_truncated
+            or approval_candidates_truncated
+            or len(ranked_tasks) > len(task_items)
+            or len(visible_projects) > len(project_items)
+            or len(approval_candidates) > len(approval_items)
+        )
     payload: dict[str, object] = {
         "question": question,
         "question_language": language,
+        "question_focus": question_focus,
         "as_of_date": today.isoformat(),
         "evidence_rules": {
             "read_only": True,

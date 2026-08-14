@@ -15,7 +15,7 @@ from apps.executive_bot.services import (
 )
 
 
-@shared_task(bind=True, max_retries=2)  # type: ignore[untyped-decorator]
+@shared_task(bind=True, max_retries=4)  # type: ignore[untyped-decorator]
 def generate_executive_report(self: Task, report_id: str) -> str:
     try:
         return generate_report(report_id=report_id)
@@ -25,14 +25,14 @@ def generate_executive_report(self: Task, report_id: str) -> str:
                 report_id=report_id,
                 failure_code="provider_retry_exhausted",
             )
-        countdown = 30 * (2**self.request.retries)
+        countdown = error.retry_after_seconds or 30 * (2**self.request.retries)
         raise self.retry(
             exc=RuntimeError("Executive report provider is temporarily unavailable."),
             countdown=countdown,
         ) from error
 
 
-@shared_task(bind=True, max_retries=2)  # type: ignore[untyped-decorator]
+@shared_task(bind=True, max_retries=4)  # type: ignore[untyped-decorator]
 def generate_executive_answer(self: Task, request_id: str) -> str:
     try:
         return generate_assistant_request(request_id=request_id)
@@ -42,7 +42,7 @@ def generate_executive_answer(self: Task, request_id: str) -> str:
                 request_id=request_id,
                 failure_code="provider_retry_exhausted",
             )
-        countdown = 30 * (2**self.request.retries)
+        countdown = error.retry_after_seconds or 30 * (2**self.request.retries)
         raise self.retry(
             exc=RuntimeError(
                 "Executive assistant provider is temporarily unavailable."

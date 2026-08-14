@@ -11,6 +11,8 @@ ACCOUNT_UPDATED = "account.updated"
 ACCOUNT_DEACTIVATED = "account.deactivated"
 ACCOUNT_REACTIVATED = "account.reactivated"
 LANGUAGE_CHANGED = "account.language_changed"
+PROFILE_AVATAR_UPDATED = "account.profile_avatar_updated"
+PROFILE_AVATAR_REMOVED = "account.profile_avatar_removed"
 DEPARTMENT_CREATED = "department.created"
 DEPARTMENT_UPDATED = "department.updated"
 DEPARTMENT_ARCHIVED = "department.archived"
@@ -98,6 +100,7 @@ AGENT_RUN_COMPLETED = "project_agent.run_completed"
 AGENT_RUN_FAILED = "project_agent.run_failed"
 AGENT_RUN_CANCELLED = "project_agent.run_cancelled"
 AGENT_RUN_REVIEWED = "project_agent.run_reviewed"
+AGENT_PROVIDER_FALLBACK = "project_agent.provider_fallback"
 AGENT_TOOL_COMPLETED = "project_agent.tool_completed"
 AGENT_TOOL_FAILED = "project_agent.tool_failed"
 AGENT_PROPOSAL_CREATED = "project_agent.proposal_created"
@@ -120,6 +123,8 @@ ALL_ACTION_CODES = (
     ACCOUNT_DEACTIVATED,
     ACCOUNT_REACTIVATED,
     LANGUAGE_CHANGED,
+    PROFILE_AVATAR_UPDATED,
+    PROFILE_AVATAR_REMOVED,
     DEPARTMENT_CREATED,
     DEPARTMENT_UPDATED,
     DEPARTMENT_ARCHIVED,
@@ -207,6 +212,7 @@ ALL_ACTION_CODES = (
     AGENT_RUN_FAILED,
     AGENT_RUN_CANCELLED,
     AGENT_RUN_REVIEWED,
+    AGENT_PROVIDER_FALLBACK,
     AGENT_TOOL_COMPLETED,
     AGENT_TOOL_FAILED,
     AGENT_PROPOSAL_CREATED,

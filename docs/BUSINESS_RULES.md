@@ -149,7 +149,7 @@ must be approved before their implementation phase.
   environment configuration. The deterministic fake provider is limited to
   development and automated testing.
 - Pilot limits are 7, 14, or 30 days of evidence, at most 200 detailed source
-  records, and 20 requests per user per local day. Truncation is disclosed in
+  records, and 100 requests per user per local day. Truncation is disclosed in
   the generated briefing.
 - Phase 16 Telegram reporting is available only to one deployment-configured
   active CEO username and one exact Telegram chat ID through the approved n8n
@@ -208,6 +208,38 @@ must be approved before their implementation phase.
   request. Processing is asynchronous, quota/token/evidence bounded, retry-
   safe, audited without question/answer content, and rechecks authority at
   request, processing, and status retrieval.
+- Phase 20 navigation presentation never grants authority; existing view and
+  object permissions remain authoritative at every destination.
+- Phase 20 progress indicators present only the canonical Phase 6 result and
+  introduce no new calculation or portfolio aggregation.
+- A user may upload, replace, or deactivate their own verified profile avatar.
+  Historical avatar records and stored derivatives remain protected under the
+  approved retention rule even after they are no longer displayed.
+- Phase 21 LM Studio inference is disabled by default, local-development only,
+  and fixed to `http://127.0.0.1:1234/v1`. It cannot be exposed to the LAN,
+  phone, n8n, Telegram, a tunnel, staging, or production under this approval.
+- Approved local logical model codes are `qwen/qwen3.5-9b` and
+  `openai/gpt-oss-20b`. Exactly one operator-pinned API model ID must match its
+  loaded ID reported by `/v1/models` and pass the capability gate; installed
+  models are never discovered, downloaded, aliased deceptively, or selected
+  silently.
+- `qwen/qwen3.5-9b` requires `LM_STUDIO_REASONING_EFFORT=none`, proven by the
+  live Arabic/English strict-schema probe. A conflicting value fails closed;
+  gpt-oss remains unavailable until explicitly installed and independently
+  gated.
+- A local response is accepted only after strict JSON Schema generation and
+  authoritative Django schema, citation, identifier, permission, and scope
+  validation. LM Studio has no direct database or business-service access, and
+  model reasoning fields are discarded rather than stored or displayed.
+- With the global fallback switch explicitly enabled, Phase 16/19 Telegram AI
+  and Phase 17 Recovery may transition once from Groq to LM Studio only after
+  a locally classified transient provider failure. After one valid local
+  decision the request/run stays pinned locally and never oscillates.
+- Authentication, configuration, permission, security, unsafe-input, schema,
+  citation, quota/budget, cancellation, stale-state, duplicate, and business-
+  rule failures never trigger fallback. Local unavailability uses the existing
+  bounded safe-failure path. Production remains Groq-only pending a separate
+  deployment decision.
 
 ## Decisions Required Before Planning
 
@@ -281,6 +313,13 @@ The project owner must approve answers to these questions:
     flow are defined in decision 0022.
 26. [Approved for Phase 19] The bounded, cited, read-only CEO Telegram AI
     assistant is defined in decision 0024.
+27. [Approved for Phase 20] Permission-preserving responsive navigation,
+    canonical progress presentation, and retained protected profile avatars
+    are defined in decision 0025.
+28. [Approved for Phase 21] Local-development LM Studio inference, the exact
+    approved Qwen/gpt-oss allowlist and reasoning gate, strict local validation,
+    exact model pinning, and controlled one-way Groq fallback are defined in
+    decision 0026.
 
 ## Rule Approval
 
@@ -293,4 +332,5 @@ in decision 0013. Phase 9 was approved in decision 0014, Phase 10 in decision
 0015, Phase 11 in decision 0016, Phase 14 in decision 0019, Phase 15 in
 decision 0020, and Phase 16 in decision 0021. Remaining decisions still block
 only separately approved extensions. Phase 17 was approved in decision 0022,
-and Phase 19 in decision 0024.
+Phase 19 in decision 0024, Phase 20 in decision 0025, and Phase 21 in decision
+0026.

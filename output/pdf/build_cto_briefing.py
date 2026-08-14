@@ -29,9 +29,9 @@ from reportlab.platypus import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "output" / "pdf" / "insight-projects-complete-cto-guide.pdf"
-LOGO = ROOT / "static" / "img" / "project-insight-logo.png"
-MARK = ROOT / "static" / "img" / "project-insight-mark.png"
+OUTPUT = ROOT / "output" / "pdf" / "insight-tracker-complete-cto-guide.pdf"
+LOGO = ROOT / "static" / "img" / "insight-tracker-logo.png"
+MARK = ROOT / "static" / "img" / "insight-tracker-mark.png"
 FONT = (
     ROOT / "static" / "vendor" / "fonts" / "NotoSansArabic-VariableFont_wdth,wght.ttf"
 )
@@ -447,7 +447,7 @@ def page_decor(canvas: Canvas, doc: SimpleDocTemplate) -> None:
         canvas.drawString(
             18 * mm,
             10.8 * mm,
-            "Insight Projects - internal CTO briefing - 4 August 2026",
+            "Insight Tracker - internal CTO briefing - 4 August 2026",
         )
     else:
         canvas.setFillColor(DEEP)
@@ -455,10 +455,10 @@ def page_decor(canvas: Canvas, doc: SimpleDocTemplate) -> None:
         draw_contained(canvas, MARK, 16 * mm, page_height - 18 * mm, 13 * mm, 8 * mm)
         canvas.setFillColor(DEEP)
         canvas.setFont("Helvetica-Bold", 8.5)
-        canvas.drawString(31 * mm, page_height - 14.8 * mm, "INSIGHT PROJECTS")
+        canvas.drawString(31 * mm, page_height - 14.8 * mm, "INSIGHT TRACKER")
         canvas.setFont("NotoArabic", 8.8)
         canvas.drawRightString(
-            page_width - 18 * mm, page_height - 14.8 * mm, rtl("إنسايت بروجكتس")
+            page_width - 18 * mm, page_height - 14.8 * mm, rtl("إنسايت تراكر")
         )
         canvas.setStrokeColor(LINE)
         canvas.setLineWidth(0.6)
@@ -535,7 +535,7 @@ story.extend(
     [
         Spacer(1, 28 * mm),
         p("15-MINUTE INTERNAL CTO BRIEFING", "CoverKicker"),
-        p("Insight Projects", "CoverTitle"),
+        p("Insight Tracker", "CoverTitle"),
         Table(
             [
                 [
@@ -557,7 +557,7 @@ story.extend(
             ),
         ),
         Spacer(1, 8 * mm),
-        p(rtl("إنسايت بروجكتس"), "CoverArabic"),
+        p(rtl("إنسايت تراكر"), "CoverArabic"),
         Spacer(1, 55 * mm),
         p(
             "Complete feature guide, AI governance, technical posture, likely CTO questions, test evidence, presentation script, and pilot recommendation.",
@@ -582,7 +582,7 @@ story.extend(
 )
 overview_text = [
     p(
-        "Insight Projects is a Django and PostgreSQL application that centralizes programs, projects, courses, tasks, people, attendance, approvals, evidence, notifications, dashboards, and exports in one permission-controlled workspace."
+        "Insight Tracker is a Django and PostgreSQL application that centralizes programs, projects, courses, tasks, people, attendance, approvals, evidence, notifications, dashboards, and exports in one permission-controlled workspace."
     ),
     bullet(
         "Leadership sees current progress, overdue work, approval status, and operational evidence without waiting for manually assembled updates."
@@ -1461,8 +1461,8 @@ def build() -> None:
         leftMargin=16 * mm,
         topMargin=22 * mm,
         bottomMargin=18 * mm,
-        title="Insight Projects Complete CTO Guide",
-        author="Insight Projects",
+        title="Insight Tracker Complete CTO Guide",
+        author="Insight Tracker",
         subject="Complete features, AI governance, CTO questions, test evidence, 15-minute script, and pilot recommendation",
     )
     document.build(story, onFirstPage=page_decor, onLaterPages=page_decor)

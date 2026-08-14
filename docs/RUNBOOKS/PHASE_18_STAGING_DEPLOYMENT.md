@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Deploy Insight Projects to a fictional-data staging environment using the same
+Deploy Insight Tracker to a fictional-data staging environment using the same
 immutable image and security posture intended for production. This runbook is
 provider-neutral; do not create billable resources until the project owner
 approves the provider, region, plans, and data-residency position.
@@ -25,8 +25,8 @@ email sender, Groq key, Telegram bot, and n8n project from production.
 From a clean reviewed commit:
 
 ```powershell
-docker build --pull --tag insight-projects:<commit-sha> .
-docker inspect insight-projects:<commit-sha> --format '{{.Config.User}}'
+docker build --pull --tag insight-tracker:<commit-sha> .
+docker inspect insight-tracker:<commit-sha> --format '{{.Config.User}}'
 ```
 
 The user must be `insight`. Push the image to the approved private registry and

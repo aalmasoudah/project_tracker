@@ -51,12 +51,7 @@
       <div class="card-body">
         <h2 class="h4" id="progress-title">{% translate "Project progress" %}</h2>
         {% for row in progress_rows %}
-          <div class="mb-3">
-            <div class="d-flex justify-content-between gap-2 mb-1"><span>{{ row.label }}</span><bdi>{{ row.progress.percentage }}%</bdi></div>
-            <div class="progress" role="progressbar" aria-label="{{ row.label }}" aria-valuenow="{{ row.progress.percentage }}" aria-valuemin="0" aria-valuemax="100">
-              <div class="progress-bar" style="width: {{ row.progress.percentage }}%"></div>
-            </div>
-          </div>
+          <div class="mb-3">{% include "includes/progress_indicator.html" with progress=row.progress label=row.label %}</div>
         {% empty %}
           <p class="text-body-secondary mb-0">{% translate "Project progress is unavailable for this scope." %}</p>
         {% endfor %}

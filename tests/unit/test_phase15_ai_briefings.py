@@ -123,7 +123,7 @@ def test_groq_request_uses_strict_schema_no_tools_and_tracks_cache(
     assert body["response_format"]["json_schema"]["strict"] is True
     assert "tools" not in body
     assert "tool_choice" not in body
-    assert request.get_header("User-agent") == "InsightProjects/1.0"
+    assert request.get_header("User-agent") == "InsightTracker/1.0"
     assert captured["timeout"] == 15
     assert result.cached_input_tokens == 300
 

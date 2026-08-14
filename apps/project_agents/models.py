@@ -134,6 +134,7 @@ class AgentRun(ProtectedAgentModel):
                     model_code__in=(
                         "openai/gpt-oss-20b",
                         "openai/gpt-oss-120b",
+                        "qwen/qwen3.5-9b",
                     )
                 ),
                 name="project_agents_model_valid",

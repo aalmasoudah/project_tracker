@@ -1,0 +1,8 @@
+{% load i18n static %}
+<footer class="app-footer">
+  <div class="app-footer-brand">
+    <img alt="" height="24" src="{% static 'img/insight-tracker-mark.png' %}" width="32">
+    <span>{% translate "Insight Tracker" %} · {% translate "إنسايت تراكر" %}</span>
+  </div>
+  <small>© {% now "Y" %} · {% translate "Project management, clearly organized." %}</small>
+</footer>

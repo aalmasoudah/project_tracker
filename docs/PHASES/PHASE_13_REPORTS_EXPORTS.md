@@ -14,7 +14,7 @@ Arabic RTL/English LTR rendering.
 - Project-progress reports in PDF and Excel.
 - Overdue-task reports in PDF and Excel.
 - Course- and project-attendance summaries in PDF and Excel.
-- Fixed Insight Projects / إنسايت بروجكتس branding derived from the approved
+- Fixed Insight Tracker / إنسايت تراكر branding derived from the approved
   supplied logo, rendered without changing its source proportions.
 - Date-range/filter validation and empty/large dataset behavior.
 - Embedded Arabic-capable fonts, correct shaping/bidi/RTL layout, localized

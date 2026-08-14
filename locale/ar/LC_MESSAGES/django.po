@@ -407,9 +407,6 @@ msgstr "سيؤدي هذا إلى تسجيل خروج المستخدم فورًا
 msgid "Time"
 msgstr "الوقت"
 
-msgid "Toggle navigation"
-msgstr "إظهار أو إخفاء قائمة التنقل"
-
 msgid ""
 "Unable to sign in with the provided credentials. Try again later or contact "
 "an administrator."
@@ -444,9 +441,6 @@ msgstr "عرض ملفي الشخصي"
 
 msgid "You do not have permission to perform this action."
 msgstr "ليس لديك صلاحية لتنفيذ هذا الإجراء."
-
-msgid "Your approved internal account details."
-msgstr "بيانات حسابك الداخلي المعتمدة."
 
 msgid "Your password was changed successfully."
 msgstr "تم تغيير كلمة مرورك بنجاح."
@@ -2674,8 +2668,8 @@ msgstr "المهام المتأخرة"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Insight Projects"
-msgstr "إنسايت بروجكتس"
+msgid "Insight Tracker"
+msgstr "إنسايت تراكر"
 
 msgid "Project attendance"
 msgstr "حضور المشروع"
@@ -3481,6 +3475,9 @@ msgstr "تم طلب تشغيل وكيل المشروع"
 msgid "Project-agent run reviewed"
 msgstr "تمت مراجعة تشغيل وكيل المشروع"
 
+msgid "Project-agent provider fallback activated"
+msgstr "تم تفعيل المزود الاحتياطي لوكيل المشروع"
+
 msgid "Project-agent run reviewed and added to project memory."
 msgstr "تمت مراجعة تشغيل وكيل المشروع وإضافته إلى ذاكرة المشروع."
 
@@ -3610,6 +3607,135 @@ msgstr "اكتمل تشغيل أداة وكيل المشروع"
 
 msgid "Project-agent tool failed safely"
 msgstr "توقفت أداة وكيل المشروع بأمان"
+
+msgid "Main navigation"
+msgstr "التنقل الرئيسي"
+
+msgid "Overview"
+msgstr "نظرة عامة"
+
+msgid "Project management"
+msgstr "إدارة المشاريع"
+
+msgid "People and attendance"
+msgstr "الأفراد والحضور"
+
+msgid "Management"
+msgstr "الإدارة"
+
+msgid "Administration"
+msgstr "إدارة النظام"
+
+msgid "Project workspace"
+msgstr "مساحة عمل المشاريع"
+
+msgid "Close navigation"
+msgstr "إغلاق قائمة التنقل"
+
+msgid "Collapse navigation"
+msgstr "طي قائمة التنقل"
+
+msgid "Expand navigation"
+msgstr "توسيع قائمة التنقل"
+
+msgid "Search projects, tasks, and people"
+msgstr "البحث في المشاريع والمهام والأشخاص"
+
+msgid "Project management, clearly organized."
+msgstr "إدارة المشاريع بوضوح وتنظيم."
+
+msgid "Overall progress"
+msgstr "التقدم الإجمالي"
+
+msgid "Account settings"
+msgstr "إعدادات الحساب"
+
+msgid "Manage your picture and review your approved internal account details."
+msgstr "أدر صورتك وراجع بيانات حسابك الداخلي المعتمدة."
+
+msgid "Profile picture"
+msgstr "الصورة الشخصية"
+
+msgid "This picture appears in your navigation profile tab."
+msgstr "تظهر هذه الصورة في بطاقة ملفك الشخصي بقائمة التنقل."
+
+msgid "Current profile picture"
+msgstr "الصورة الشخصية الحالية"
+
+msgid "JPEG, PNG, or WebP. Maximum size 5 MB."
+msgstr "بصيغة JPEG أو PNG أو WebP، وبحجم أقصى 5 ميجابايت."
+
+msgid "Upload picture"
+msgstr "رفع الصورة"
+
+msgid "Remove picture"
+msgstr "إزالة الصورة"
+
+msgid "Account details"
+msgstr "بيانات الحساب"
+
+msgid "The profile picture must not exceed 5 MB."
+msgstr "يجب ألا يتجاوز حجم الصورة الشخصية 5 ميجابايت."
+
+msgid "Upload a valid JPEG, PNG, or WebP image."
+msgstr "ارفع صورة صالحة بصيغة JPEG أو PNG أو WebP."
+
+msgid "The profile picture is invalid."
+msgstr "الصورة الشخصية غير صالحة."
+
+msgid "The profile picture dimensions must not exceed 4096 pixels."
+msgstr "يجب ألا تتجاوز أبعاد الصورة الشخصية 4096 بكسل."
+
+msgid "Your profile picture was updated."
+msgstr "تم تحديث صورتك الشخصية."
+
+msgid "Your profile picture was removed."
+msgstr "تمت إزالة صورتك الشخصية."
+
+msgid "CEO Telegram AI question"
+msgstr "سؤال الذكاء الاصطناعي التنفيذي عبر تيليجرام"
+
+msgid "Executive assistant answer completed"
+msgstr "اكتملت إجابة المساعد التنفيذي"
+
+msgid "Executive assistant answer failed"
+msgstr "فشلت إجابة المساعد التنفيذي"
+
+msgid "Executive assistant question requested"
+msgstr "طُلب سؤال المساعد التنفيذي"
+
+msgid "إنسايت تراكر"
+msgstr "إنسايت تراكر"
+
+msgid "Toggle navigation"
+msgstr "إظهار أو إخفاء قائمة التنقل"
+
+msgid "AI briefing"
+msgstr "الإحاطة بالذكاء الاصطناعي"
+
+msgid "Breadcrumb"
+msgstr "مسار التنقل"
+
+msgid "Project agent"
+msgstr "وكيل المشروع"
+
+msgid "Not provided"
+msgstr "غير متوفر"
+
+msgid "Yes"
+msgstr "نعم"
+
+msgid "No"
+msgstr "لا"
+
+msgid "Notification topic"
+msgstr "موضوع الإشعار"
+
+#~ msgid "Open navigation"
+#~ msgstr "فتح قائمة التنقل"
+
+#~ msgid "Your approved internal account details."
+#~ msgstr "بيانات حسابك الداخلي المعتمدة."
 
 #~ msgid "Append-only Phase 2 account and department events."
 #~ msgstr "سجل غير قابل للتعديل لأحداث الحسابات والأقسام في المرحلة الثانية."

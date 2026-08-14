@@ -5,7 +5,7 @@
 
 ## Context
 
-Insight Projects needs a useful, controlled LLM feature without creating an
+Insight Tracker needs a useful, controlled LLM feature without creating an
 unrestricted chatbot or allowing generated text to change business records.
 The existing application already owns authoritative project visibility,
 progress, task, milestone, approval, audit, notification, and background-job

@@ -3,7 +3,7 @@
 ## Status and Objective
 
 Status: Approved scope requirement. User-visible localization slices are
-approved through Phase 16.
+approved through Phase 21.
 
 Arabic and English are first-class across the full system. Arabic support
 means more than translating headings: workflows, validation, content entry,
@@ -167,6 +167,22 @@ Source `المصدر`. Arabic answers use clear RTL text while codes, dates, and
 citations remain direction-isolated. English questions receive English LTR
 answers. Gregorian dates and Western digits follow the approved Telegram
 report convention; no new user-entered date format is added.
+
+Phase 20 terminology includes My Profile, Profile Picture, Upload Picture,
+Remove Picture, Main Navigation, Collapse Navigation, Expand Navigation, and
+Overall Progress. Navigation and avatar validation are complete in Arabic and
+English. The desktop sidebar and mobile off-canvas edge mirror with document
+direction, while user names, role labels, codes, and percentages remain safely
+isolated where needed.
+
+Phase 21 terminology includes Local AI Provider, Local Model, Provider
+Fallback, Local Provider Unavailable, and Capability Check. Operator guidance
+and safe user-visible failures must be reviewed in Arabic and English. Stable
+provider codes, logical model codes `qwen/qwen3.5-9b` and
+`openai/gpt-oss-20b`, exact API model IDs, reasoning codes, reason codes, usage
+values, and citations remain direction-isolated. Provider
+transitions do not change the requested answer language or the existing
+Arabic RTL/English LTR content and citation rules.
 
 Separately approved extensions must resolve:
 

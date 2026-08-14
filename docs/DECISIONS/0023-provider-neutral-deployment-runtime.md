@@ -6,7 +6,7 @@ Status: Approved
 
 ## Decision
 
-Insight Projects uses one locked, non-root Python 3.13 container image for the
+Insight Tracker uses one locked, non-root Python 3.13 container image for the
 Gunicorn web process, Celery workers, the single Celery Beat scheduler, and
 one-off release commands. Migrations remain an explicit release action and are
 never coupled to web startup.

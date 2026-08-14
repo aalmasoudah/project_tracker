@@ -104,7 +104,6 @@ def test_mobile_bilingual_audit_archive_and_operations(
         assert page.get_by_role("heading", name="العمليات").is_visible()
         assert page.get_by_text("24", exact=True).is_visible()
 
-        page.locator("button.navbar-toggler").click()
         page.locator('select[name="language"]').select_option("en")
         page.locator('form[action$="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")

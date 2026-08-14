@@ -3,7 +3,7 @@
   {% if poll %}hx-get="{% url 'project_agents:status' run.pk %}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
   <div class="card shadow-sm mb-4"><div class="card-body">
     <div class="d-flex flex-wrap justify-content-between gap-2">
-      <div><span class="badge text-bg-{% if run.status == 'completed' %}success{% elif run.status == 'failed' or run.status == 'stale' %}danger{% elif run.status == 'awaiting_approval' %}warning{% else %}primary{% endif %}">{{ run.get_status_display }}</span> <span class="ms-2">{{ run.get_goal_code_display }} · {{ run.get_language_display }}</span></div>
+      <div><span class="badge text-bg-{% if run.status == 'completed' %}success{% elif run.status == 'failed' or run.status == 'stale' %}danger{% elif run.status == 'awaiting_approval' %}warning{% else %}primary{% endif %}">{{ run.get_status_display }}</span> <span class="ms-2">{{ run.get_goal_code_display }} &middot; {{ run.get_language_display }}</span></div>
       <small class="text-muted"><bdi>{{ run.created_at|date:"Y-m-d H:i" }}</bdi></small>
     </div>
     <dl class="detail-grid mt-3 mb-0">
@@ -44,12 +44,23 @@
   {% for card in proposal_cards %}
     {% with proposal=card.proposal %}
     <section class="card border-warning shadow-sm mb-4"><div class="card-body">
-      <div class="d-flex flex-wrap justify-content-between gap-2"><h2 class="h4">{% translate "Proposal" %}</h2><span class="badge text-bg-warning">{{ proposal.get_status_display }} · {{ proposal.get_risk_display }}</span></div>
-      <p><bdi>{{ proposal.action_code }}</bdi></p>
+      <div class="d-flex flex-wrap justify-content-between gap-2"><h2 class="h4">{% translate "Proposal" %}</h2><span class="badge text-bg-warning">{{ proposal.get_status_display }} &middot; {{ proposal.get_risk_display }}</span></div>
+      <h3 class="h5">{{ card.presentation.action_label }}</h3>
+      {% if card.presentation.summary %}<p class="preserve-lines">{{ card.presentation.summary }}</p>{% endif %}
       {% if card.citations %}<p class="small"><strong>{% translate "Citations" %}:</strong> {% for source in card.citations %}{% if source.url %}<a href="{{ source.url }}">{{ source.label }}</a>{% else %}{{ source.label }}{% endif %}{% if not forloop.last %}، {% endif %}{% endfor %}</p>{% endif %}
       <div class="row g-3">
-        <div class="col-12 col-lg-6"><h3 class="h6">{% translate "Before State" %}</h3><pre class="small bg-light border rounded p-3 overflow-auto"><bdi>{{ proposal.before_state }}</bdi></pre></div>
-        <div class="col-12 col-lg-6"><h3 class="h6">{% translate "Proposed change" %}</h3><pre class="small bg-light border rounded p-3 overflow-auto"><bdi>{{ proposal.payload }}</bdi></pre></div>
+        <div class="col-12 col-lg-6">
+          <h4 class="h6">{% translate "Before State" %}</h4>
+          <dl class="detail-grid bg-light border rounded p-3 mb-0">
+            {% for field in card.presentation.before_fields %}<div><dt>{{ field.label }}</dt><dd>{% if field.url %}<a href="{{ field.url }}"><bdi>{{ field.value }}</bdi></a>{% else %}<bdi>{{ field.value }}</bdi>{% endif %}</dd></div>{% endfor %}
+          </dl>
+        </div>
+        <div class="col-12 col-lg-6">
+          <h4 class="h6">{% translate "Proposed change" %}</h4>
+          <dl class="detail-grid bg-light border rounded p-3 mb-0">
+            {% for field in card.presentation.change_fields %}<div><dt>{{ field.label }}</dt><dd>{% if field.url %}<a href="{{ field.url }}"><bdi>{{ field.value }}</bdi></a>{% else %}<bdi>{{ field.value }}</bdi>{% endif %}</dd></div>{% endfor %}
+          </dl>
+        </div>
       </div>
       {% if proposal.status == 'pending' and card.can_decide %}
         <form method="post" class="mt-3" novalidate>

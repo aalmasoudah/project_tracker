@@ -105,6 +105,7 @@ ACTION_LABELS: Final = {
     actions.AGENT_RUN_FAILED: _("Project-agent run failed"),
     actions.AGENT_RUN_CANCELLED: _("Project-agent run cancelled"),
     actions.AGENT_RUN_REVIEWED: _("Project-agent run reviewed"),
+    actions.AGENT_PROVIDER_FALLBACK: _("Project-agent provider fallback activated"),
     actions.AGENT_TOOL_COMPLETED: _("Project-agent tool completed"),
     actions.AGENT_TOOL_FAILED: _("Project-agent tool failed safely"),
     actions.AGENT_PROPOSAL_CREATED: _("Project-agent proposal created"),

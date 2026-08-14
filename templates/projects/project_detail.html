@@ -4,18 +4,21 @@
 {% block title %}{{ project|localized_project_name }} · {% translate "Projects" %}{% endblock %}
 
 {% block content %}
-  <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
-    <div><p class="text-primary fw-semibold mb-1"><bdi>{{ project.code }}</bdi></p><h1 class="h2">{{ project|localized_project_name }}</h1></div>
-    <div class="d-flex flex-wrap gap-2">
-      {% if can_start_project_agent %}<a class="btn btn-primary" href="{% url 'project_agents:request' project.pk %}">{% translate "Start Project Agent" %}</a>{% endif %}
-      {% if can_generate_ai_briefing %}<a class="btn btn-primary" href="{% url 'ai_briefings:request' project.pk %}">{% translate "Generate AI Briefing" %}</a>{% endif %}
-      {% if perms.approvals.submit_approval and project.status == "active" %}<a class="btn btn-primary" href="{% url 'approvals:submit' 'project' project.pk %}">{% translate "Submit for approval" %}</a>{% endif %}
-      {% if can_manage %}<a class="btn btn-outline-primary" href="{% url 'projects:update' project.pk %}">{% translate "Edit" %}</a><a class="btn btn-outline-primary" href="{% url 'projects:team' project.pk %}">{% translate "Manage team" %}</a>{% endif %}
-      {% if can_history %}<a class="btn btn-outline-secondary" href="{% url 'projects:history' project.pk %}">{% translate "History" %}</a>{% endif %}
-      {% if can_archive %}
-        {% if project.is_archived %}<a class="btn btn-outline-success" href="{% url 'projects:restore' project.pk %}">{% translate "Restore" %}</a>{% else %}<a class="btn btn-outline-danger" href="{% url 'projects:archive' project.pk %}">{% translate "Archive" %}</a>{% endif %}
-      {% endif %}
+  <div class="project-detail-heading d-flex flex-wrap justify-content-between gap-4 mb-4">
+    <div class="project-heading-copy">
+      <div><p class="text-primary fw-semibold mb-1"><bdi>{{ project.code }}</bdi></p><h1 class="h2">{{ project|localized_project_name }}</h1></div>
+      <div class="project-heading-actions d-flex flex-wrap align-items-start gap-2 mt-3">
+        {% if can_start_project_agent %}<a class="btn btn-primary" href="{% url 'project_agents:request' project.pk %}">{% translate "Start Project Agent" %}</a>{% endif %}
+        {% if can_generate_ai_briefing %}<a class="btn btn-primary" href="{% url 'ai_briefings:request' project.pk %}">{% translate "Generate AI Briefing" %}</a>{% endif %}
+        {% if perms.approvals.submit_approval and project.status == "active" %}<a class="btn btn-primary" href="{% url 'approvals:submit' 'project' project.pk %}">{% translate "Submit for approval" %}</a>{% endif %}
+        {% if can_manage %}<a class="btn btn-outline-primary" href="{% url 'projects:update' project.pk %}">{% translate "Edit" %}</a><a class="btn btn-outline-primary" href="{% url 'projects:team' project.pk %}">{% translate "Manage team" %}</a>{% endif %}
+        {% if can_history %}<a class="btn btn-outline-secondary" href="{% url 'projects:history' project.pk %}">{% translate "History" %}</a>{% endif %}
+        {% if can_archive %}
+          {% if project.is_archived %}<a class="btn btn-outline-success" href="{% url 'projects:restore' project.pk %}">{% translate "Restore" %}</a>{% else %}<a class="btn btn-outline-danger" href="{% url 'projects:archive' project.pk %}">{% translate "Archive" %}</a>{% endif %}
+        {% endif %}
+      </div>
     </div>
+    {% if progress %}<div class="project-progress-ring">{% include "includes/progress_indicator.html" with progress=progress variant="ring" %}</div>{% endif %}
   </div>
   {% if project.is_archived %}<div class="alert alert-secondary">{% translate "This project is archived and read-only." %}</div>{% endif %}
   <dl class="detail-grid">
@@ -29,7 +32,6 @@
     <div><dt>{% translate "Status" %}</dt><dd>{{ project.get_status_display }}</dd></div>
     <div><dt>{% translate "Priority" %}</dt><dd>{{ project.get_priority_display }}</dd></div>
     <div><dt>{% translate "Dates" %}</dt><dd><bdi>{{ project.start_date|date:"Y-m-d" }} – {{ project.end_date|date:"Y-m-d" }}</bdi></dd></div>
-    {% if progress %}<div><dt>{% translate "Progress" %}</dt><dd>{% include "includes/progress_value.html" with progress=progress %}</dd></div>{% endif %}
     {% if show_budget %}<div><dt>{% translate "Budget" %}</dt><dd><bdi>{{ project.budget|default:"—" }} SAR</bdi></dd></div>{% endif %}
   </dl>
   <div class="row g-4 mt-1">

@@ -34,6 +34,13 @@ operational audit records.
 - A CEO-only, read-only Telegram AI executive assistant for bounded standalone
   Arabic/English questions using permission-scoped cited evidence under the
   Phase 19 boundary.
+- A responsive permission-aware bilingual application shell, consistent
+  progress/button presentation, and protected self-service profile avatars
+  under the Phase 20 boundary.
+- An explicitly enabled local-development LM Studio provider for one exact
+  pinned model from the approved Qwen 3.5 9B/gpt-oss 20B allowlist, with strict structured output and a
+  controlled Groq-to-local fallback for Telegram AI and project-recovery work
+  under the Phase 21 boundary.
 - First-class Arabic and English localization across the application,
   including RTL/LTR layouts, validation, search, imports, notifications,
   operational views, and generated reports.
@@ -83,10 +90,12 @@ operational audit records.
 17. Agentic Project Recovery and Planning
 18. Deployment Readiness
 19. Telegram AI Executive Assistant
+20. UI/UX Navigation, Progress, and Profiles
+21. Local LM Studio Inference and Controlled Fallback
 
 ## Scope Approval
 
-Status: Approved through the Phase 19 Telegram AI-assistant extension.
+Status: Approved through the Phase 21 local LM Studio extension.
 
 The project owner approved the original scope on 2026-07-23 and subsequently
 added full Arabic support on the same date. Approval of this scope does not
@@ -114,3 +123,14 @@ assistant on 2026-08-06. This adds only standalone read-only executive
 questions for the configured CEO/chat pair. It does not authorize multi-turn
 memory, unrestricted prompts or data, other recipients, tools, or writes. The
 approved boundary is recorded in decision 0024.
+
+The project owner approved the Phase 20 UI/UX, three-click navigation,
+progress presentation, button, footer, and protected profile-avatar extension
+on 2026-08-07. It changes no domain permission, workflow, or progress formula.
+The approved boundary is recorded in decision 0025.
+
+The project owner approved the Phase 21 local LM Studio extension on
+2026-08-13. It permits local-development inference and a bounded, one-way
+Groq-to-local fallback for the existing Telegram AI and Project Recovery Agent
+features. It does not expand evidence, recipients, permissions, tools, actions,
+or production deployment; the boundary is recorded in decision 0026.

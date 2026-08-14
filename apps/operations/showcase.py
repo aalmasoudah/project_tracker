@@ -126,18 +126,37 @@ def _purge_order(models: set[type[Model]]) -> list[type[Model]]:
 
 
 @transaction.atomic
-def reset_application_data(*, keep_username: str = "zx") -> User:
-    """Delete development data while preserving one verified superuser identity."""
-    keep = User.objects.select_for_update().get(username=keep_username)
+def reset_application_data(
+    *,
+    keep_username: str = "zx",
+    preserve_usernames: tuple[str, ...] = (),
+) -> User:
+    """Delete development data while preserving verified local identities."""
+    preserved_usernames = {keep_username, *preserve_usernames}
+    preserved_users = list(
+        User.objects.select_for_update().filter(username__in=preserved_usernames)
+    )
+    found_usernames = {user.username for user in preserved_users}
+    missing_usernames = preserved_usernames - found_usernames
+    if missing_usernames:
+        missing = ", ".join(sorted(missing_usernames))
+        raise RuntimeError(
+            f"Required retained showcase accounts are missing: {missing}"
+        )
+    keep = next(user for user in preserved_users if user.username == keep_username)
     if not keep.is_active or not keep.is_superuser:
         raise RuntimeError(
             "The retained technical administrator must be active and superuser."
         )
 
-    keep.department = None
-    keep.deactivated_by = None
-    keep.is_staff = True
-    keep.save(update_fields=("department", "deactivated_by", "is_staff"))
+    for user in preserved_users:
+        user.department = None
+        user.deactivated_by = None
+        if user.pk == keep.pk:
+            user.is_staff = True
+            user.save(update_fields=("department", "deactivated_by", "is_staff"))
+        else:
+            user.save(update_fields=("department", "deactivated_by"))
 
     preserved = {User, Department, Group, Permission, ContentType}
     purge_models: set[type[Model]] = {
@@ -149,9 +168,12 @@ def reset_application_data(*, keep_username: str = "zx") -> User:
         _raw_delete(model._base_manager.all())
 
     User.objects.update(deactivated_by=None)
-    _raw_delete(User.groups.through._base_manager.exclude(user_id=keep.pk))
-    _raw_delete(User.user_permissions.through._base_manager.exclude(user_id=keep.pk))
-    _raw_delete(User.objects.exclude(pk=keep.pk))
+    preserved_ids = [user.pk for user in preserved_users]
+    _raw_delete(User.groups.through._base_manager.exclude(user_id__in=preserved_ids))
+    _raw_delete(
+        User.user_permissions.through._base_manager.exclude(user_id__in=preserved_ids)
+    )
+    _raw_delete(User.objects.exclude(pk__in=preserved_ids))
     _raw_delete(Department._base_manager.all())
 
     keep.groups.set([Group.objects.get(name=TECHNICAL_ADMIN)])
@@ -928,25 +950,49 @@ def build_university_showcase(
             tags=[tags["training"], tags["quality"]],
         )
 
-    for index in range(1, 5):
+    trainee_names = {
+        "KAU": (
+            "سارة أحمد الغامدي",
+            "عبدالله محمد الزهراني",
+            "نورة خالد الحربي",
+            "فيصل علي القرني",
+        ),
+        "KSU": (
+            "ريم سعد العتيبي",
+            "محمد عبدالعزيز الدوسري",
+            "لمى فهد القحطاني",
+            "تركي صالح المطيري",
+        ),
+        "KKU": (
+            "أروى حسن الشهري",
+            "خالد عبدالله الأسمري",
+            "هدى علي القحطاني",
+            "ماجد أحمد عسيري",
+        ),
+    }
+
+    for index, (kau_name, kku_name) in enumerate(
+        zip(trainee_names["KAU"], trainee_names["KKU"], strict=True),
+        start=1,
+    ):
         create_enrollment(
             actor=executive,
             course=courses["KAU"],
-            full_name=f"متدرب KAU الخيالي {index}",
+            full_name=kau_name,
             phone=f"0501000{index:03d}",
             email=f"kau.trainee{index}@example.test",
         )
         create_enrollment(
             actor=executive,
             course=courses["KKU"],
-            full_name=f"متدرب KKU الخيالي {index}",
+            full_name=kku_name,
             phone=f"0503000{index:03d}",
             email=f"kku.trainee{index}@example.test",
         )
 
     csv_text = "الاسم الكامل,رقم الجوال,البريد الإلكتروني\n" + "\n".join(
-        f"متدرب KSU الخيالي {index},0502000{index:03d},ksu.trainee{index}@example.test"
-        for index in range(1, 5)
+        f"{full_name},0502000{index:03d},ksu.trainee{index}@example.test"
+        for index, full_name in enumerate(trainee_names["KSU"], start=1)
     )
     batch = preview_import(
         actor=executive,
@@ -1076,6 +1122,624 @@ def build_university_showcase(
         name="بحث البرامج الجامعية",
         view_type=SavedFilter.ViewType.SEARCH,
         criteria={"q": "جامعة"},
+    )
+    generate_task_deadline_notifications(today=today)
+
+    from apps.notifications.models import Notification
+    from apps.trainees.models import Trainee
+
+    return ShowcaseSummary(
+        users=User.objects.count(),
+        projects=Project.objects.count(),
+        courses=Course.objects.count(),
+        tasks=Task.objects.count(),
+        milestones=Milestone.objects.count(),
+        trainees=Trainee.objects.count(),
+        sessions=Session.objects.count(),
+        notifications=Notification.objects.count(),
+    )
+
+
+@transaction.atomic
+def build_minimal_feature_showcase(
+    *,
+    password: str,
+    keep_username: str = "zx",
+    ceo_username: str = "demo.executive",
+) -> ShowcaseSummary:
+    """Build one compact Arabic scenario spanning every implemented domain."""
+    if len(password) < 12:
+        raise ValueError("The demo password must contain at least 12 characters.")
+
+    technical = reset_application_data(
+        keep_username=keep_username,
+        preserve_usernames=(ceo_username,),
+    )
+    ceo = User.objects.select_for_update().get(username=ceo_username)
+    if not ceo.is_active:
+        raise RuntimeError("The retained Telegram CEO account must be active.")
+
+    today = timezone.localdate()
+    start = today - timedelta(days=60)
+    end = today + timedelta(days=180)
+    department = create_department(
+        actor=technical,
+        code="DEMO-PMO",
+        name_ar="مكتب إدارة مشروع العرض المتكامل",
+        name_en="Integrated Showcase PMO",
+    )
+
+    ceo.display_name = "نورة الحربي - الرئيس التنفيذي"
+    ceo.department = department
+    ceo.preferred_language = User.Language.ARABIC
+    ceo.must_change_password = False
+    ceo.groups.set([Group.objects.get(name=CEO)])
+    ceo.save(
+        update_fields=(
+            "display_name",
+            "department",
+            "preferred_language",
+            "must_change_password",
+        )
+    )
+
+    account_specs = {
+        "EXEC": (
+            "demo.exec.manager",
+            "سلمان القحطاني - المدير التنفيذي",
+            EXECUTIVE_MANAGER,
+        ),
+        "PM": (
+            "demo.pm.kau",
+            "ريم الغامدي - مدير المشروع",
+            PROJECT_MANAGER,
+        ),
+        "SUP": (
+            "demo.supervisor.kau",
+            "عمر الزهراني - مشرف المشروع",
+            SUPERVISOR,
+        ),
+        "EMP": (
+            "demo.employee",
+            "ليان الشريف - موظفة تنفيذ",
+            EMPLOYEE,
+        ),
+        "CONTRACTOR": (
+            "demo.contractor",
+            "رزان المالكي - متعاقدة تجربة مستخدم",
+            CONTRACTOR,
+        ),
+    }
+    users = {
+        key: _make_account(
+            actor=technical,
+            department=department,
+            username=username,
+            display_name=display_name,
+            role=role,
+            password=password,
+        )
+        for key, (username, display_name, role) in account_specs.items()
+    }
+    executive = users["EXEC"]
+    manager = users["PM"]
+    supervisor = users["SUP"]
+    employee = users["EMP"]
+    contractor = users["CONTRACTOR"]
+
+    client = save_reference(
+        actor=executive,
+        model=Client,
+        code="KAU-DEMO",
+        name_ar="جامعة الملك عبدالعزيز - بيانات عرض خيالية",
+        name_en="King Abdulaziz University - Fictional Demo",
+    )
+    category = save_reference(
+        actor=executive,
+        model=Category,
+        code="DIGITAL-EXPERIENCE",
+        name_ar="التحول الرقمي وتجربة المستفيد",
+        name_en="Digital Transformation and User Experience",
+    )
+    project = create_project(
+        actor=executive,
+        code="DEMO-360",
+        name_ar="منصة الخدمات الجامعية الذكية - العرض المتكامل",
+        name_en="Smart University Services - Complete Showcase",
+        department=department,
+        client=client,
+        category=category,
+        manager=manager,
+        supervisor=supervisor,
+        status=Project.Status.DRAFT,
+        priority=Project.Priority.CRITICAL,
+        start_date=start,
+        end_date=end,
+        budget=Decimal("950000.00"),
+        goals=(
+            "عرض إدارة المشروع والمهام والتدريب والحضور والموافقات والتقارير "
+            "والذكاء الاصطناعي في سيناريو واحد."
+        ),
+        requirements=(
+            "دعم العربية والإنجليزية، صلاحيات دقيقة، تقارير قابلة للتنزيل، "
+            "ومخرجات ذكاء اصطناعي موثقة."
+        ),
+        notes="جميع الأسماء والبيانات في هذا المشروع خيالية ومخصصة للاختبار المحلي.",
+    )
+    project = _set_project_status(executive, project, Project.Status.ACTIVE)
+    replace_project_team(
+        actor=executive,
+        project=project,
+        members=[employee, contractor],
+    )
+
+    archived_project = create_project(
+        actor=executive,
+        code="DEMO-ARCHIVE",
+        name_ar="تجربة سابقة مؤرشفة",
+        name_en="Archived Previous Pilot",
+        department=department,
+        client=client,
+        category=category,
+        manager=manager,
+        supervisor=supervisor,
+        status=Project.Status.DRAFT,
+        priority=Project.Priority.LOW,
+        start_date=start,
+        end_date=end,
+        budget=Decimal("50000.00"),
+        goals="إظهار مركز الأرشيف والاستعادة.",
+        requirements="لا يوجد.",
+        notes="سجل خيالي مؤرشف للاختبار.",
+    )
+    archive_project(actor=executive, project=archived_project)
+
+    tags = {
+        "urgent": save_tag(
+            actor=executive,
+            code="URGENT",
+            name_ar="عاجل",
+            name_en="Urgent",
+        ),
+        "quality": save_tag(
+            actor=executive,
+            code="QUALITY",
+            name_ar="جودة",
+            name_en="Quality",
+        ),
+        "training": save_tag(
+            actor=executive,
+            code="TRAINING",
+            name_ar="تدريب",
+            name_en="Training",
+        ),
+    }
+
+    parent = _create_task_with_state(
+        actor=executive,
+        code="DEMO-EPIC",
+        name_ar="إطلاق بوابة الخدمات",
+        name_en="Launch the services portal",
+        project=project,
+        course=None,
+        parent=None,
+        assignees=[employee, contractor],
+        primary=employee,
+        priority=Task.Priority.HIGH,
+        start_date=today - timedelta(days=30),
+        due_date=today + timedelta(days=45),
+        final_status=Task.Status.IN_PROGRESS,
+        tags=[tags["quality"]],
+    )
+    _create_task_with_state(
+        actor=executive,
+        code="DEMO-EPIC-UX",
+        name_ar="اعتماد تصميم الواجهة العربية",
+        name_en="Approve the Arabic interface design",
+        project=project,
+        course=None,
+        parent=parent,
+        assignees=[contractor],
+        primary=contractor,
+        priority=Task.Priority.HIGH,
+        start_date=today - timedelta(days=25),
+        due_date=today - timedelta(days=5),
+        final_status=Task.Status.COMPLETED,
+        tags=[tags["quality"]],
+    )
+    _create_task_with_state(
+        actor=executive,
+        code="DEMO-EPIC-API",
+        name_ar="ربط الخدمات الداخلية",
+        name_en="Integrate internal services",
+        project=project,
+        course=None,
+        parent=parent,
+        assignees=[employee],
+        primary=employee,
+        priority=Task.Priority.HIGH,
+        start_date=today - timedelta(days=20),
+        due_date=today + timedelta(days=20),
+        final_status=Task.Status.IN_PROGRESS,
+        tags=[tags["quality"]],
+    )
+    blocked = _create_task_with_state(
+        actor=executive,
+        code="DEMO-BLOCKED",
+        name_ar="حل تعطل تكامل نظام القبول",
+        name_en="Resolve admissions integration blocker",
+        project=project,
+        course=None,
+        parent=None,
+        assignees=[employee],
+        primary=employee,
+        priority=Task.Priority.CRITICAL,
+        start_date=today - timedelta(days=18),
+        due_date=today - timedelta(days=2),
+        final_status=Task.Status.BLOCKED,
+        tags=[tags["urgent"]],
+        blocking_reason="بانتظار اعتماد بيانات الربط من الجهة المالكة.",
+    )
+    due_soon = _create_task_with_state(
+        actor=executive,
+        code="DEMO-CRITICAL",
+        name_ar="اختبار رحلة الطالب قبل الإطلاق",
+        name_en="Test the student journey before launch",
+        project=project,
+        course=None,
+        parent=None,
+        assignees=[contractor],
+        primary=contractor,
+        priority=Task.Priority.CRITICAL,
+        start_date=today - timedelta(days=3),
+        due_date=today + timedelta(days=1),
+        final_status=Task.Status.IN_PROGRESS,
+        tags=[tags["urgent"], tags["quality"]],
+    )
+    _create_task_with_state(
+        actor=executive,
+        code="DEMO-TODO",
+        name_ar="تجهيز خطة التواصل مع المستخدمين",
+        name_en="Prepare the user communication plan",
+        project=project,
+        course=None,
+        parent=None,
+        assignees=[employee],
+        primary=employee,
+        priority=Task.Priority.MEDIUM,
+        start_date=today,
+        due_date=today + timedelta(days=30),
+        final_status=Task.Status.TODO,
+        tags=[tags["quality"]],
+    )
+    _create_task_with_state(
+        actor=executive,
+        code="DEMO-CANCELLED",
+        name_ar="طلب تغيير خارج النطاق",
+        name_en="Out-of-scope change request",
+        project=project,
+        course=None,
+        parent=None,
+        assignees=[employee],
+        primary=employee,
+        priority=Task.Priority.LOW,
+        start_date=today - timedelta(days=10),
+        due_date=today + timedelta(days=50),
+        final_status=Task.Status.CANCELLED,
+        tags=[tags["quality"]],
+    )
+    archived_task = _create_task_with_state(
+        actor=executive,
+        code="DEMO-OLD-TASK",
+        name_ar="تحليل قديم مؤرشف",
+        name_en="Archived old analysis",
+        project=project,
+        course=None,
+        parent=None,
+        assignees=[employee],
+        primary=employee,
+        priority=Task.Priority.LOW,
+        start_date=today - timedelta(days=20),
+        due_date=today + timedelta(days=10),
+        final_status=Task.Status.TODO,
+        tags=[tags["quality"]],
+    )
+    archive_task(actor=executive, task=archived_task)
+    add_task_comment(
+        actor=employee,
+        task=blocked,
+        body=("تم توثيق سبب التعطل. @demo.pm.kau نحتاج قرارًا قبل موعد الإطلاق."),
+    )
+    upload_task_file(
+        actor=contractor,
+        task=due_soon,
+        upload=_pdf_upload("demo-ux-test-evidence.pdf"),
+    )
+
+    trainer = save_trainer(
+        actor=executive,
+        code="TR-DEMO",
+        name_ar="د. أمل الزهراني",
+        name_en="Dr Amal Alzahrani",
+        email="trainer.demo@example.test",
+        phone="+966500000101",
+        organization="جهة تدريب خيالية",
+        notes="مدربة خارجية خيالية لاختبار الرابط الآمن للحضور.",
+    )
+    course = create_course(
+        actor=executive,
+        code="DEMO-ENABLE",
+        project=project,
+        name_ar="تمكين فريق تشغيل المنصة",
+        name_en="Platform Operations Team Enablement",
+        description="دورة خيالية تربط التدريب بالمهام والحضور والتقارير.",
+        delivery_type=Course.DeliveryType.HYBRID,
+        location="جدة / عن بُعد",
+        capacity=10,
+        start_at=_riyadh_datetime(today - timedelta(days=30), 9),
+        end_at=_riyadh_datetime(today + timedelta(days=60), 15),
+        status=Course.Status.DRAFT,
+        notes="تستخدم لاختبار المدربين والمتدربين والجلسات والحضور.",
+    )
+    course = _set_course_status(executive, course, Course.Status.ACTIVE)
+    replace_course_trainers(actor=executive, course=course, trainers=[trainer])
+    upload_course_file(
+        actor=executive,
+        course=course,
+        upload=_pdf_upload("demo-course-guide.pdf"),
+    )
+    _create_task_with_state(
+        actor=executive,
+        code="DEMO-COURSE-DONE",
+        name_ar="إعداد المادة التدريبية",
+        name_en="Prepare training material",
+        project=None,
+        course=course,
+        parent=None,
+        assignees=[employee],
+        primary=employee,
+        priority=Task.Priority.MEDIUM,
+        start_date=today - timedelta(days=20),
+        due_date=today - timedelta(days=5),
+        final_status=Task.Status.COMPLETED,
+        tags=[tags["training"]],
+    )
+    _create_task_with_state(
+        actor=executive,
+        code="DEMO-COURSE-WIP",
+        name_ar="متابعة تطبيق المتدربين",
+        name_en="Follow up trainee application",
+        project=None,
+        course=course,
+        parent=None,
+        assignees=[employee, contractor],
+        primary=employee,
+        priority=Task.Priority.HIGH,
+        start_date=today - timedelta(days=5),
+        due_date=today + timedelta(days=25),
+        final_status=Task.Status.IN_PROGRESS,
+        tags=[tags["training"], tags["quality"]],
+    )
+
+    for index, full_name in enumerate(
+        ("سارة أحمد الغامدي", "عبدالله محمد الزهراني"),
+        start=1,
+    ):
+        create_enrollment(
+            actor=executive,
+            course=course,
+            full_name=full_name,
+            phone=f"0501000{index:03d}",
+            email=f"direct.trainee{index}@example.test",
+        )
+
+    csv_text = (
+        "الاسم الكامل,رقم الجوال,البريد الإلكتروني\n"
+        "نورة خالد الحربي,0501000003,import.trainee3@example.test\n"
+        "فيصل علي القرني,0501000004,import.trainee4@example.test\n"
+    )
+    confirmed_batch = preview_import(
+        actor=executive,
+        course=course,
+        upload=SimpleUploadedFile(
+            "demo-trainees-ar.csv",
+            csv_text.encode("utf-8-sig"),
+            content_type="text/csv",
+        ),
+    )
+    confirm_import(actor=executive, batch=confirmed_batch)
+    cancelled_batch = preview_import(
+        actor=executive,
+        course=course,
+        upload=SimpleUploadedFile(
+            "demo-cancelled-preview.csv",
+            (
+                "full_name,phone,email\nمتدرب معاينة,0501999999,preview@example.test\n"
+            ).encode(),
+            content_type="text/csv",
+        ),
+    )
+    cancel_import(actor=executive, batch=cancelled_batch)
+
+    sessions: list[Session] = []
+    approved_session = create_sessions(
+        actor=executive,
+        course=course,
+        trainer=trainer,
+        title_ar="جلسة التدريب المعتمدة",
+        title_en="Approved training session",
+        start_at=_riyadh_datetime(today - timedelta(days=3), 10),
+        end_at=_riyadh_datetime(today - timedelta(days=3), 12),
+        notes="جلسة خيالية لاختبار الاعتماد والتصحيح.",
+    )[0]
+    sessions.append(approved_session)
+    approved_link, _approved_token = issue_trainer_link(
+        actor=executive,
+        session=approved_session,
+        lifetime_hours=24,
+    )
+    approved_entries: dict[int, tuple[str, str]] = {
+        participant.pk: (
+            str(
+                AttendanceEntry.Value.LATE
+                if index == 0
+                else AttendanceEntry.Value.PRESENT
+            ),
+            "ملاحظة حضور خيالية",
+        )
+        for index, participant in enumerate(
+            approved_session.participants.order_by("pk")
+        )
+    }
+    approved_submission = submit_attendance(
+        link=approved_link,
+        entries=approved_entries,
+        trainer_notes="تم إرسال الحضور للمراجعة.",
+        evidence_files=[_pdf_upload("demo-attendance-evidence.pdf")],
+    )
+    approved_submission = review_attendance(
+        actor=supervisor,
+        submission=approved_submission,
+        decision=AttendanceReview.Decision.APPROVED,
+    )
+    corrected_entries: dict[int, tuple[str, str]] = {
+        entry.participant_id: (
+            str(AttendanceEntry.Value.PRESENT if index == 0 else entry.value),
+            "تصحيح خيالي معتمد" if index == 0 else entry.notes,
+        )
+        for index, entry in enumerate(
+            approved_submission.entries.order_by("participant_id")
+        )
+    }
+    correct_attendance(
+        actor=executive,
+        submission=approved_submission,
+        entries=corrected_entries,
+        reason="تصحيح أول سجل لإظهار سجل قبل وبعد.",
+    )
+
+    pending_session = create_sessions(
+        actor=executive,
+        course=course,
+        trainer=trainer,
+        title_ar="جلسة بانتظار مراجعة المشرف",
+        title_en="Session awaiting supervisor review",
+        start_at=_riyadh_datetime(today - timedelta(days=1), 10),
+        end_at=_riyadh_datetime(today - timedelta(days=1), 12),
+        notes="جلسة خيالية لاختبار الرفض وإعادة الفتح.",
+    )[0]
+    sessions.append(pending_session)
+    pending_link, _pending_token = issue_trainer_link(
+        actor=executive,
+        session=pending_session,
+        lifetime_hours=24,
+    )
+    pending_entries: dict[int, tuple[str, str]] = {
+        participant.pk: (str(AttendanceEntry.Value.PRESENT), "إدخال أولي")
+        for participant in pending_session.participants.order_by("pk")
+    }
+    pending_submission = submit_attendance(
+        link=pending_link,
+        entries=pending_entries,
+        trainer_notes="الإرسال الأول.",
+        evidence_files=[],
+    )
+    rejected_submission = review_attendance(
+        actor=supervisor,
+        submission=pending_submission,
+        decision=AttendanceReview.Decision.REJECTED,
+        reason="يرجى توضيح حالة الحضور قبل الاعتماد.",
+    )
+    resubmission_entries = {
+        entry.participant_id: (entry.value, "تم التوضيح بعد الرفض")
+        for entry in rejected_submission.entries.order_by("participant_id")
+    }
+    submit_attendance(
+        link=rejected_submission.trainer_link,
+        entries=resubmission_entries,
+        trainer_notes="أعيد الإرسال بعد معالجة سبب الرفض.",
+        evidence_files=[],
+    )
+    sessions.extend(
+        create_sessions(
+            actor=executive,
+            course=course,
+            trainer=trainer,
+            title_ar="جلسات المتابعة الأسبوعية",
+            title_en="Weekly follow-up sessions",
+            start_at=_riyadh_datetime(today + timedelta(days=7), 10),
+            end_at=_riyadh_datetime(today + timedelta(days=7), 11),
+            recurrence=Session.Recurrence.WEEKLY,
+            recurrence_count=2,
+        )
+    )
+
+    milestone_outcomes = (
+        ("DEMO-GATE-OK", "بوابة معتمدة", "Approved gate", "approved"),
+        ("DEMO-GATE-NO", "بوابة مرفوضة", "Rejected gate", "rejected"),
+        (
+            "DEMO-GATE-WAIT",
+            "بوابة بانتظار مدير المشروع",
+            "Gate awaiting project manager",
+            "pending_manager",
+        ),
+    )
+    for code, name_ar, name_en, outcome in milestone_outcomes:
+        milestone = create_milestone(
+            actor=executive,
+            code=code,
+            project=project,
+            name_ar=name_ar,
+            name_en=name_en,
+            description="مرحلة خيالية لإظهار حالات مسار الاعتماد المتسلسل.",
+            start_date=today - timedelta(days=10),
+            due_date=today + timedelta(days=10),
+            status=Milestone.Status.DRAFT,
+        )
+        milestone = update_milestone(
+            actor=executive,
+            milestone=milestone,
+            code=milestone.code,
+            project=milestone.project,
+            name_ar=milestone.name_ar,
+            name_en=milestone.name_en,
+            description=milestone.description,
+            start_date=milestone.start_date,
+            due_date=milestone.due_date,
+            status=Milestone.Status.IN_PROGRESS,
+        )
+        approval = submit_completion(actor=executive, target=milestone)
+        if outcome == "rejected":
+            reject_request(
+                actor=supervisor,
+                approval_request=approval,
+                reason="يجب استكمال دليل الاختبار قبل الاعتماد.",
+            )
+            continue
+        approval = approve_request(actor=supervisor, approval_request=approval)
+        if outcome == "approved":
+            approve_request(actor=manager, approval_request=approval)
+
+    save_filter(
+        owner=ceo,
+        name="المهام الحرجة والمتأخرة",
+        view_type=SavedFilter.ViewType.KANBAN,
+        criteria={"q": "تعطل"},
+    )
+    save_filter(
+        owner=executive,
+        name="خطة الستين يومًا القادمة",
+        view_type=SavedFilter.ViewType.GANTT,
+        criteria={
+            "date_from": today.isoformat(),
+            "date_to": (today + timedelta(days=60)).isoformat(),
+        },
+    )
+    save_filter(
+        owner=employee,
+        name="مهامي الحالية",
+        view_type=SavedFilter.ViewType.SEARCH,
+        criteria={"q": "الخدمات"},
     )
     generate_task_deadline_notifications(today=today)
 

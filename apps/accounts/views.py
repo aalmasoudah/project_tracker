@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ValidationError
-from django.http import HttpRequest, HttpResponse
+from django.http import FileResponse, Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import translation
@@ -21,20 +21,23 @@ from apps.accounts.forms import (
     AccountCreateForm,
     AccountUpdateForm,
     AdministrativePasswordResetForm,
+    ProfileAvatarForm,
     ThrottledAuthenticationForm,
 )
-from apps.accounts.models import User
+from apps.accounts.models import User, UserAvatar
 from apps.accounts.roles import role_label
 from apps.accounts.selectors import users_visible_to, visible_user_or_404
 from apps.accounts.services import (
     complete_own_password_change,
     create_account,
     deactivate_account,
+    deactivate_profile_avatar,
     managed_role_code,
     reactivate_account,
     reset_account_password,
     update_account,
     update_language_preference,
+    update_profile_avatar,
 )
 from apps.audit import actions
 from apps.audit.services import record_audit_event
@@ -144,18 +147,81 @@ def password_change(request: HttpRequest) -> HttpResponse:
     )
 
 
+def _profile_context(actor: User, form: ProfileAvatarForm) -> dict[str, Any]:
+    return {
+        "profile_user": actor,
+        "role_label": role_label(managed_role_code(actor)),
+        "avatar_form": form,
+        "active_avatar": actor.active_profile_avatar,
+    }
+
+
 @login_required
+@require_http_methods(["GET"])
 def profile(request: HttpRequest) -> HttpResponse:
     """Render the current user's own approved profile fields."""
     actor = cast(User, request.user)
     return render(
         request,
         "accounts/profile.html",
-        {
-            "profile_user": actor,
-            "role_label": role_label(managed_role_code(actor)),
-        },
+        _profile_context(actor, ProfileAvatarForm()),
     )
+
+
+@login_required
+@require_http_methods(["POST"])
+def profile_avatar_update(request: HttpRequest) -> HttpResponse:
+    """Validate and replace only the signed-in user's own avatar."""
+    actor = cast(User, request.user)
+    form = ProfileAvatarForm(request.POST, request.FILES)
+    if form.is_valid():
+        try:
+            update_profile_avatar(
+                actor=actor,
+                upload=form.cleaned_data["avatar"],
+                request=request,
+            )
+        except ValidationError as error:
+            form.add_error("avatar", error)
+        else:
+            messages.success(request, _("Your profile picture was updated."))
+            return redirect("accounts:profile")
+    return render(
+        request,
+        "accounts/profile.html",
+        _profile_context(actor, form),
+        status=400,
+    )
+
+
+@login_required
+@require_http_methods(["POST"])
+def profile_avatar_remove(request: HttpRequest) -> HttpResponse:
+    """Deactivate only the signed-in user's displayed avatar."""
+    actor = cast(User, request.user)
+    removed = deactivate_profile_avatar(actor=actor, request=request)
+    if removed:
+        messages.success(request, _("Your profile picture was removed."))
+    return redirect("accounts:profile")
+
+
+@login_required
+@require_http_methods(["GET"])
+def profile_avatar_image(request: HttpRequest, user_id: int) -> FileResponse:
+    """Stream one active private avatar after current account-scope checks."""
+    actor = cast(User, request.user)
+    if actor.pk != user_id:
+        visible_user_or_404(actor, user_id)
+    try:
+        avatar = UserAvatar.objects.get(user_id=user_id, is_active=True)
+        image = avatar.image.open("rb")
+    except (UserAvatar.DoesNotExist, FileNotFoundError, OSError) as error:
+        raise Http404 from error
+    response = FileResponse(image, content_type="image/webp")
+    response["Cache-Control"] = "private, max-age=300"
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Content-Security-Policy"] = "default-src 'none'; sandbox"
+    return response
 
 
 @login_required

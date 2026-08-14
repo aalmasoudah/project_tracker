@@ -1,6 +1,6 @@
 ---
 name: insight-project-agent
-description: Safely operate, inspect, or evaluate Insight Projects Phase 17 project-recovery agent runs. Use for starting a predefined recovery analysis, reviewing its cited plan/tool timeline, deciding a pending proposal, reviewing verified memory, or checking Phase 17 acceptance and security behavior in Arabic or English.
+description: Safely operate, inspect, or evaluate Insight Tracker Phase 17 project-recovery agent runs. Use for starting a predefined recovery analysis, reviewing its cited plan/tool timeline, deciding a pending proposal, reviewing verified memory, or checking Phase 17 acceptance and security behavior in Arabic or English.
 ---
 
 # Insight Project Agent

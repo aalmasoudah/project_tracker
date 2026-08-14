@@ -1,17 +1,23 @@
-"""Transactional account lifecycle and role-assignment services."""
+"""Transactional account lifecycle and profile services."""
 
+import hashlib
+from dataclasses import dataclass
+from io import BytesIO
 from typing import TYPE_CHECKING
 
 from django.contrib.auth import SESSION_KEY
 from django.contrib.sessions.models import Session
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import UploadedFile
 from django.db import transaction
 from django.db.models import Q, Subquery
 from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from PIL import Image, ImageOps, UnidentifiedImageError
 
-from apps.accounts.models import User
+from apps.accounts.models import User, UserAvatar
 from apps.accounts.roles import (
     NON_TECHNICAL_ROLE_CODES,
     ROLE_CODES,
@@ -22,6 +28,67 @@ from apps.audit.services import record_audit_event
 
 if TYPE_CHECKING:
     from apps.organizations.models import Department
+
+
+AVATAR_MAX_BYTES = 5 * 1024 * 1024
+AVATAR_MAX_DIMENSION = 4096
+AVATAR_OUTPUT_SIZE = 512
+AVATAR_ALLOWED_FORMATS = frozenset({"JPEG", "PNG", "WEBP"})
+
+
+@dataclass(frozen=True)
+class PreparedAvatar:
+    """A verified metadata-free derivative ready for private storage."""
+
+    content: bytes
+    source_size: int
+    content_sha256: str
+
+
+def prepare_profile_avatar(upload: UploadedFile) -> PreparedAvatar:
+    """Decode, verify, orient, crop, and normalize an untrusted image upload."""
+    if upload.size is not None and upload.size > AVATAR_MAX_BYTES:
+        raise ValidationError(_("The profile picture must not exceed 5 MB."))
+    raw = upload.read(AVATAR_MAX_BYTES + 1)
+    if len(raw) > AVATAR_MAX_BYTES:
+        raise ValidationError(_("The profile picture must not exceed 5 MB."))
+
+    try:
+        with Image.open(BytesIO(raw)) as probe:
+            source_format = (probe.format or "").upper()
+            if source_format not in AVATAR_ALLOWED_FORMATS:
+                raise ValidationError(_("Upload a valid JPEG, PNG, or WebP image."))
+            width, height = probe.size
+            if width < 1 or height < 1:
+                raise ValidationError(_("The profile picture is invalid."))
+            if width > AVATAR_MAX_DIMENSION or height > AVATAR_MAX_DIMENSION:
+                raise ValidationError(
+                    _("The profile picture dimensions must not exceed 4096 pixels.")
+                )
+            probe.verify()
+
+        with Image.open(BytesIO(raw)) as source:
+            normalized = ImageOps.exif_transpose(source)
+            if "A" in normalized.getbands() or "transparency" in normalized.info:
+                normalized = normalized.convert("RGBA")
+            else:
+                normalized = normalized.convert("RGB")
+            avatar = ImageOps.fit(
+                normalized,
+                (AVATAR_OUTPUT_SIZE, AVATAR_OUTPUT_SIZE),
+                method=Image.Resampling.LANCZOS,
+            )
+            output = BytesIO()
+            avatar.save(output, format="WEBP", quality=85, method=6)
+    except (Image.DecompressionBombError, UnidentifiedImageError, OSError) as error:
+        raise ValidationError(_("Upload a valid JPEG, PNG, or WebP image.")) from error
+
+    content = output.getvalue()
+    return PreparedAvatar(
+        content=content,
+        source_size=len(raw),
+        content_sha256=hashlib.sha256(content).hexdigest(),
+    )
 
 
 def managed_role_code(user: User) -> str | None:
@@ -369,3 +436,81 @@ def update_language_preference(
         metadata={"language": language_code},
         request=request,
     )
+
+
+@transaction.atomic
+def update_profile_avatar(
+    *,
+    actor: User,
+    upload: UploadedFile,
+    request: HttpRequest | None = None,
+) -> UserAvatar:
+    """Replace the actor's displayed avatar while retaining prior evidence."""
+    if not actor.is_active:
+        raise PermissionDenied(_("An active account is required."))
+    prepared = prepare_profile_avatar(upload)
+    locked_actor = User.objects.select_for_update().get(pk=actor.pk)
+    now = timezone.now()
+    previous = list(
+        UserAvatar.objects.select_for_update().filter(
+            user=locked_actor,
+            is_active=True,
+        )
+    )
+    for avatar in previous:
+        avatar.is_active = False
+        avatar.deactivated_at = now
+        avatar.deactivated_by = locked_actor
+        avatar.save(
+            update_fields=("is_active", "deactivated_at", "deactivated_by"),
+        )
+
+    avatar = UserAvatar(
+        user=locked_actor,
+        content_sha256=prepared.content_sha256,
+        source_size=prepared.source_size,
+    )
+    avatar.image.save("avatar.webp", ContentFile(prepared.content), save=False)
+    avatar.save()
+    record_audit_event(
+        actor=locked_actor,
+        action=actions.PROFILE_AVATAR_UPDATED,
+        target_type="account_avatar",
+        target_id=str(avatar.pk),
+        target_label=locked_actor.display_name,
+        metadata={"replaced_count": len(previous), "source_size": avatar.source_size},
+        request=request,
+    )
+    return avatar
+
+
+@transaction.atomic
+def deactivate_profile_avatar(
+    *,
+    actor: User,
+    request: HttpRequest | None = None,
+) -> bool:
+    """Hide the actor's avatar and retain its protected record and file."""
+    if not actor.is_active:
+        raise PermissionDenied(_("An active account is required."))
+    locked_actor = User.objects.select_for_update().get(pk=actor.pk)
+    avatar = (
+        UserAvatar.objects.select_for_update()
+        .filter(user=locked_actor, is_active=True)
+        .first()
+    )
+    if avatar is None:
+        return False
+    avatar.is_active = False
+    avatar.deactivated_at = timezone.now()
+    avatar.deactivated_by = locked_actor
+    avatar.save(update_fields=("is_active", "deactivated_at", "deactivated_by"))
+    record_audit_event(
+        actor=locked_actor,
+        action=actions.PROFILE_AVATAR_REMOVED,
+        target_type="account_avatar",
+        target_id=str(avatar.pk),
+        target_label=locked_actor.display_name,
+        request=request,
+    )
+    return True

@@ -33,6 +33,7 @@ class ReportDocument:
     filename_stem: str
     sheet_name: str
     sections: tuple[tuple[str, tuple[str, ...]], ...] = ()
+    column_weights: tuple[float, ...] = ()
 
 
 def _bounded(queryset: QuerySet[Any]) -> tuple[Any, ...]:

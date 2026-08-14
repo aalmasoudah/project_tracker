@@ -279,3 +279,24 @@ class PreferredLanguageForm(forms.Form):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         _style_form_fields(self)
+
+
+class ProfileAvatarForm(forms.Form):
+    """Accept one bounded image; decoded verification happens in the service."""
+
+    avatar = forms.FileField(
+        label=_("Profile picture"),
+        help_text=_("JPEG, PNG, or WebP. Maximum size 5 MB."),
+        widget=forms.ClearableFileInput(
+            attrs={
+                "accept": "image/jpeg,image/png,image/webp",
+                "class": "form-control",
+            }
+        ),
+    )
+
+    def clean_avatar(self) -> Any:
+        avatar = self.cleaned_data["avatar"]
+        if avatar.size > 5 * 1024 * 1024:
+            raise ValidationError(_("The profile picture must not exceed 5 MB."))
+        return avatar

@@ -16,6 +16,12 @@ from apps.ai_briefings.providers.base import (
     ProviderResult,
     TemporaryProviderError,
 )
+from apps.ai_briefings.providers.groq_rate_limits import (
+    GroqCapacityUnavailable,
+    GroqPromptBudgetExceeded,
+    reserve_groq_capacity,
+    retry_after_seconds,
+)
 from apps.ai_briefings.schemas import briefing_json_schema
 
 APPROVED_GROQ_MODELS = frozenset({"openai/gpt-oss-20b", "openai/gpt-oss-120b"})
@@ -57,7 +63,7 @@ class GroqBriefingProvider:
         detail_level: str,
         repair: bool = False,
     ) -> ProviderResult:
-        body = {
+        body: dict[str, object] = {
             "model": self.model,
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -80,10 +86,28 @@ class GroqBriefingProvider:
                 },
             },
             "temperature": 0.1,
-            "max_completion_tokens": self.max_output_tokens,
             "reasoning_effort": self.reasoning_effort,
             "stream": False,
         }
+        try:
+            reservation = reserve_groq_capacity(
+                api_key=self.api_key,
+                model=self.model,
+                body=body,
+                configured_output_tokens=self.max_output_tokens,
+            )
+        except GroqCapacityUnavailable as error:
+            raise TemporaryProviderError(
+                "Groq rate capacity is temporarily reserved.",
+                retry_after_seconds=error.retry_after_seconds,
+                fallback_eligible=True,
+                reason_code="rate_limited",
+            ) from error
+        except GroqPromptBudgetExceeded as error:
+            raise ProviderResponseError(
+                "The briefing evidence exceeds the safe Groq token budget."
+            ) from error
+        body["max_completion_tokens"] = reservation.max_output_tokens
         request = Request(
             GROQ_CHAT_COMPLETIONS_URL,
             data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
@@ -91,7 +115,7 @@ class GroqBriefingProvider:
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "User-Agent": "InsightProjects/1.0",
+                "User-Agent": "InsightTracker/1.0",
             },
             method="POST",
         )
@@ -99,15 +123,30 @@ class GroqBriefingProvider:
             with urlopen(request, timeout=self.timeout_seconds) as response:
                 raw_response = response.read(2_000_001)
         except HTTPError as error:
-            if error.code == 429 or 500 <= error.code < 600:
+            reservation.release()
+            if error.code in {408, 429} or 500 <= error.code < 600:
                 raise TemporaryProviderError(
-                    "Groq is temporarily unavailable."
+                    "Groq is temporarily unavailable.",
+                    retry_after_seconds=retry_after_seconds(error.headers),
+                    fallback_eligible=True,
+                    reason_code=(
+                        "rate_limited"
+                        if error.code == 429
+                        else "transport_error"
+                        if error.code == 408
+                        else "provider_unavailable"
+                    ),
                 ) from error
             raise ProviderResponseError(
                 "Groq rejected the briefing request."
             ) from error
         except (TimeoutError, URLError) as error:
-            raise TemporaryProviderError("Groq is temporarily unavailable.") from error
+            reservation.release()
+            raise TemporaryProviderError(
+                "Groq is temporarily unavailable.",
+                fallback_eligible=True,
+                reason_code="transport_error",
+            ) from error
         if len(raw_response) > 2_000_000:
             raise ProviderResponseError("Groq returned an oversized response.")
         try:
@@ -126,6 +165,13 @@ class GroqBriefingProvider:
         cached_input_tokens: object = None
         if isinstance(token_details, dict):
             cached_input_tokens = token_details.get("cached_tokens")
+        reservation.reconcile(
+            input_tokens=input_tokens if isinstance(input_tokens, int) else None,
+            cached_input_tokens=(
+                cached_input_tokens if isinstance(cached_input_tokens, int) else None
+            ),
+            output_tokens=output_tokens if isinstance(output_tokens, int) else None,
+        )
         return ProviderResult(
             data=data,
             provider_code="groq",

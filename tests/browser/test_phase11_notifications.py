@@ -72,7 +72,6 @@ def test_mobile_bilingual_notification_read_and_preferences(
         assert page.url.endswith("/accounts/me/")
 
         page.goto(f"{live_server.url}/notifications/")
-        page.locator("button.navbar-toggler").click()
         page.locator('select[name="language"]').select_option("en")
         page.locator('form[action$="/i18n/setlang/"] button').click()
         page.wait_for_load_state("networkidle")
